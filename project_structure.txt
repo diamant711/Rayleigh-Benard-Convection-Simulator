@@ -1,0 +1,13 @@
+# struttura progetto
+
+CLI / GUI
+
+1 - Input (recipiente, liquido, condizioni iniziali)
+
+2 - Calcolo 4 schermate 2 grafici e 2 simulazioni 3D
+
+3 - Output file tex pdf
+
+Web interface
+Raylib Webassembly
+2D equations
