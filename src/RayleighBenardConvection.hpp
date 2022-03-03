@@ -31,14 +31,14 @@
  class RayBenConvection {
 
    public:
-   RayBenConvection();
-   ~RayBenConvection();
-   init();
-   eval_next_frame();
-   write_actual_frame();
+     RayBenConvection();
+     ~RayBenConvection();
+     init();
+     eval_next_frame();
+     write_actual_frame();
 
    private:
-   const std::vector<Color> jet{
+     const std::vector<Color> jet {
 (Color){  0,    0,  131,  255},
 (Color){  0,    0,  135,  255},
 (Color){  0,    0,  139,  255},
@@ -297,14 +297,14 @@
 (Color){128,    0,    0,  255}
 };
  
-   void printColor (Color );
-   Color TtoC (double );
-   Eigen::Matrix<double, nx, ny> T;
-   void d_solve(Eigen::Matrix<double,-1,1> &,
+     void printColor (Color );
+     Color TtoC (double );
+     Eigen::Matrix<double, nx, ny> T;
+     void d_solve(Eigen::Matrix<double,-1,1> &,
              const Eigen::Matrix<int,1,-1> &,
              const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &,
              const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &);
-   void Draw(const Eigen::Matrix<double, -1, -1> & ); 
+     void Draw(const Eigen::Matrix<double, -1, -1> & ); 
 };
 
   RayBenConvection::RayBenConvection() {}
