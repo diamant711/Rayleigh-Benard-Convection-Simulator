@@ -82,6 +82,42 @@ class RayBenConvection {
   double m_VS = 0;
   double m_VE = 0;
   double m_VW = 0;
+  Eigen::Matrix<double, m_nx-1, m_ny-2> m_bcu;
+  Eigen::Matrix<double, m_nx-2, m_ny-1> m_bcv;
+  Eigen::Matrix<double, -1, 1> m_e;
+  Eigen::Matrix<double, -1, 1> m_i;
+  Eigen::Matrix<double, -1, -1> m_Ax;
+  Eigen::Matrix<double, -1, -1> m_Ay;
+  Eigen::Matrix<double, -1, -1> m_A;
+  Eigen::Matrix<double, -1, -1> m_Du;
+  Eigen::Matrix<int, 1, -1> m_pu; 
+  Eigen::Matrix<double, -1, -1> m_Duperm;
+  std::vector<Eigen::Matrix<double, -1, -1>> m_LUu;
+  Eigen::Matrix<double, -1, -1> m_Dv;
+  Eigen::Matrix<int, 1, -1> m_pv;
+  Eigen::Matrix<double, -1, -1> m_Dvperm;
+  std::vector<Eigen::Matrix<double, -1, -1>> m_LUv;
+  Eigen::Matrix<int, 1, -1> m_pp;
+  Eigen::Matrix<double, -1, -1> m_Aperm;
+  std::vector<Eigen::Matrix<double, -1, -1>> m_LUp;
+  Eigen::Matrix<double, m_nx-2, m_ny-2> m_bcT;
+  Eigen::Matrix<double, -1, -1> m_Tx;
+  Eigen::Matrix<double, -1, -1> m_Ty;
+  Eigen::Matrix<double, -1, -1> m_Tt;
+  Eigen::Matrix<int, 1, -1> m_pt;
+  Eigen::Matrix<double, -1, -1> m_Ttperm;
+  std::vector<Eigen::Matrix<double, -1, -1>> m_LUt;
+  Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lu_solver;
+  Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Uu_solver;
+  Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lv_solver;
+  Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Uv_solver;
+  Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lp_solver;
+  Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Up_solver;
+  Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lt_solver;
+  Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Ut_solver;
+  const unsigned int m_ii = m_nx-2;
+  const unsigned int m_jj = m_ny-2;
+
 
     const std::vector<Color> jet {
       (Color){  0,    0,  131,  255},
@@ -563,5 +599,37 @@ void RayBenConvection::luP(Eigen::Matrix<double,-1,-1> &mat,
 }
 
 void RayBenConvection::init(){
+
+  std::chrono::time_point<std::chrono::high_resolution_clock> init_lenght = 
+    std::chrono::high_resolution_clock::now();
+  Eigen::setNbThreads(NPROC);
+  ::SetTraceLogLevel(LOG_WARNING);
+
+  if(m_TS != m_TN)
+    m_To = (m_TS < m_TN) ? m_TS : m_TN;
+  else{
+    std::cout << "Something stupid went wrong...";
+    return;
+  }
+
+  //dt correction:
+  m_dt = m_tf / m_nt;
+
+  //initialising calculation maxtrices:
+  m_u.setZero();
+  m_v.setZero();
+  m_p.setZero();
+  m_S.setZero();
+  m_uplot.setZero();
+  m_vplot.setZero();
+  m_T.setConstant(m_To);
+
+  m_Tstar = m_T;
+  m_ustar = m_u;
+  m_uhalf = m_u;
+  m_uconv = m_u;
+  m_vstar = m_v;
+  m_vhalf = m_v;
+  m_vconv = m_v;
 
 }
