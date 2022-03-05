@@ -82,6 +82,7 @@ class RayBenConvection {
   double m_VS = 0;
   double m_VE = 0;
   double m_VW = 0;
+  //initialisation variables
   Eigen::Matrix<double, m_nx-1, m_ny-2> m_bcu;
   Eigen::Matrix<double, m_nx-2, m_ny-1> m_bcv;
   Eigen::Matrix<double, -1, 1> m_e;
@@ -600,36 +601,277 @@ void RayBenConvection::luP(Eigen::Matrix<double,-1,-1> &mat,
 
 void RayBenConvection::init(){
 
-  std::chrono::time_point<std::chrono::high_resolution_clock> init_lenght = 
-    std::chrono::high_resolution_clock::now();
-  Eigen::setNbThreads(NPROC);
-  ::SetTraceLogLevel(LOG_WARNING);
+ std::chrono::time_point<std::chrono::high_resolution_clock> init_lenght = 
+   std::chrono::high_resolution_clock::now();
+ Eigen::setNbThreads(NPROC);
+ ::SetTraceLogLevel(LOG_WARNING);
 
-  if(m_TS != m_TN)
-    m_To = (m_TS < m_TN) ? m_TS : m_TN;
-  else{
-    std::cout << "Something stupid went wrong...";
-    return;
-  }
+ if(m_TS != m_TN)
+   m_To = (m_TS < m_TN) ? m_TS : m_TN;
+ else{
+   std::cout << "Something stupid went wrong...";
+   return;
+ }
 
-  //dt correction:
-  m_dt = m_tf / m_nt;
+//dt correction:
+ m_dt = m_tf / m_nt;
 
-  //initialising calculation maxtrices:
-  m_u.setZero();
-  m_v.setZero();
-  m_p.setZero();
-  m_S.setZero();
-  m_uplot.setZero();
-  m_vplot.setZero();
-  m_T.setConstant(m_To);
+//initialising calculation maxtrices:
+ m_u.setZero();
+ m_v.setZero();
+ m_p.setZero();
+ m_S.setZero();
+ m_uplot.setZero();
+ m_vplot.setZero();
+ m_T.setConstant(m_To);
 
-  m_Tstar = m_T;
-  m_ustar = m_u;
-  m_uhalf = m_u;
-  m_uconv = m_u;
-  m_vstar = m_v;
-  m_vhalf = m_v;
-  m_vconv = m_v;
+ m_Tstar = m_T;
+ m_ustar = m_u;
+ m_uhalf = m_u;
+ m_uconv = m_u;
+ m_vstar = m_v;
+ m_vhalf = m_v;
+ m_vconv = m_v;
+
+//IMPLICIT DIFFUSION:-
+//B.C vector(for u)
+ m_bcu.setZero(),
+ m_bcu.row(0).setConstant(2 * m_UW / std::pow(m_dx,2));
+ m_bcu.row(m_bcu.rows()-1).setConstant(2 * m_UE / std::pow(m_dx,2));
+ m_bcu.col(0).setConstant(m_US / std::pow(m_dy,2));
+ m_bcu.col(m_bcu.cols()-1).setConstant(m_UN / std::pow(m_dy,2));
+ 
+//B.Cs at the corners:
+ m_bcu(0, 0)                       = 2 * m_UW / std::pow(m_dx,2) + m_US / std::pow(m_dy,2);
+ m_bcu(m_bcu.rows()-1, 0)            = 2 * m_UE / std::pow(m_dx,2) + m_US / std::pow(m_dy,2);
+ m_bcu(0, (m_ny-2)-1)                = 2 * m_UW / std::pow(m_dx,2) + m_UN / std::pow(m_dy,2);
+ m_bcu(m_bcu.rows()-1, m_bcu.cols()-1) = 2 * m_UE / std::pow(m_dx,2) + m_UN / std::pow(m_dy,2);
+ m_bcu = m_dt * m_bcu / m_Re;
+
+//B.C vector(for v)
+ m_bcv.setZero();
+ m_bcv.row(0).setConstant(2 * m_VW / std::pow(m_dx,2));
+ m_bcv.row(m_bcv.rows()-1).setConstant(2 * m_VE / std::pow(m_dx,2));
+ m_bcv.col(0).setConstant(m_VS / std::pow(m_dy,2)); 
+ m_bcv.col(m_bcv.cols()-1).setConstant(m_VN / std::pow(m_dy,2));
+
+//B.Cs at the corners:
+ m_bcv(0, 0)                       = 2 * m_VW / std::pow(m_dx,2) + m_VS / std::pow(m_dy,2);
+ m_bcv(m_bcv.rows()-1, 0)            = 2 * m_VE / std::pow(m_dx,2) + m_VS / std::pow(m_dy,2);
+ m_bcv(0, m_bcv.cols()-1)            = 2 * m_VW / std::pow(m_dx,2) + m_VN / std::pow(m_dy,2);
+ m_bcv(m_bcv.rows()-1, m_bcv.cols()-1) = 2 * m_VE / std::pow(m_dx,2) + m_VN / std::pow(m_dy,2);
+ m_bcv = m_dt * m_bcv / m_Re;
+
+//Initialising central difference operator(for u)
+ m_e.resize(m_nx-1, 1);
+ m_i.resize(m_ny-2, 1);
+ m_e.setOnes();
+ m_i.setOnes();
+
+ m_Ax = spdiags(
+   static_cast<Eigen::Matrix<double, -1, -1>>(m_e * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
+   Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
+   m_nx-1, m_nx-1
+   );
+
+ m_Ay = spdiags(
+   static_cast<Eigen::Matrix<double, -1, -1>>(m_i * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
+   Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
+   m_ny-2, m_ny-2
+   );
+
+ m_Ax(0, 0) = -3;
+ m_Ax(m_Ax.rows()-1, m_Ax.rows()-1) = -3; 
+  
+ m_A = kron<double>(
+       static_cast<Eigen::Matrix<double, -1, -1>>(m_Ay/std::pow(m_dy,2)), 
+       Eigen::Matrix<double, m_nx-1, m_nx-1>::Identity()
+       )
+       + kron<double>(
+       Eigen::Matrix<double, m_ny-2, m_ny-2>::Identity(),
+       static_cast<Eigen::Matrix<double, -1, -1>>(m_Ax/std::pow(m_dx,2))
+       );
+
+ m_Du = Eigen::Matrix<double, (m_nx-1)*(m_ny-2), (m_nx-1)*(m_ny-2)>::Identity() - m_dt * m_A/m_Re;
+ m_pu = my_symamd(m_Du);
+
+ m_Duperm = m_Du(m_pu,m_pu);
+
+#ifndef FAST
+ luP(m_Duperm, m_LUu);
+#endif
+
+//Central difference operator(for v)
+ m_e.resize(m_nx-2, 1);
+ m_e.setOnes();
+ m_i.resize(m_ny-1, 1);
+ m_i.setOnes();
+
+ m_Ax = spdiags(
+   static_cast<Eigen::Matrix<double, -1, -1>>(m_e * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
+   Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
+   m_nx-2, m_nx-2
+   );
+
+ m_Ay = spdiags(
+   static_cast<Eigen::Matrix<double, -1, -1>>(m_i * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
+   Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
+   m_ny-1, m_ny-1
+   ); 
+
+ m_Ay(0, 0) = -3;
+ m_Ay(m_Ay.rows()-1, m_Ay.cols()-1) = -3; 
+  
+ m_A = kron<double>(
+       static_cast<Eigen::Matrix<double, -1, -1>>(m_Ay/std::pow(m_dy,2)), 
+       Eigen::Matrix<double, m_nx-2, m_nx-2>::Identity()
+     )
+   + kron<double>(
+       Eigen::Matrix<double, m_ny-1, m_ny-1>::Identity(),
+       static_cast<Eigen::Matrix<double, -1, -1>>(m_Ax/std::pow(m_dx,2))
+     );
+  
+ m_Dv = Eigen::Matrix<double, (m_nx-2)*(m_ny-1), (m_nx-2)*(m_ny-1)>::Identity() - m_dt * m_A/m_Re;
+ m_pv = my_symamd(m_Dv);
+  
+ m_Dvperm = m_Dv(m_pv,m_pv);
+#ifndef FAST
+ luP(m_Dvperm, m_LUv);
+#endif
+
+//
+//Calculating the coefficient matrix for the PPE
+ m_e.resize(m_nx-2, 1);
+ m_e.setOnes();
+ m_i.resize(m_ny-2, 1);
+ m_i.setOnes();
+
+ m_Ax = spdiags(
+   static_cast<Eigen::Matrix<double, -1, -1>>(m_e * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
+   Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
+   m_nx-2, m_nx-2
+   ); 
+
+ m_Ay = spdiags(
+   static_cast<Eigen::Matrix<double, -1, -1>>(m_i * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
+   Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
+   m_ny-2, m_ny-2
+   ); 
+
+ m_Ax(0, 0) = -1;
+ m_Ay(0, 0) = -1;
+ m_Ax(m_Ax.rows()-1, m_Ax.cols()-1) = -1;
+ m_Ay(m_Ay.rows()-1, m_Ay.cols()-1) = -1;
+  
+ m_A = kron<double>(
+       static_cast<Eigen::Matrix<double, -1, -1>>(m_Ay/std::pow(m_dy,2)), 
+       Eigen::Matrix<double, m_nx-2, m_nx-2>::Identity()
+     )
+   + kron<double>(
+       Eigen::Matrix<double, m_ny-2, m_ny-2>::Identity(),
+       static_cast<Eigen::Matrix<double, -1, -1>>(m_Ax/std::pow(m_dx,2))
+     );
+ 
+ m_pp = my_symamd(m_A);
+ 
+ m_Aperm = m_A(m_pp,m_pp);
+#ifndef FAST
+ luP(m_Aperm, m_LUp);
+#endif
+  
+//%%
+//%B.C vector(for T)
+ m_bcT.setZero();
+ m_bcT.row(0).setConstant(- m_TnW / m_dx); 
+ m_bcT.row(m_bcT.rows()-1).setConstant(m_TnE / m_dx);
+ m_bcT.col(0).setConstant(m_TS / std::pow(m_dy,2)); 
+ m_bcT.col(m_bcT.cols()-1).setConstant(m_TN / std::pow(m_dy,2));
+
+//%B.Cs at the corners:
+ m_bcT(0, 0)                       = - m_TnW / m_dx + m_TS / std::pow(m_dy,2);
+ m_bcT(m_bcT.rows()-1, 0)            = m_TnE / m_dx + m_TS / std::pow(m_dy,2);
+ m_bcT(0, m_bcT.cols()-1)            = - m_TnW / m_dx + m_TN / std::pow(m_dy,2);
+ m_bcT(m_bcT.rows()-1, m_bcT.cols()-1) = m_TnE / m_dx + m_TN / std::pow(m_dy,2);
+ m_bcT = m_dt * m_bcT / m_Pe;
+  
+//Central difference operator(for T)
+ m_e.resize(m_nx-2, 1);
+ m_e.setOnes();
+ m_i.resize(m_ny-2, 1);
+ m_i.setOnes();
+
+ m_Tx = spdiags(
+   static_cast<Eigen::Matrix<double, -1, -1>>(m_e * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
+   Eigen::Matrix<int, 1, 3> (-1, 0, 1),
+   m_nx-2, m_nx-2
+   ); 
+
+ m_Ty = spdiags(
+   static_cast<Eigen::Matrix<double, -1, -1>>(m_i * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
+   Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
+   m_ny-2, m_ny-2
+   ); 
+
+ m_Tx(0, 0) = -1;
+ m_Tx(m_Tx.rows()-1, m_Tx.cols()-1) = -1; 
+
+ m_Tt = kron<double>(
+       static_cast<Eigen::Matrix<double, -1, -1>>(m_Ty/std::pow(m_dy,2)),
+ Eigen::Matrix<double, m_nx-2, m_nx-2>::Identity()
+     )
+     + kron<double>(
+       Eigen::Matrix<double, m_ny-2, m_ny-2>::Identity(),
+       static_cast<Eigen::Matrix<double, -1, -1>>(m_Tx/std::pow(m_dx,2))
+     );
+  
+ m_Tt = Eigen::Matrix<double, (m_nx-2)*(m_ny-2), (m_nx-2)*(m_ny-2)>::Identity() - m_dt * m_Tt/m_Pe;
+ m_pt = my_symamd(m_Tt);
+  
+ m_Ttperm = m_Tt(m_pt,m_pt);
+
+#ifndef FAST
+  luP(m_Ttperm, m_LUt);
+#endif
+
+//%%
+//%Boundary conditions
+ m_T.row(0) = m_T.row(1) - Eigen::Matrix<double, 1, m_ny>::Constant(m_TnW * m_dx);
+ m_T.row(m_T.rows()-1) = m_T.row(m_T.rows()-2) + Eigen::Matrix<double, 1, m_ny>::Constant(m_TnE * m_dx);
+ m_T.col(0).setConstant(m_TS);
+ m_T.col(m_T.cols()-1).setConstant(m_TN);
+
+ m_u.row(0) = Eigen::Matrix<double, 1, m_ny>::Constant(2 * m_UW) - m_u.row(1);
+ m_u.row(m_u.rows()-1) = Eigen::Matrix<double, 1, m_ny>::Constant(2 * m_UE) - m_u.row(m_u.rows()-2);
+ m_u.col(0).setConstant(m_US);
+ m_u.col(m_u.cols()-1).setConstant(m_UN);
+  
+ m_v.row(0).setConstant(m_VW);
+ m_v.row(m_v.rows()-1).setConstant(m_VE);
+ m_v.col(0) = Eigen::Matrix<double, m_nx, 1>::Constant(2 * m_VS) - m_v.col(1);
+ m_v.col(m_v.cols()-1) = Eigen::Matrix<double, m_nx, 1>::Constant(2 * m_VN) - m_v.col(m_v.cols()-2);
+
+//FIXME: questo commento annuncia l'inizio del for?  
+//%%
+//%Evaluating temperature and velocity field at each time step
+
+//Easying solver calculations: eleoicca stuff
+ m_Lu_solver.compute(m_LUu[0]);
+ m_Uu_solver.compute(m_LUu[1]);
+ m_Lv_solver.compute(m_LUv[0]);
+ m_Uv_solver.compute(m_LUv[1]);
+ m_Lp_solver.compute(m_LUp[0]);
+ m_Up_solver.compute(m_LUp[1]);
+ m_Lt_solver.compute(m_LUt[0]);
+ m_Ut_solver.compute(m_LUt[1]);
+
+
+//conclusion
+  std::cout << "Time spent in init() function: "
+  << static_cast<float>(
+       std::chrono::duration_cast<std::chrono::milliseconds>(
+          std::chrono::high_resolution_clock::now() - init_lenght
+       ).count()
+     ) / 1000
+  << "s" << std::endl;
 
 }
