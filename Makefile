@@ -63,8 +63,10 @@ env: ;
 	@echo "All enviroment component ready"
 
 clean: ;
+	cd $(OBJ_DIR)
 	rm $(OBJECTS)
+	cd $(PRJ_DIR)
 
 purge: ;
   make clean
-  rm -rf $(PRJ_DIR)/$(REPOS_DIR)/* 
+  rm -rf $(REPOS_DIR)/* 
