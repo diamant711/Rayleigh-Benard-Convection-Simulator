@@ -2,7 +2,7 @@
 //
 //  RayleighBenardConvection.hpp specifies a class which is able to
 //  perform perturbative calculations on a fixed environment,
-//  describing fluid dyamics evolution according to Navier-Stokes equations.  
+//  describing fluid m_dyamics evolution according to Navier-Stokes equations.
 //
 /////////////////////////////////////////////////
 
@@ -23,7 +23,7 @@
 #define REFRESH_RATE 5
 #define PIXEL 4
 
-#define WINDOW_WIDTH ((PIXEL*m_nx) + 3*m_nx)
+#define WINDOW_WIm_dtH ((PIXEL*m_nx) + 3*m_nx)
 #define WINDOW_HEIGHT ((PIXEL*m_ny) + 3*m_ny)
 #define NPROC 12
 #define END_CICLE 5000
@@ -45,7 +45,6 @@ class RayBenConvection {
   const double m_tf = 1e3;
   double m_dt = 1e-2;
   const unsigned int m_nt = ((int) m_tf / m_dt) + 1;
- // dt = tf / nt;
   const double m_H = 2;
   const double m_L = 5;
   const double m_dx = m_L / (m_nx - 1);
@@ -116,9 +115,10 @@ class RayBenConvection {
   Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Up_solver;
   Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lt_solver;
   Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Ut_solver;
-  const unsigned int m_ii = m_nx-2;
-  const unsigned int m_jj = m_ny-2;
-
+  //const unsigned int m_ii = m_nx-2;
+  //const unsigned int m_jj = m_ny-2;
+  //it: ex-for counter.
+  unsigned int m_it;
 
     const std::vector<Color> jet {
       (Color){  0,    0,  131,  255},
@@ -382,7 +382,7 @@ class RayBenConvection {
   //functions
     void printColor (Color );
     Color TtoC (double );
-    void d_solve(Eigen::Matrix<double,-1,1> &,
+    static void d_solve(Eigen::Matrix<double,-1,1> &,
             const Eigen::Matrix<int,1,-1> &,
             const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &,
             const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &);
@@ -437,7 +437,7 @@ void RayBenConvection::Draw(const Eigen::Matrix<double, -1, -1> &T)
     ::ClearBackground((Color){ 255, 255, 255, 255});
     for(unsigned int i = 0; i < nx; ++i) {
       for(unsigned int k = 0; k < ny; ++k) {
-        ::DrawRectangle((WINDOW_WIDTH/2 - nx*PIXEL/2) + i*PIXEL, 
+        ::DrawRectangle((WINDOW_WIm_dtH/2 - nx*PIXEL/2) + i*PIXEL, 
                        (WINDOW_HEIGHT/2 + ny*PIXEL/2) - k*PIXEL, 
                        PIXEL, PIXEL, TtoC(T(i, k)));
       }
@@ -488,10 +488,10 @@ Eigen::Matrix<Scalar,-1,-1> RayBenConvection::spdiags(const Eigen::Matrix<Scalar
   for (int k = 0; k < d.size(); k++) {
     int i_min = std::max(0, -d(k));
     int i_max = std::min(m - 1, n - d(k) - 1);
-    int B_idx_start = m >= n ? d(k) : 0;
+    int B_im_dx_start = m >= n ? d(k) : 0;
 
     for (int i = i_min; i <= i_max; i++) {
-      triplets.push_back( T(i, i+d(k), B(B_idx_start + i, k)) );
+      triplets.push_back( T(i, i+d(k), B(B_im_dx_start + i, k)) );
     }
   }
 
@@ -613,7 +613,7 @@ void RayBenConvection::init(){
    return;
  }
 
-//dt correction:
+//m_dt correction:
  m_dt = m_tf / m_nt;
 
 //initialising calculation maxtrices:
@@ -864,8 +864,6 @@ void RayBenConvection::init(){
  m_Lt_solver.compute(m_LUt[0]);
  m_Ut_solver.compute(m_LUt[1]);
 
-
-//conclusion
   std::cout << "Time spent in init() function: "
   << static_cast<float>(
        std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -874,4 +872,160 @@ void RayBenConvection::init(){
      ) / 1000
   << "s" << std::endl;
 
+m_it=0;
+
 }
+
+void RayBenConvection::eval_next_frame(){
+
+const unsigned int ii = m_nx-2;
+const unsigned int jj = m_ny-2;
+
+if (m_it < END_CICLE ) {
+
+
+   if (m_it = 0)
+        ::InitWindow(WINDOW_WIm_dtH, WINDOW_HEIGHT, "Rayleigh-Benard Convection");
+    ETA(m_it);
+
+    /*
+    m_uplot = 0.5 * (m_u.block(0,0,m_nx,m_ny) + m_u.block(1,0,m_nx,m_ny));
+    m_vplot = 0.5 * (m_v.block(0,0,m_nx,m_ny) + m_v.block(0,1,m_nx,m_ny));
+    */
+
+   if(m_it % REFRESH_RATE == 0) {
+     Draw(m_T);
+   }
+
+   Eigen::Matrix<double, -1, -1> Tn(m_T);
+   m_Tstar.block(1,1,ii,jj) = (Tn.block(1,1,ii,jj).array() - (m_dt / m_dx / 2)
+     * (m_u.block(2,1,ii,jj).array() * (Tn.block(1,1,ii,jj) + Tn.block(2,1,ii,jj)).array() 
+     - m_u.block(1,1,ii,jj).array() * (Tn.block(1,1,ii,jj) + Tn.block(0,1,ii,jj)).array()) 
+     - (m_dt / m_dy / 2)
+     * (m_v.block(1,2,ii,jj).array() * (Tn.block(1,1,ii,jj) + Tn.block(1,2,ii,jj)).array()
+     - m_v.block(1,1,ii,jj).array() * (Tn.block(1,1,ii,jj) + Tn.block(1,0,ii,jj)).array())).matrix();
+
+   Eigen::Matrix<double, -1, 1> t;
+   t.resize(m_bcT.rows()*m_bcT.cols(), 1);
+   t.col(0) = (m_Tstar.block(1,1,m_Tstar.rows()-2,m_Tstar.cols()-2) + m_bcT).reshaped(m_bcT.rows()*m_bcT.cols(), 1);
+
+   t(m_pt) = static_cast<Eigen::Matrix<double, -1, -1>>(m_Ut_solver.solve(m_Lt_solver.solve(t(m_pt))));
+
+   Eigen::Matrix<double, -1, -1> new_t = t.reshaped(m_nx-2, m_ny-2);
+
+   m_T.block(1,1,m_T.rows()-2,m_T.cols()-2) = new_t;
+
+   m_T.row(0) = m_T.row(1) - Eigen::Matrix<double, 1, m_ny>::Constant(m_TnW * m_dx);
+   m_T.row(m_T.rows()-1) = m_T.row(m_T.rows()-2) + Eigen::Matrix<double, 1, m_ny>::Constant(m_TnE * m_dx);
+
+   m_T.col(0).setConstant(m_TS);
+   m_T.col(m_T.cols()-1).setConstant(m_TN);
+
+   Eigen::Matrix<double, -1, -1> un = m_u;
+   Eigen::Matrix<double, -1, -1> vn = m_v;
+
+   //%Predictor step(Lax-Friedrich)
+   m_uhalf.block(2,1,ii,jj) = (0.5 * (un.block(3,1,ii,jj) + un.block(1,1,ii,jj)).array() - (m_dt / m_dx / 8)
+                   * (un.block(3,1,ii,jj) + un.block(2,1,ii,jj)).array().square() - (un.block(2,1,ii,jj)
+                   + un.block(1,1,ii,jj)).array().square() - (m_dt / m_dy / 8) * ((un.block(2,1,ii,jj)
+                   + un.block(2,2,ii,jj)).array() * (vn.block(1,2,ii,jj) + vn.block(2,2,ii,jj)).array()
+                   - (un.block(2,1,ii,jj) + un.block(2,0,ii,jj)).array() * (vn.block(1,1,ii,jj)
+                   + vn.block(2,1,ii,jj)).array())).matrix();
+   m_vhalf.block(1,2,ii,jj) = (0.5 * (vn.block(1,3,ii,jj) + vn.block(1,1,ii,jj)).array() - (m_dt / m_dx / 8)
+                   * ((un.block(2,1,ii,jj) + un.block(2,2,ii,jj)).array() * (vn.block(1,2,ii,jj) 
+                   + vn.block(2,2,ii,jj)).array() - (un.block(1,1,ii,jj) + un.block(1,0,ii,jj)).array()
+                   * (vn.block(1,2,ii,jj)
+                   + vn.block(0,2,ii,jj)).array()) - (m_dt / m_dy / 8) * ((vn.block(1,3,ii,jj) 
+                   + vn.block(1,2,ii,jj)).array().square() - (vn.block(1,2,ii,jj)
+                   + vn.block(1,1,ii,jj)).array().square())).matrix();
+   //%Corrector step(Leapfrog)
+   m_uconv.block(2,1,ii,jj) = (un.block(2,1,ii,jj).array() - (m_dt / (4 * m_dx)) * ((m_uhalf.block(3,1,ii,jj) 
+                   + m_uhalf.block(2,1,ii,jj)).array().square() - (m_uhalf.block(2,1,ii,jj)
+                   + m_uhalf.block(1,1,ii,jj)).array().square()) - (m_dt / (4 * m_dy)) * ((m_uhalf.block(2,1,ii,jj) 
+                   + m_uhalf.block(2,2,ii,jj)).array() * (m_vhalf.block(1,2,ii,jj) + m_vhalf.block(2,2,ii,jj)).array()
+                   - (m_uhalf.block(2,1,ii,jj) + m_uhalf.block(2,0,ii,jj)).array() * (m_vhalf.block(1,1,ii,jj) 
+                   + m_vhalf.block(2,1,ii,jj)).array())).matrix();
+   m_vconv.block(1,2,ii,jj) = (vn.block(1,2,ii,jj).array() - (m_dt / (4 * m_dx)) * ((m_uhalf.block(2,1,ii,jj) 
+                   + m_uhalf.block(2,2,ii,jj)).array() * (m_vhalf.block(1,2,ii,jj) + m_vhalf.block(2,2,ii,jj)).array()
+                   - (m_uhalf.block(1,1,ii,jj) + m_uhalf.block(1,0,ii,jj)).array() * (m_vhalf.block(1,2,ii,jj)
+                   + m_vhalf.block(0,2,ii,jj)).array()) - (m_dt / (4 * m_dy)) * ((m_vhalf.block(1,3,ii,jj)
+                   + m_vhalf.block(1,2,ii,jj)).array().square() 
+                   - (m_vhalf.block(1,2,ii,jj) + m_vhalf.block(1,1,ii,jj)).array().square())).matrix();
+   //%Buoyancy term (Boussinesq aproximation):
+   m_vconv.block(1,2,ii,jj) = m_vconv.block(1,2,ii,jj) + (m_Gr / std::pow(m_Re, 2)) * (0.5 * (m_T.block(1,1,ii,jj)
+                   + m_T.block(1,2,ii,jj)) - Eigen::Matrix<double, ii, jj>::Constant(m_To));
+
+   //%(2) Implicit central difference (spatial)
+   Eigen::Matrix<double, -1, 1> U;
+   U.resize(m_bcu.rows()*m_bcu.cols(), 1);
+
+   U.col(0) = (m_uconv.block(1,1,m_uconv.rows()-2,m_uconv.cols()-2) + m_bcu).reshaped(m_bcu.rows()*m_bcu.cols(), 1);
+
+   Eigen::Matrix<double, -1, 1> V;
+   V.resize(m_bcv.rows()*m_bcv.cols(), 1);
+
+   V.col(0) = (m_vconv.block(1,1,m_vconv.rows()-2,m_vconv.cols()-2) + m_bcv).reshaped(m_bcv.rows()*m_bcv.cols(), 1);
+
+   std::thread t1(d_solve, std::ref(U), std::ref(m_pu), std::ref(m_Lu_solver), std::ref(m_Uu_solver));
+   std::thread t2(d_solve, std::ref(V), std::ref(m_pv), std::ref(m_Lv_solver), std::ref(m_Uv_solver));
+
+   t1.join();
+   t2.join();
+
+   Eigen::Matrix<double, -1, -1> new_U = U.reshaped(m_nx-1, m_ny-2);
+
+   m_ustar.block(1,1,m_ustar.rows()-2,m_ustar.cols()-2) = new_U;
+
+   Eigen::Matrix<double, -1, -1> new_V = V.reshaped(m_nx-2, m_ny-1);
+
+   m_vstar.block(1,1,m_vstar.rows()-2,m_vstar.cols()-2) = new_V;
+
+   //%Pressure Poisson equation(elliptic):
+   m_S.block(1,1,ii,jj) = (m_ustar.block(2,1,ii,jj) - m_ustar.block(1,1,ii,jj)) / m_dx
+                           + (m_vstar.block(1,2,ii,jj) - m_vstar.block(1,1,ii,jj)) / m_dy;
+
+   Eigen::Matrix<double, -1, 1> s;
+   s.resize((m_S.rows()-2)*(m_S.cols()-2), 1);
+
+   s.col(0) = m_S.block(1,1,m_S.rows()-2,m_S.cols()-2).reshaped((m_S.rows()-2)*(m_S.cols()-2), 1);
+
+   s(m_pp) = static_cast<Eigen::Matrix<double, -1, -1>>(m_Up_solver.solve(m_Lp_solver.solve(s(m_pp))));
+
+   Eigen::Matrix<double, -1, -1> new_s = s.reshaped(m_nx-2, m_ny-2);
+
+   m_p.block(1,1,new_s.rows(),new_s.cols()) = new_s;
+
+   m_p.row(0) = m_p.row(1);
+   m_p.row(m_p.rows()-1) = m_p.row(m_p.rows()-2);
+
+   m_p.col(0) = m_p.col(1);
+   m_p.col(m_p.cols()-1) = m_p.col(m_p.cols()-2);
+
+   m_u.block(2,1,ii,jj) = m_ustar.block(2,1,ii,jj) - (m_p.block(2,1,ii,jj) - m_p.block(1,1,ii,jj)) / m_dx;
+   m_v.block(1,2,ii,jj) = m_vstar.block(1,2,ii,jj) - (m_p.block(1,2,ii,jj) - m_p.block(1,1,ii,jj)) / m_dy;
+
+   m_u.row(0) = Eigen::Matrix<double, 1, m_ny>::Constant(2*m_UW) - m_u.row(1);
+   m_u.row(m_u.rows()-1) = Eigen::Matrix<double, 1, m_ny>::Constant(2*m_UE) - m_u.row(m_u.rows()-2);
+
+   m_u.col(0).setConstant(m_US);
+   m_u.col(m_u.cols()-1).setConstant(m_UN);
+
+   m_v.row(0).setConstant(m_VW);
+   m_v.row(m_v.rows()-1).setConstant(m_VE);
+
+   m_v.col(0) = Eigen::Matrix<double, m_nx, 1>::Constant(2*m_VS) - m_v.col(1);
+   m_v.col(m_v.cols()-1) = Eigen::Matrix<double, m_nx, 1>::Constant(2*m_VN) - m_v.col(m_v.cols()-2);
+
+ }
+
+ if (m_it = END_CICLE) {
+    std::cout << "FINE" << std::endl;
+    ::CloseWindow();
+    return;
+   }
+
+++m_it;
+
+return;
+}
+
