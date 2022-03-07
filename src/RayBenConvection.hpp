@@ -120,287 +120,287 @@ class RayBenConvection {
   //it: ex-for counter.
   unsigned int m_it;
 
-    const std::vector<Color> jet {
-      (Color){  0,    0,  131,  255},
-      (Color){  0,    0,  135,  255},
-      (Color){  0,    0,  139,  255},
-      (Color){  0,    0,  143,  255},
-      (Color){  0,    0,  147,  255},
-      (Color){  0,    0,  151,  255},
-      (Color){  0,    0,  155,  255},
-      (Color){  0,    0,  159,  255},
-      (Color){  0,    0,  163,  255},
-      (Color){  0,    0,  167,  255},
-      (Color){  0,    0,  171,  255},
-      (Color){  0,    0,  175,  255},
-      (Color){  0,    0,  179,  255},
-      (Color){  0,    0,  183,  255},
-      (Color){  0,    0,  187,  255},
-      (Color){  0,    0,  191,  255},
-      (Color){  0,    0,  195,  255},
-      (Color){  0,    0,  199,  255},
-      (Color){  0,    0,  203,  255},
-      (Color){  0,    0,  207,  255},
-      (Color){  0,    0,  211,  255},
-      (Color){  0,    0,  215,  255},
-      (Color){  0,    0,  219,  255},
-      (Color){  0,    0,  223,  255},
-      (Color){  0,    0,  227,  255},
-      (Color){  0,    0,  231,  255},
-      (Color){  0,    0,  235,  255},
-      (Color){  0,    0,  239,  255},
-      (Color){  0,    0,  243,  255},
-      (Color){  0,    0,  247,  255},
-      (Color){  0,    0,  251,  255},
-      (Color){  0,    0,  255,  255},
-      (Color){  0,    4,  255,  255},
-      (Color){  0,    8,  255,  255},
-      (Color){  0,   12,  255,  255},
-      (Color){  0,   16,  255,  255},
-      (Color){  0,   20,  255,  255},
-      (Color){  0,   24,  255,  255},
-      (Color){  0,   28,  255,  255},
-      (Color){  0,   32,  255,  255},
-      (Color){  0,   36,  255,  255},
-      (Color){  0,   40,  255,  255},
-      (Color){  0,   44,  255,  255},
-      (Color){  0,   48,  255,  255},
-      (Color){  0,   52,  255,  255},
-      (Color){  0,   56,  255,  255},
-      (Color){  0,   60,  255,  255},
-      (Color){  0,   64,  255,  255},
-      (Color){  0,   68,  255,  255},
-      (Color){  0,   72,  255,  255},
-      (Color){  0,   76,  255,  255},
-      (Color){  0,   80,  255,  255},
-      (Color){  0,   84,  255,  255},
-      (Color){  0,   88,  255,  255},
-      (Color){  0,   92,  255,  255},
-      (Color){  0,   96,  255,  255},
-      (Color){  0,  100,  255,  255},
-      (Color){  0,  104,  255,  255},
-      (Color){  0,  108,  255,  255},
-      (Color){  0,  112,  255,  255},
-      (Color){  0,  116,  255,  255},
-      (Color){  0,  120,  255,  255},
-      (Color){  0,  124,  255,  255},
-      (Color){  0,  128,  255,  255},
-      (Color){  0,  131,  255,  255},
-      (Color){  0,  135,  255,  255},
-      (Color){  0,  139,  255,  255},
-      (Color){  0,  143,  255,  255},
-      (Color){  0,  147,  255,  255},
-      (Color){  0,  151,  255,  255},
-      (Color){  0,  155,  255,  255},
-      (Color){  0,  159,  255,  255},
-      (Color){  0,  163,  255,  255},
-      (Color){  0,  167,  255,  255},
-      (Color){  0,  171,  255,  255},
-      (Color){  0,  175,  255,  255},
-      (Color){  0,  179,  255,  255},
-      (Color){  0,  183,  255,  255},
-      (Color){  0,  187,  255,  255},
-      (Color){  0,  191,  255,  255},
-      (Color){  0,  195,  255,  255},
-      (Color){  0,  199,  255,  255},
-      (Color){  0,  203,  255,  255},
-      (Color){  0,  207,  255,  255},
-      (Color){  0,  211,  255,  255},
-      (Color){  0,  215,  255,  255},
-      (Color){  0,  219,  255,  255},
-      (Color){  0,  223,  255,  255},
-      (Color){  0,  227,  255,  255},
-      (Color){  0,  231,  255,  255},
-      (Color){  0,  235,  255,  255},
-      (Color){  0,  239,  255,  255},
-      (Color){  0,  243,  255,  255},
-      (Color){  0,  247,  255,  255},
-      (Color){  0,  251,  255,  255},
-      (Color){  0,  255,  255,  255},
-      (Color){  4,  255,  251,  255},
-      (Color){  8,  255,  247,  255},
-      (Color){ 12,  255,  243,  255},
-      (Color){ 16,  255,  239,  255},
-      (Color){ 20,  255,  235,  255},
-      (Color){ 24,  255,  231,  255},
-      (Color){ 28,  255,  227,  255},
-      (Color){ 32,  255,  223,  255},
-      (Color){ 36,  255,  219,  255},
-      (Color){ 40,  255,  215,  255},
-      (Color){ 44,  255,  211,  255},
-      (Color){ 48,  255,  207,  255},
-      (Color){ 52,  255,  203,  255},
-      (Color){ 56,  255,  199,  255},
-      (Color){ 60,  255,  195,  255},
-      (Color){ 64,  255,  191,  255},
-      (Color){ 68,  255,  187,  255},
-      (Color){ 72,  255,  183,  255},
-      (Color){ 76,  255,  179,  255},
-      (Color){ 80,  255,  175,  255},
-      (Color){ 84,  255,  171,  255},
-      (Color){ 88,  255,  167,  255},
-      (Color){ 92,  255,  163,  255},
-      (Color){ 96,  255,  159,  255},
-      (Color){100,  255,  155,  255},
-      (Color){104,  255,  151,  255},
-      (Color){108,  255,  147,  255},
-      (Color){112,  255,  143,  255},
-      (Color){116,  255,  139,  255},
-      (Color){120,  255,  135,  255},
-      (Color){124,  255,  131,  255},
-      (Color){128,  255,  128,  255},
-      (Color){131,  255,  124,  255},
-      (Color){135,  255,  120,  255},
-      (Color){139,  255,  116,  255},
-      (Color){143,  255,  112,  255},
-      (Color){147,  255,  108,  255},
-      (Color){151,  255,  104,  255},
-      (Color){155,  255,  100,  255},
-      (Color){159,  255,   96,  255},
-      (Color){163,  255,   92,  255},
-      (Color){167,  255,   88,  255},
-      (Color){171,  255,   84,  255},
-      (Color){175,  255,   80,  255},
-      (Color){179,  255,   76,  255},
-      (Color){183,  255,   72,  255},
-      (Color){187,  255,   68,  255},
-      (Color){191,  255,   64,  255},
-      (Color){195,  255,   60,  255},
-      (Color){199,  255,   56,  255},
-      (Color){203,  255,   52,  255},
-      (Color){207,  255,   48,  255},
-      (Color){211,  255,   44,  255},
-      (Color){215,  255,   40,  255},
-      (Color){219,  255,   36,  255},
-      (Color){223,  255,   32,  255},
-      (Color){227,  255,   28,  255},
-      (Color){231,  255,   24,  255},
-      (Color){235,  255,   20,  255},
-      (Color){239,  255,   16,  255},
-      (Color){243,  255,   12,  255},
-      (Color){247,  255,    8,  255},
-      (Color){251,  255,    4,  255},
-      (Color){255,  255,    0,  255},
-      (Color){255,  251,    0,  255},
-      (Color){255,  247,    0,  255},
-      (Color){255,  243,    0,  255},
-      (Color){255,  239,    0,  255},
-      (Color){255,  235,    0,  255},
-      (Color){255,  231,    0,  255},
-      (Color){255,  227,    0,  255},
-      (Color){255,  223,    0,  255},
-      (Color){255,  219,    0,  255},
-      (Color){255,  215,    0,  255},
-      (Color){255,  211,    0,  255},
-      (Color){255,  207,    0,  255},
-      (Color){255,  203,    0,  255},
-      (Color){255,  199,    0,  255},
-      (Color){255,  195,    0,  255},
-      (Color){255,  191,    0,  255},
-      (Color){255,  187,    0,  255},
-      (Color){255,  183,    0,  255},
-      (Color){255,  179,    0,  255},
-      (Color){255,  175,    0,  255},
-      (Color){255,  171,    0,  255},
-      (Color){255,  167,    0,  255},
-      (Color){255,  163,    0,  255},
-      (Color){255,  159,    0,  255},
-      (Color){255,  155,    0,  255},
-      (Color){255,  151,    0,  255},
-      (Color){255,  147,    0,  255},
-      (Color){255,  143,    0,  255},
-      (Color){255,  139,    0,  255},
-      (Color){255,  135,    0,  255},
-      (Color){255,  131,    0,  255},
-      (Color){255,  128,    0,  255},
-      (Color){255,  124,    0,  255},
-      (Color){255,  120,    0,  255},
-      (Color){255,  116,    0,  255},
-      (Color){255,  112,    0,  255},
-      (Color){255,  108,    0,  255},
-      (Color){255,  104,    0,  255},
-      (Color){255,  100,    0,  255},
-      (Color){255,   96,    0,  255},
-      (Color){255,   92,    0,  255},
-      (Color){255,   88,    0,  255},
-      (Color){255,   84,    0,  255},
-      (Color){255,   80,    0,  255},
-      (Color){255,   76,    0,  255},
-      (Color){255,   72,    0,  255},
-      (Color){255,   68,    0,  255},
-      (Color){255,   64,    0,  255},
-      (Color){255,   60,    0,  255},
-      (Color){255,   56,    0,  255},
-      (Color){255,   52,    0,  255},
-      (Color){255,   48,    0,  255},
-      (Color){255,   44,    0,  255},
-      (Color){255,   40,    0,  255},
-      (Color){255,   36,    0,  255},
-      (Color){255,   32,    0,  255},
-      (Color){255,   28,    0,  255},
-      (Color){255,   24,    0,  255},
-      (Color){255,   20,    0,  255},
-      (Color){255,   16,    0,  255},
-      (Color){255,   12,    0,  255},
-      (Color){255,    8,    0,  255},
-      (Color){255,    4,    0,  255},
-      (Color){255,    0,    0,  255},
-      (Color){251,    0,    0,  255},
-      (Color){247,    0,    0,  255},
-      (Color){243,    0,    0,  255},
-      (Color){239,    0,    0,  255},
-      (Color){235,    0,    0,  255},
-      (Color){231,    0,    0,  255},
-      (Color){227,    0,    0,  255},
-      (Color){223,    0,    0,  255},
-      (Color){219,    0,    0,  255},
-      (Color){215,    0,    0,  255},
-      (Color){211,    0,    0,  255},
-      (Color){207,    0,    0,  255},
-      (Color){203,    0,    0,  255},
-      (Color){199,    0,    0,  255},
-      (Color){195,    0,    0,  255},
-      (Color){191,    0,    0,  255},
-      (Color){187,    0,    0,  255},
-      (Color){183,    0,    0,  255},
-      (Color){179,    0,    0,  255},
-      (Color){175,    0,    0,  255},
-      (Color){171,    0,    0,  255},
-      (Color){167,    0,    0,  255},
-      (Color){163,    0,    0,  255},
-      (Color){159,    0,    0,  255},
-      (Color){155,    0,    0,  255},
-      (Color){151,    0,    0,  255},
-      (Color){147,    0,    0,  255},
-      (Color){143,    0,    0,  255},
-      (Color){139,    0,    0,  255},
-      (Color){135,    0,    0,  255},
-      (Color){131,    0,    0,  255},
-      (Color){128,    0,    0,  255}
-    };
+  const std::vector<Color> jet {
+    (Color){  0,    0,  131,  255},
+    (Color){  0,    0,  135,  255},
+    (Color){  0,    0,  139,  255},
+    (Color){  0,    0,  143,  255},
+    (Color){  0,    0,  147,  255},
+    (Color){  0,    0,  151,  255},
+    (Color){  0,    0,  155,  255},
+    (Color){  0,    0,  159,  255},
+    (Color){  0,    0,  163,  255},
+    (Color){  0,    0,  167,  255},
+    (Color){  0,    0,  171,  255},
+    (Color){  0,    0,  175,  255},
+    (Color){  0,    0,  179,  255},
+    (Color){  0,    0,  183,  255},
+    (Color){  0,    0,  187,  255},
+    (Color){  0,    0,  191,  255},
+    (Color){  0,    0,  195,  255},
+    (Color){  0,    0,  199,  255},
+    (Color){  0,    0,  203,  255},
+    (Color){  0,    0,  207,  255},
+    (Color){  0,    0,  211,  255},
+    (Color){  0,    0,  215,  255},
+    (Color){  0,    0,  219,  255},
+    (Color){  0,    0,  223,  255},
+    (Color){  0,    0,  227,  255},
+    (Color){  0,    0,  231,  255},
+    (Color){  0,    0,  235,  255},
+    (Color){  0,    0,  239,  255},
+    (Color){  0,    0,  243,  255},
+    (Color){  0,    0,  247,  255},
+    (Color){  0,    0,  251,  255},
+    (Color){  0,    0,  255,  255},
+    (Color){  0,    4,  255,  255},
+    (Color){  0,    8,  255,  255},
+    (Color){  0,   12,  255,  255},
+    (Color){  0,   16,  255,  255},
+    (Color){  0,   20,  255,  255},
+    (Color){  0,   24,  255,  255},
+    (Color){  0,   28,  255,  255},
+    (Color){  0,   32,  255,  255},
+    (Color){  0,   36,  255,  255},
+    (Color){  0,   40,  255,  255},
+    (Color){  0,   44,  255,  255},
+    (Color){  0,   48,  255,  255},
+    (Color){  0,   52,  255,  255},
+    (Color){  0,   56,  255,  255},
+    (Color){  0,   60,  255,  255},
+    (Color){  0,   64,  255,  255},
+    (Color){  0,   68,  255,  255},
+    (Color){  0,   72,  255,  255},
+    (Color){  0,   76,  255,  255},
+    (Color){  0,   80,  255,  255},
+    (Color){  0,   84,  255,  255},
+    (Color){  0,   88,  255,  255},
+    (Color){  0,   92,  255,  255},
+    (Color){  0,   96,  255,  255},
+    (Color){  0,  100,  255,  255},
+    (Color){  0,  104,  255,  255},
+    (Color){  0,  108,  255,  255},
+    (Color){  0,  112,  255,  255},
+    (Color){  0,  116,  255,  255},
+    (Color){  0,  120,  255,  255},
+    (Color){  0,  124,  255,  255},
+    (Color){  0,  128,  255,  255},
+    (Color){  0,  131,  255,  255},
+    (Color){  0,  135,  255,  255},
+    (Color){  0,  139,  255,  255},
+    (Color){  0,  143,  255,  255},
+    (Color){  0,  147,  255,  255},
+    (Color){  0,  151,  255,  255},
+    (Color){  0,  155,  255,  255},
+    (Color){  0,  159,  255,  255},
+    (Color){  0,  163,  255,  255},
+    (Color){  0,  167,  255,  255},
+    (Color){  0,  171,  255,  255},
+    (Color){  0,  175,  255,  255},
+    (Color){  0,  179,  255,  255},
+    (Color){  0,  183,  255,  255},
+    (Color){  0,  187,  255,  255},
+    (Color){  0,  191,  255,  255},
+    (Color){  0,  195,  255,  255},
+    (Color){  0,  199,  255,  255},
+    (Color){  0,  203,  255,  255},
+    (Color){  0,  207,  255,  255},
+    (Color){  0,  211,  255,  255},
+    (Color){  0,  215,  255,  255},
+    (Color){  0,  219,  255,  255},
+    (Color){  0,  223,  255,  255},
+    (Color){  0,  227,  255,  255},
+    (Color){  0,  231,  255,  255},
+    (Color){  0,  235,  255,  255},
+    (Color){  0,  239,  255,  255},
+    (Color){  0,  243,  255,  255},
+    (Color){  0,  247,  255,  255},
+    (Color){  0,  251,  255,  255},
+    (Color){  0,  255,  255,  255},
+    (Color){  4,  255,  251,  255},
+    (Color){  8,  255,  247,  255},
+    (Color){ 12,  255,  243,  255},
+    (Color){ 16,  255,  239,  255},
+    (Color){ 20,  255,  235,  255},
+    (Color){ 24,  255,  231,  255},
+    (Color){ 28,  255,  227,  255},
+    (Color){ 32,  255,  223,  255},
+    (Color){ 36,  255,  219,  255},
+    (Color){ 40,  255,  215,  255},
+    (Color){ 44,  255,  211,  255},
+    (Color){ 48,  255,  207,  255},
+    (Color){ 52,  255,  203,  255},
+    (Color){ 56,  255,  199,  255},
+    (Color){ 60,  255,  195,  255},
+    (Color){ 64,  255,  191,  255},
+    (Color){ 68,  255,  187,  255},
+    (Color){ 72,  255,  183,  255},
+    (Color){ 76,  255,  179,  255},
+    (Color){ 80,  255,  175,  255},
+    (Color){ 84,  255,  171,  255},
+    (Color){ 88,  255,  167,  255},
+    (Color){ 92,  255,  163,  255},
+    (Color){ 96,  255,  159,  255},
+    (Color){100,  255,  155,  255},
+    (Color){104,  255,  151,  255},
+    (Color){108,  255,  147,  255},
+    (Color){112,  255,  143,  255},
+    (Color){116,  255,  139,  255},
+    (Color){120,  255,  135,  255},
+    (Color){124,  255,  131,  255},
+    (Color){128,  255,  128,  255},
+    (Color){131,  255,  124,  255},
+    (Color){135,  255,  120,  255},
+    (Color){139,  255,  116,  255},
+    (Color){143,  255,  112,  255},
+    (Color){147,  255,  108,  255},
+    (Color){151,  255,  104,  255},
+    (Color){155,  255,  100,  255},
+    (Color){159,  255,   96,  255},
+    (Color){163,  255,   92,  255},
+    (Color){167,  255,   88,  255},
+    (Color){171,  255,   84,  255},
+    (Color){175,  255,   80,  255},
+    (Color){179,  255,   76,  255},
+    (Color){183,  255,   72,  255},
+    (Color){187,  255,   68,  255},
+    (Color){191,  255,   64,  255},
+    (Color){195,  255,   60,  255},
+    (Color){199,  255,   56,  255},
+    (Color){203,  255,   52,  255},
+    (Color){207,  255,   48,  255},
+    (Color){211,  255,   44,  255},
+    (Color){215,  255,   40,  255},
+    (Color){219,  255,   36,  255},
+    (Color){223,  255,   32,  255},
+    (Color){227,  255,   28,  255},
+    (Color){231,  255,   24,  255},
+    (Color){235,  255,   20,  255},
+    (Color){239,  255,   16,  255},
+    (Color){243,  255,   12,  255},
+    (Color){247,  255,    8,  255},
+    (Color){251,  255,    4,  255},
+    (Color){255,  255,    0,  255},
+    (Color){255,  251,    0,  255},
+    (Color){255,  247,    0,  255},
+    (Color){255,  243,    0,  255},
+    (Color){255,  239,    0,  255},
+    (Color){255,  235,    0,  255},
+    (Color){255,  231,    0,  255},
+    (Color){255,  227,    0,  255},
+    (Color){255,  223,    0,  255},
+    (Color){255,  219,    0,  255},
+    (Color){255,  215,    0,  255},
+    (Color){255,  211,    0,  255},
+    (Color){255,  207,    0,  255},
+    (Color){255,  203,    0,  255},
+    (Color){255,  199,    0,  255},
+    (Color){255,  195,    0,  255},
+    (Color){255,  191,    0,  255},
+    (Color){255,  187,    0,  255},
+    (Color){255,  183,    0,  255},
+    (Color){255,  179,    0,  255},
+    (Color){255,  175,    0,  255},
+    (Color){255,  171,    0,  255},
+    (Color){255,  167,    0,  255},
+    (Color){255,  163,    0,  255},
+    (Color){255,  159,    0,  255},
+    (Color){255,  155,    0,  255},
+    (Color){255,  151,    0,  255},
+    (Color){255,  147,    0,  255},
+    (Color){255,  143,    0,  255},
+    (Color){255,  139,    0,  255},
+    (Color){255,  135,    0,  255},
+    (Color){255,  131,    0,  255},
+    (Color){255,  128,    0,  255},
+    (Color){255,  124,    0,  255},
+    (Color){255,  120,    0,  255},
+    (Color){255,  116,    0,  255},
+    (Color){255,  112,    0,  255},
+    (Color){255,  108,    0,  255},
+    (Color){255,  104,    0,  255},
+    (Color){255,  100,    0,  255},
+    (Color){255,   96,    0,  255},
+    (Color){255,   92,    0,  255},
+    (Color){255,   88,    0,  255},
+    (Color){255,   84,    0,  255},
+    (Color){255,   80,    0,  255},
+    (Color){255,   76,    0,  255},
+    (Color){255,   72,    0,  255},
+    (Color){255,   68,    0,  255},
+    (Color){255,   64,    0,  255},
+    (Color){255,   60,    0,  255},
+    (Color){255,   56,    0,  255},
+    (Color){255,   52,    0,  255},
+    (Color){255,   48,    0,  255},
+    (Color){255,   44,    0,  255},
+    (Color){255,   40,    0,  255},
+    (Color){255,   36,    0,  255},
+    (Color){255,   32,    0,  255},
+    (Color){255,   28,    0,  255},
+    (Color){255,   24,    0,  255},
+    (Color){255,   20,    0,  255},
+    (Color){255,   16,    0,  255},
+    (Color){255,   12,    0,  255},
+    (Color){255,    8,    0,  255},
+    (Color){255,    4,    0,  255},
+    (Color){255,    0,    0,  255},
+    (Color){251,    0,    0,  255},
+    (Color){247,    0,    0,  255},
+    (Color){243,    0,    0,  255},
+    (Color){239,    0,    0,  255},
+    (Color){235,    0,    0,  255},
+    (Color){231,    0,    0,  255},
+    (Color){227,    0,    0,  255},
+    (Color){223,    0,    0,  255},
+    (Color){219,    0,    0,  255},
+    (Color){215,    0,    0,  255},
+    (Color){211,    0,    0,  255},
+    (Color){207,    0,    0,  255},
+    (Color){203,    0,    0,  255},
+    (Color){199,    0,    0,  255},
+    (Color){195,    0,    0,  255},
+    (Color){191,    0,    0,  255},
+    (Color){187,    0,    0,  255},
+    (Color){183,    0,    0,  255},
+    (Color){179,    0,    0,  255},
+    (Color){175,    0,    0,  255},
+    (Color){171,    0,    0,  255},
+    (Color){167,    0,    0,  255},
+    (Color){163,    0,    0,  255},
+    (Color){159,    0,    0,  255},
+    (Color){155,    0,    0,  255},
+    (Color){151,    0,    0,  255},
+    (Color){147,    0,    0,  255},
+    (Color){143,    0,    0,  255},
+    (Color){139,    0,    0,  255},
+    (Color){135,    0,    0,  255},
+    (Color){131,    0,    0,  255},
+    (Color){128,    0,    0,  255}
+  };
 
   //functions
-    void printColor (Color );
-    Color TtoC (double );
-    static void d_solve(Eigen::Matrix<double,-1,1> &,
-            const Eigen::Matrix<int,1,-1> &,
-            const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &,
-            const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &);
-    void Draw(const Eigen::Matrix<double, -1, -1> & );
-    void ETA(int);
+  void printColor (Color );
+  Color TtoC (double );
+  static void d_solve(Eigen::Matrix<double,-1,1> &,
+          const Eigen::Matrix<int,1,-1> &,
+          const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &,
+          const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &);
+  void Draw(const Eigen::Matrix<double, -1, -1> & );
+  void ETA(int);
 
-    template <typename Scalar> 
-    Eigen::Matrix<Scalar,-1,-1> spdiags(const Eigen::Matrix<Scalar, -1, -1>& , 
-                                    const Eigen::Matrix<int, -1, 1>& ,
-                                    size_t , size_t );
-    template <typename Scalar> 
-    Eigen::Matrix<Scalar,-1,-1> kron(const Eigen::Matrix<Scalar, -1, -1>&,
-                                 const Eigen::Matrix<Scalar, -1, -1>&); 
-    template <typename Scalar>
-    std::vector<Eigen::Triplet<Scalar>> SparseToTriplet(Eigen::SparseMatrix<Scalar> &);
-    template <typename Scalar>
-    Eigen::Matrix<int, 1, -1> my_symamd(Eigen::Matrix<Scalar, -1, -1> &); 
-    void luP(Eigen::Matrix<double,-1,-1> &, std::vector<Eigen::Matrix<double,-1,-1>> &);
+  template <typename Scalar> 
+  Eigen::Matrix<Scalar,-1,-1> spdiags(const Eigen::Matrix<Scalar, -1, -1>& , 
+                                  const Eigen::Matrix<int, -1, 1>& ,
+                                  size_t , size_t );
+  template <typename Scalar> 
+  Eigen::Matrix<Scalar,-1,-1> kron(const Eigen::Matrix<Scalar, -1, -1>&,
+                               const Eigen::Matrix<Scalar, -1, -1>&); 
+  template <typename Scalar>
+  std::vector<Eigen::Triplet<Scalar>> SparseToTriplet(Eigen::SparseMatrix<Scalar> &);
+  template <typename Scalar>
+  Eigen::Matrix<int, 1, -1> my_symamd(Eigen::Matrix<Scalar, -1, -1> &); 
+  void luP(Eigen::Matrix<double,-1,-1> &, std::vector<Eigen::Matrix<double,-1,-1>> &);
 
 };
 
@@ -878,14 +878,15 @@ m_it=0;
 
 void RayBenConvection::eval_next_frame(){
 
-const unsigned int ii = m_nx-2;
-const unsigned int jj = m_ny-2;
+  const unsigned int ii = m_nx-2;
+  const unsigned int jj = m_ny-2;
 
-if (m_it < END_CICLE ) {
+  if (m_it < END_CICLE ) {
 
 
-   if (m_it = 0)
-        ::InitWindow(WINDOW_WIm_dtH, WINDOW_HEIGHT, "Rayleigh-Benard Convection");
+    if (m_it = 0)
+      ::InitWindow(WINDOW_WIm_dtH, WINDOW_HEIGHT, "Rayleigh-Benard Convection");
+    
     ETA(m_it);
 
     /*
@@ -893,139 +894,139 @@ if (m_it < END_CICLE ) {
     m_vplot = 0.5 * (m_v.block(0,0,m_nx,m_ny) + m_v.block(0,1,m_nx,m_ny));
     */
 
-   if(m_it % REFRESH_RATE == 0) {
-     Draw(m_T);
-   }
+    if(m_it % REFRESH_RATE == 0) {
+      Draw(m_T);
+    }
 
-   Eigen::Matrix<double, -1, -1> Tn(m_T);
-   m_Tstar.block(1,1,ii,jj) = (Tn.block(1,1,ii,jj).array() - (m_dt / m_dx / 2)
-     * (m_u.block(2,1,ii,jj).array() * (Tn.block(1,1,ii,jj) + Tn.block(2,1,ii,jj)).array() 
-     - m_u.block(1,1,ii,jj).array() * (Tn.block(1,1,ii,jj) + Tn.block(0,1,ii,jj)).array()) 
-     - (m_dt / m_dy / 2)
-     * (m_v.block(1,2,ii,jj).array() * (Tn.block(1,1,ii,jj) + Tn.block(1,2,ii,jj)).array()
-     - m_v.block(1,1,ii,jj).array() * (Tn.block(1,1,ii,jj) + Tn.block(1,0,ii,jj)).array())).matrix();
+    Eigen::Matrix<double, -1, -1> Tn(m_T);
+    m_Tstar.block(1,1,ii,jj) = (Tn.block(1,1,ii,jj).array() - (m_dt / m_dx / 2)
+      * (m_u.block(2,1,ii,jj).array() * (Tn.block(1,1,ii,jj) + Tn.block(2,1,ii,jj)).array() 
+      - m_u.block(1,1,ii,jj).array() * (Tn.block(1,1,ii,jj) + Tn.block(0,1,ii,jj)).array()) 
+      - (m_dt / m_dy / 2)
+      * (m_v.block(1,2,ii,jj).array() * (Tn.block(1,1,ii,jj) + Tn.block(1,2,ii,jj)).array()
+      - m_v.block(1,1,ii,jj).array() * (Tn.block(1,1,ii,jj) + Tn.block(1,0,ii,jj)).array())).matrix();
 
-   Eigen::Matrix<double, -1, 1> t;
-   t.resize(m_bcT.rows()*m_bcT.cols(), 1);
-   t.col(0) = (m_Tstar.block(1,1,m_Tstar.rows()-2,m_Tstar.cols()-2) + m_bcT).reshaped(m_bcT.rows()*m_bcT.cols(), 1);
+    Eigen::Matrix<double, -1, 1> t;
+    t.resize(m_bcT.rows()*m_bcT.cols(), 1);
+    t.col(0) = (m_Tstar.block(1,1,m_Tstar.rows()-2,m_Tstar.cols()-2) + m_bcT).reshaped(m_bcT.rows()*m_bcT.cols(), 1);
 
-   t(m_pt) = static_cast<Eigen::Matrix<double, -1, -1>>(m_Ut_solver.solve(m_Lt_solver.solve(t(m_pt))));
+    t(m_pt) = static_cast<Eigen::Matrix<double, -1, -1>>(m_Ut_solver.solve(m_Lt_solver.solve(t(m_pt))));
 
-   Eigen::Matrix<double, -1, -1> new_t = t.reshaped(m_nx-2, m_ny-2);
+    Eigen::Matrix<double, -1, -1> new_t = t.reshaped(m_nx-2, m_ny-2);
 
-   m_T.block(1,1,m_T.rows()-2,m_T.cols()-2) = new_t;
+    m_T.block(1,1,m_T.rows()-2,m_T.cols()-2) = new_t;
 
-   m_T.row(0) = m_T.row(1) - Eigen::Matrix<double, 1, m_ny>::Constant(m_TnW * m_dx);
-   m_T.row(m_T.rows()-1) = m_T.row(m_T.rows()-2) + Eigen::Matrix<double, 1, m_ny>::Constant(m_TnE * m_dx);
+    m_T.row(0) = m_T.row(1) - Eigen::Matrix<double, 1, m_ny>::Constant(m_TnW * m_dx);
+    m_T.row(m_T.rows()-1) = m_T.row(m_T.rows()-2) + Eigen::Matrix<double, 1, m_ny>::Constant(m_TnE * m_dx);
 
-   m_T.col(0).setConstant(m_TS);
-   m_T.col(m_T.cols()-1).setConstant(m_TN);
+    m_T.col(0).setConstant(m_TS);
+    m_T.col(m_T.cols()-1).setConstant(m_TN);
 
-   Eigen::Matrix<double, -1, -1> un = m_u;
-   Eigen::Matrix<double, -1, -1> vn = m_v;
+    Eigen::Matrix<double, -1, -1> un = m_u;
+    Eigen::Matrix<double, -1, -1> vn = m_v;
 
-   //%Predictor step(Lax-Friedrich)
-   m_uhalf.block(2,1,ii,jj) = (0.5 * (un.block(3,1,ii,jj) + un.block(1,1,ii,jj)).array() - (m_dt / m_dx / 8)
-                   * (un.block(3,1,ii,jj) + un.block(2,1,ii,jj)).array().square() - (un.block(2,1,ii,jj)
-                   + un.block(1,1,ii,jj)).array().square() - (m_dt / m_dy / 8) * ((un.block(2,1,ii,jj)
-                   + un.block(2,2,ii,jj)).array() * (vn.block(1,2,ii,jj) + vn.block(2,2,ii,jj)).array()
-                   - (un.block(2,1,ii,jj) + un.block(2,0,ii,jj)).array() * (vn.block(1,1,ii,jj)
-                   + vn.block(2,1,ii,jj)).array())).matrix();
-   m_vhalf.block(1,2,ii,jj) = (0.5 * (vn.block(1,3,ii,jj) + vn.block(1,1,ii,jj)).array() - (m_dt / m_dx / 8)
-                   * ((un.block(2,1,ii,jj) + un.block(2,2,ii,jj)).array() * (vn.block(1,2,ii,jj) 
-                   + vn.block(2,2,ii,jj)).array() - (un.block(1,1,ii,jj) + un.block(1,0,ii,jj)).array()
-                   * (vn.block(1,2,ii,jj)
-                   + vn.block(0,2,ii,jj)).array()) - (m_dt / m_dy / 8) * ((vn.block(1,3,ii,jj) 
-                   + vn.block(1,2,ii,jj)).array().square() - (vn.block(1,2,ii,jj)
-                   + vn.block(1,1,ii,jj)).array().square())).matrix();
-   //%Corrector step(Leapfrog)
-   m_uconv.block(2,1,ii,jj) = (un.block(2,1,ii,jj).array() - (m_dt / (4 * m_dx)) * ((m_uhalf.block(3,1,ii,jj) 
-                   + m_uhalf.block(2,1,ii,jj)).array().square() - (m_uhalf.block(2,1,ii,jj)
-                   + m_uhalf.block(1,1,ii,jj)).array().square()) - (m_dt / (4 * m_dy)) * ((m_uhalf.block(2,1,ii,jj) 
-                   + m_uhalf.block(2,2,ii,jj)).array() * (m_vhalf.block(1,2,ii,jj) + m_vhalf.block(2,2,ii,jj)).array()
-                   - (m_uhalf.block(2,1,ii,jj) + m_uhalf.block(2,0,ii,jj)).array() * (m_vhalf.block(1,1,ii,jj) 
-                   + m_vhalf.block(2,1,ii,jj)).array())).matrix();
-   m_vconv.block(1,2,ii,jj) = (vn.block(1,2,ii,jj).array() - (m_dt / (4 * m_dx)) * ((m_uhalf.block(2,1,ii,jj) 
-                   + m_uhalf.block(2,2,ii,jj)).array() * (m_vhalf.block(1,2,ii,jj) + m_vhalf.block(2,2,ii,jj)).array()
-                   - (m_uhalf.block(1,1,ii,jj) + m_uhalf.block(1,0,ii,jj)).array() * (m_vhalf.block(1,2,ii,jj)
-                   + m_vhalf.block(0,2,ii,jj)).array()) - (m_dt / (4 * m_dy)) * ((m_vhalf.block(1,3,ii,jj)
-                   + m_vhalf.block(1,2,ii,jj)).array().square() 
-                   - (m_vhalf.block(1,2,ii,jj) + m_vhalf.block(1,1,ii,jj)).array().square())).matrix();
-   //%Buoyancy term (Boussinesq aproximation):
-   m_vconv.block(1,2,ii,jj) = m_vconv.block(1,2,ii,jj) + (m_Gr / std::pow(m_Re, 2)) * (0.5 * (m_T.block(1,1,ii,jj)
-                   + m_T.block(1,2,ii,jj)) - Eigen::Matrix<double, ii, jj>::Constant(m_To));
+    //%Predictor step(Lax-Friedrich)
+    m_uhalf.block(2,1,ii,jj) = (0.5 * (un.block(3,1,ii,jj) + un.block(1,1,ii,jj)).array() - (m_dt / m_dx / 8)
+                    * (un.block(3,1,ii,jj) + un.block(2,1,ii,jj)).array().square() - (un.block(2,1,ii,jj)
+                    + un.block(1,1,ii,jj)).array().square() - (m_dt / m_dy / 8) * ((un.block(2,1,ii,jj)
+                    + un.block(2,2,ii,jj)).array() * (vn.block(1,2,ii,jj) + vn.block(2,2,ii,jj)).array()
+                    - (un.block(2,1,ii,jj) + un.block(2,0,ii,jj)).array() * (vn.block(1,1,ii,jj)
+                    + vn.block(2,1,ii,jj)).array())).matrix();
+    m_vhalf.block(1,2,ii,jj) = (0.5 * (vn.block(1,3,ii,jj) + vn.block(1,1,ii,jj)).array() - (m_dt / m_dx / 8)
+                    * ((un.block(2,1,ii,jj) + un.block(2,2,ii,jj)).array() * (vn.block(1,2,ii,jj) 
+                    + vn.block(2,2,ii,jj)).array() - (un.block(1,1,ii,jj) + un.block(1,0,ii,jj)).array()
+                    * (vn.block(1,2,ii,jj)
+                    + vn.block(0,2,ii,jj)).array()) - (m_dt / m_dy / 8) * ((vn.block(1,3,ii,jj) 
+                    + vn.block(1,2,ii,jj)).array().square() - (vn.block(1,2,ii,jj)
+                    + vn.block(1,1,ii,jj)).array().square())).matrix();
+    //%Corrector step(Leapfrog)
+    m_uconv.block(2,1,ii,jj) = (un.block(2,1,ii,jj).array() - (m_dt / (4 * m_dx)) * ((m_uhalf.block(3,1,ii,jj) 
+                    + m_uhalf.block(2,1,ii,jj)).array().square() - (m_uhalf.block(2,1,ii,jj)
+                    + m_uhalf.block(1,1,ii,jj)).array().square()) - (m_dt / (4 * m_dy)) * ((m_uhalf.block(2,1,ii,jj) 
+                    + m_uhalf.block(2,2,ii,jj)).array() * (m_vhalf.block(1,2,ii,jj) + m_vhalf.block(2,2,ii,jj)).array()
+                    - (m_uhalf.block(2,1,ii,jj) + m_uhalf.block(2,0,ii,jj)).array() * (m_vhalf.block(1,1,ii,jj) 
+                    + m_vhalf.block(2,1,ii,jj)).array())).matrix();
+    m_vconv.block(1,2,ii,jj) = (vn.block(1,2,ii,jj).array() - (m_dt / (4 * m_dx)) * ((m_uhalf.block(2,1,ii,jj) 
+                    + m_uhalf.block(2,2,ii,jj)).array() * (m_vhalf.block(1,2,ii,jj) + m_vhalf.block(2,2,ii,jj)).array()
+                    - (m_uhalf.block(1,1,ii,jj) + m_uhalf.block(1,0,ii,jj)).array() * (m_vhalf.block(1,2,ii,jj)
+                    + m_vhalf.block(0,2,ii,jj)).array()) - (m_dt / (4 * m_dy)) * ((m_vhalf.block(1,3,ii,jj)
+                    + m_vhalf.block(1,2,ii,jj)).array().square() 
+                    - (m_vhalf.block(1,2,ii,jj) + m_vhalf.block(1,1,ii,jj)).array().square())).matrix();
+    //%Buoyancy term (Boussinesq aproximation):
+    m_vconv.block(1,2,ii,jj) = m_vconv.block(1,2,ii,jj) + (m_Gr / std::pow(m_Re, 2)) * (0.5 * (m_T.block(1,1,ii,jj)
+                    + m_T.block(1,2,ii,jj)) - Eigen::Matrix<double, ii, jj>::Constant(m_To));
 
-   //%(2) Implicit central difference (spatial)
-   Eigen::Matrix<double, -1, 1> U;
-   U.resize(m_bcu.rows()*m_bcu.cols(), 1);
+    //%(2) Implicit central difference (spatial)
+    Eigen::Matrix<double, -1, 1> U;
+    U.resize(m_bcu.rows()*m_bcu.cols(), 1);
 
-   U.col(0) = (m_uconv.block(1,1,m_uconv.rows()-2,m_uconv.cols()-2) + m_bcu).reshaped(m_bcu.rows()*m_bcu.cols(), 1);
+    U.col(0) = (m_uconv.block(1,1,m_uconv.rows()-2,m_uconv.cols()-2) + m_bcu).reshaped(m_bcu.rows()*m_bcu.cols(), 1);
 
-   Eigen::Matrix<double, -1, 1> V;
-   V.resize(m_bcv.rows()*m_bcv.cols(), 1);
+    Eigen::Matrix<double, -1, 1> V;
+    V.resize(m_bcv.rows()*m_bcv.cols(), 1);
 
-   V.col(0) = (m_vconv.block(1,1,m_vconv.rows()-2,m_vconv.cols()-2) + m_bcv).reshaped(m_bcv.rows()*m_bcv.cols(), 1);
+    V.col(0) = (m_vconv.block(1,1,m_vconv.rows()-2,m_vconv.cols()-2) + m_bcv).reshaped(m_bcv.rows()*m_bcv.cols(), 1);
 
-   std::thread t1(d_solve, std::ref(U), std::ref(m_pu), std::ref(m_Lu_solver), std::ref(m_Uu_solver));
-   std::thread t2(d_solve, std::ref(V), std::ref(m_pv), std::ref(m_Lv_solver), std::ref(m_Uv_solver));
+    std::thread t1(d_solve, std::ref(U), std::ref(m_pu), std::ref(m_Lu_solver), std::ref(m_Uu_solver));
+    std::thread t2(d_solve, std::ref(V), std::ref(m_pv), std::ref(m_Lv_solver), std::ref(m_Uv_solver));
 
-   t1.join();
-   t2.join();
+    t1.join();
+    t2.join();
 
-   Eigen::Matrix<double, -1, -1> new_U = U.reshaped(m_nx-1, m_ny-2);
+    Eigen::Matrix<double, -1, -1> new_U = U.reshaped(m_nx-1, m_ny-2);
 
-   m_ustar.block(1,1,m_ustar.rows()-2,m_ustar.cols()-2) = new_U;
+    m_ustar.block(1,1,m_ustar.rows()-2,m_ustar.cols()-2) = new_U;
 
-   Eigen::Matrix<double, -1, -1> new_V = V.reshaped(m_nx-2, m_ny-1);
+    Eigen::Matrix<double, -1, -1> new_V = V.reshaped(m_nx-2, m_ny-1);
 
-   m_vstar.block(1,1,m_vstar.rows()-2,m_vstar.cols()-2) = new_V;
+    m_vstar.block(1,1,m_vstar.rows()-2,m_vstar.cols()-2) = new_V;
 
-   //%Pressure Poisson equation(elliptic):
-   m_S.block(1,1,ii,jj) = (m_ustar.block(2,1,ii,jj) - m_ustar.block(1,1,ii,jj)) / m_dx
-                           + (m_vstar.block(1,2,ii,jj) - m_vstar.block(1,1,ii,jj)) / m_dy;
+    //%Pressure Poisson equation(elliptic):
+    m_S.block(1,1,ii,jj) = (m_ustar.block(2,1,ii,jj) - m_ustar.block(1,1,ii,jj)) / m_dx
+                            + (m_vstar.block(1,2,ii,jj) - m_vstar.block(1,1,ii,jj)) / m_dy;
 
-   Eigen::Matrix<double, -1, 1> s;
-   s.resize((m_S.rows()-2)*(m_S.cols()-2), 1);
+    Eigen::Matrix<double, -1, 1> s;
+    s.resize((m_S.rows()-2)*(m_S.cols()-2), 1);
 
-   s.col(0) = m_S.block(1,1,m_S.rows()-2,m_S.cols()-2).reshaped((m_S.rows()-2)*(m_S.cols()-2), 1);
+    s.col(0) = m_S.block(1,1,m_S.rows()-2,m_S.cols()-2).reshaped((m_S.rows()-2)*(m_S.cols()-2), 1);
 
-   s(m_pp) = static_cast<Eigen::Matrix<double, -1, -1>>(m_Up_solver.solve(m_Lp_solver.solve(s(m_pp))));
+    s(m_pp) = static_cast<Eigen::Matrix<double, -1, -1>>(m_Up_solver.solve(m_Lp_solver.solve(s(m_pp))));
 
-   Eigen::Matrix<double, -1, -1> new_s = s.reshaped(m_nx-2, m_ny-2);
+    Eigen::Matrix<double, -1, -1> new_s = s.reshaped(m_nx-2, m_ny-2);
 
-   m_p.block(1,1,new_s.rows(),new_s.cols()) = new_s;
+    m_p.block(1,1,new_s.rows(),new_s.cols()) = new_s;
 
-   m_p.row(0) = m_p.row(1);
-   m_p.row(m_p.rows()-1) = m_p.row(m_p.rows()-2);
+    m_p.row(0) = m_p.row(1);
+    m_p.row(m_p.rows()-1) = m_p.row(m_p.rows()-2);
 
-   m_p.col(0) = m_p.col(1);
-   m_p.col(m_p.cols()-1) = m_p.col(m_p.cols()-2);
+    m_p.col(0) = m_p.col(1);
+    m_p.col(m_p.cols()-1) = m_p.col(m_p.cols()-2);
 
-   m_u.block(2,1,ii,jj) = m_ustar.block(2,1,ii,jj) - (m_p.block(2,1,ii,jj) - m_p.block(1,1,ii,jj)) / m_dx;
-   m_v.block(1,2,ii,jj) = m_vstar.block(1,2,ii,jj) - (m_p.block(1,2,ii,jj) - m_p.block(1,1,ii,jj)) / m_dy;
+    m_u.block(2,1,ii,jj) = m_ustar.block(2,1,ii,jj) - (m_p.block(2,1,ii,jj) - m_p.block(1,1,ii,jj)) / m_dx;
+    m_v.block(1,2,ii,jj) = m_vstar.block(1,2,ii,jj) - (m_p.block(1,2,ii,jj) - m_p.block(1,1,ii,jj)) / m_dy;
 
-   m_u.row(0) = Eigen::Matrix<double, 1, m_ny>::Constant(2*m_UW) - m_u.row(1);
-   m_u.row(m_u.rows()-1) = Eigen::Matrix<double, 1, m_ny>::Constant(2*m_UE) - m_u.row(m_u.rows()-2);
+    m_u.row(0) = Eigen::Matrix<double, 1, m_ny>::Constant(2*m_UW) - m_u.row(1);
+    m_u.row(m_u.rows()-1) = Eigen::Matrix<double, 1, m_ny>::Constant(2*m_UE) - m_u.row(m_u.rows()-2);
 
-   m_u.col(0).setConstant(m_US);
-   m_u.col(m_u.cols()-1).setConstant(m_UN);
+    m_u.col(0).setConstant(m_US);
+    m_u.col(m_u.cols()-1).setConstant(m_UN);
 
-   m_v.row(0).setConstant(m_VW);
-   m_v.row(m_v.rows()-1).setConstant(m_VE);
+    m_v.row(0).setConstant(m_VW);
+    m_v.row(m_v.rows()-1).setConstant(m_VE);
 
-   m_v.col(0) = Eigen::Matrix<double, m_nx, 1>::Constant(2*m_VS) - m_v.col(1);
-   m_v.col(m_v.cols()-1) = Eigen::Matrix<double, m_nx, 1>::Constant(2*m_VN) - m_v.col(m_v.cols()-2);
+    m_v.col(0) = Eigen::Matrix<double, m_nx, 1>::Constant(2*m_VS) - m_v.col(1);
+    m_v.col(m_v.cols()-1) = Eigen::Matrix<double, m_nx, 1>::Constant(2*m_VN) - m_v.col(m_v.cols()-2);
 
- }
+  }
 
- if (m_it = END_CICLE) {
+  if (m_it = END_CICLE) {
     std::cout << "FINE" << std::endl;
     ::CloseWindow();
     return;
-   }
+  }
 
-++m_it;
+  ++m_it;
 
-return;
+  return;
 }
 
