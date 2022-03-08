@@ -5,6 +5,24 @@
 //  describing fluid m_dyamics evolution according to Navier-Stokes equations.
 //
 /////////////////////////////////////////////////
+/******************************************************************
+ * TODO list:
+ * 1 - Metodi privati vanno rinominati con il prefisso m_
+ * 2 - Dopo aver scritto la documentazione sulla matematica: m_ii, m_jj -> nx-2, ny-2
+ * 3 - write_actual_frame() deve scrivere un file .h che conterrà una
+ *     dichiarazione di una variabile globale dal nome poco rilevante che sarà
+ *     del tipo double[nx][ny][5000] ad ogni chiamata del metodo in oggetto
+ *     verrà salvato T al valore attuale. (Scritto in semplice C99 -> no Eigen::
+ *     e no std::)
+ * 4 - Cercare di capire che analisi matematica vogliamo fare, propongo tre tipi
+ *     di documentazione: a) un file LaTeX con le info molto leggere
+ *     matematiche, una pagine di man per le info sull'utilizzo del software e
+ *     una pagina stile doxigen con gli oggetti e i metodi
+ * 5 - E' la corretta astrazione quella realizzata? Magari facciamo meglio il
+ *     server web?
+ * 6 - Quali parametri l'utente può modificare?
+ ******************************************************************/
+
 
 #include <iostream>
 #include <cmath>
@@ -115,8 +133,8 @@ class RayBenConvection {
   Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Up_solver;
   Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lt_solver;
   Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Ut_solver;
-  //const unsigned int m_ii = m_nx-2;
-  //const unsigned int m_jj = m_ny-2;
+  static const unsigned int m_ii = m_nx-2;
+  static const unsigned int m_jj = m_ny-2;
   //it: ex-for counter.
   unsigned int m_it;
 
@@ -380,28 +398,27 @@ class RayBenConvection {
   };
 
   //functions
-  void printColor (Color );
-  Color TtoC (double );
+  void printColor (Color);
+  Color TtoC (double);
   static void d_solve(Eigen::Matrix<double,-1,1> &,
           const Eigen::Matrix<int,1,-1> &,
           const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &,
           const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &);
-  void Draw(const Eigen::Matrix<double, -1, -1> & );
+  void Draw(const Eigen::Matrix<double, -1, -1> &);
   void ETA(int);
 
   template <typename Scalar> 
-  Eigen::Matrix<Scalar,-1,-1> spdiags(const Eigen::Matrix<Scalar, -1, -1>& , 
-                                  const Eigen::Matrix<int, -1, 1>& ,
-                                  size_t , size_t );
+  Eigen::Matrix<Scalar,-1,-1> spdiags(const Eigen::Matrix<Scalar, -1, -1> &, 
+                                  const Eigen::Matrix<int, -1, 1> &,
+                                  size_t, size_t);
   template <typename Scalar> 
-  Eigen::Matrix<Scalar,-1,-1> kron(const Eigen::Matrix<Scalar, -1, -1>&,
-                               const Eigen::Matrix<Scalar, -1, -1>&); 
+  Eigen::Matrix<Scalar,-1,-1> kron(const Eigen::Matrix<Scalar, -1, -1> &,
+                               const Eigen::Matrix<Scalar, -1, -1> &);
   template <typename Scalar>
   std::vector<Eigen::Triplet<Scalar>> SparseToTriplet(Eigen::SparseMatrix<Scalar> &);
   template <typename Scalar>
   Eigen::Matrix<int, 1, -1> my_symamd(Eigen::Matrix<Scalar, -1, -1> &); 
   void luP(Eigen::Matrix<double,-1,-1> &, std::vector<Eigen::Matrix<double,-1,-1>> &);
-
 };
 
 RayBenConvection::RayBenConvection() {}
@@ -872,8 +889,8 @@ void RayBenConvection::init(){
 
 bool RayBenConvection::eval_next_frame(){
 
-  const unsigned int ii = m_nx-2;
-  const unsigned int jj = m_ny-2;
+  //const unsigned int m_ii = m_nx-2;
+  //const unsigned int m_jj = m_ny-2;
 
   if (m_it < END_CICLE ) {
     
@@ -889,12 +906,12 @@ bool RayBenConvection::eval_next_frame(){
     }
 
     Eigen::Matrix<double, -1, -1> Tn(m_T);
-    m_Tstar.block(1,1,ii,jj) = (Tn.block(1,1,ii,jj).array() - (m_dt / m_dx / 2)
-      * (m_u.block(2,1,ii,jj).array() * (Tn.block(1,1,ii,jj) + Tn.block(2,1,ii,jj)).array() 
-      - m_u.block(1,1,ii,jj).array() * (Tn.block(1,1,ii,jj) + Tn.block(0,1,ii,jj)).array()) 
+    m_Tstar.block(1,1,m_ii,m_jj) = (Tn.block(1,1,m_ii,m_jj).array() - (m_dt / m_dx / 2)
+      * (m_u.block(2,1,m_ii,m_jj).array() * (Tn.block(1,1,m_ii,m_jj) + Tn.block(2,1,m_ii,m_jj)).array() 
+      - m_u.block(1,1,m_ii,m_jj).array() * (Tn.block(1,1,m_ii,m_jj) + Tn.block(0,1,m_ii,m_jj)).array()) 
       - (m_dt / m_dy / 2)
-      * (m_v.block(1,2,ii,jj).array() * (Tn.block(1,1,ii,jj) + Tn.block(1,2,ii,jj)).array()
-      - m_v.block(1,1,ii,jj).array() * (Tn.block(1,1,ii,jj) + Tn.block(1,0,ii,jj)).array())).matrix();
+      * (m_v.block(1,2,m_ii,m_jj).array() * (Tn.block(1,1,m_ii,m_jj) + Tn.block(1,2,m_ii,m_jj)).array()
+      - m_v.block(1,1,m_ii,m_jj).array() * (Tn.block(1,1,m_ii,m_jj) + Tn.block(1,0,m_ii,m_jj)).array())).matrix();
 
     Eigen::Matrix<double, -1, 1> t;
     t.resize(m_bcT.rows()*m_bcT.cols(), 1);
@@ -916,35 +933,35 @@ bool RayBenConvection::eval_next_frame(){
     Eigen::Matrix<double, -1, -1> vn = m_v;
 
     //%Predictor step(Lax-Friedrich)
-    m_uhalf.block(2,1,ii,jj) = (0.5 * (un.block(3,1,ii,jj) + un.block(1,1,ii,jj)).array() - (m_dt / m_dx / 8)
-                    * (un.block(3,1,ii,jj) + un.block(2,1,ii,jj)).array().square() - (un.block(2,1,ii,jj)
-                    + un.block(1,1,ii,jj)).array().square() - (m_dt / m_dy / 8) * ((un.block(2,1,ii,jj)
-                    + un.block(2,2,ii,jj)).array() * (vn.block(1,2,ii,jj) + vn.block(2,2,ii,jj)).array()
-                    - (un.block(2,1,ii,jj) + un.block(2,0,ii,jj)).array() * (vn.block(1,1,ii,jj)
-                    + vn.block(2,1,ii,jj)).array())).matrix();
-    m_vhalf.block(1,2,ii,jj) = (0.5 * (vn.block(1,3,ii,jj) + vn.block(1,1,ii,jj)).array() - (m_dt / m_dx / 8)
-                    * ((un.block(2,1,ii,jj) + un.block(2,2,ii,jj)).array() * (vn.block(1,2,ii,jj) 
-                    + vn.block(2,2,ii,jj)).array() - (un.block(1,1,ii,jj) + un.block(1,0,ii,jj)).array()
-                    * (vn.block(1,2,ii,jj)
-                    + vn.block(0,2,ii,jj)).array()) - (m_dt / m_dy / 8) * ((vn.block(1,3,ii,jj) 
-                    + vn.block(1,2,ii,jj)).array().square() - (vn.block(1,2,ii,jj)
-                    + vn.block(1,1,ii,jj)).array().square())).matrix();
+    m_uhalf.block(2,1,m_ii,m_jj) = (0.5 * (un.block(3,1,m_ii,m_jj) + un.block(1,1,m_ii,m_jj)).array() - (m_dt / m_dx / 8)
+                    * (un.block(3,1,m_ii,m_jj) + un.block(2,1,m_ii,m_jj)).array().square() - (un.block(2,1,m_ii,m_jj)
+                    + un.block(1,1,m_ii,m_jj)).array().square() - (m_dt / m_dy / 8) * ((un.block(2,1,m_ii,m_jj)
+                    + un.block(2,2,m_ii,m_jj)).array() * (vn.block(1,2,m_ii,m_jj) + vn.block(2,2,m_ii,m_jj)).array()
+                    - (un.block(2,1,m_ii,m_jj) + un.block(2,0,m_ii,m_jj)).array() * (vn.block(1,1,m_ii,m_jj)
+                    + vn.block(2,1,m_ii,m_jj)).array())).matrix();
+    m_vhalf.block(1,2,m_ii,m_jj) = (0.5 * (vn.block(1,3,m_ii,m_jj) + vn.block(1,1,m_ii,m_jj)).array() - (m_dt / m_dx / 8)
+                    * ((un.block(2,1,m_ii,m_jj) + un.block(2,2,m_ii,m_jj)).array() * (vn.block(1,2,m_ii,m_jj) 
+                    + vn.block(2,2,m_ii,m_jj)).array() - (un.block(1,1,m_ii,m_jj) + un.block(1,0,m_ii,m_jj)).array()
+                    * (vn.block(1,2,m_ii,m_jj)
+                    + vn.block(0,2,m_ii,m_jj)).array()) - (m_dt / m_dy / 8) * ((vn.block(1,3,m_ii,m_jj) 
+                    + vn.block(1,2,m_ii,m_jj)).array().square() - (vn.block(1,2,m_ii,m_jj)
+                    + vn.block(1,1,m_ii,m_jj)).array().square())).matrix();
     //%Corrector step(Leapfrog)
-    m_uconv.block(2,1,ii,jj) = (un.block(2,1,ii,jj).array() - (m_dt / (4 * m_dx)) * ((m_uhalf.block(3,1,ii,jj) 
-                    + m_uhalf.block(2,1,ii,jj)).array().square() - (m_uhalf.block(2,1,ii,jj)
-                    + m_uhalf.block(1,1,ii,jj)).array().square()) - (m_dt / (4 * m_dy)) * ((m_uhalf.block(2,1,ii,jj) 
-                    + m_uhalf.block(2,2,ii,jj)).array() * (m_vhalf.block(1,2,ii,jj) + m_vhalf.block(2,2,ii,jj)).array()
-                    - (m_uhalf.block(2,1,ii,jj) + m_uhalf.block(2,0,ii,jj)).array() * (m_vhalf.block(1,1,ii,jj) 
-                    + m_vhalf.block(2,1,ii,jj)).array())).matrix();
-    m_vconv.block(1,2,ii,jj) = (vn.block(1,2,ii,jj).array() - (m_dt / (4 * m_dx)) * ((m_uhalf.block(2,1,ii,jj) 
-                    + m_uhalf.block(2,2,ii,jj)).array() * (m_vhalf.block(1,2,ii,jj) + m_vhalf.block(2,2,ii,jj)).array()
-                    - (m_uhalf.block(1,1,ii,jj) + m_uhalf.block(1,0,ii,jj)).array() * (m_vhalf.block(1,2,ii,jj)
-                    + m_vhalf.block(0,2,ii,jj)).array()) - (m_dt / (4 * m_dy)) * ((m_vhalf.block(1,3,ii,jj)
-                    + m_vhalf.block(1,2,ii,jj)).array().square() 
-                    - (m_vhalf.block(1,2,ii,jj) + m_vhalf.block(1,1,ii,jj)).array().square())).matrix();
+    m_uconv.block(2,1,m_ii,m_jj) = (un.block(2,1,m_ii,m_jj).array() - (m_dt / (4 * m_dx)) * ((m_uhalf.block(3,1,m_ii,m_jj) 
+                    + m_uhalf.block(2,1,m_ii,m_jj)).array().square() - (m_uhalf.block(2,1,m_ii,m_jj)
+                    + m_uhalf.block(1,1,m_ii,m_jj)).array().square()) - (m_dt / (4 * m_dy)) * ((m_uhalf.block(2,1,m_ii,m_jj) 
+                    + m_uhalf.block(2,2,m_ii,m_jj)).array() * (m_vhalf.block(1,2,m_ii,m_jj) + m_vhalf.block(2,2,m_ii,m_jj)).array()
+                    - (m_uhalf.block(2,1,m_ii,m_jj) + m_uhalf.block(2,0,m_ii,m_jj)).array() * (m_vhalf.block(1,1,m_ii,m_jj) 
+                    + m_vhalf.block(2,1,m_ii,m_jj)).array())).matrix();
+    m_vconv.block(1,2,m_ii,m_jj) = (vn.block(1,2,m_ii,m_jj).array() - (m_dt / (4 * m_dx)) * ((m_uhalf.block(2,1,m_ii,m_jj) 
+                    + m_uhalf.block(2,2,m_ii,m_jj)).array() * (m_vhalf.block(1,2,m_ii,m_jj) + m_vhalf.block(2,2,m_ii,m_jj)).array()
+                    - (m_uhalf.block(1,1,m_ii,m_jj) + m_uhalf.block(1,0,m_ii,m_jj)).array() * (m_vhalf.block(1,2,m_ii,m_jj)
+                    + m_vhalf.block(0,2,m_ii,m_jj)).array()) - (m_dt / (4 * m_dy)) * ((m_vhalf.block(1,3,m_ii,m_jj)
+                    + m_vhalf.block(1,2,m_ii,m_jj)).array().square() 
+                    - (m_vhalf.block(1,2,m_ii,m_jj) + m_vhalf.block(1,1,m_ii,m_jj)).array().square())).matrix();
     //%Buoyancy term (Boussinesq aproximation):
-    m_vconv.block(1,2,ii,jj) = m_vconv.block(1,2,ii,jj) + (m_Gr / std::pow(m_Re, 2)) * (0.5 * (m_T.block(1,1,ii,jj)
-                    + m_T.block(1,2,ii,jj)) - Eigen::Matrix<double, ii, jj>::Constant(m_To));
+    m_vconv.block(1,2,m_ii,m_jj) = m_vconv.block(1,2,m_ii,m_jj) + (m_Gr / std::pow(m_Re, 2)) * (0.5 * (m_T.block(1,1,m_ii,m_jj)
+                    + m_T.block(1,2,m_ii,m_jj)) - Eigen::Matrix<double, m_ii, m_jj>::Constant(m_To));
 
     //%(2) Implicit central difference (spatial)
     Eigen::Matrix<double, -1, 1> U;
@@ -972,8 +989,8 @@ bool RayBenConvection::eval_next_frame(){
     m_vstar.block(1,1,m_vstar.rows()-2,m_vstar.cols()-2) = new_V;
 
     //%Pressure Poisson equation(elliptic):
-    m_S.block(1,1,ii,jj) = (m_ustar.block(2,1,ii,jj) - m_ustar.block(1,1,ii,jj)) / m_dx
-                            + (m_vstar.block(1,2,ii,jj) - m_vstar.block(1,1,ii,jj)) / m_dy;
+    m_S.block(1,1,m_ii,m_jj) = (m_ustar.block(2,1,m_ii,m_jj) - m_ustar.block(1,1,m_ii,m_jj)) / m_dx
+                            + (m_vstar.block(1,2,m_ii,m_jj) - m_vstar.block(1,1,m_ii,m_jj)) / m_dy;
 
     Eigen::Matrix<double, -1, 1> s;
     s.resize((m_S.rows()-2)*(m_S.cols()-2), 1);
@@ -992,8 +1009,8 @@ bool RayBenConvection::eval_next_frame(){
     m_p.col(0) = m_p.col(1);
     m_p.col(m_p.cols()-1) = m_p.col(m_p.cols()-2);
 
-    m_u.block(2,1,ii,jj) = m_ustar.block(2,1,ii,jj) - (m_p.block(2,1,ii,jj) - m_p.block(1,1,ii,jj)) / m_dx;
-    m_v.block(1,2,ii,jj) = m_vstar.block(1,2,ii,jj) - (m_p.block(1,2,ii,jj) - m_p.block(1,1,ii,jj)) / m_dy;
+    m_u.block(2,1,m_ii,m_jj) = m_ustar.block(2,1,m_ii,m_jj) - (m_p.block(2,1,m_ii,m_jj) - m_p.block(1,1,m_ii,m_jj)) / m_dx;
+    m_v.block(1,2,m_ii,m_jj) = m_vstar.block(1,2,m_ii,m_jj) - (m_p.block(1,2,m_ii,m_jj) - m_p.block(1,1,m_ii,m_jj)) / m_dy;
 
     m_u.row(0) = Eigen::Matrix<double, 1, m_ny>::Constant(2*m_UW) - m_u.row(1);
     m_u.row(m_u.rows()-1) = Eigen::Matrix<double, 1, m_ny>::Constant(2*m_UE) - m_u.row(m_u.rows()-2);
