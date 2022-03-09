@@ -627,11 +627,13 @@ void RayBenConvection::m_write_current_frame (){
   m_output_header_file << "{";
     for (unsigned int i = 0; i < m_nx; i++) {
       m_output_header_file << "{";
-        for (unsigned int j = 0; j < m_ny; j++) 
-         m_output_header_file << m_T( i, j) << ", ";
+        for (unsigned int j = 0; j < m_ny; j++)
+          if (j < m_ny - 1)
+            m_output_header_file << "\t" << m_T(i, j) << ", ";
+          else m_output_header_file << "\t" << m_T(i, j); 
       m_output_header_file << "},\n ";
       }
-  m_output_header_file << "},\n ";
+  m_output_header_file << "}";
 };
 
 void RayBenConvection::init(){
@@ -1058,10 +1060,10 @@ void RayBenConvection::write_current_data(){
       std::cerr <<"Failed opening output_header_file. Exiting..." <<std::endl;
       return;
       }
-  m_output_header_file << "const unsigned int nx = " << m_nx << ";/n" 
-                          "const unsigned int ny = " << m_ny << ";/n"
-                          "const unsigned int n_steps = " << END_CICLE << ";/n" 
-                          "const double T [nx][ny][n_steps] = {/n";
+  m_output_header_file << "const unsigned int nx = " << m_nx << ";\n" 
+                          "const unsigned int ny = " << m_ny << ";\n"
+                          "const unsigned int n_steps = " << END_CICLE << ";\n" 
+                          "const double T [nx][ny][n_steps] = {\n";
   m_write_current_frame();
   }
   else if (m_it == END_CICLE){
@@ -1070,6 +1072,7 @@ void RayBenConvection::write_current_data(){
    std::cout << "File chiuso";
    }
   else {
+    m_output_header_file <<",\n";
     m_write_current_frame();
   }
 }
