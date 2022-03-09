@@ -1,4 +1,5 @@
 #include "RayBenConvection.hpp"
+#include "Server.hpp"
 
 int main(){
   RayBenConvection con;
