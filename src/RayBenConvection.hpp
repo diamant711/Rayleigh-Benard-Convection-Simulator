@@ -10,7 +10,7 @@
  * TODO list:
  * X - Metodi privati vanno rinominati con il prefisso m_
  * 2 - Dopo aver scritto la documentazione sulla matematica: m_ii, m_jj -> nx-2, ny-2
- * 3 - write_current_frame() deve scrivere un file .h che conterra' una
+ * X - write_current_frame() deve scrivere un file .h che conterra' una
  *     dichiarazione di una variabile globale dal nome poco rilevante che sara' 
  *     del tipo double[nx][ny][5000] ad ogni chiamata del metodo in oggetto
  *     verra' salvato T al valore attuale. (Scritto in semplice C99 -> no Eigen::
@@ -45,7 +45,7 @@
 #define WINDOW_WIDTH ((PIXEL*m_nx) + 3*m_nx)
 #define WINDOW_HEIGHT ((PIXEL*m_ny) + 3*m_ny)
 #define NPROC 12
-#define END_CICLE 50
+#define END_CICLE 5000
 #define OUTPUT_HEADER_FILE_NAME "temperature_matrix.h"
 
 
