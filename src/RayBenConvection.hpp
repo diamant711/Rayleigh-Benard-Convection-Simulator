@@ -1,3 +1,4 @@
+
 ///////////////////////////////////////////////
 //
 //  RayleighBenardConvection.hpp specifies a class which is able to
@@ -25,11 +26,11 @@
 
 
 #include <iostream>
+#include <fstream>
 #include <cmath>
 #include <vector>
 #include <chrono>
 #include <thread>
-#include <unistd.h>
 #include "Eigen/Eigen"
 #include "SuiteSparse_config.h"
 #include "colamd.h"
@@ -44,8 +45,8 @@
 #define WINDOW_WIDTH ((PIXEL*m_nx) + 3*m_nx)
 #define WINDOW_HEIGHT ((PIXEL*m_ny) + 3*m_ny)
 #define NPROC 12
-#define END_CICLE 5000
-#define OUTPUT_HEADER_FILE_NAME "./inc/temperature_matrix.h"
+#define END_CICLE 50
+#define OUTPUT_HEADER_FILE_NAME "temperature_matrix.h"
 
 
 class RayBenConvection {
@@ -139,6 +140,7 @@ class RayBenConvection {
   //it: ex-for counter.
   unsigned int m_it;
   std::ofstream m_output_header_file;
+
   const std::vector<Color> jet {
     (Color){  0,    0,  131,  255},
     (Color){  0,    0,  135,  255},
@@ -423,7 +425,7 @@ class RayBenConvection {
   Eigen::Matrix<int, 1, -1> m_my_symamd(Eigen::Matrix<Scalar, -1, -1> &); 
 
   void m_luP(Eigen::Matrix<double,-1,-1> &, std::vector<Eigen::Matrix<double,-1,-1>> &);
-  void m_write_current_frame(int );
+  void m_write_current_frame();
 };
 
 RayBenConvection::RayBenConvection() {}
@@ -605,7 +607,7 @@ Eigen::Matrix<int, 1, -1> RayBenConvection::m_my_symamd(Eigen::Matrix<Scalar, -1
 
 void RayBenConvection::m_luP(Eigen::Matrix<double,-1,-1> &mat,
          std::vector<Eigen::Matrix<double,-1,-1>> &ret_vett){
-  
+
   Eigen::SparseMatrix<double> spmat = mat.sparseView();
   Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> LU_dec(spmat);
 
@@ -617,29 +619,38 @@ void RayBenConvection::m_luP(Eigen::Matrix<double,-1,-1> &mat,
   ret_vett.clear();
   ret_vett.push_back(PL_mat); //[0]
   ret_vett.push_back(U_mat); //[1]
-  
+
   return;
 }
 
-void RayBenConvection::m_write_current_frame (int n_step){
+void RayBenConvection::m_write_current_frame (){
+  m_output_header_file << "{";
+    for (unsigned int i = 0; i < m_nx; i++) {
+      m_output_header_file << "{";
+        for (unsigned int j = 0; j < m_ny; j++) 
+         m_output_header_file << m_T( i, j) << ", ";
+      m_output_header_file << "},\n ";
+      }
+  m_output_header_file << "},\n ";
 };
+
 void RayBenConvection::init(){
-  
+
   std::chrono::time_point<std::chrono::high_resolution_clock> init_lenght = 
     std::chrono::high_resolution_clock::now();
   Eigen::setNbThreads(NPROC);
   ::SetTraceLogLevel(LOG_WARNING);
-  
+
   if(m_TS != m_TN)
     m_To = (m_TS < m_TN) ? m_TS : m_TN;
   else{
     std::cout << "Something stupid went wrong...";
     return;
   }
-  
+
   //m_dt correction:
   m_dt = m_tf / m_nt;
-  
+
   //initialising calculation maxtrices:
   m_u.setZero();
   m_v.setZero();
@@ -1041,18 +1052,24 @@ bool RayBenConvection::eval_next_frame(){
 
 void RayBenConvection::write_current_data(){
   if (m_it == 0){
-    m_output_header_file.open(OUTPUT_HEADER_FILE_NAME, ios_base::out);
- 
-    if (!= m_output_header_file.is_open()){
+    m_output_header_file.open(OUTPUT_HEADER_FILE_NAME, std::ios_base::out);
+   std::cout << "File aperto"; 
+    if (! m_output_header_file.is_open()){
       std::cerr <<"Failed opening output_header_file. Exiting..." <<std::endl;
       return;
       }
   m_output_header_file << "const unsigned int nx = " << m_nx << ";/n" 
                           "const unsigned int ny = " << m_ny << ";/n"
                           "const unsigned int n_steps = " << END_CICLE << ";/n" 
-                          "const double T [nx][ny][n_steps] = {/n"
-
- }
-  else if (m_it == END_CICLE){}
-  else {}
+                          "const double T [nx][ny][n_steps] = {/n";
+  m_write_current_frame();
+  }
+  else if (m_it == END_CICLE){
+    m_output_header_file << "}; ";
+    m_output_header_file.close();
+   std::cout << "File chiuso";
+   }
+  else {
+    m_write_current_frame();
+  }
 }
