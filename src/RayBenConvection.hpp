@@ -7,12 +7,12 @@
 /////////////////////////////////////////////////
 /******************************************************************
  * TODO list:
- * 1 - Metodi privati vanno rinominati con il prefisso m_
+ * X - Metodi privati vanno rinominati con il prefisso m_
  * 2 - Dopo aver scritto la documentazione sulla matematica: m_ii, m_jj -> nx-2, ny-2
- * 3 - write_actual_frame() deve scrivere un file .h che conterrà una
- *     dichiarazione di una variabile globale dal nome poco rilevante che sarà
+ * 3 - write_current_frame() deve scrivere un file .h che conterra' una
+ *     dichiarazione di una variabile globale dal nome poco rilevante che sara'�
  *     del tipo double[nx][ny][5000] ad ogni chiamata del metodo in oggetto
- *     verrà salvato T al valore attuale. (Scritto in semplice C99 -> no Eigen::
+ *     verra' salvato T al valore attuale. (Scritto in semplice C99 -> no Eigen::
  *     e no std::)
  * 4 - Cercare di capire che analisi matematica vogliamo fare, propongo tre tipi
  *     di documentazione: a) un file LaTeX con le info molto leggere
@@ -45,6 +45,7 @@
 #define WINDOW_HEIGHT ((PIXEL*m_ny) + 3*m_ny)
 #define NPROC 12
 #define END_CICLE 5000
+#define OUTPUT_HEADER_FILE_NAME "./inc/temperature_matrix.h"
 
 
 class RayBenConvection {
@@ -54,7 +55,7 @@ class RayBenConvection {
     ~RayBenConvection();
   void init();
   bool eval_next_frame();
-  void write_actual_frame();
+  void write_current_data();
 
   private:
   //variables
@@ -137,7 +138,7 @@ class RayBenConvection {
   static const unsigned int m_jj = m_ny-2;
   //it: ex-for counter.
   unsigned int m_it;
-
+  std::ofstream m_output_header_file;
   const std::vector<Color> jet {
     (Color){  0,    0,  131,  255},
     (Color){  0,    0,  135,  255},
@@ -398,38 +399,42 @@ class RayBenConvection {
   };
 
   //functions
-  void printColor (Color);
-  Color TtoC (double);
-  static void d_solve(Eigen::Matrix<double,-1,1> &,
+  void m_printColor (Color);
+  Color m_TtoC (double);
+  static void m_d_solve(Eigen::Matrix<double,-1,1> &,
           const Eigen::Matrix<int,1,-1> &,
           const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &,
           const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &);
-  void Draw(const Eigen::Matrix<double, -1, -1> &);
-  void ETA(int);
+  void m_Draw(const Eigen::Matrix<double, -1, -1> &);
+  void m_ETA(int);
 
   template <typename Scalar> 
-  Eigen::Matrix<Scalar,-1,-1> spdiags(const Eigen::Matrix<Scalar, -1, -1> &, 
+  Eigen::Matrix<Scalar,-1,-1> m_spdiags(const Eigen::Matrix<Scalar, -1, -1> &, 
                                   const Eigen::Matrix<int, -1, 1> &,
                                   size_t, size_t);
   template <typename Scalar> 
-  Eigen::Matrix<Scalar,-1,-1> kron(const Eigen::Matrix<Scalar, -1, -1> &,
+  Eigen::Matrix<Scalar,-1,-1> m_kron(const Eigen::Matrix<Scalar, -1, -1> &,
                                const Eigen::Matrix<Scalar, -1, -1> &);
+
   template <typename Scalar>
-  std::vector<Eigen::Triplet<Scalar>> SparseToTriplet(Eigen::SparseMatrix<Scalar> &);
+  std::vector<Eigen::Triplet<Scalar>> m_SparseToTriplet(Eigen::SparseMatrix<Scalar> &);
   template <typename Scalar>
-  Eigen::Matrix<int, 1, -1> my_symamd(Eigen::Matrix<Scalar, -1, -1> &); 
-  void luP(Eigen::Matrix<double,-1,-1> &, std::vector<Eigen::Matrix<double,-1,-1>> &);
+
+  Eigen::Matrix<int, 1, -1> m_my_symamd(Eigen::Matrix<Scalar, -1, -1> &); 
+
+  void m_luP(Eigen::Matrix<double,-1,-1> &, std::vector<Eigen::Matrix<double,-1,-1>> &);
+  void m_write_current_frame(int );
 };
 
 RayBenConvection::RayBenConvection() {}
 
 RayBenConvection::~RayBenConvection() {}
 
-void RayBenConvection::printColor (Color c) {
+void RayBenConvection::m_printColor (Color c) {
   ::printf("(%d, %d, %d, %d)\n", c.r, c.g, c.b, c.a);
 }
 
-Color RayBenConvection::TtoC (double T) {
+Color RayBenConvection::m_TtoC (double T) {
   /*
   (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
   */
@@ -438,7 +443,7 @@ Color RayBenConvection::TtoC (double T) {
 }
 
 
-void RayBenConvection::d_solve(Eigen::Matrix<double,-1,1> &mat,
+void RayBenConvection::m_d_solve(Eigen::Matrix<double,-1,1> &mat,
            const Eigen::Matrix<int,1,-1> &perm,
            const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &L,
            const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &U) {
@@ -446,7 +451,7 @@ void RayBenConvection::d_solve(Eigen::Matrix<double,-1,1> &mat,
 }
 
 
-void RayBenConvection::Draw(const Eigen::Matrix<double, -1, -1> &T)
+void RayBenConvection::m_Draw(const Eigen::Matrix<double, -1, -1> &T)
 {
   const unsigned int nx = T.rows();
   const unsigned int ny = T.cols();
@@ -456,7 +461,7 @@ void RayBenConvection::Draw(const Eigen::Matrix<double, -1, -1> &T)
       for(unsigned int k = 0; k < ny; ++k) {
         ::DrawRectangle((WINDOW_WIDTH/2 - nx*PIXEL/2) + i*PIXEL, 
                        (WINDOW_HEIGHT/2 + ny*PIXEL/2) - k*PIXEL, 
-                       PIXEL, PIXEL, TtoC(T(i, k)));
+                       PIXEL, PIXEL, m_TtoC(T(i, k)));
       }
     }
   
@@ -468,7 +473,7 @@ void RayBenConvection::Draw(const Eigen::Matrix<double, -1, -1> &T)
   ::EndDrawing();
 }
 
-void RayBenConvection::ETA(int n_calls){
+void RayBenConvection::m_ETA(int n_calls){
   static std::chrono::time_point<std::chrono::high_resolution_clock> old_time;
   float delta_t;
 
@@ -493,7 +498,7 @@ void RayBenConvection::ETA(int n_calls){
 }
 
 template <typename Scalar> 
-Eigen::Matrix<Scalar,-1,-1> RayBenConvection::spdiags(const Eigen::Matrix<Scalar, -1, -1>& B, 
+Eigen::Matrix<Scalar,-1,-1> RayBenConvection::m_spdiags(const Eigen::Matrix<Scalar, -1, -1>& B, 
                                     const Eigen::Matrix<int, -1, 1>& d,
                                     size_t m, size_t n) {
   Eigen::SparseMatrix<Scalar> A(m,n);
@@ -518,7 +523,7 @@ Eigen::Matrix<Scalar,-1,-1> RayBenConvection::spdiags(const Eigen::Matrix<Scalar
 }
 
 template <typename Scalar> 
-Eigen::Matrix<Scalar,-1,-1> RayBenConvection::kron(const Eigen::Matrix<Scalar, -1, -1>& B, 
+Eigen::Matrix<Scalar,-1,-1> RayBenConvection::m_kron(const Eigen::Matrix<Scalar, -1, -1>& B, 
                                  const Eigen::Matrix<Scalar, -1, -1>& d) {
   Eigen::Matrix<Scalar, -1, -1> A;
   A.resize(B.rows()*d.rows(), B.cols()*d.cols());
@@ -533,7 +538,7 @@ Eigen::Matrix<Scalar,-1,-1> RayBenConvection::kron(const Eigen::Matrix<Scalar, -
 }
 
 template <typename Scalar>
-std::vector<Eigen::Triplet<Scalar>> RayBenConvection::SparseToTriplet(Eigen::SparseMatrix<Scalar> &A)
+std::vector<Eigen::Triplet<Scalar>> RayBenConvection::m_SparseToTriplet(Eigen::SparseMatrix<Scalar> &A)
 {
   std::vector<Eigen::Triplet<Scalar>> A_Triplet;
   for (int k = 0; k < A.outerSize(); ++k)
@@ -547,7 +552,7 @@ std::vector<Eigen::Triplet<Scalar>> RayBenConvection::SparseToTriplet(Eigen::Spa
 }
 
 template <typename Scalar>
-Eigen::Matrix<int, 1, -1> RayBenConvection::my_symamd(Eigen::Matrix<Scalar, -1, -1> &mat) {
+Eigen::Matrix<int, 1, -1> RayBenConvection::m_my_symamd(Eigen::Matrix<Scalar, -1, -1> &mat) {
   if (mat.rows() != mat.cols()) {
     std::cerr << "symamd: Matrice non quadrata!" << std::endl;
     exit(1);
@@ -598,7 +603,7 @@ Eigen::Matrix<int, 1, -1> RayBenConvection::my_symamd(Eigen::Matrix<Scalar, -1, 
   }
 }
 
-void RayBenConvection::luP(Eigen::Matrix<double,-1,-1> &mat,
+void RayBenConvection::m_luP(Eigen::Matrix<double,-1,-1> &mat,
          std::vector<Eigen::Matrix<double,-1,-1>> &ret_vett){
   
   Eigen::SparseMatrix<double> spmat = mat.sparseView();
@@ -616,6 +621,8 @@ void RayBenConvection::luP(Eigen::Matrix<double,-1,-1> &mat,
   return;
 }
 
+void RayBenConvection::m_write_current_frame (int n_step){
+};
 void RayBenConvection::init(){
   
   std::chrono::time_point<std::chrono::high_resolution_clock> init_lenght = 
@@ -685,13 +692,13 @@ void RayBenConvection::init(){
   m_e.setOnes();
   m_i.setOnes();
   
-  m_Ax = spdiags(
+  m_Ax = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_e * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
     Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
     m_nx-1, m_nx-1
     );
   
-  m_Ay = spdiags(
+  m_Ay = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_i * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
     Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
     m_ny-2, m_ny-2
@@ -700,21 +707,21 @@ void RayBenConvection::init(){
   m_Ax(0, 0) = -3;
   m_Ax(m_Ax.rows()-1, m_Ax.rows()-1) = -3; 
    
-  m_A = kron<double>(
+  m_A = m_kron<double>(
         static_cast<Eigen::Matrix<double, -1, -1>>(m_Ay/std::pow(m_dy,2)), 
         Eigen::Matrix<double, m_nx-1, m_nx-1>::Identity()
         )
-        + kron<double>(
+        + m_kron<double>(
         Eigen::Matrix<double, m_ny-2, m_ny-2>::Identity(),
         static_cast<Eigen::Matrix<double, -1, -1>>(m_Ax/std::pow(m_dx,2))
         );
   
   m_Du = Eigen::Matrix<double, (m_nx-1)*(m_ny-2), (m_nx-1)*(m_ny-2)>::Identity() - m_dt * m_A/m_Re;
-  m_pu = my_symamd(m_Du);
+  m_pu = m_my_symamd(m_Du);
   
   m_Duperm = m_Du(m_pu,m_pu);
   
-  luP(m_Duperm, m_LUu);
+  m_luP(m_Duperm, m_LUu);
   
   //Central difference operator(for v)
   m_e.resize(m_nx-2, 1);
@@ -722,13 +729,13 @@ void RayBenConvection::init(){
   m_i.resize(m_ny-1, 1);
   m_i.setOnes();
   
-  m_Ax = spdiags(
+  m_Ax = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_e * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
     Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
     m_nx-2, m_nx-2
     );
   
-  m_Ay = spdiags(
+  m_Ay = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_i * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
     Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
     m_ny-1, m_ny-1
@@ -737,21 +744,21 @@ void RayBenConvection::init(){
   m_Ay(0, 0) = -3;
   m_Ay(m_Ay.rows()-1, m_Ay.cols()-1) = -3; 
    
-  m_A = kron<double>(
+  m_A = m_kron<double>(
         static_cast<Eigen::Matrix<double, -1, -1>>(m_Ay/std::pow(m_dy,2)), 
         Eigen::Matrix<double, m_nx-2, m_nx-2>::Identity()
       )
-    + kron<double>(
+    + m_kron<double>(
         Eigen::Matrix<double, m_ny-1, m_ny-1>::Identity(),
         static_cast<Eigen::Matrix<double, -1, -1>>(m_Ax/std::pow(m_dx,2))
       );
    
   m_Dv = Eigen::Matrix<double, (m_nx-2)*(m_ny-1), (m_nx-2)*(m_ny-1)>::Identity() - m_dt * m_A/m_Re;
-  m_pv = my_symamd(m_Dv);
+  m_pv = m_my_symamd(m_Dv);
    
   m_Dvperm = m_Dv(m_pv,m_pv);
  
-  luP(m_Dvperm, m_LUv);
+  m_luP(m_Dvperm, m_LUv);
 
   //
   //Calculating the coefficient matrix for the PPE
@@ -760,13 +767,13 @@ void RayBenConvection::init(){
   m_i.resize(m_ny-2, 1);
   m_i.setOnes();
   
-  m_Ax = spdiags(
+  m_Ax = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_e * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
     Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
     m_nx-2, m_nx-2
     ); 
   
-  m_Ay = spdiags(
+  m_Ay = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_i * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
     Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
     m_ny-2, m_ny-2
@@ -776,22 +783,22 @@ void RayBenConvection::init(){
   m_Ay(0, 0) = -1;
   m_Ax(m_Ax.rows()-1, m_Ax.cols()-1) = -1;
   m_Ay(m_Ay.rows()-1, m_Ay.cols()-1) = -1;
-   
-  m_A = kron<double>(
+
+  m_A = m_kron<double>(
         static_cast<Eigen::Matrix<double, -1, -1>>(m_Ay/std::pow(m_dy,2)), 
         Eigen::Matrix<double, m_nx-2, m_nx-2>::Identity()
       )
-    + kron<double>(
+    + m_kron<double>(
         Eigen::Matrix<double, m_ny-2, m_ny-2>::Identity(),
         static_cast<Eigen::Matrix<double, -1, -1>>(m_Ax/std::pow(m_dx,2))
       );
-  
-  m_pp = my_symamd(m_A);
-  
+
+  m_pp = m_my_symamd(m_A);
+
   m_Aperm = m_A(m_pp,m_pp);
-  
-  luP(m_Aperm, m_LUp);
-  
+
+  m_luP(m_Aperm, m_LUp);
+
   //%%
   //%B.C vector(for T)
   m_bcT.setZero();
@@ -806,43 +813,43 @@ void RayBenConvection::init(){
   m_bcT(0, m_bcT.cols()-1)            = - m_TnW / m_dx + m_TN / std::pow(m_dy,2);
   m_bcT(m_bcT.rows()-1, m_bcT.cols()-1) = m_TnE / m_dx + m_TN / std::pow(m_dy,2);
   m_bcT = m_dt * m_bcT / m_Pe;
-  
+
   //Central difference operator(for T)
   m_e.resize(m_nx-2, 1);
   m_e.setOnes();
   m_i.resize(m_ny-2, 1);
   m_i.setOnes();
-  
-  m_Tx = spdiags(
+
+  m_Tx = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_e * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
     Eigen::Matrix<int, 1, 3> (-1, 0, 1),
     m_nx-2, m_nx-2
-    ); 
-  
-  m_Ty = spdiags(
+    );
+
+  m_Ty = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_i * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
-    Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
+    Eigen::Matrix<int, 1, 3> (-1, 0, 1),
     m_ny-2, m_ny-2
-    ); 
-  
+    );
+
   m_Tx(0, 0) = -1;
   m_Tx(m_Tx.rows()-1, m_Tx.cols()-1) = -1; 
-  
-  m_Tt = kron<double>(
+
+  m_Tt = m_kron<double>(
         static_cast<Eigen::Matrix<double, -1, -1>>(m_Ty/std::pow(m_dy,2)),
   Eigen::Matrix<double, m_nx-2, m_nx-2>::Identity()
       )
-      + kron<double>(
+      + m_kron<double>(
         Eigen::Matrix<double, m_ny-2, m_ny-2>::Identity(),
         static_cast<Eigen::Matrix<double, -1, -1>>(m_Tx/std::pow(m_dx,2))
       );
-   
+
   m_Tt = Eigen::Matrix<double, (m_nx-2)*(m_ny-2), (m_nx-2)*(m_ny-2)>::Identity() - m_dt * m_Tt/m_Pe;
-  m_pt = my_symamd(m_Tt);
-   
+  m_pt = m_my_symamd(m_Tt);
+
   m_Ttperm = m_Tt(m_pt,m_pt);
-  
-  luP(m_Ttperm, m_LUt);
+
+  m_luP(m_Ttperm, m_LUt);
 
   //%%
   //%Boundary conditions
@@ -850,12 +857,12 @@ void RayBenConvection::init(){
   m_T.row(m_T.rows()-1) = m_T.row(m_T.rows()-2) + Eigen::Matrix<double, 1, m_ny>::Constant(m_TnE * m_dx);
   m_T.col(0).setConstant(m_TS);
   m_T.col(m_T.cols()-1).setConstant(m_TN);
-  
+
   m_u.row(0) = Eigen::Matrix<double, 1, m_ny>::Constant(2 * m_UW) - m_u.row(1);
   m_u.row(m_u.rows()-1) = Eigen::Matrix<double, 1, m_ny>::Constant(2 * m_UE) - m_u.row(m_u.rows()-2);
   m_u.col(0).setConstant(m_US);
   m_u.col(m_u.cols()-1).setConstant(m_UN);
-   
+
   m_v.row(0).setConstant(m_VW);
   m_v.row(m_v.rows()-1).setConstant(m_VE);
   m_v.col(0) = Eigen::Matrix<double, m_nx, 1>::Constant(2 * m_VS) - m_v.col(1);
@@ -893,16 +900,11 @@ bool RayBenConvection::eval_next_frame(){
   //const unsigned int m_jj = m_ny-2;
 
   if (m_it < END_CICLE ) {
-    
-    ETA(m_it);
 
-    /*
-    m_uplot = 0.5 * (m_u.block(0,0,m_nx,m_ny) + m_u.block(1,0,m_nx,m_ny));
-    m_vplot = 0.5 * (m_v.block(0,0,m_nx,m_ny) + m_v.block(0,1,m_nx,m_ny));
-    */
+    m_ETA(m_it);
 
-    if(m_it % REFRESH_RATE == 0) {
-      Draw(m_T);
+      if(m_it % REFRESH_RATE == 0) {
+      m_Draw(m_T);
     }
 
     Eigen::Matrix<double, -1, -1> Tn(m_T);
@@ -974,8 +976,8 @@ bool RayBenConvection::eval_next_frame(){
 
     V.col(0) = (m_vconv.block(1,1,m_vconv.rows()-2,m_vconv.cols()-2) + m_bcv).reshaped(m_bcv.rows()*m_bcv.cols(), 1);
 
-    std::thread t1(d_solve, std::ref(U), std::ref(m_pu), std::ref(m_Lu_solver), std::ref(m_Uu_solver));
-    std::thread t2(d_solve, std::ref(V), std::ref(m_pv), std::ref(m_Lv_solver), std::ref(m_Uv_solver));
+    std::thread t1(m_d_solve, std::ref(U), std::ref(m_pu), std::ref(m_Lu_solver), std::ref(m_Uu_solver));
+    std::thread t2(m_d_solve, std::ref(V), std::ref(m_pv), std::ref(m_Lv_solver), std::ref(m_Uv_solver));
 
     t1.join();
     t2.join();
@@ -1037,3 +1039,20 @@ bool RayBenConvection::eval_next_frame(){
   return false;
 }
 
+void RayBenConvection::write_current_data(){
+  if (m_it == 0){
+    m_output_header_file.open(OUTPUT_HEADER_FILE_NAME, ios_base::out);
+ 
+    if (!= m_output_header_file.is_open()){
+      std::cerr <<"Failed opening output_header_file. Exiting..." <<std::endl;
+      return;
+      }
+  m_output_header_file << "const unsigned int nx = " << m_nx << ";/n" 
+                          "const unsigned int ny = " << m_ny << ";/n"
+                          "const unsigned int n_steps = " << END_CICLE << ";/n" 
+                          "const double T [nx][ny][n_steps] = {/n"
+
+ }
+  else if (m_it == END_CICLE){}
+  else {}
+}
