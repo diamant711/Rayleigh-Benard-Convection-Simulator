@@ -4,16 +4,13 @@ class TCPConnection {
   public:
     TCPConnection();
     ~TCPConnection();
-    bool write();
-    bool read();
-    void load_data(std::string &);
-    void load_data(std::vector<int> &);
-    void load_data(std::vector<unsigned char> &);
-    void load_data(boost::asio::mutable_buffer &);
-    std::string& unload_data();
-    std::vector<int>& unload_data();
-    std::vector<unsigned char>& unload_data();
-    boost::asio::mutable_buffer& unload_data();
+    bool write(void);
+    bool read(void);
+    void load_data(const std::string &);
+    void load_data(const std::vector<int> &);
+    void load_data(const std::vector<unsigned char> &);
+    void load_data(const boost::asio::mutable_buffer &);
+    const boost::asio::mutable_buffer& unload_data(void) const;
     const boost::asio::ip::tcp::socket& get_socket() const;
   private:
     boost::asio::ip::tcp::socket m_socket;
