@@ -1,9 +1,9 @@
 #include <boost/asio.hpp>
 
-class TCPConnection {
+class Connection {
   public:
-    TCPConnection();
-    ~TCPConnection();
+    Connection();
+    ~Connection();
     bool write(void);
     bool read(void);
     void load_data(const std::string &);
