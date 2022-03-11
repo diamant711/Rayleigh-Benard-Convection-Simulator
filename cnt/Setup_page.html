@@ -6,7 +6,7 @@
       body {
         background-color: lightblue;
       }
-      #avviso {
+      #warning {
         color: crimson;
       }
     </style>
@@ -16,15 +16,35 @@
     </script>
   </head>
   <body>
-    <h1 id="avviso">Testo avviso</h1>
-    <form action="" method="get">
-      <label for="hwt">Hot wall temperature</label>
-      <input type="text" id="hwt" name="hwt"><br><br>
-      <label for="cwt">Cold wall temperature</label>
-      <input type="text" id="cwt" name="cwt"><br><br>
-      <label for="hwt">Hot wall temperature</label>
-      <input type="text" id="hwt" name="hwt"><br><br>
+    <h1 id="title"> Setup Convection parameters </h1>
+    <h2 id="warning">Warning: </h2>
+    <h3 id= "warning text">In the following input boxes the user will find parameters regarding water,
+                          at temperature interval 25-35 Celsius degree, sea-level pressure. 
+                          You can try modifing them: </h3>  
+      <form action="" method="get">
+      <label for="hwt">Hot wall temperature (in Celsius)</label>
+      <input type="text" placeholder="35" id="hwt" name="hwt"><br><br>
+      <label for="cwt">Cold wall temperature (in Celsius)</label>
+      <input type="text" placeholder="25" id="cwt" name="cwt"><br><br>
 
+      <h4 id="RAY" > Rayleigh number is a dimensionless number associated with buoyancy-driven flow, also known as natural convection. </h4>
+      <p id="RAY_2" >It characterises the fluid's flow regime: below a critical value, denotes laminar flow, and heat transfer is by 
+                      conduction rather than convection. Over the critical value, it denotes turbulent flow with convection cells. </p>
+      <label for="Ray"> Rayleigh number:</label>
+      <input type="text" placeholder="1e2" id="Ray" name="Ray"><br><br>
+
+      <h4 id="PR" >Prandtl  number is defined as the ratio of momentum diffusivity 
+                   to thermal diffusivity: </h4>
+      <p id="PR_2" > For Pr ≪ 1 the thermal diffusivity dominatest the behavior, while for 
+                      Pr ≫ 1 the momentum diffusivity dominates.  </p>
+      <label for="Pr">Prandtl number:</label>
+      <input type="text" placeholder="7" id="Pr" name="Pr"><br><br>
+
+      <h4 id="REY" >Reynolds number helps predict flow patterns in different fluid flow situations. </h4>
+      <p id="REY_2" > At low Reynolds numbers, flows tends to be laminar,
+                       while at high Reynolds numbers flows tend to be turbulent. </p>
+      <label for="Rey">Reynolds number:</label>
+      <input type="text" placeholder="1e2" id="Rey" name="Rey"><br><br>
 
       <input type="submit" value="Submit">
     </form> 
