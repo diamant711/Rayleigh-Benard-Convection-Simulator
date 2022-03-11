@@ -19,9 +19,9 @@
 /******************************************************************************
  *
  *    TODO:
- *      1) set_status_code method
- *      2) get_http_response method
- *      3) tests...
+ *      1) get_http_response method
+ *      2) tests...
+ *      3) http file not found
  *
  *****************************************************************************/
 
@@ -43,7 +43,6 @@ class WebPage {
     WebPage(const std::string &);
     ~WebPage(void);
     
-    void set_status_code(unsigned int);
     const std::string& get_http_response(void) const;
   
   private:
@@ -53,9 +52,10 @@ class WebPage {
     std::string m_http_header;
     std::string m_http_body;
     std::string m_http_response;
-    status_code_t m_status_code = {200, "OK"};
+    status_code_t m_status_code = {200, "OK\0"};
     const std::vector<std::string> m_content_types = {
-      "text/html"
+      "text/html",
+      "text/plain"
     };
     bool m_ready_to_ship = false;
     //function
@@ -74,9 +74,9 @@ bool WebPage::m_fill_http_header(void) {
     std::sprintf(content_lenght, "%d", tmp.size());
     tmp.clear();
     tmp = HTTP_VERSION + ' ' + m_status_code.status_number 
-                       + ' ' + m_status_code.status_phrase + "\r\n"
-          + "Content-Type: " + m_content_type + "\r\n"
-          + "Content-Lenght: " + content_lenght + "\r\n";
+                       + ' ' + m_status_code.status_phrase + '\r' + '\n'
+          + "Content-Type: " + m_content_type + '\r' + '\n'
+          + "Content-Lenght: " + content_lenght + '\r' + '\n';
     m_http_header = tmp;
     m_input_file.clear();
     m_input_file.seekg(0);
@@ -109,7 +109,7 @@ void WebPage::m_compose_response(void) {
 const std::string WebPage::m_get_extension_from_path(const std::string &path) {
   std::string::size_type start_index = path.find_last_of('.');
   return (start_index == path.size()) ? "plain"
-          : path.substr(start_index, path.size() - start_index);
+          : path.substr(start_index + 1, path.size() - start_index + 1);
 }
 
 const std::string WebPage::m_get_extension_from_path(const char *path) {
@@ -122,7 +122,7 @@ WebPage::WebPage(const char *path) : m_input_file(path),
                                        *std::find(
                                          m_content_types.cbegin(),
                                          m_content_types.cend(),
-                                         m_get_extension_from_path(path)
+                                         "text/" + m_get_extension_from_path(path)
                                        )
                                      )
 {
