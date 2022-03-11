@@ -80,8 +80,10 @@ class RayBenConvection {
   double m_To;
   Eigen::Matrix<double, m_nx, m_ny> m_T;
   const double m_Re = 1e2;
+  // Numero di Prandtl: (m_Pr) rapporto della diffusivita' cinematica rispetto alla diffusivita' termica per un fluido viscoso.
   const double m_Pr = 7;
   const double m_Pe = m_Re * m_Pr;
+  // rapporto della diffusivita' cinematica rispetto alla diffusivita' termica per un fluido viscoso.
   const double m_Ra = 1e2;
   const double m_Gr= m_Ra / m_Pr;
   Eigen::Matrix<double, m_nx, m_ny> m_Tstar;
