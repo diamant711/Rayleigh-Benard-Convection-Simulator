@@ -19,15 +19,15 @@
 /******************************************************************************
  *
  *    TODO:
- *      1) get_http_response method
- *      2) tests...
- *      3) http file not found
+ *      1) tests...
+ *      2) http file not found
  *
  *****************************************************************************/
 
-#include <vector>
-#include <fstream>
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
 
 #define MAX_BODY_SIZE_DIGITS 100
 #define HTTP_VERSION "HTTP/1.1"
@@ -66,6 +66,10 @@ class WebPage {
     void m_compose_response(void);
 };
 
+const std::string& WebPage::get_http_response(void) const {
+  return m_http_response;
+}
+
 bool WebPage::m_fill_http_header(void) {
   if(m_input_file.good()) {
     std::string tmp;
@@ -73,10 +77,21 @@ bool WebPage::m_fill_http_header(void) {
     char content_lenght[MAX_BODY_SIZE_DIGITS];
     std::sprintf(content_lenght, "%d", tmp.size());
     tmp.clear();
-    tmp = HTTP_VERSION + ' ' + m_status_code.status_number 
-                       + ' ' + m_status_code.status_phrase + '\r' + '\n'
-          + "Content-Type: " + m_content_type + '\r' + '\n'
-          + "Content-Lenght: " + content_lenght + '\r' + '\n';
+    tmp = HTTP_VERSION;
+    tmp += ' ';
+    tmp += m_status_code.status_number;
+    tmp += ' ';
+    tmp += m_status_code.status_phrase;
+    tmp += '\r';
+    tmp += '\n';
+    tmp += "Content-Type: ";
+    tmp += m_content_type;
+    tmp += '\r';
+    tmp += '\n';
+    tmp += "Content-Lenght: ";
+    tmp += content_lenght;
+    tmp += '\r';
+    tmp += '\n';
     m_http_header = tmp;
     m_input_file.clear();
     m_input_file.seekg(0);
@@ -134,7 +149,7 @@ WebPage::WebPage(const std::string &path) : m_input_file(path),
                                        *std::find(
                                          m_content_types.cbegin(),
                                          m_content_types.cend(),
-                                         m_get_extension_from_path(path)
+                                         "text/" + m_get_extension_from_path(path)
                                        )
                                      )
 {
