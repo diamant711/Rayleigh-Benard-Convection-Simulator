@@ -19,8 +19,7 @@
 /******************************************************************************
  *
  *    TODO:
- *      1) tests...
- *      2) http file not found
+ *      1) http file not found
  *
  *****************************************************************************/
 
@@ -29,7 +28,6 @@
 #include <string>
 #include <vector>
 
-#define MAX_BODY_SIZE_DIGITS 100
 #define HTTP_VERSION "HTTP/1.1"
 
 class WebPage {
@@ -49,10 +47,12 @@ class WebPage {
     //Variables
     std::ifstream m_input_file;
     std::string m_content_type;
+    const std::string m_content_type_prefix = "text/";
     std::string m_http_header;
     std::string m_http_body;
     std::string m_http_response;
-    status_code_t m_status_code = {200, "OK\0"};
+    std::string m_content_lenght;
+    status_code_t m_status_code = {200, "OK"};
     const std::vector<std::string> m_content_types = {
       "text/html",
       "text/plain"
@@ -62,9 +62,18 @@ class WebPage {
     const std::string m_get_extension_from_path(const std::string &);
     const std::string m_get_extension_from_path(const char *);
     bool m_fill_http_header(void);
-    bool m_fill_http_body(void);
     void m_compose_response(void);
+    std::string m_itos(int);
 };
+
+std::string WebPage::m_itos(int n) {
+  static const unsigned int max_number_digits = 100;
+  std::string ret;
+  char buf[max_number_digits];
+  std::sprintf(buf, "%d", n);
+  ret = buf;
+  return ret; 
+}
 
 const std::string& WebPage::get_http_response(void) const {
   return m_http_response;
@@ -73,13 +82,14 @@ const std::string& WebPage::get_http_response(void) const {
 bool WebPage::m_fill_http_header(void) {
   if(m_input_file.good()) {
     std::string tmp;
-    m_input_file >> tmp;
-    char content_lenght[MAX_BODY_SIZE_DIGITS];
-    std::sprintf(content_lenght, "%d", tmp.size());
+    m_http_body.clear();
+    while(!m_input_file.eof())
+      m_http_body += m_input_file.get();
+    m_content_lenght = m_itos(m_http_body.size());
     tmp.clear();
     tmp = HTTP_VERSION;
     tmp += ' ';
-    tmp += m_status_code.status_number;
+    tmp += m_itos(m_status_code.status_number);
     tmp += ' ';
     tmp += m_status_code.status_phrase;
     tmp += '\r';
@@ -89,7 +99,7 @@ bool WebPage::m_fill_http_header(void) {
     tmp += '\r';
     tmp += '\n';
     tmp += "Content-Lenght: ";
-    tmp += content_lenght;
+    tmp += m_content_lenght;
     tmp += '\r';
     tmp += '\n';
     m_http_header = tmp;
@@ -102,19 +112,8 @@ bool WebPage::m_fill_http_header(void) {
   }
 }
 
-bool WebPage::m_fill_http_body(void) {
-  if(m_input_file.good()) {
-    m_input_file >> m_http_body;
-    m_input_file.close();
-    return true;
-  } else {
-    std::cerr << "Error: file not good" << std::endl;
-    return false;
-  } 
-}
-
 void WebPage::m_compose_response(void) {
-  if(m_fill_http_header() && m_fill_http_body()) {
+  if(m_fill_http_header()) {
     m_http_response = m_http_header + "\r\n" + m_http_body;
   } else {
     std::cerr << "Due to file errors the http response wont be completed" << std::endl;
@@ -123,34 +122,36 @@ void WebPage::m_compose_response(void) {
 
 const std::string WebPage::m_get_extension_from_path(const std::string &path) {
   std::string::size_type start_index = path.find_last_of('.');
-  return (start_index == path.size()) ? "plain"
-          : path.substr(start_index + 1, path.size() - start_index + 1);
+  if (start_index == path.size()) {
+    return "plain";
+  } else {
+    return path.substr(start_index + 1, path.size() - start_index + 1);
+  }
 }
 
 const std::string WebPage::m_get_extension_from_path(const char *path) {
-  std::string tmp_path(path);
-  return m_get_extension_from_path(tmp_path);
+  std::string tmp(path);
+  tmp = m_get_extension_from_path(tmp);
+  return tmp;
 }
 
-WebPage::WebPage(const char *path) : m_input_file(path),
-                                     m_content_type(
-                                       *std::find(
-                                         m_content_types.cbegin(),
-                                         m_content_types.cend(),
-                                         "text/" + m_get_extension_from_path(path)
-                                       )
-                                     )
-{
+WebPage::WebPage(const char *path) : m_input_file(path) {
+  m_content_type = *(std::find(
+        m_content_types.begin(),
+        m_content_types.end(),
+        m_content_type_prefix + m_get_extension_from_path(path)
+  ));
   m_compose_response();
 }
 
 WebPage::WebPage(const std::string &path) : m_input_file(path),
                                      m_content_type(
-                                       *std::find(
-                                         m_content_types.cbegin(),
-                                         m_content_types.cend(),
-                                         "text/" + m_get_extension_from_path(path)
-                                       )
+                                       *(std::find(
+                                         m_content_types.begin(),
+                                         m_content_types.end(),
+                                           m_content_type_prefix
+                                           + m_get_extension_from_path(path)
+                                       ))
                                      )
 {
   m_compose_response();
