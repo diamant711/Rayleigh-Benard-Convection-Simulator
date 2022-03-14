@@ -9,7 +9,7 @@
 #include <boost/asio.hpp>
 #include <memory>
 
-class Connection : public std::enable_shared_from_this<Connection> {
+class Connection {
   public:
     Connection();
     ~Connection();
@@ -21,7 +21,7 @@ class Connection : public std::enable_shared_from_this<Connection> {
     void load_data(const std::shared_ptr<char>);
     void load_data(const boost::asio::mutable_buffer &);
     const std::shared_ptr<char> unload_data(void) const;
-    const boost::asio::ip::tcp::socket& get_socket() const;
+    boost::asio::ip::tcp::socket& get_socket();
   private:
     boost::asio::ip::tcp::socket m_socket;
     boost::asio::mutable_buffer m_internal_buffer;
