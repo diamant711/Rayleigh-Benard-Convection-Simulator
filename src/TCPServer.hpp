@@ -21,6 +21,7 @@ class TCPServer : public Server {
     void m_start_accept(void);
     void m_handle_accept(m_connection_database_record_t &,
                          const boost::system::error_code &);
+    
 };
 
 TCPServer::TCPServer(int port) : m_acceptor(m_io_context, 
@@ -35,6 +36,7 @@ void m_handle_accept(m_connection_database_record_t& new_connection,
                      const boost::system::error_code& error)
 {
   if(!error) {
+    //compile simple different instances different stack
     new_connection.remote_ip = ;
     new_connection. = ;
     m_connection_database.insert(new_connection);

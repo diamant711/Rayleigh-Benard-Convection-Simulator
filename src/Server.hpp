@@ -21,6 +21,7 @@ class Server {
       bool end_of_life = false;
       boost::asio::address remote_ip;
     } m_connection_database_record_t;
+    //stack different instance different map
     std::map<int, m_connection_database_record_t> m_connection_database;
     boost::asio::io_context m_io_context;
 };
