@@ -4,18 +4,15 @@
 #include "WebPage.hpp"
 
 int main(){
-  /*
+ 
   RayBenConvection con;
-  con.init();
+  con.init(25, 55, 1e2, 7, 100);
 
   while(1){
     con.write_current_data();
     if (con.eval_next_frame())
       break;
   }
-  */
-  WebPage test_page("../cnt/test.html");
-  std::cout << test_page.get_http_response() << std::endl;
-
+ 
   return 0;
 }

@@ -36,9 +36,6 @@
 #include "colamd.h"
 #include "raylib.h"
 
-#define T_CALDO 35
-#define T_FREDDO 25
-
 #define REFRESH_RATE 5
 #define PIXEL 4
 
@@ -54,7 +51,7 @@ class RayBenConvection {
   public:
     RayBenConvection();
     ~RayBenConvection();
-  void init();
+  void init(double, double, double, double, double );
   bool eval_next_frame();
   void write_current_data();
 
@@ -69,8 +66,8 @@ class RayBenConvection {
   const double m_L = 5;
   const double m_dx = m_L / (m_nx - 1);
   const double m_dy = m_H / (m_ny - 1);
-  const double m_TN = T_FREDDO;
-  const double m_TS = T_CALDO;
+  double m_TN;  //lower temperature (cold)
+  double m_TS;  //upper temperature (hot)
   Eigen::Matrix<double, m_nx+1, m_ny> m_u;
   Eigen::Matrix<double, m_nx, m_ny+1> m_v;
   Eigen::Matrix<double, m_nx, m_ny> m_p;
@@ -79,13 +76,11 @@ class RayBenConvection {
   Eigen::Matrix<double, m_nx, m_ny> m_vplot;
   double m_To;
   Eigen::Matrix<double, m_nx, m_ny> m_T;
-  const double m_Re = 1e2;
-  // Numero di Prandtl: (m_Pr) rapporto della diffusivita' cinematica rispetto alla diffusivita' termica per un fluido viscoso.
-  const double m_Pr = 7;
-  const double m_Pe = m_Re * m_Pr;
-  // rapporto della diffusivita' cinematica rispetto alla diffusivita' termica per un fluido viscoso.
-  const double m_Ra = 1e2;
-  const double m_Gr= m_Ra / m_Pr;
+  double m_Re;
+  double m_Pr;
+  double m_Pe;
+  double m_Ra;
+  double m_Gr;
   Eigen::Matrix<double, m_nx, m_ny> m_Tstar;
   Eigen::Matrix<double, m_nx+1, m_ny> m_ustar;
   Eigen::Matrix<double, m_nx+1, m_ny> m_uhalf;
@@ -404,12 +399,12 @@ class RayBenConvection {
 
   //functions
   void m_printColor (Color);
-  Color m_TtoC (double);
+  Color m_TtoC (double, double, double);
   static void m_d_solve(Eigen::Matrix<double,-1,1> &,
           const Eigen::Matrix<int,1,-1> &,
           const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &,
           const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &);
-  void m_Draw(const Eigen::Matrix<double, -1, -1> &);
+  void m_Draw(double, double, const Eigen::Matrix<double, -1, -1> &);
   void m_ETA(int);
 
   template <typename Scalar> 
@@ -438,11 +433,11 @@ void RayBenConvection::m_printColor (Color c) {
   ::printf("(%d, %d, %d, %d)\n", c.r, c.g, c.b, c.a);
 }
 
-Color RayBenConvection::m_TtoC (double T) {
+Color RayBenConvection::m_TtoC (double cold_temp, double hot_temp,  double T) {
   /*
   (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
   */
-  int index = (T - T_FREDDO) * (jet.size() - 1) / ( T_CALDO - T_FREDDO );
+  int index = (T - cold_temp) * (jet.size() - 1) / ( hot_temp - cold_temp );
   return jet[index];
 }
 
@@ -455,7 +450,7 @@ void RayBenConvection::m_d_solve(Eigen::Matrix<double,-1,1> &mat,
 }
 
 
-void RayBenConvection::m_Draw(const Eigen::Matrix<double, -1, -1> &T)
+void RayBenConvection::m_Draw(double cold_temp, double hot_temp, const Eigen::Matrix<double, -1, -1> &T)
 {
   const unsigned int nx = T.rows();
   const unsigned int ny = T.cols();
@@ -465,7 +460,7 @@ void RayBenConvection::m_Draw(const Eigen::Matrix<double, -1, -1> &T)
       for(unsigned int k = 0; k < ny; ++k) {
         ::DrawRectangle((WINDOW_WIDTH/2 - nx*PIXEL/2) + i*PIXEL, 
                        (WINDOW_HEIGHT/2 + ny*PIXEL/2) - k*PIXEL, 
-                       PIXEL, PIXEL, m_TtoC(T(i, k)));
+                       PIXEL, PIXEL, m_TtoC(cold_temp, hot_temp, T(i, k)));
       }
     }
   
@@ -638,12 +633,20 @@ void RayBenConvection::m_write_current_frame (){
   m_output_header_file << "}";
 };
 
-void RayBenConvection::init(){
+void RayBenConvection::init(double cold_temp, double hot_temp, double Ray_numb, double Pr_numb, double Re_numb ){
 
   std::chrono::time_point<std::chrono::high_resolution_clock> init_lenght = 
     std::chrono::high_resolution_clock::now();
   Eigen::setNbThreads(NPROC);
   ::SetTraceLogLevel(LOG_WARNING);
+
+  m_TN = cold_temp;
+  m_TS = hot_temp;
+  m_Ra = Ray_numb;
+  m_Pr = Pr_numb;
+  m_Re = Re_numb;
+  m_Pe= m_Re * m_Pr;
+  m_Gr= m_Ra / m_Pr;
 
   if(m_TS != m_TN)
     m_To = (m_TS < m_TN) ? m_TS : m_TN;
@@ -651,7 +654,7 @@ void RayBenConvection::init(){
     std::cout << "Something stupid went wrong...";
     return;
   }
-
+ std::cout<<"656"<<std::endl;
   //m_dt correction:
   m_dt = m_tf / m_nt;
 
@@ -671,7 +674,7 @@ void RayBenConvection::init(){
   m_vstar = m_v;
   m_vhalf = m_v;
   m_vconv = m_v;
-  
+
   //IMPLICIT DIFFUSION:-
   //B.C vector(for u)
   m_bcu.setZero(),
@@ -679,14 +682,14 @@ void RayBenConvection::init(){
   m_bcu.row(m_bcu.rows()-1).setConstant(2 * m_UE / std::pow(m_dx,2));
   m_bcu.col(0).setConstant(m_US / std::pow(m_dy,2));
   m_bcu.col(m_bcu.cols()-1).setConstant(m_UN / std::pow(m_dy,2));
-  
+
   //B.Cs at the corners:
   m_bcu(0, 0)                       = 2 * m_UW / std::pow(m_dx,2) + m_US / std::pow(m_dy,2);
   m_bcu(m_bcu.rows()-1, 0)            = 2 * m_UE / std::pow(m_dx,2) + m_US / std::pow(m_dy,2);
   m_bcu(0, (m_ny-2)-1)                = 2 * m_UW / std::pow(m_dx,2) + m_UN / std::pow(m_dy,2);
   m_bcu(m_bcu.rows()-1, m_bcu.cols()-1) = 2 * m_UE / std::pow(m_dx,2) + m_UN / std::pow(m_dy,2);
   m_bcu = m_dt * m_bcu / m_Re;
-  
+
   //B.C vector(for v)
   m_bcv.setZero();
   m_bcv.row(0).setConstant(2 * m_VW / std::pow(m_dx,2));
@@ -700,19 +703,19 @@ void RayBenConvection::init(){
   m_bcv(0, m_bcv.cols()-1)            = 2 * m_VW / std::pow(m_dx,2) + m_VN / std::pow(m_dy,2);
   m_bcv(m_bcv.rows()-1, m_bcv.cols()-1) = 2 * m_VE / std::pow(m_dx,2) + m_VN / std::pow(m_dy,2);
   m_bcv = m_dt * m_bcv / m_Re;
-  
+
   //Initialising central difference operator(for u)
   m_e.resize(m_nx-1, 1);
   m_i.resize(m_ny-2, 1);
   m_e.setOnes();
   m_i.setOnes();
-  
+
   m_Ax = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_e * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
     Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
     m_nx-1, m_nx-1
     );
-  
+
   m_Ay = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_i * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
     Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
@@ -767,12 +770,12 @@ void RayBenConvection::init(){
         Eigen::Matrix<double, m_ny-1, m_ny-1>::Identity(),
         static_cast<Eigen::Matrix<double, -1, -1>>(m_Ax/std::pow(m_dx,2))
       );
-   
+
   m_Dv = Eigen::Matrix<double, (m_nx-2)*(m_ny-1), (m_nx-2)*(m_ny-1)>::Identity() - m_dt * m_A/m_Re;
   m_pv = m_my_symamd(m_Dv);
-   
+
   m_Dvperm = m_Dv(m_pv,m_pv);
- 
+
   m_luP(m_Dvperm, m_LUv);
 
   //
@@ -781,13 +784,13 @@ void RayBenConvection::init(){
   m_e.setOnes();
   m_i.resize(m_ny-2, 1);
   m_i.setOnes();
-  
+
   m_Ax = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_e * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
     Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
     m_nx-2, m_nx-2
     ); 
-  
+
   m_Ay = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_i * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
     Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
@@ -798,6 +801,7 @@ void RayBenConvection::init(){
   m_Ay(0, 0) = -1;
   m_Ax(m_Ax.rows()-1, m_Ax.cols()-1) = -1;
   m_Ay(m_Ay.rows()-1, m_Ay.cols()-1) = -1;
+
 
   m_A = m_kron<double>(
         static_cast<Eigen::Matrix<double, -1, -1>>(m_Ay/std::pow(m_dy,2)), 
@@ -860,6 +864,7 @@ void RayBenConvection::init(){
       );
 
   m_Tt = Eigen::Matrix<double, (m_nx-2)*(m_ny-2), (m_nx-2)*(m_ny-2)>::Identity() - m_dt * m_Tt/m_Pe;
+
   m_pt = m_my_symamd(m_Tt);
 
   m_Ttperm = m_Tt(m_pt,m_pt);
@@ -889,12 +894,19 @@ void RayBenConvection::init(){
 
   //Easying solver calculations: eleoicca stuff
   m_Lu_solver.compute(m_LUu[0]);
+
   m_Uu_solver.compute(m_LUu[1]);
+
   m_Lv_solver.compute(m_LUv[0]);
+
   m_Uv_solver.compute(m_LUv[1]);
+
   m_Lp_solver.compute(m_LUp[0]);
+
   m_Up_solver.compute(m_LUp[1]);
+
   m_Lt_solver.compute(m_LUt[0]);
+
   m_Ut_solver.compute(m_LUt[1]);
 
   std::cout << "Time spent in init() function: "
@@ -919,7 +931,7 @@ bool RayBenConvection::eval_next_frame(){
     m_ETA(m_it);
 
       if(m_it % REFRESH_RATE == 0) {
-      m_Draw(m_T);
+      m_Draw(m_TN, m_TS, m_T);
     }
 
     Eigen::Matrix<double, -1, -1> Tn(m_T);
