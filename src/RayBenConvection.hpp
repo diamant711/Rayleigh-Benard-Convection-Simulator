@@ -645,7 +645,7 @@ void RayBenConvection::init(double cold_temp, double hot_temp, double Ray_numb, 
   m_Ra = Ray_numb;
   m_Pr = Pr_numb;
   m_Re = Re_numb;
-  m_Pe= 0;
+  m_Pe = m_Re * m_Pr;
   m_Gr= m_Ra / m_Pr;
 
   if(m_TS != m_TN)
