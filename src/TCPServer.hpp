@@ -36,10 +36,11 @@ void m_handle_accept(m_connection_database_record_t& new_connection,
                      const boost::system::error_code& error)
 {
   if(!error) {
-    //compile simple different instances different stack
-    new_connection.remote_ip = ;
-    new_connection. = ;
-    m_connection_database.insert(new_connection);
+    new_connection.remote_ip = 
+      new_connection.connection.get_socket().remote_endpoint().address();
+    new_connection.port = 
+      new_connection.connection.get_socket().remote_endpoint().port();
+    m_connection_database.push_back(new_connection);
   }
   m_start_accept();
 }
@@ -47,7 +48,7 @@ void m_handle_accept(m_connection_database_record_t& new_connection,
 void Server::start_accept(void) {
   m_connection_database_record_t new_connection;
 
-  async_accept(new_connection.connection_ptr->get_socket(),
+  async_accept(new_connection.connection.get_socket(),
                std::bind(&m_handle_accept, this, new_connection, error));
 }
 
