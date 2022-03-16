@@ -398,6 +398,7 @@ class RayBenConvection {
   };
 
   //functions
+  void m_apply_correction(void);
   void m_printColor (Color);
   Color m_TtoC (double, double, double);
   static void m_d_solve(Eigen::Matrix<double,-1,1> &,
@@ -429,6 +430,17 @@ RayBenConvection::RayBenConvection() {}
 
 RayBenConvection::~RayBenConvection() {}
 
+void RayBenConvection::m_apply_correction(void) {
+  for(int i = 0; i < m_T.rows(); ++i) {
+    for(int k = 0; k < m_T.cols(); ++k) {
+      if((m_T(i, k) < m_TN) || (m_T(i, k) > m_TS)) {
+        std::cout << m_T(i, k) << std::endl;
+        m_T(i, k) = m_TN;
+      }
+    }
+  }
+}
+
 void RayBenConvection::m_printColor (Color c) {
   ::printf("(%d, %d, %d, %d)\n", c.r, c.g, c.b, c.a);
 }
@@ -437,8 +449,12 @@ Color RayBenConvection::m_TtoC (double cold_temp, double hot_temp,  double T) {
   /*
   (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
   */
-  int index = (T - cold_temp) * (jet.size() - 1) / ( hot_temp - cold_temp );
-  return jet[index];
+  if ((T <= hot_temp) && (T >= cold_temp)) {
+    int index = (T - cold_temp) * (jet.size() - 1) / ( hot_temp - cold_temp );
+    return jet[index];
+  } else {
+    return (Color){0, 0, 0, 0};
+  }
 }
 
 
@@ -928,9 +944,11 @@ bool RayBenConvection::eval_next_frame(){
 
   if (m_it < END_CICLE ) {
 
-    m_ETA(m_it);
+    //m_ETA(m_it);
+    
+    m_apply_correction();
 
-      if(m_it % REFRESH_RATE == 0) {
+    if(m_it % REFRESH_RATE == 0) {
       m_Draw(m_TN, m_TS, m_T);
     }
 
