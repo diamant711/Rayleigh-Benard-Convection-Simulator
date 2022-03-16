@@ -6,6 +6,9 @@
       body {
         background-color: lightblue;
       }
+      #warning_three {
+        color: crimson;
+      }
       #warning {
         color: crimson;
       }
@@ -22,10 +25,16 @@
                           that characterise water convection between 25-35 Celsius degree, 
                           at sea-level pressure. 
                           You can try modifing them: </h3>  
-    <p id="warning two"> All parameters are approximed as linear functions of temperature. 
-                         Pay extra attention when choosing temperatures close to 4 Celsius degrees.
-                         User is advised to choose temperatures in the range [15-55] Celsius. </p>
+    <p id="warning_two"> All parameters are approximed as linear functions of temperature. 
+                         Pay extra attention when choosing temperatures close to 4 Celsius degrees. </p>
+    <p id="warning_three"> User is advised to choose intervals of maximum 15degrees, to ensure the validity 
+                         of the simulation (linearized). </p>
       <form action="" method="get">
+      <h4 id="time" > This input box allows the user to select the duration of the simulation. Maximum number of steps is 10000. </h4>
+      <p id="time_2"> First convection cells are usually completed by the 2900th cicle.  </p>
+      <label for= "smlt time">Simulation duration (steps)</label>
+ 
+      <input type="text" placeholder="5000" id="smlt time" name="smlt time"><br><br>
       <label for="cwt">Cold wall temperature (in Celsius)</label>
       <input type="text" placeholder="25" id="cwt" name="cwt"><br><br>
       <label for="hwt">Hot wall temperature (in Celsius)</label>
