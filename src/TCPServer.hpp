@@ -4,10 +4,13 @@
 //  protocol.
 //
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef TCPSERVER_HPP
+#define TCPSERVER_HPP
+
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
-#include <functional>
 #include "Server.hpp"
+#include "Connection.hpp"
 
 //Not good here
 using boost::asio::ip::tcp;
@@ -59,3 +62,5 @@ void TCPServer::m_start_accept(void) {
 }
 
 void TCPServer::respond(void) {}
+
+#endif

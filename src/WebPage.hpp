@@ -22,6 +22,8 @@
  *      1) http file not found
  *
  *****************************************************************************/
+#ifndef WEBPAGE_HPP
+#define WEBPAGE_HPP
 
 #include <iostream>
 #include <fstream>
@@ -158,3 +160,5 @@ WebPage::WebPage(const std::string &path) : m_input_file(path),
 }
 
 WebPage::~WebPage(void) {}
+
+#endif
