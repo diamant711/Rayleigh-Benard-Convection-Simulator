@@ -15,8 +15,11 @@ class Server {
   public:
     Server();
     ~Server();
-    virtual void respond(void) {};
     boost::asio::io_context& get_executor(void);
+    m_connection_database_record_t& get_connection_by_index(int);
+    m_connection_database_record_t& get_fist_connection(void);
+    m_connection_database_record_t& get_last_connection(void);
+    size_t get_plugged_connection(void);
   protected:
     //Variables
     typedef struct {
@@ -30,10 +33,11 @@ class Server {
       boost::asio::ip::address remote_ip;
       int port = -1;
     } m_connection_database_record_t;
-    std::vector<m_connection_database_record_t> m_connection_database;
-    boost::asio::io_context m_io_context;
     //Functions
     virtual void m_start_accept(void) {};
+  private:
+    boost::asio::io_context m_io_context;
+    std::vector<m_connection_database_record_t> m_connection_database;
 };
 
 Server::Server() {}
@@ -42,6 +46,22 @@ Server::~Server() {}
 
 boost::asio::io_context& Server::get_executor(void) {
   return m_io_context;
+}
+
+Server::m_connection_database_record_t& get_connection_by_index(int index) {
+  return m_connection_database.at(index);
+}
+
+Server::m_connection_database_record_t& get_fist_connection(void) {
+  return get_connection_by_index(0);
+}
+
+Server::m_connection_database_record_t& get_last_connection(void) {
+  return get_connection_by_index(get_plugged_connection() - 1);
+}
+
+size_t Server::get_plugged_connection(void) {
+  return m_connection_database.size();
 }
 
 #endif
