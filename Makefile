@@ -69,9 +69,9 @@ env: ;
 
 clean: ;
 	cd $(OBJ_DIR)
-	rm $(OBJECTS)
+	rm -f $(OBJECTS)
 	cd $(PRJ_DIR)
-	rm $(X_NAME)
+	rm -f $(X_NAME)
 
 purge: ;
 	make clean
