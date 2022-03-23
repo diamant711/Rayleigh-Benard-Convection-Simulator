@@ -1,6 +1,8 @@
 #include "RayBenConvection.hpp"
-//#include "Connection.hpp"
-//#include "Server.hpp"
+#include "Connection.hpp"
+#include "Server.hpp"
+#include "TCPServer.hpp"
+//#include "WebServer.hpp"
 #include "WebPage.hpp"
 
 int main(){
