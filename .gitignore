@@ -36,3 +36,5 @@ main
 test
 temperature_matrix.h
 *.swp
+CaosTester
+repos/*
