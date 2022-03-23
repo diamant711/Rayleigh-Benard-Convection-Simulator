@@ -6,7 +6,7 @@
 int main(){
  
   RayBenConvection con;
-  con.init(3000, 25, 35, 1e2, 7, 100);
+  con.init(6000, 25, 35, 150, 9, 130);
 
   while(1){
     con.write_current_data();

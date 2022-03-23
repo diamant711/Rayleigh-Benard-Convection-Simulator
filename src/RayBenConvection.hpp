@@ -22,6 +22,7 @@
  * 5 - E' la corretta astrazione quella realizzata? Magari facciamo meglio il
  *     server web?
  * 6 - Quali parametri l'utente può modificare?
+ *
  ******************************************************************/
 
 
@@ -44,13 +45,19 @@
 #define NPROC 12
 #define OUTPUT_HEADER_FILE_NAME "temperature_matrix.h"
 
+/*enum Warning_bytes {
+   = 01000000000000000000000000000000,
+  delta_temperature_over_10 = 00100000000000000000000000000000,
+  TN_below_4 = 00010000000000000000000000000000,
+}
+*/
 
 class RayBenConvection {
 
   public:
     RayBenConvection();
     ~RayBenConvection();
-  void init(unsigned int, double, double, double, double, double );
+  int init(unsigned int, double, double, double, double, double );
   bool eval_next_frame();
   void write_current_data();
 
@@ -72,8 +79,6 @@ class RayBenConvection {
   Eigen::Matrix<double, m_nx, m_ny+1> m_v;
   Eigen::Matrix<double, m_nx, m_ny> m_p;
   Eigen::Matrix<double, m_nx, m_ny> m_S;
-  Eigen::Matrix<double, m_nx, m_ny> m_uplot;
-  Eigen::Matrix<double, m_nx, m_ny> m_vplot;
   double m_To;
   Eigen::Matrix<double, m_nx, m_ny> m_T;
   double m_Re;
@@ -434,7 +439,6 @@ void RayBenConvection::m_apply_correction(void) {
   for(int i = 0; i < m_T.rows(); ++i) {
     for(int k = 0; k < m_T.cols(); ++k) {
       if((m_T(i, k) < m_TN) || (m_T(i, k) > m_TS)) {
-        std::cout << m_T(i, k) << std::endl;
         m_T(i, k) = m_TN;
       }
     }
@@ -649,7 +653,7 @@ void RayBenConvection::m_write_current_frame (){
   m_output_header_file << "}";
 };
 
-void RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_temp, 
+int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_temp, 
                             double Ray_numb, double Pr_numb, double Re_numb ){
 
   std::chrono::time_point<std::chrono::high_resolution_clock> init_lenght = 
@@ -657,6 +661,7 @@ void RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot
   Eigen::setNbThreads(NPROC);
   ::SetTraceLogLevel(LOG_WARNING);
 
+  int ret_value = 0;
   m_END_CICLE = END_CICLE;
   m_TN = cold_temp;
   m_TS = hot_temp;
@@ -666,11 +671,52 @@ void RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot
   m_Pe = m_Re * m_Pr;
   m_Gr= m_Ra / m_Pr;
 
+  if (END_CICLE > 6000){
+    std::cout<< "The number of steps requested "<<END_CICLE<<" is too high."<<std::endl;
+    return -1;
+    }
+
   if(m_TS != m_TN)
     m_To = (m_TS < m_TN) ? m_TS : m_TN;
   else{
-    std::cout << "Something stupid went wrong...";
-    return;
+    std::cout << "Please, remeber to provide two different temperatures.";
+    return -2;
+  }
+
+  if (m_TN <= 0 || m_TN >= 100){
+    std::cout << "Default parameters regard liquid water. Work in 0-100 range.";
+    return -3;
+  }
+
+  if (Ray_numb < 50 || Ray_numb > 150 ){
+    std::cout << "Working range for Rayleigh number: 50-150.";
+    return -4;
+  }
+
+  if (Pr_numb < 5 || Pr_numb > 9){
+    std::cout << "Working range for Prandtl number: 5-9.";
+    return -5;
+  }
+
+  if (Re_numb < 70 ||  Re_numb > 130){
+    std::cout << "Working range for Reynolds number: 70-130.";
+    return -6;
+  }
+
+  if (m_TN < 4){
+    std::cout << "Working with linear parameters. Liquid water "
+                 "below of 4 Celsius does not follow linear behaviour." << std::endl;
+    std::cout << "A simulation will be provided but the user is "
+                 "advised to change working parameters." << std::endl;
+    ret_value += 0b00010000000000000000000000000000;
+  }
+
+  if (m_TS - m_TN > 10){
+    std::cout << "Warning: with this temperature range the linear" 
+                " model validity is not guaranteed." << std::endl;
+    std::cout << "The duration of the simulation will depend on the temperature range," 
+                 "so nsteps requested cannot be assured." << std::endl; 
+    ret_value += 0b00100000000000000000000000000000;
   }
 
   //m_dt correction:
@@ -681,10 +727,8 @@ void RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot
   m_v.setZero();
   m_p.setZero();
   m_S.setZero();
-  m_uplot.setZero();
-  m_vplot.setZero();
   m_T.setConstant(m_To);
-  
+
   m_Tstar = m_T;
   m_ustar = m_u;
   m_uhalf = m_u;
@@ -936,7 +980,13 @@ void RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot
   << "s" << std::endl;
 
   m_it=0;
+
+#ifndef FAST
   ::InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Rayleigh-Benard Convection");
+#endif
+
+return ret_value;
+
 }
 
 bool RayBenConvection::eval_next_frame(){
@@ -946,13 +996,15 @@ bool RayBenConvection::eval_next_frame(){
 
   if (m_it < m_END_CICLE ) {
 
-    //m_ETA(m_it);
-    
+   m_ETA(m_it);
+
     m_apply_correction();
 
+#ifndef FAST
     if(m_it % REFRESH_RATE == 0) {
       m_Draw(m_TN, m_TS, m_T);
     }
+#endif
 
     Eigen::Matrix<double, -1, -1> Tn(m_T);
     m_Tstar.block(1,1,m_ii,m_jj) = (Tn.block(1,1,m_ii,m_jj).array() - (m_dt / m_dx / 2)
@@ -1075,11 +1127,13 @@ bool RayBenConvection::eval_next_frame(){
 
   }
 
+#ifndef FAST
   if (m_it == m_END_CICLE) {
     std::cout << "FINE" << std::endl;
     ::CloseWindow();
     return true;
   }
+#endif
 
   ++m_it;
 
