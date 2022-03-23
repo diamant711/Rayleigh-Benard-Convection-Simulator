@@ -42,7 +42,6 @@
 #define WINDOW_WIDTH ((PIXEL*m_nx) + 3*m_nx)
 #define WINDOW_HEIGHT ((PIXEL*m_ny) + 3*m_ny)
 #define NPROC 12
-#define END_CICLE 5000
 #define OUTPUT_HEADER_FILE_NAME "temperature_matrix.h"
 
 
@@ -51,12 +50,13 @@ class RayBenConvection {
   public:
     RayBenConvection();
     ~RayBenConvection();
-  void init(double, double, double, double, double );
+  void init(unsigned int, double, double, double, double, double );
   bool eval_next_frame();
   void write_current_data();
 
   private:
   //variables
+  unsigned int m_END_CICLE;
   static const unsigned int m_nx = 100;
   static const unsigned int m_ny = 70;
   const double m_tf = 1e3;
@@ -502,9 +502,9 @@ void RayBenConvection::m_ETA(int n_calls){
     if(delta_t > 0) {
       for(int i = 0; i < 80; ++i)
         std::putc(' ', stdout);
-      std::cout << "\rETA: "<< delta_t * (END_CICLE - n_calls) << "s\t" 
+      std::cout << "\rETA: "<< delta_t * (m_END_CICLE - n_calls) << "s\t" 
                 << 1.0/delta_t << "c/s\t("
-                << n_calls << "/" << END_CICLE << ")\r";
+                << n_calls << "/" << m_END_CICLE << ")\r";
       ::fflush(stdout);
     }
   }
@@ -649,13 +649,15 @@ void RayBenConvection::m_write_current_frame (){
   m_output_header_file << "}";
 };
 
-void RayBenConvection::init(double cold_temp, double hot_temp, double Ray_numb, double Pr_numb, double Re_numb ){
+void RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_temp, 
+                            double Ray_numb, double Pr_numb, double Re_numb ){
 
   std::chrono::time_point<std::chrono::high_resolution_clock> init_lenght = 
     std::chrono::high_resolution_clock::now();
   Eigen::setNbThreads(NPROC);
   ::SetTraceLogLevel(LOG_WARNING);
 
+  m_END_CICLE = END_CICLE;
   m_TN = cold_temp;
   m_TS = hot_temp;
   m_Ra = Ray_numb;
@@ -942,7 +944,7 @@ bool RayBenConvection::eval_next_frame(){
   //const unsigned int m_ii = m_nx-2;
   //const unsigned int m_jj = m_ny-2;
 
-  if (m_it < END_CICLE ) {
+  if (m_it < m_END_CICLE ) {
 
     //m_ETA(m_it);
     
@@ -1073,7 +1075,7 @@ bool RayBenConvection::eval_next_frame(){
 
   }
 
-  if (m_it == END_CICLE) {
+  if (m_it == m_END_CICLE) {
     std::cout << "FINE" << std::endl;
     ::CloseWindow();
     return true;
@@ -1094,11 +1096,11 @@ void RayBenConvection::write_current_data(){
       }
   m_output_header_file << "const unsigned int nx = " << m_nx << ";\n" 
                           "const unsigned int ny = " << m_ny << ";\n"
-                          "const unsigned int n_steps = " << END_CICLE << ";\n" 
+                          "const unsigned int n_steps = " << m_END_CICLE << ";\n" 
                           "const double T [nx][ny][n_steps] = {\n";
   m_write_current_frame();
   }
-  else if (m_it == END_CICLE){
+  else if (m_it == m_END_CICLE){
     m_output_header_file << "}; ";
     m_output_header_file.close();
    std::cout << "File chiuso";
