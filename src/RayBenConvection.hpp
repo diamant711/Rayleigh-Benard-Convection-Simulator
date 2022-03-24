@@ -981,9 +981,8 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
 
   m_it=0;
 
-#ifndef FAST
-  ::InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Rayleigh-Benard Convection");
-#endif
+
+//  ::InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Rayleigh-Benard Convection");
 
 return ret_value;
 
@@ -1000,11 +999,10 @@ bool RayBenConvection::eval_next_frame(){
 
     m_apply_correction();
 
-#ifndef FAST
-    if(m_it % REFRESH_RATE == 0) {
-      m_Draw(m_TN, m_TS, m_T);
-    }
-#endif
+
+//    if(m_it % REFRESH_RATE == 0) {
+//      m_Draw(m_TN, m_TS, m_T);
+//    }
 
     Eigen::Matrix<double, -1, -1> Tn(m_T);
     m_Tstar.block(1,1,m_ii,m_jj) = (Tn.block(1,1,m_ii,m_jj).array() - (m_dt / m_dx / 2)
@@ -1127,13 +1125,13 @@ bool RayBenConvection::eval_next_frame(){
 
   }
 
-#ifndef FAST
+
   if (m_it == m_END_CICLE) {
     std::cout << "FINE" << std::endl;
-    ::CloseWindow();
+//    ::CloseWindow();
     return true;
   }
-#endif
+
 
   ++m_it;
 
