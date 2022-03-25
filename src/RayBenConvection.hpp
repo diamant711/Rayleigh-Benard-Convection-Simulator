@@ -445,9 +445,9 @@ void RayBenConvection::m_apply_correction(void) {
   }
 }
 
-void RayBenConvection::m_printColor (Color c) {
-  ::printf("(%d, %d, %d, %d)\n", c.r, c.g, c.b, c.a);
-}
+//void RayBenConvection::m_printColor (Color c) {
+//  ::printf("(%d, %d, %d, %d)\n", c.r, c.g, c.b, c.a);
+//}
 
 Color RayBenConvection::m_TtoC (double cold_temp, double hot_temp,  double T) {
   /*
@@ -1149,6 +1149,8 @@ void RayBenConvection::write_current_data(){
   m_output_header_file << "const unsigned int nx = " << m_nx << ";\n" 
                           "const unsigned int ny = " << m_ny << ";\n"
                           "const unsigned int n_steps = " << m_END_CICLE << ";\n" 
+                          "const unsigned double cold_temp = " << m_TN << ";\n"
+                          "const unsigned double hot_temp = " << m_TS << ";\n"
                           "const double T [nx][ny][n_steps] = {\n";
   m_write_current_frame();
   }
