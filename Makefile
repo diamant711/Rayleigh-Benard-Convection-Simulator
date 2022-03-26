@@ -1,3 +1,7 @@
+# Machine dependent variables
+TMP_DIR = /temporanea
+
+# Machine indipendent variables
 SOURCES = $(SRC_DIR)/main.cpp                            \
 					$(SRC_DIR)/RayBenConvection.hpp                \
 					$(SRC_DIR)/Connection.hpp                      \
@@ -21,7 +25,7 @@ SRC_DIR = src
 INC_DIR = inc
 LIB_DIR = lib
 OBJ_DIR = obj
-REPOS_DIR = repos
+REPOS_DIR = caos_tester_tmp_repos
 CXX = g++
 CXXFLAGS = -O3 -I$(INC_DIR)/ -Wextra -std=c++11 -pg -g#altro
 LDFLAGS = $(STATIC_LIB) $(DINAMIC_LIB) -fopenmp#altro
@@ -29,9 +33,10 @@ X_NAME = CaosTester
 RAYLIB_REPO = https://github.com/raysan5/raylib.git
 RAYLIB_LIB_FILE = $(PRJ_DIR)/$(LIB_DIR)/libraylib.a
 EMSDK_REPO = https://github.com/emscripten-core/emsdk.git
-EMSDK_SDK_COMPILER = $(PRJ_DIR)/$(REPOS_DIR)/emsdk/upstream/emscripten/emcc
-EMSDK_SDK_ARCHIVER = $(PRJ_DIR)/$(REPOS_DIR)/emsdk/upstream/emscripten/emar
+EMSDK_SDK_COMPILER = $(TMP_DIR)/emsdk/upstream/emscripten/emcc
+EMSDK_SDK_ARCHIVER = $(TMP_DIR)/emsdk/upstream/emscripten/emar
 
+# Recipes
 all: env $(X_NAME)
 
 $(X_NAME): $(SOURCES) $(OBJECTS)
@@ -41,9 +46,14 @@ $(OBJ_DIR)/%.o:: $(SRC_DIR)/%.cpp
 	$(CXX) $(<D)/$(<F) $(CXXFLAGS) -c -o $(@D)/$(@F)
 
 env: ;
-	mkdir -p $(OBJ_DIR) $(REPOS_DIR)
+	@if [ ! -e $(OBJ_DIR) ] || [ ! -d $(OBJ_DIR) ] ; then\
+		mkdir -p $(OBJ_DIR);\
+	fi
+	@if [ ! -e $(TMP_DIR)/$(REPOS_DIR) ] || [ ! -d $(TMP_DIR)/$(REPOS_DIR) ] ; then\
+		mkdir -p $(TMP_DIR)/$(REPOS_DIR);\
+	fi
 	@if [ ! -e "$(EMSDK_SDK_COMPILER)" ] || [ ! -e "$(EMSDK_SDK_ARCHIVER)" ] ; then\
-		cd $(REPOS_DIR);\
+		cd $(TMP_DIR)/$(REPOS_DIR);\
 		git clone $(EMSDK_REPO) emsdk;\
 		cd emsdk/;\
 		./emsdk install latest;\
@@ -51,7 +61,7 @@ env: ;
 		cd $(PRJ_DIR);\
 	fi
 	@if [ ! -e "$(RAYLIB_LIB_FILE)" ] ; then\
-		cd $(REPOS_DIR);\
+		cd $(TMP_DIR)/$(REPOS_DIR);\
 		git clone $(RAYLIB_REPO) raylib;\
 		cd raylib/src/;\
 		$(EMSDK_SDK_COMPILER) -c rcore.c -Os -Wall -DPLATFORM_WEB -DGRAPHICS_API_OPENGL_ES2;\
@@ -75,4 +85,4 @@ clean: ;
 
 purge: ;
 	make clean
-	rm -rf $(REPOS_DIR)/* 
+	rm -rf $(TMP_DIR)/
