@@ -445,9 +445,9 @@ void RayBenConvection::m_apply_correction(void) {
   }
 }
 
-void RayBenConvection::m_printColor (Color c) {
-  ::printf("(%d, %d, %d, %d)\n", c.r, c.g, c.b, c.a);
-}
+//void RayBenConvection::m_printColor (Color c) {
+//  ::printf("(%d, %d, %d, %d)\n", c.r, c.g, c.b, c.a);
+//}
 
 Color RayBenConvection::m_TtoC (double cold_temp, double hot_temp,  double T) {
   /*
@@ -981,9 +981,8 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
 
   m_it=0;
 
-#ifndef FAST
-  ::InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Rayleigh-Benard Convection");
-#endif
+
+//  ::InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Rayleigh-Benard Convection");
 
 return ret_value;
 
@@ -1000,11 +999,10 @@ bool RayBenConvection::eval_next_frame(){
 
     m_apply_correction();
 
-#ifndef FAST
-    if(m_it % REFRESH_RATE == 0) {
-      m_Draw(m_TN, m_TS, m_T);
-    }
-#endif
+
+//    if(m_it % REFRESH_RATE == 0) {
+//      m_Draw(m_TN, m_TS, m_T);
+//    }
 
     Eigen::Matrix<double, -1, -1> Tn(m_T);
     m_Tstar.block(1,1,m_ii,m_jj) = (Tn.block(1,1,m_ii,m_jj).array() - (m_dt / m_dx / 2)
@@ -1127,13 +1125,13 @@ bool RayBenConvection::eval_next_frame(){
 
   }
 
-#ifndef FAST
+
   if (m_it == m_END_CICLE) {
     std::cout << "FINE" << std::endl;
-    ::CloseWindow();
+//    ::CloseWindow();
     return true;
   }
-#endif
+
 
   ++m_it;
 
@@ -1151,6 +1149,8 @@ void RayBenConvection::write_current_data(){
   m_output_header_file << "const unsigned int nx = " << m_nx << ";\n" 
                           "const unsigned int ny = " << m_ny << ";\n"
                           "const unsigned int n_steps = " << m_END_CICLE << ";\n" 
+                          "const unsigned double cold_temp = " << m_TN << ";\n"
+                          "const unsigned double hot_temp = " << m_TS << ";\n"
                           "const double T [nx][ny][n_steps] = {\n";
   m_write_current_frame();
   }
