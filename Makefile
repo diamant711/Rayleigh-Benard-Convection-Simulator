@@ -12,8 +12,7 @@ SOURCES = $(SRC_DIR)/main.cpp                            \
 
 OBJECTS = $(OBJ_DIR)/main.o
 
-STATIC_LIB = $(LIB_DIR)/libraylib.a                      \
-						 $(LIB_DIR)/libcolamd.a                      \
+STATIC_LIB = $(LIB_DIR)/libcolamd.a                      \
 						 $(LIB_DIR)/libsuitesparseconfig.a
 
 DINAMIC_LIB = -lm                                        \
@@ -69,8 +68,8 @@ env: ;
 	fi
 	@if [ ! -e "$(RAYLIB_LIB_FILE)" ] ; then\
 		cd $(REPOS_DIR);\
-		echo "Making RAYLIB (for web) dependencies";\
 		git clone $(RAYLIB_REPO) raylib;\
+		echo "Making RAYLIB (for web) dependencies";\
 		cd raylib/src/;\
 		$(EMSDK_SDK_COMPILER) -c rcore.c -Os -Wall -DPLATFORM_WEB -DGRAPHICS_API_OPENGL_ES2;\
 		$(EMSDK_SDK_COMPILER) -c rshapes.c -Os -Wall -DPLATFORM_WEB -DGRAPHICS_API_OPENGL_ES2;\
@@ -96,3 +95,4 @@ purge: ;
 	@make clean
 	@echo "Cleaning dependencies..."
 	rm -rf $(REPOS_DIR)
+	rm lib/libraylib.a

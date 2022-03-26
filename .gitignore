@@ -37,4 +37,4 @@ test
 temperature_matrix.h
 *.swp
 CaosTester
-repos/*
+libraylib.a
