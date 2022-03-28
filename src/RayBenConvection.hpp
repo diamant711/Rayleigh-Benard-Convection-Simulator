@@ -21,8 +21,17 @@
  *     una pagina stile doxigen con gli oggetti e i metodi
  * 5 - E' la corretta astrazione quella realizzata? Magari facciamo meglio il
  *     server web?
- * 6 - Quali parametri l'utente può modificare?
+ * X - Quali parametri l'utente può modificare?
  *
+ *LEGENDA ERRORI: 
+ * return -1  END_CICLE > 6000
+ * return -2  m_TS=m_TN
+ * return -3  m_TN <= 0 oppure m_TN >= m_TS
+ * return -4  Ray_numb < 50 || > 150
+ * return -5  Pr_numb < 5 || > 9
+ * return -6  Re_numb < 70 || > 130 
+ * return -7  m_TS >= 100
+
  ******************************************************************/
 
 
@@ -40,7 +49,6 @@
 #define OUTPUT_HEADER_FILE_NAME "temperature_matrix.h"
 
 /*enum Warning_bytes {
-   = 01000000000000000000000000000000,
   delta_temperature_over_10 = 00100000000000000000000000000000,
   TN_below_4 = 00010000000000000000000000000000,
 }
@@ -415,9 +423,14 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
   }
 
   if (m_TN <= 0 || m_TN >= 100){
-    std::cout << "Default parameters regard liquid water. Work in 0-100 range.";
+    std::cout << "Default parameters regard liquid water. Work in 1-99 range.";
     return -3;
   }
+
+   if (m_TS >= 100){
+     std::cout << "Default parameters regard liquid water. Work in 1-99 range.";
+     return -7;
+   }
 
   if (Ray_numb < 50 || Ray_numb > 150 ){
     std::cout << "Working range for Rayleigh number: 50-150.";
