@@ -98,6 +98,3 @@ purge: ;
 	@echo "Cleaning dependencies..."
 	rm -rf $(REPOS_DIR)
 	rm -f lib/libraylib.a
-	rm raylib.html
-	rm raylib.wasm
-	rm raylib.js
