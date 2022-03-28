@@ -47,6 +47,8 @@ $(OBJ_DIR)/%.o:: $(SRC_DIR)/%.cpp $(HEADERS)
 	@echo "CXX     $(<F)"
 	@$(CXX) $(<D)/$(<F) $(CXXFLAGS) -c -o $(@D)/$(@F)
 
+raylib: src/raylib_page.c ; $(EMSDK_SDK_COMPILER) $< -o $@.html
+
 env: ;
 	@if [ ! -e $(OBJ_DIR) ] || [ ! -d $(OBJ_DIR) ] ; then\
 		echo "Making objects dir";\
