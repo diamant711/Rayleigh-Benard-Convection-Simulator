@@ -405,12 +405,12 @@ class RayBenConvection {
   //functions
   void m_apply_correction(void);
   void m_printColor (Color);
-  Color m_TtoC (double, double, double);
+//  Color m_TtoC (double, double, double);
   static void m_d_solve(Eigen::Matrix<double,-1,1> &,
           const Eigen::Matrix<int,1,-1> &,
           const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &,
           const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &);
-  void m_Draw(double, double, const Eigen::Matrix<double, -1, -1> &);
+//  void m_Draw(double, double, const Eigen::Matrix<double, -1, -1> &);
   void m_ETA(int);
 
   template <typename Scalar> 
@@ -449,17 +449,17 @@ void RayBenConvection::m_apply_correction(void) {
 //  ::printf("(%d, %d, %d, %d)\n", c.r, c.g, c.b, c.a);
 //}
 
-Color RayBenConvection::m_TtoC (double cold_temp, double hot_temp,  double T) {
+//Color RayBenConvection::m_TtoC (double cold_temp, double hot_temp,  double T) {
   /*
   (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
   */
-  if ((T <= hot_temp) && (T >= cold_temp)) {
-    int index = (T - cold_temp) * (jet.size() - 1) / ( hot_temp - cold_temp );
-    return jet[index];
-  } else {
-    return (Color){0, 0, 0, 0};
-  }
-}
+//  if ((T <= hot_temp) && (T >= cold_temp)) {
+//    int index = (T - cold_temp) * (jet.size() - 1) / ( hot_temp - cold_temp );
+//    return jet[index];
+//  } else {
+//    return (Color){0, 0, 0, 0};
+//  }
+//}
 
 
 void RayBenConvection::m_d_solve(Eigen::Matrix<double,-1,1> &mat,
@@ -470,27 +470,27 @@ void RayBenConvection::m_d_solve(Eigen::Matrix<double,-1,1> &mat,
 }
 
 
-void RayBenConvection::m_Draw(double cold_temp, double hot_temp, const Eigen::Matrix<double, -1, -1> &T)
-{
-  const unsigned int nx = T.rows();
-  const unsigned int ny = T.cols();
-  ::BeginDrawing();
-    ::ClearBackground((Color){ 255, 255, 255, 255});
-    for(unsigned int i = 0; i < nx; ++i) {
-      for(unsigned int k = 0; k < ny; ++k) {
-        ::DrawRectangle((WINDOW_WIDTH/2 - nx*PIXEL/2) + i*PIXEL, 
-                       (WINDOW_HEIGHT/2 + ny*PIXEL/2) - k*PIXEL, 
-                       PIXEL, PIXEL, m_TtoC(cold_temp, hot_temp, T(i, k)));
-      }
-    }
+//void RayBenConvection::m_Draw(double cold_temp, double hot_temp, const Eigen::Matrix<double, -1, -1> &T)
+//{
+//  const unsigned int nx = T.rows();
+//  const unsigned int ny = T.cols();
+//  ::BeginDrawing();
+//    ::ClearBackground((Color){ 255, 255, 255, 255});
+//    for(unsigned int i = 0; i < nx; ++i) {
+//      for(unsigned int k = 0; k < ny; ++k) {
+//        ::DrawRectangle((WINDOW_WIDTH/2 - nx*PIXEL/2) + i*PIXEL, 
+//                       (WINDOW_HEIGHT/2 + ny*PIXEL/2) - k*PIXEL, 
+//                       PIXEL, PIXEL, m_TtoC(cold_temp, hot_temp, T(i, k)));
+//      }
+//    }
   
-    int posY = 5;
-    for(unsigned int i = 0; i < jet.size(); ++i) {
-      ::DrawRectangle(5, posY, 5, 1, jet[i]);
-      posY += 1;
-    }
-  ::EndDrawing();
-}
+//    int posY = 5;
+//    for(unsigned int i = 0; i < jet.size(); ++i) {
+//      ::DrawRectangle(5, posY, 5, 1, jet[i]);
+//      posY += 1;
+//    }
+//  ::EndDrawing();
+//}
 
 void RayBenConvection::m_ETA(int n_calls){
   static std::chrono::time_point<std::chrono::high_resolution_clock> old_time;

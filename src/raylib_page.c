@@ -1,5 +1,5 @@
 #include "temperature_matrix.h"
-#include "raylib.h"
+#include "../inc/raylib.h"
 #include "jet.h"
 
 #define PIXEL 4
