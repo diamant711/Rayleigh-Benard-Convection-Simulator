@@ -48,7 +48,7 @@ $(OBJ_DIR)/%.o:: $(SRC_DIR)/%.cpp $(HEADERS)
 	@$(CXX) $(<D)/$(<F) $(CXXFLAGS) -c -o $(@D)/$(@F)
 
 raylib: src/raylib_page.c 
-	$(EMSDK_SDK_COMPILER) $< lib/libraylib.a -o /dev/null -DPLATFORM_WEB -Os -Wall -s USE_GLFW=3 --shell-file /temporanea/caos_tester_tmp_repos_riccardoosvaldo.nana.d/emsdk/upstream/emscripten/src/shell.html
+	$(EMSDK_SDK_COMPILER) $< lib/libraylib.a -o $@.html -DPLATFORM_WEB -Os -Wall -s USE_GLFW=3 --shell-file /temporanea/caos_tester_tmp_repos_$(USER).d/emsdk/upstream/emscripten/src/shell.html
 
 env: ;
 	@if [ ! -e $(OBJ_DIR) ] || [ ! -d $(OBJ_DIR) ] ; then\
