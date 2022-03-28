@@ -2,8 +2,7 @@
 TMP_DIR = /temporanea
 
 # Machine indipendent variables
-SOURCES = $(SRC_DIR)/main.cpp                            \
-					$(SRC_DIR)/RayBenConvection.hpp                \
+HEADERS =	$(SRC_DIR)/RayBenConvection.hpp                \
 					$(SRC_DIR)/Connection.hpp                      \
 					$(SRC_DIR)/Server.hpp                          \
 					$(SRC_DIR)/TCPServer.hpp											 \
@@ -14,10 +13,10 @@ OBJECTS = $(OBJ_DIR)/main.o
 
 STATIC_LIB = $(LIB_DIR)/libcolamd.a                      \
 						 $(LIB_DIR)/libsuitesparseconfig.a
-
+						
 DINAMIC_LIB = -lm                                        \
-							-lpthread                                  \
-							-ldl                                       \
+              -lpthread                                  \
+              -ldl                                       \
 							-lboost_system
 
 PRJ_DIR = $(shell pwd)
@@ -25,9 +24,9 @@ SRC_DIR = src
 INC_DIR = inc
 LIB_DIR = lib
 OBJ_DIR = obj
-REPOS_DIR = $(TMP_DIR)/caos_tester_tmp_repos
+REPOS_DIR = $(TMP_DIR)/caos_tester_tmp_repos_$(USER).d
 CXX = g++
-CXXFLAGS = -O3 -I$(INC_DIR)/ -Wextra -std=c++11 -pg -g#altro
+CXXFLAGS = -O3 -I$(INC_DIR)/ -Wall -Wextra -std=c++11 -pg -g#altro
 LDFLAGS = $(STATIC_LIB) $(DINAMIC_LIB) -fopenmp#altro
 X_NAME = CaosTester
 RAYLIB_REPO = https://github.com/raysan5/raylib.git
@@ -40,11 +39,11 @@ EMSDK_SDK_ARCHIVER = $(REPOS_DIR)/emsdk/upstream/emscripten/emar
 all: env $(X_NAME)
 	@echo "Build done!"
 
-$(X_NAME): $(SOURCES) $(OBJECTS)
+$(X_NAME): $(OBJECTS)
 	@echo "LD      $@"
 	@$(CXX) $(OBJECTS) $(LDFLAGS) -o $(X_NAME)
 
-$(OBJ_DIR)/%.o:: $(SRC_DIR)/%.cpp
+$(OBJ_DIR)/%.o:: $(SRC_DIR)/%.cpp $(HEADERS)
 	@echo "CXX     $(<F)"
 	@$(CXX) $(<D)/$(<F) $(CXXFLAGS) -c -o $(@D)/$(@F)
 
@@ -95,4 +94,4 @@ purge: ;
 	@make clean
 	@echo "Cleaning dependencies..."
 	rm -rf $(REPOS_DIR)
-	rm lib/libraylib.a
+	rm -f lib/libraylib.a
