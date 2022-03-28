@@ -38,3 +38,6 @@ temperature_matrix.h
 *.swp
 CaosTester
 libraylib.a
+raylib.html
+raylib.wasm
+raylib.js

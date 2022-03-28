@@ -1,54 +1,85 @@
-#include "temperature_matrix.h"
+/*******************************************************************************************
+*
+*   raylib [core] example - Basic window (adapted for HTML5 platform)
+*
+*   This example is prepared to compile for PLATFORM_WEB, PLATFORM_DESKTOP and PLATFORM_RPI
+*   As you will notice, code structure is slightly diferent to the other examples...
+*   To compile it for PLATFORM_WEB just uncomment #define PLATFORM_WEB at beginning
+*
+*   This example has been created using raylib 1.3 (www.raylib.com)
+*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
+*
+*   Copyright (c) 2015 Ramon Santamaria (@raysan5)
+*
+********************************************************************************************/
+
 #include "../inc/raylib.h"
-#include "jet.h"
 
-#define PIXEL 4
-#define WINDOW_WIDTH ((PIXEL*nx) + 3*nx)
-#define WINDOW_HEIGHT ((PIXEL*ny) + 3*ny)
-#define FPS 10
+//#define PLATFORM_WEB
 
-Color TtoC (double cold, double hot,  double t) {
-   /*
-   (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
-   */
-   if ((t <= hot) && (t >= cold)) {
-     int index = (t - cold) * (JETSIZE - 1) / ( hot - cold );
-     return jet[index];
-   } else {
-     return (Color){0, 0, 0, 0};
-   }
+#if defined(PLATFORM_WEB)
+    #include <emscripten/emscripten.h>
+#endif
+
+//----------------------------------------------------------------------------------
+// Global Variables Definition
+//----------------------------------------------------------------------------------
+const int screenWidth = 800;
+const int screenHeight = 450;
+
+//----------------------------------------------------------------------------------
+// Module Functions Declaration
+//----------------------------------------------------------------------------------
+void UpdateDrawFrame(void);     // Update and Draw one frame
+
+//----------------------------------------------------------------------------------
+// Main Enry Point
+//----------------------------------------------------------------------------------
+int main()
+{
+    // Initialization
+    //--------------------------------------------------------------------------------------
+    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+
+#if defined(PLATFORM_WEB)
+    emscripten_set_main_loop(UpdateDrawFrame, 0, 1);
+#else
+    SetTargetFPS(60);   // Set our game to run at 60 frames-per-second
+    //--------------------------------------------------------------------------------------
+
+    // Main game loop
+    while (!WindowShouldClose())    // Detect window close button or ESC key
+    {
+        UpdateDrawFrame();
+    }
+#endif
+
+    // De-Initialization
+    //--------------------------------------------------------------------------------------
+    CloseWindow();        // Close window and OpenGL context
+    //--------------------------------------------------------------------------------------
+
+    return 0;
 }
 
-void Draw(double cold, double hot, const double t[ny][nx])
-  {
+//----------------------------------------------------------------------------------
+// Module Functions Definition
+//----------------------------------------------------------------------------------
+void UpdateDrawFrame(void)
+{
+    // Update
+    //----------------------------------------------------------------------------------
+    // TODO: Update your variables here
+    //----------------------------------------------------------------------------------
+
+    // Draw
+    //----------------------------------------------------------------------------------
     BeginDrawing();
-      ClearBackground((Color){ 255, 255, 255, 255});
-      for(unsigned int i = 0; i < nx; ++i) {
-        for(unsigned int k = 0; k < ny; ++k) {
-          DrawRectangle((WINDOW_WIDTH/2 - nx*PIXEL/2) + i*PIXEL, 
-                         (WINDOW_HEIGHT/2 + ny*PIXEL/2) - k*PIXEL, 
-                         PIXEL, PIXEL, TtoC(cold, hot, t[i][k]));
-        }
-      }
-  int posY = 5;
-    for(unsigned int i = 0; i < JETSIZE; ++i) {
-      DrawRectangle(5, posY, 5, 1, jet[i]);
-     posY += 1;
-   }
- EndDrawing();
-}
 
-int main(){
+        ClearBackground(RAYWHITE);
 
-SetTargetFPS(FPS);
+        DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
 
-InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Rayleigh-Benard Convection");
-
-  for (int i = 0; i < n_steps; i++)
-    Draw(cold_temp, hot_temp, T[i]);
-
-
-CloseWindow();
-
-return 0;
+    EndDrawing();
+    //----------------------------------------------------------------------------------
 }
