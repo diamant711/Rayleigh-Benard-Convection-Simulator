@@ -12,14 +12,14 @@ Color TtoC (double cold, double hot,  double t) {
    (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
    */
    if ((t <= hot) && (t >= cold)) {
-     int index = (t - cold) * (JETSIZE() - 1) / ( hot - cold );
+     int index = (t - cold) * (JETSIZE - 1) / ( hot - cold );
      return jet[index];
    } else {
      return (Color){0, 0, 0, 0};
    }
 }
 
-void Draw(double cold, double hot, const double t[][])
+void Draw(double cold, double hot, const double t[ny][nx])
   {
     BeginDrawing();
       ClearBackground((Color){ 255, 255, 255, 255});
@@ -27,7 +27,7 @@ void Draw(double cold, double hot, const double t[][])
         for(unsigned int k = 0; k < ny; ++k) {
           DrawRectangle((WINDOW_WIDTH/2 - nx*PIXEL/2) + i*PIXEL, 
                          (WINDOW_HEIGHT/2 + ny*PIXEL/2) - k*PIXEL, 
-                         PIXEL, PIXEL, TtoC(cold, hot, t(i, k)));
+                         PIXEL, PIXEL, TtoC(cold, hot, t[i][k]));
         }
       }
   int posY = 5;
@@ -44,8 +44,8 @@ SetTargetFPS(FPS);
 
 InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Rayleigh-Benard Convection");
 
-  for (int i = 0; i < ; i++)
-    Draw(cold_temp, hot_temp, T);
+  for (int i = 0; i < n_steps; i++)
+    Draw(cold_temp, hot_temp, T[i]);
 
 
 CloseWindow();

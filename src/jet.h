@@ -1,8 +1,8 @@
-#include"raylib.h"
+#include"../inc/raylib.h"
 
 #define JETSIZE 256
 
-const Color jet[JETSIZE] {
+const Color jet[JETSIZE] = {
   (Color){  0,    0,  139,  255},
   (Color){  0,    0,  143,  255},
   (Color){  0,    0,  147,  255},

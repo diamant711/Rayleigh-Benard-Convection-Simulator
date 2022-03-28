@@ -47,7 +47,7 @@ $(OBJ_DIR)/%.o:: $(SRC_DIR)/%.cpp $(HEADERS)
 	@echo "CXX     $(<F)"
 	@$(CXX) $(<D)/$(<F) $(CXXFLAGS) -c -o $(@D)/$(@F)
 
-raylib: src/raylib_page.c ; $(EMSDK_SDK_COMPILER) $< -o $@.html
+raylib: src/raylib_page.c ; $(EMSDK_SDK_COMPILER) $< lib/libraylib.a -o $@.html -lglfw
 
 env: ;
 	@if [ ! -e $(OBJ_DIR) ] || [ ! -d $(OBJ_DIR) ] ; then\
