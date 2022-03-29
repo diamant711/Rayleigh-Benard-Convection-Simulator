@@ -382,12 +382,12 @@ void RayBenConvection::m_luP(Eigen::Matrix<double,-1,-1> &mat,
 
 void RayBenConvection::m_write_current_frame (){
   m_output_header_file << "{";
-    for (unsigned int i = 0; i < m_nx; i++) {
+    for (unsigned int i = 0; i < m_ny; i++) {
       m_output_header_file << "{";
-        for (unsigned int j = 0; j < m_ny; j++)
-          if (j < m_ny - 1)
-            m_output_header_file << "\t" << m_T(i, j) << ", ";
-          else m_output_header_file << "\t" << m_T(i, j); 
+        for (unsigned int j = 0; j < m_nx; j++)
+          if (j < m_nx - 1)
+            m_output_header_file << "\t" << m_T(j, i) << ", ";
+          else m_output_header_file << "\t" << m_T(j, i); 
       m_output_header_file << "},\n ";
       }
   m_output_header_file << "}";
@@ -866,7 +866,6 @@ bool RayBenConvection::eval_next_frame(){
 
   if (m_it == m_END_CICLE) {
     std::cout << "FINE" << std::endl;
-//    ::CloseWindow();
     return true;
   }
 
@@ -887,8 +886,8 @@ void RayBenConvection::write_current_data(){
   m_output_header_file << "const unsigned int nx = " << m_nx << ";\n" 
                           "const unsigned int ny = " << m_ny << ";\n"
                           "const unsigned int n_steps = " << m_END_CICLE << ";\n" 
-                          "const unsigned double cold_temp = " << m_TN << ";\n"
-                          "const unsigned double hot_temp = " << m_TS << ";\n"
+                          "const double cold_temp = " << m_TN << ";\n"
+                          "const double hot_temp = " << m_TS << ";\n"
                           "const double T [nx][ny][n_steps] = {\n";
   m_write_current_frame();
   }
