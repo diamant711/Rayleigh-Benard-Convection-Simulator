@@ -46,7 +46,7 @@
 #include "colamd.h"
 
 #define NPROC 12
-#define OUTPUT_HEADER_FILE_NAME "temperature_matrix.h"
+#define OUTPUT_HEADER_FILE_NAME "src/temperature_matrix.h"
 
 /*enum Warning_bytes {
   delta_temperature_over_10 = 00100000000000000000000000000000,
@@ -883,12 +883,12 @@ void RayBenConvection::write_current_data(){
       std::cerr <<"Failed opening output_header_file. Exiting..." <<std::endl;
       return;
     }
-    m_output_header_file << "const unsigned int nx = " << m_nx << ";\n" 
-                            "const unsigned int ny = " << m_ny << ";\n"
-                            "const unsigned int n_steps = " << m_END_CICLE << ";\n" 
+    m_output_header_file << "#define NX " << m_nx << "\n" 
+                            "#define NY " << m_ny << "\n"
+                            "#define N_STEPS " << m_END_CICLE << "\n" 
                             "const double cold_temp = " << m_TN << ";\n"
                             "const double hot_temp = " << m_TS << ";\n"
-                            "const double T [nx][ny][n_steps] = {\n";
+                            "const double T [NX][NY][N_STEPS] = {\n";
     m_write_current_frame();
   }
   else if (m_it == m_END_CICLE){
