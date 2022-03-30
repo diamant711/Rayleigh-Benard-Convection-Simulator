@@ -13,6 +13,8 @@
 *
 ********************************************************************************************/
 
+#include <stdlib.h>
+
 #include "../inc/raylib.h"
 #include "../temperature_matrix.h"
 #include "jet.h"
@@ -93,10 +95,9 @@ void UpdateDrawFrame(void)
   // Update
   //----------------------------------------------------------------------------------
   // TODO: Update your variables here
-    if (n_step < n_steps) {
-      T[n_step];  //TODO: come fa a sapere quale dimensione sta variando?
-      ++n_step;
-    }
+  if (n_step >= n_steps) {
+    exit(0);
+  }
   //----------------------------------------------------------------------------------
 
   // Draw
@@ -108,18 +109,20 @@ void UpdateDrawFrame(void)
     DrawText("Rayleigh-Benard Convection", 190, 200, 20, LIGHTGRAY);
 
     for(unsigned int i = 0; i < nx; ++i) {
-    for(unsigned int k = 0; k < ny; ++k) {
-      DrawRectangle((WINDOW_WIDTH/2 - nx*PIXEL/2) + i*PIXEL, 
-                    (WINDOW_HEIGHT/2 + ny*PIXEL/2) - k*PIXEL, 
-                     PIXEL, PIXEL, TtoC(cold_temp, hot_temp, T[i][k][n_step]));
-       }
-     }
+      for(unsigned int k = 0; k < ny; ++k) {
+        DrawRectangle((WINDOW_WIDTH/2 - nx*PIXEL/2) + i*PIXEL, 
+                      (WINDOW_HEIGHT/2 + ny*PIXEL/2) - k*PIXEL, 
+                       PIXEL, PIXEL, TtoC(cold_temp, hot_temp, T[i][k][n_step]));
+      }
+    }
     int posY = 5;
-     for(unsigned int i = 0; i < JETSIZE; ++i) {
+    for(unsigned int i = 0; i < JETSIZE; ++i) {
        DrawRectangle(5, posY, 5, 1, jet[i]);
        posY += 1;
     }
 
-    EndDrawing();
-    //----------------------------------------------------------------------------------
+  EndDrawing();
+  //----------------------------------------------------------------------------------
+
+  ++n_step;
 }
