@@ -876,26 +876,26 @@ bool RayBenConvection::eval_next_frame(){
 }
 
 void RayBenConvection::write_current_data(){
-  if (m_it == 0){
+  if (m_it == 0) {
     m_output_header_file.open(OUTPUT_HEADER_FILE_NAME, std::ios_base::out);
-   std::cout << "File aperto"; 
+    std::cout << "File aperto"; 
     if (! m_output_header_file.is_open()){
       std::cerr <<"Failed opening output_header_file. Exiting..." <<std::endl;
       return;
-      }
-  m_output_header_file << "const unsigned int nx = " << m_nx << ";\n" 
-                          "const unsigned int ny = " << m_ny << ";\n"
-                          "const unsigned int n_steps = " << m_END_CICLE << ";\n" 
-                          "const double cold_temp = " << m_TN << ";\n"
-                          "const double hot_temp = " << m_TS << ";\n"
-                          "const double T [nx][ny][n_steps] = {\n";
-  m_write_current_frame();
+    }
+    m_output_header_file << "const unsigned int nx = " << m_nx << ";\n" 
+                            "const unsigned int ny = " << m_ny << ";\n"
+                            "const unsigned int n_steps = " << m_END_CICLE << ";\n" 
+                            "const double cold_temp = " << m_TN << ";\n"
+                            "const double hot_temp = " << m_TS << ";\n"
+                            "const double T [nx][ny][n_steps] = {\n";
+    m_write_current_frame();
   }
   else if (m_it == m_END_CICLE){
     m_output_header_file << "}; ";
     m_output_header_file.close();
-   std::cout << "File chiuso";
-   }
+  std::cout << "File chiuso";
+  }
   else {
     m_output_header_file <<",\n";
     m_write_current_frame();

@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "RayBenConvection.hpp"
 #include "Connection.hpp"
 #include "Server.hpp"
@@ -15,6 +17,7 @@ int main(){
     if (con.eval_next_frame())
       break;
   }
- 
+  
+  std::cout << "End main return 0" << std::endl;
   return 0;
 }
