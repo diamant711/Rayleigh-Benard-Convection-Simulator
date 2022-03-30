@@ -93,7 +93,7 @@ clean: ;
 	rm -f $(OBJECTS)
 	@cd $(PRJ_DIR)
 	rm -f $(X_NAME)
-	rm -f raylib.html raylib.js raylib.wasm
+	rm -f raylib.html raylib.js raylib.wasm gmon.out
 
 purge: ;
 	@make clean
