@@ -49,16 +49,11 @@ class WebPage {
     //Variables
     std::ifstream m_input_file;
     std::string m_content_type;
-    const std::string m_content_type_prefix = "text/";
     std::string m_http_header;
     std::string m_http_body;
     std::string m_http_response;
     std::string m_content_lenght;
     status_code_t m_status_code = {200, "OK"};
-    const std::vector<std::string> m_content_types = {
-      "text/html",
-      "text/plain"
-    };
     bool m_ready_to_ship = false;
     //function
     const std::string m_get_extension_from_path(const std::string &);
@@ -82,6 +77,23 @@ const std::string& WebPage::get_http_response(void) const {
 }
 
 bool WebPage::m_fill_http_header(void) {
+  bool content_type_ok = true;
+  std::string ext(m_get_extension_from_path);
+  if(ext == "plain") {
+    m_content_type = "text/plain";
+  } else if(ext == "html") {
+    m_content_type = "text/html";
+  } else if(ext == "css") {
+    m_content_type = "text/css";
+  } else if(ext == "js") {
+    m_content_type = "application/javascript";
+  } else if(ext == "wasm") {
+    m_content_type = "application/wasm";
+  } else {
+    std::cerr << "Warnings: Unknown file type deceted... disabling"
+                 " Content-Type tag in http header..." << std::endl;
+    content_type_ok = false;
+  }  
   if(m_input_file.good()) {
     std::string tmp;
     m_http_body.clear();
@@ -96,10 +108,12 @@ bool WebPage::m_fill_http_header(void) {
     tmp += m_status_code.status_phrase;
     tmp += '\r';
     tmp += '\n';
-    tmp += "Content-Type: ";
-    tmp += m_content_type;
-    tmp += '\r';
-    tmp += '\n';
+    if(content_type_ok) {
+      tmp += "Content-Type: ";
+      tmp += m_content_type;
+      tmp += '\r';
+      tmp += '\n';
+    }
     tmp += "Content-Lenght: ";
     tmp += m_content_lenght;
     tmp += '\r';
@@ -138,24 +152,10 @@ const std::string WebPage::m_get_extension_from_path(const char *path) {
 }
 
 WebPage::WebPage(const char *path) : m_input_file(path) {
-  m_content_type = *(std::find(
-        m_content_types.begin(),
-        m_content_types.end(),
-        m_content_type_prefix + m_get_extension_from_path(path)
-  ));
   m_compose_response();
 }
 
-WebPage::WebPage(const std::string &path) : m_input_file(path),
-                                     m_content_type(
-                                       *(std::find(
-                                         m_content_types.begin(),
-                                         m_content_types.end(),
-                                           m_content_type_prefix
-                                           + m_get_extension_from_path(path)
-                                       ))
-                                     )
-{
+WebPage::WebPage(const std::string &path) : m_input_file(path) {
   m_compose_response();
 }
 
