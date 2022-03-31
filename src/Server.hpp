@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  Serber.hpp specifies a class which define the base virtual methods that 
+//  Server.hpp specifies a class which define the base virtual methods that 
 //  define an asyncronus server
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -36,7 +36,9 @@ class Server {
     m_connection_database_record_t& m_get_fist_connection(void);
     m_connection_database_record_t& m_get_last_connection(void);
     size_t m_get_plugged_connection(void);
+    bool m_is_waiting_list_empty(void);
     void m_insert_new_connection(m_connection_database_record_t &);
+    void m_delete_connection_by_index(int);
     virtual void m_start_accept(void) {};
   private:
     boost::asio::io_context m_io_context;
@@ -56,11 +58,11 @@ Server::m_connection_database_record_t& Server::m_get_connection_by_index(int in
 }
 
 Server::m_connection_database_record_t& Server::m_get_fist_connection(void) {
-  return m_get_connection_by_index(0);
+  return m_connection_database.front();
 }
 
 Server::m_connection_database_record_t& Server::m_get_last_connection(void) {
-  return m_get_connection_by_index(m_get_plugged_connection() - 1);
+  return m_connection_database.back();
 }
 
 size_t Server::m_get_plugged_connection(void) {
@@ -69,6 +71,14 @@ size_t Server::m_get_plugged_connection(void) {
 
 void Server::m_insert_new_connection(Server::m_connection_database_record_t& new_connection) {
   m_connection_database.push_back(new_connection);
+}
+
+void Server::m_delete_connection_by_index(int index) {
+  m_connection_database.erase(index);
+}
+    
+bool m_is_waiting_list_empty(void) {
+  return m_connection_database.empty();
 }
 
 #endif
