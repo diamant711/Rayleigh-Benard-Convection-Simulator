@@ -8,7 +8,9 @@
 #define SERVER_HPP
 
 #include <vector>
+
 #include <boost/asio.hpp>
+
 #include "Connection.hpp"
 
 class Server {
