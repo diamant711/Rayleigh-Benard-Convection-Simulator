@@ -16,12 +16,12 @@
 #include <stdlib.h>
 
 #include "../inc/raylib.h"
-#include "../temperature_matrix.h"
+#include "temperature_matrix.h"
 #include "jet.h"
 
 #define PIXEL 4
-#define WINDOW_WIDTH ((PIXEL*nx) + 3*nx)
-#define WINDOW_HEIGHT ((PIXEL*ny) + 3*ny)
+#define WINDOW_WIDTH ((PIXEL*NX) + 3*NX)
+#define WINDOW_HEIGHT ((PIXEL*NY) + 3*NY)
 #define FPS 10
 
 //#define PLATFORM_WEB
@@ -95,7 +95,7 @@ void UpdateDrawFrame(void)
   // Update
   //----------------------------------------------------------------------------------
   // TODO: Update your variables here
-  if (n_step >= n_steps) {
+  if (n_step >= N_STEPS) {
     exit(0);
   }
   //----------------------------------------------------------------------------------
@@ -108,10 +108,10 @@ void UpdateDrawFrame(void)
 
     DrawText("Rayleigh-Benard Convection", 190, 200, 20, LIGHTGRAY);
 
-    for(unsigned int i = 0; i < nx; ++i) {
-      for(unsigned int k = 0; k < ny; ++k) {
-        DrawRectangle((WINDOW_WIDTH/2 - nx*PIXEL/2) + i*PIXEL, 
-                      (WINDOW_HEIGHT/2 + ny*PIXEL/2) - k*PIXEL, 
+    for(unsigned int i = 0; i < NX; ++i) {
+      for(unsigned int k = 0; k < NY; ++k) {
+        DrawRectangle((WINDOW_WIDTH/2 - NX*PIXEL/2) + i*PIXEL, 
+                      (WINDOW_HEIGHT/2 + NY*PIXEL/2) - k*PIXEL, 
                        PIXEL, PIXEL, TtoC(cold_temp, hot_temp, T[i][k][n_step]));
       }
     }
