@@ -74,10 +74,10 @@ void Server::m_insert_new_connection(Server::m_connection_database_record_t& new
 }
 
 void Server::m_delete_connection_by_index(int index) {
-  m_connection_database.erase(index);
+  m_connection_database.erase(m_connection_database.cbegin() + index);
 }
     
-bool m_is_waiting_list_empty(void) {
+bool Server::m_is_waiting_list_empty(void) {
   return m_connection_database.empty();
 }
 

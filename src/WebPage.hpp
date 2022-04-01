@@ -47,6 +47,7 @@ class WebPage {
   
   private:
     //Variables
+    std::string m_file_path;
     std::ifstream m_input_file;
     std::string m_content_type;
     std::string m_http_header;
@@ -78,7 +79,7 @@ const std::string& WebPage::get_http_response(void) const {
 
 bool WebPage::m_fill_http_header(void) {
   bool content_type_ok = true;
-  std::string ext(m_get_extension_from_path);
+  std::string ext(m_get_extension_from_path(m_file_path));
   if(ext == "plain") {
     m_content_type = "text/plain";
   } else if(ext == "html") {
@@ -151,11 +152,11 @@ const std::string WebPage::m_get_extension_from_path(const char *path) {
   return tmp;
 }
 
-WebPage::WebPage(const char *path) : m_input_file(path) {
+WebPage::WebPage(const char *path) : m_file_path(path), m_input_file(path) {
   m_compose_response();
 }
 
-WebPage::WebPage(const std::string &path) : m_input_file(path) {
+WebPage::WebPage(const std::string &path) : m_file_path(path), m_input_file(path) {
   m_compose_response();
 }
 

@@ -53,6 +53,7 @@ void Connection::m_handle_send(const boost::system::error_code& error, size_t by
     m_first_operation_ended = true;
   } else {
     m_send_error = true; //va implementato come controllo nei send successivi notifica utente
+    std::cerr << "Error: send: byte transferred = " << bytes_transferred << std::endl;
   }
 }
 
