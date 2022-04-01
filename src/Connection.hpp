@@ -27,14 +27,16 @@ class Connection {
     void load_data(const boost::asio::const_buffer &);
     const std::shared_ptr<char> unload_data(void) const;
     boost::asio::ip::tcp::socket& get_socket(void);
+    bool first_operation_ended(void);
   private:
-    //variables
+    // Variables
     boost::asio::ip::tcp::socket m_socket;
     boost::asio::mutable_buffer m_internal_receive_buffer;
     boost::asio::mutable_buffer m_internal_send_buffer; //cast a const_buffer
     bool m_send_error = false;
     bool m_receive_error = false;
-    //functions
+    bool m_first_operation_ended = false;
+    // Functions
     void m_handle_send(const boost::system::error_code&,
                        size_t /*bytes_transferred*/);
 };
@@ -42,12 +44,13 @@ class Connection {
 Connection::Connection(boost::asio::io_context& executor) : m_socket(executor) {}
 
 Connection::~Connection(void) {
-m_socket.close();
+  m_socket.close();
 }
 
 void Connection::m_handle_send(const boost::system::error_code& error, size_t bytes_transferred){
   if (!error){
     ::memset(m_internal_send_buffer.data(), 0, m_internal_send_buffer.size());
+    m_first_operation_ended = true;
   } else {
     m_send_error = true; //va implementato come controllo nei send successivi notifica utente
   }
@@ -76,8 +79,13 @@ const std::shared_ptr<char> Connection::unload_data(void) const {
   std::shared_ptr<char> data_ptr(static_cast<char *>(m_internal_receive_buffer.data()));
   return data_ptr;
 }
+
 boost::asio::ip::tcp::socket& Connection::get_socket(void) {
   return m_socket;
+}
+ 
+bool Connection::first_operation_ended(void) {
+  return m_first_operation_ended;
 }
 
 #endif
