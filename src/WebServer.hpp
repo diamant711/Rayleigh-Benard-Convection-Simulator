@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include <memory>
+#include <stringstream>
 
 #include <boost/asio.hpp>
 
@@ -32,18 +33,29 @@ class WebServer : public TCPServer {
       SETUP,
       PROCESSING,
       OUTPUT
-    } m_first_user_status_t;
+    } first_user_status_t;
+    typedef struct {
+      unsigned int steps;
+      double cold_temp;
+      double hot_temp;
+      double Ra;
+      double Pr;
+      double Re;
+    } html_form_input_t;
     WebServer(int, std::string, std::string, std::string, std::string);
     ~WebServer(void);
     void respond_to_all(void);
+    html_form_input_t& get_user_input(void);
   private:
     //Functions
     WebPage& m_generate_Output_page(void);
+    html_form_input_t m_gci_parser(const std::string &);
     //Variables
+    html_form_input_t m_internal_html_form_input;
     std::vector<std::unique_ptr<WebPage>> m_pages;
     bool m_was_first_user_connected = false;
     boost::asio::ip::address m_first_user_address;
-    m_first_user_status_t m_first_user_status = NO_FIRST_USER;
+    first_user_status_t m_first_user_status = NO_FIRST_USER;
 };
 
 WebServer::WebServer(int port, 
@@ -81,12 +93,14 @@ void WebServer::respond_to_all(void) {
             m_get_connection_by_index(i).connection_ptr
               ->load_data(m_pages.at(2)->get_http_response());
             m_get_connection_by_index(i).connection_ptr->send();
+            //CGI
           break;
           
           case PROCESSING:  
             m_get_connection_by_index(i).connection_ptr
               ->load_data(m_pages.at(3)->get_http_response());
             m_get_connection_by_index(i).connection_ptr->send();
+            //PROGRESS BAR
           break;
           
           case OUTPUT:
@@ -108,6 +122,23 @@ void WebServer::respond_to_all(void) {
     }
   }  
   return;
+}
+
+html_form_input_t& WebServer::get_user_input(void) {
+  return m_internal_html_form_input;
+}
+    
+html_form_input_t& WebServer::m_gci_parser(const std::string& http_request) {
+  std::stringstream ss(http_request);
+  std::string tmp_s;
+  char tmp_c;
+  ss >> tmp_s;
+  if(tmp_s != "POST") {
+    std::cerr << tmp_s << " http request method detected!" << std::endl;
+  }
+  ss >> tmp_s;
+  
+
 }
 
 #endif
