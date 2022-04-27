@@ -18,7 +18,7 @@
 
 #include <iostream>
 #include <memory>
-#include <stringstream>
+#include <sstream>
 
 #include <boost/asio.hpp>
 
@@ -45,13 +45,13 @@ class WebServer : public TCPServer {
     WebServer(int, std::string, std::string, std::string, std::string);
     ~WebServer(void);
     void respond_to_all(void);
-    html_form_input_t& get_user_input(void);
+    html_form_input_t get_user_input(void);
   private:
     //Functions
     WebPage& m_generate_Output_page(void);
-    html_form_input_t m_gci_parser(const std::string &);
+    void m_gci_parser(const std::string &);
     //Variables
-    html_form_input_t m_internal_html_form_input;
+    WebServer::html_form_input_t m_internal_html_form_input;
     std::vector<std::unique_ptr<WebPage>> m_pages;
     bool m_was_first_user_connected = false;
     boost::asio::ip::address m_first_user_address;
@@ -124,20 +124,17 @@ void WebServer::respond_to_all(void) {
   return;
 }
 
-html_form_input_t& WebServer::get_user_input(void) {
+WebServer::html_form_input_t WebServer::get_user_input(void) {
   return m_internal_html_form_input;
 }
-    
-html_form_input_t& WebServer::m_gci_parser(const std::string& http_request) {
+
+void WebServer::m_gci_parser(const std::string& http_request) {
   std::stringstream ss(http_request);
   std::string tmp_s;
-  char tmp_c;
+  std::cout << "Start CGI analysis..." << std::endl;
   ss >> tmp_s;
-  if(tmp_s != "POST") {
-    std::cerr << tmp_s << " http request method detected!" << std::endl;
-  }
+  std::cout << "HTTP method: " << tmp_s << std::endl;
   ss >> tmp_s;
-  
 
 }
 
