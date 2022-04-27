@@ -45,7 +45,7 @@ $(X_NAME): $(OBJECTS)
 	@$(CXX) $(OBJECTS) $(LDFLAGS) -o $(X_NAME)
 
 $(OBJ_DIR)/%.o:: $(SRC_DIR)/%.cpp $(HEADERS)
-	@echo "CXX     $(<F)"
+	@echo "CXX     $(@F)"
 	@$(CXX) $(<D)/$(<F) $(CXXFLAGS) -c -o $(@D)/$(@F)
 
 raylib: src/raylib_page.c 
