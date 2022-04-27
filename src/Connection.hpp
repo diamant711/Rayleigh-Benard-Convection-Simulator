@@ -39,6 +39,7 @@ class Connection {
     // Functions
     void m_handle_send(const boost::system::error_code&,
                        size_t /*bytes_transferred*/);
+    void m_handle_receive(const boost::system::error_code&, size_t);þ
 };
 
 Connection::Connection(boost::asio::io_context& executor) : m_socket(executor) {}
@@ -57,13 +58,25 @@ void Connection::m_handle_send(const boost::system::error_code& error, size_t by
   }
 }
 
+void Connection::m_handle_receive(const boost::system::error_code& error, size_t bytes_transferred){
+ if (!error){
+   ::memset(m_internal_receive_buffer.data(), 0, m_internal_receive_buffer.size());
+   m_first_operation_ended = true;
+  } else {
+    m_receive_error = true; //va implementato come controllo nei receive successivi notifica utente
+    std::cerr << "Error: receive: byte transferred = " << bytes_transferred << std::endl;
+  }
+}
+
+
 void Connection::send(void) {
   m_socket.async_send(m_internal_send_buffer, boost::bind(&Connection::m_handle_send, this, boost::asio::placeholders::error,
                       boost::asio::placeholders::bytes_transferred));
 }
 
 void Connection::receive(void) {
-//  m_socket.async_receive(m_internal_receive_buffer);
+  m_socket.async_receive(m_internal_receive_buffer, boost::bind(&Connection::m_handle_receive, this, boost::asio::placeholders::error,
+                      boost::asio::placeholders::byte_transferred));
 }
 
 void Connection::load_data(const std::string &) {}
