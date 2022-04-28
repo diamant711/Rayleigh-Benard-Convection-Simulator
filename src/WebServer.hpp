@@ -36,11 +36,11 @@ class WebServer : public TCPServer {
     } first_user_status_t;
     typedef struct {
       unsigned int steps;
-      double cold_temp;
-      double hot_temp;
-      double Ra;
+      double cwt;
+      double hwt;
+      double Ray;
       double Pr;
-      double Re;
+      double Rey;
     } html_form_input_t;
     WebServer(int, std::string, std::string, std::string, std::string);
     ~WebServer(void);
@@ -51,6 +51,7 @@ class WebServer : public TCPServer {
     WebPage& m_generate_Output_page(void);
     void m_gci_parser(const std::string &);
     //Variables
+    const unsigned int m_n_input_parameter = 6;
     WebServer::html_form_input_t m_internal_html_form_input;
     std::vector<std::unique_ptr<WebPage>> m_pages;
     bool m_was_first_user_connected = false;
@@ -129,13 +130,60 @@ WebServer::html_form_input_t WebServer::get_user_input(void) {
 }
 
 void WebServer::m_gci_parser(const std::string& http_request) {
+  // GET /?steps=3000&cwt=25&hwt=35&Ray=100&Pr=7&Rey=100 HTTP/1.1
   std::stringstream ss(http_request);
   std::string tmp_s;
-  std::cout << "Start CGI analysis..." << std::endl;
+  std::cout << "INFO WebServer: m_cgi_parser: Start CGI analysis..." << std::endl;
   ss >> tmp_s;
-  std::cout << "HTTP method: " << tmp_s << std::endl;
+  std::cout << "INFO WebServer: m_cgi_parser: HTTP method used: " << tmp_s << std::endl;
   ss >> tmp_s;
-
+  tmp_s.erase(0, 2);
+  for(unsigned int i = 0; i <= m_n_input_parameter; ++i) {
+    std::string token = tmp_s.substr(0, tmp_s.find_first_of("&"));
+    size_t eq_pos = token.find_first_of("=");
+    std::string p_name = token.substr(0, eq_pos - 1);
+    if(p_name == "steps") {
+      m_internal_html_form_input.steps = 
+        stoul(token.substr(eq_pos + 1, token.size()));   
+      tmp_s.erase(0, token.size());
+      std::cout << "INFO WebServer: m_cgi_parser: " << token << std::endl;
+      continue;
+    } else if(p_name == "cwt") {
+      m_internal_html_form_input.cwt = 
+        stod(token.substr(eq_pos + 1, token.size()));  
+      tmp_s.erase(0, token.size());
+      std::cout << "INFO WebServer: m_cgi_parser: " << token << std::endl;
+      continue;
+    } else if(p_name == "hwt") {
+      m_internal_html_form_input.hwt = 
+        stod(token.substr(eq_pos + 1, token.size()));   
+      tmp_s.erase(0, token.size());
+      std::cout << "INFO WebServer: m_cgi_parser: " << token << std::endl;
+      continue;
+    } else if(p_name == "Ray") {
+      m_internal_html_form_input.Ray = 
+        stod(token.substr(eq_pos + 1, token.size()));   
+      tmp_s.erase(0, token.size());
+      std::cout << "INFO WebServer: m_cgi_parser: " << token << std::endl;
+      continue;
+    } else if(p_name == "Pr") {
+      m_internal_html_form_input.Pr = 
+        stod(token.substr(eq_pos + 1, token.size()));   
+      tmp_s.erase(0, token.size());
+      std::cout << "INFO WebServer: m_cgi_parser: " << token << std::endl;
+      continue;
+    } else if(p_name == "Rey") {
+       m_internal_html_form_input.Rey = 
+        stod(token.substr(eq_pos + 1, token.size()));   
+      tmp_s.erase(0, token.size());   
+      continue;
+      std::cout << "INFO WebServer: m_cgi_parser: " << token << std::endl;
+    } else {
+      std::cerr << "WebServer: m_gci_parser: Parameter name " << p_name 
+                << " not recognized." << std::endl;
+    }
+  }
+  std::cout << "INFO WebServer: m_cgi_parser: Finished CGI analysis." << std::endl;
 }
 
 #endif
