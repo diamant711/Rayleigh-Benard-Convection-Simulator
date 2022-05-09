@@ -79,7 +79,10 @@ void Connection::receive(void) {
                       boost::asio::placeholders::byte_transferred));
 }
 
-void Connection::load_data(const std::string &) {}
+void Connection::load_data(const std::string &input) {
+  m_internal_send_buffer = 
+    static_cast<boost::asio::mutable_buffer>(input);
+}
 
 void Connection::load_data(const std::vector<int> &) {}
 
