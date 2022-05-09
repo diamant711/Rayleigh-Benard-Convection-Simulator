@@ -131,7 +131,7 @@ bool WebPage::m_fill_http_header(void) {
 
 void WebPage::m_compose_response(void) {
   if(m_fill_http_header()) {
-    m_http_response = m_http_header + "\r\n" + m_http_body;
+    m_http_response = m_http_header + "\r\n" + m_http_body + "\r\n";
   } else {
     std::cerr << "Due to file errors the http response wont be completed" << std::endl;
   }

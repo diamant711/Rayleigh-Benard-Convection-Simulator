@@ -17,6 +17,7 @@ class Server {
   public:
     Server();
     ~Server();
+    void run_one(void);
   protected:
     //Variables
     typedef struct {
@@ -79,6 +80,10 @@ void Server::m_delete_connection_by_index(int index) {
     
 bool Server::m_is_waiting_list_empty(void) {
   return m_connection_database.empty();
+}
+
+void Server::run_one(void) {
+  m_io_context.run_one();
 }
 
 #endif

@@ -23,8 +23,8 @@ int main(){
                             "cnt/ServerFull_page.html", 
                             "cnt/Setup_page.html",
                             "cnt/Process_page.html");
-
   while(1) {
+    webserver.run_one();
     webserver.respond_to_all();
   }
 

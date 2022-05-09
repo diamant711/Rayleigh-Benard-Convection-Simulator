@@ -75,6 +75,8 @@ WebServer::~WebServer() {}
 
 void WebServer::respond_to_all(void) {
   if(!m_is_waiting_list_empty()) {
+    std::cerr << "WebServer: respond_to_all: INFO: waiting list is not empty" 
+              << std::endl;
     for(size_t i = 0; i < m_get_plugged_connection(); ++i)
       if(m_get_connection_by_index(i).connection_ptr->first_operation_ended())
         m_delete_connection_by_index(i);
@@ -84,6 +86,8 @@ void WebServer::respond_to_all(void) {
                                ->get_socket().remote_endpoint().address();
       m_was_first_user_connected = true;
       m_first_user_status = SETUP;
+      std::cerr << "WebServer: respond_to_all: INFO: first user at " 
+                << m_first_user_address << std::endl;
     }
 
     for(size_t i = 0; i < m_get_plugged_connection(); ++i) {
@@ -91,11 +95,15 @@ void WebServer::respond_to_all(void) {
           ->get_socket().remote_endpoint().address() == m_first_user_address) {
         switch (m_first_user_status) {
           case SETUP:  
+            std::cerr << "WebServer: respond_to_all: INFO: first user at "
+                      << "SETUP stage" << std::endl;
             m_get_connection_by_index(i).connection_ptr
               ->load_data(m_pages.at(2)->get_http_response());
             m_get_connection_by_index(i).connection_ptr->send();
-            std::cout << "Debug ok" << std::endl;
-            exit(0);
+
+            m_get_connection_by_index(i).connection_ptr
+              ->get_socket().close();
+            while(1) {;}
             //CGI
           break;
           
