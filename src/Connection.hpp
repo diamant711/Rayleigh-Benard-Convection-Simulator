@@ -23,7 +23,6 @@ class Connection {
     void load_data(const std::string &);
     void load_data(const std::vector<int> &);
     void load_data(const std::vector<unsigned char> &);
-    void load_data(const std::shared_ptr<char>);
     void load_data(const boost::asio::const_buffer &);
     const std::shared_ptr<char> unload_data(void) const;
     boost::asio::ip::tcp::socket& get_socket(void);
@@ -39,7 +38,7 @@ class Connection {
     // Functions
     void m_handle_send(const boost::system::error_code&,
                        size_t /*bytes_transferred*/);
-    void m_handle_receive(const boost::system::error_code&, size_t);þ
+    void m_handle_receive(const boost::system::error_code&, size_t);
 };
 
 Connection::Connection(boost::asio::io_context& executor) : m_socket(executor) {}
@@ -76,21 +75,24 @@ void Connection::send(void) {
 
 void Connection::receive(void) {
   m_socket.async_receive(m_internal_receive_buffer, boost::bind(&Connection::m_handle_receive, this, boost::asio::placeholders::error,
-                      boost::asio::placeholders::byte_transferred));
+                      boost::asio::placeholders::bytes_transferred));
 }
 
 void Connection::load_data(const std::string &input) {
-  m_internal_send_buffer = 
-    static_cast<boost::asio::mutable_buffer>(input);
+  ::memcpy(m_internal_receive_buffer.data(), input.data(), input.size());
 }
 
-void Connection::load_data(const std::vector<int> &) {}
+void Connection::load_data(const std::vector<int> &input) {
+  ::memcpy(m_internal_receive_buffer.data(), input.data(), input.size());
+}
 
-void Connection::load_data(const std::vector<unsigned char> &) {}
+void Connection::load_data(const std::vector<unsigned char> &input) {
+  ::memcpy(m_internal_receive_buffer.data(), input.data(), input.size());
+}
 
-void Connection::load_data(const std::shared_ptr<char>) {}
-
-void Connection::load_data(const boost::asio::const_buffer &) {}
+void Connection::load_data(const boost::asio::const_buffer &input) {
+  ::memcpy(m_internal_receive_buffer.data(), input.data(), input.size());
+}
 
 const std::shared_ptr<char> Connection::unload_data(void) const {
   std::shared_ptr<char> data_ptr(static_cast<char *>(m_internal_receive_buffer.data()));

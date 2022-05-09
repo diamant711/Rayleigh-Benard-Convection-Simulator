@@ -94,6 +94,8 @@ void WebServer::respond_to_all(void) {
             m_get_connection_by_index(i).connection_ptr
               ->load_data(m_pages.at(2)->get_http_response());
             m_get_connection_by_index(i).connection_ptr->send();
+            std::cout << "Debug ok" << std::endl;
+            exit(0);
             //CGI
           break;
           
