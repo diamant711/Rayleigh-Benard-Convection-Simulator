@@ -47,6 +47,7 @@ class WebServer : public TCPServer {
     ~WebServer(void);
     void respond_to_all(void);
     html_form_input_t get_user_input(void);
+    bool is_html_form_input_available(void);
   private:
     //Functions
     WebPage& m_generate_Output_page(void);
@@ -58,6 +59,7 @@ class WebServer : public TCPServer {
     bool m_was_first_user_connected = false;
     boost::asio::ip::address m_first_user_address;
     first_user_status_t m_first_user_status = NO_FIRST_USER;
+    bool m_cgi_parameter_available = false;
 };
 
 WebServer::WebServer(int port, 
@@ -223,7 +225,12 @@ void WebServer::m_cgi_parser(const std::string& http_request) {
                 << "\' not recognized." << std::endl;
     }
   }
+  m_cgi_parameter_available = true;
   std::cout << "INFO: WebServer: m_cgi_parser: Finished CGI analysis." << std::endl;
+}
+
+bool WebServer::is_html_form_input_available(void) {
+  return m_cgi_parameter_available;
 }
 
 #endif
