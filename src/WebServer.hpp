@@ -28,9 +28,10 @@
 class WebServer : public TCPServer {
   public:
     typedef enum {
-      ERROR,
       NO_FIRST_USER,
+      ERROR,
       SETUP,
+      CGI,
       PROCESSING,
       OUTPUT
     } first_user_status_t;
@@ -49,7 +50,7 @@ class WebServer : public TCPServer {
   private:
     //Functions
     WebPage& m_generate_Output_page(void);
-    void m_gci_parser(const std::string &);
+    void m_cgi_parser(const std::string &);
     //Variables
     const unsigned int m_n_input_parameter = 6;
     WebServer::html_form_input_t m_internal_html_form_input;
@@ -74,19 +75,20 @@ WebServer::WebServer(int port,
 WebServer::~WebServer() {}
 
 void WebServer::respond_to_all(void) {
+  for(size_t i = 0; i < m_get_plugged_connection(); ++i)
+    if(m_get_connection_by_index(i).connection_ptr->first_operation_ended())
+      m_delete_connection_by_index(i);
+
   if(!m_is_waiting_list_empty()) {
-    std::cerr << "WebServer: respond_to_all: INFO: waiting list is not empty" 
+    std::cerr << "INFO: WebServer: respond_to_all: waiting list is not empty" 
               << std::endl;
-    for(size_t i = 0; i < m_get_plugged_connection(); ++i)
-      if(m_get_connection_by_index(i).connection_ptr->first_operation_ended())
-        m_delete_connection_by_index(i);
 
     if(!m_was_first_user_connected) {
       m_first_user_address = m_get_fist_connection().connection_ptr
                                ->get_socket().remote_endpoint().address();
       m_was_first_user_connected = true;
       m_first_user_status = SETUP;
-      std::cerr << "WebServer: respond_to_all: INFO: first user at " 
+      std::cerr << "INFO: WebServer: respond_to_all: first user addres is " 
                 << m_first_user_address << std::endl;
     }
 
@@ -95,16 +97,24 @@ void WebServer::respond_to_all(void) {
           ->get_socket().remote_endpoint().address() == m_first_user_address) {
         switch (m_first_user_status) {
           case SETUP:  
-            std::cerr << "WebServer: respond_to_all: INFO: first user at "
+            std::cerr << "INFO: WebServer: respond_to_all: first user at "
                       << "SETUP stage" << std::endl;
             m_get_connection_by_index(i).connection_ptr
               ->load_data(m_pages.at(2)->get_http_response());
             m_get_connection_by_index(i).connection_ptr->send();
+            m_first_user_status = CGI;
+            continue;
+          break;
 
-            m_get_connection_by_index(i).connection_ptr
-              ->get_socket().close();
-            while(1) {;}
-            //CGI
+          case CGI:
+            std::cerr << "INFO: WebServer: respond_to_all: first user at "
+                      << "CGI stage" << std::endl;
+            m_get_connection_by_index(i).connection_ptr->receive();
+            m_cgi_parser(
+              &(*m_get_connection_by_index(i).connection_ptr->unload_data())
+            );
+            m_first_user_status = PROCESSING;
+            continue;
           break;
           
           case PROCESSING:  
@@ -112,17 +122,18 @@ void WebServer::respond_to_all(void) {
               ->load_data(m_pages.at(3)->get_http_response());
             m_get_connection_by_index(i).connection_ptr->send();
             //PROGRESS BAR
+            continue;
           break;
           
           case OUTPUT:
             //raylib compilation and shipping
+            continue;
           break;
-          
-          case NO_FIRST_USER:  
-          default:
-            m_get_connection_by_index(i).connection_ptr
-              ->load_data(m_pages.at(0)->get_http_response());
-            m_get_connection_by_index(i).connection_ptr->send();
+
+          case ERROR:
+          case NO_FIRST_USER:
+            //something is wrong
+            continue;
           break;
         }
       } else {
@@ -139,61 +150,80 @@ WebServer::html_form_input_t WebServer::get_user_input(void) {
   return m_internal_html_form_input;
 }
 
-void WebServer::m_gci_parser(const std::string& http_request) {
+void WebServer::m_cgi_parser(const std::string& http_request) {
   // GET /?steps=3000&cwt=25&hwt=35&Ray=100&Pr=7&Rey=100 HTTP/1.1
   std::stringstream ss(http_request);
   std::string tmp_s;
-  std::cout << "INFO WebServer: m_cgi_parser: Start CGI analysis..." << std::endl;
+  std::cerr << "INFO: WebServer: m_cgi_parser: Start CGI analysis..." << std::endl;
   ss >> tmp_s;
-  std::cout << "INFO WebServer: m_cgi_parser: HTTP method used: " << tmp_s << std::endl;
+  std::cerr << "INFO: WebServer: m_cgi_parser: HTTP method used: " << tmp_s << std::endl;
   ss >> tmp_s;
+  std::cerr << "INFO: WebServer: m_cgi_parser: CGI string = " << tmp_s << std::endl;
   tmp_s.erase(0, 2);
-  for(unsigned int i = 0; i <= m_n_input_parameter; ++i) {
+  for(unsigned int i = 0; i < m_n_input_parameter; ++i) {
     std::string token = tmp_s.substr(0, tmp_s.find_first_of("&"));
     size_t eq_pos = token.find_first_of("=");
-    std::string p_name = token.substr(0, eq_pos - 1);
+    std::string p_name = token.substr(0, eq_pos);
     if(p_name == "steps") {
       m_internal_html_form_input.steps = 
         stoul(token.substr(eq_pos + 1, token.size()));   
-      tmp_s.erase(0, token.size());
-      std::cout << "INFO WebServer: m_cgi_parser: " << token << std::endl;
+      tmp_s.erase(0, token.size() + 1);
+      std::cerr << "INFO: WebServer: m_cgi_parser: found parameter {name = \'"
+                << p_name << "\',\t value = " 
+                << stoul(token.substr(eq_pos + 1, token.size())) 
+                << "}"  << std::endl;
       continue;
     } else if(p_name == "cwt") {
       m_internal_html_form_input.cwt = 
         stod(token.substr(eq_pos + 1, token.size()));  
-      tmp_s.erase(0, token.size());
-      std::cout << "INFO WebServer: m_cgi_parser: " << token << std::endl;
+      tmp_s.erase(0, token.size() + 1);
+      std::cerr << "INFO: WebServer: m_cgi_parser: found parameter {name = \'"
+                << p_name << "\',\t value = " 
+                << stoul(token.substr(eq_pos + 1, token.size())) 
+                << "}"  << std::endl;
       continue;
     } else if(p_name == "hwt") {
       m_internal_html_form_input.hwt = 
         stod(token.substr(eq_pos + 1, token.size()));   
-      tmp_s.erase(0, token.size());
-      std::cout << "INFO WebServer: m_cgi_parser: " << token << std::endl;
+      tmp_s.erase(0, token.size() + 1);
+      std::cerr << "INFO: WebServer: m_cgi_parser: found parameter {name = \'"
+                << p_name << "\',\t value = " 
+                << stoul(token.substr(eq_pos + 1, token.size())) 
+                << "}"  << std::endl;
       continue;
     } else if(p_name == "Ray") {
       m_internal_html_form_input.Ray = 
         stod(token.substr(eq_pos + 1, token.size()));   
-      tmp_s.erase(0, token.size());
-      std::cout << "INFO WebServer: m_cgi_parser: " << token << std::endl;
+      tmp_s.erase(0, token.size() + 1);
+      std::cerr << "INFO: WebServer: m_cgi_parser: found parameter {name = \'"
+                << p_name << "\',\t value = " 
+                << stoul(token.substr(eq_pos + 1, token.size())) 
+                << "}"  << std::endl;
       continue;
     } else if(p_name == "Pr") {
       m_internal_html_form_input.Pr = 
         stod(token.substr(eq_pos + 1, token.size()));   
-      tmp_s.erase(0, token.size());
-      std::cout << "INFO WebServer: m_cgi_parser: " << token << std::endl;
+      tmp_s.erase(0, token.size() + 1);
+      std::cerr << "INFO: WebServer: m_cgi_parser: found parameter {name = \'"
+                << p_name << "\',\t value = " 
+                << stoul(token.substr(eq_pos + 1, token.size())) 
+                << "}"  << std::endl;
       continue;
     } else if(p_name == "Rey") {
        m_internal_html_form_input.Rey = 
         stod(token.substr(eq_pos + 1, token.size()));   
-      tmp_s.erase(0, token.size());   
+      tmp_s.erase(0, token.size() + 1);
+      std::cerr << "INFO: WebServer: m_cgi_parser: found parameter {name = \'"
+                << p_name << "\',\t value = " 
+                << stoul(token.substr(eq_pos + 1, token.size())) 
+                << "}"  << std::endl;
       continue;
-      std::cout << "INFO WebServer: m_cgi_parser: " << token << std::endl;
     } else {
-      std::cerr << "WebServer: m_gci_parser: Parameter name " << p_name 
-                << " not recognized." << std::endl;
+      std::cerr << "WARNING: WebServer: m_gci_parser: Parameter name \'" << p_name 
+                << "\' not recognized." << std::endl;
     }
   }
-  std::cout << "INFO WebServer: m_cgi_parser: Finished CGI analysis." << std::endl;
+  std::cout << "INFO: WebServer: m_cgi_parser: Finished CGI analysis." << std::endl;
 }
 
 #endif

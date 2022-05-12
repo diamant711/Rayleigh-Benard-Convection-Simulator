@@ -39,32 +39,39 @@ class Connection {
     void m_handle_send(const boost::system::error_code&,
                        size_t /*bytes_transferred*/);
     void m_handle_receive(const boost::system::error_code&, size_t);
-    void m_resize_internal_send_buffer(int n);
 };
 
 Connection::Connection(boost::asio::io_context& executor) : m_socket(executor) {}
 
 Connection::~Connection(void) {
+  std::cerr << "INFO: Connection: user " << m_socket.remote_endpoint().address() 
+            << ": destructor: socket close." << std::endl;
   m_socket.close();
 }
 
 void Connection::m_handle_send(const boost::system::error_code& error, size_t bytes_transferred){
+  std::cerr << "INFO: Connection: user " << m_socket.remote_endpoint().address() 
+            << ": m_handle_send: bytes transferred = " << bytes_transferred 
+            << std::endl;
   if (!error){
-    m_internal_receive_buffer_ptr.release();
+    m_internal_send_buffer_ptr.release();
     m_first_operation_ended = true;
   } else {
     m_send_error = true; //va implementato come controllo nei send successivi notifica utente
-    std::cerr << "Error: send: byte transferred = " << bytes_transferred << std::endl;
+    std::cerr << "Error" << std::endl;
   }
 }
 
 void Connection::m_handle_receive(const boost::system::error_code& error, size_t bytes_transferred){
- if (!error){
-   m_internal_send_buffer_ptr.release();
+  std::cerr << "INFO: Connection: user " << m_socket.remote_endpoint().address() 
+            << ": m_handle_receive: bytes transferred = " << bytes_transferred 
+            << std::endl;
+  if (!error){
+   m_internal_receive_buffer_ptr.release();
    m_first_operation_ended = true;
   } else {
     m_receive_error = true; //va implementato come controllo nei receive successivi notifica utente
-    std::cerr << "Error: receive: byte transferred = " << bytes_transferred << std::endl;
+    std::cerr << "Error" << std::endl;
   }
 }
 
@@ -77,6 +84,9 @@ void Connection::send(void) {
 }
 
 void Connection::receive(void) {
+  m_internal_receive_buffer_ptr.reset(new boost::asio::mutable_buffer(
+    new char[m_socket.available()], m_socket.available()
+  ));
   m_socket.async_receive(*m_internal_receive_buffer_ptr,
                         boost::bind(&Connection::m_handle_receive, this, 
                                 boost::asio::placeholders::error,
@@ -89,15 +99,25 @@ void Connection::load_data(const std::string &input) {
 }
 
 void Connection::load_data(const std::vector<int> &input) {
+  m_internal_send_buffer_ptr.reset(new boost::asio::const_buffer(input.data(), 
+                                                                 input.size()));
 }
 
 void Connection::load_data(const std::vector<unsigned char> &input) {
+  m_internal_send_buffer_ptr.reset(new boost::asio::const_buffer(input.data(), 
+                                                                 input.size()));
 }
 
 void Connection::load_data(const boost::asio::const_buffer &input) {
+  m_internal_send_buffer_ptr.reset(new boost::asio::const_buffer(input.data(), 
+                                                                 input.size()));
 }
 
 const std::shared_ptr<char> Connection::unload_data(void) const {
+  std::shared_ptr<char> ret_ptr(new char[m_internal_receive_buffer_ptr->size()]);
+  ::memcpy(&(*ret_ptr), m_internal_receive_buffer_ptr->data(), 
+                       m_internal_receive_buffer_ptr->size());
+  return ret_ptr;
 }
 
 boost::asio::ip::tcp::socket& Connection::get_socket(void) {

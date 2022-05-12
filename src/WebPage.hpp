@@ -53,7 +53,7 @@ class WebPage {
     std::string m_http_header;
     std::string m_http_body;
     std::string m_http_response;
-    std::string m_content_lenght;
+    std::string m_content_length;
     status_code_t m_status_code = {200, "OK"};
     bool m_ready_to_ship = false;
     //function
@@ -100,7 +100,7 @@ bool WebPage::m_fill_http_header(void) {
     m_http_body.clear();
     while(!m_input_file.eof())
       m_http_body += m_input_file.get();
-    m_content_lenght = m_itos(m_http_body.size());
+    m_content_length = m_itos(m_http_body.size());
     tmp.clear();
     tmp = HTTP_VERSION;
     tmp += ' ';
@@ -115,8 +115,8 @@ bool WebPage::m_fill_http_header(void) {
       tmp += '\r';
       tmp += '\n';
     }
-    tmp += "Content-Lenght: ";
-    tmp += m_content_lenght;
+    tmp += "Content-Length: ";
+    tmp += m_content_length;
     tmp += '\r';
     tmp += '\n';
     m_http_header = tmp;
@@ -131,9 +131,12 @@ bool WebPage::m_fill_http_header(void) {
 
 void WebPage::m_compose_response(void) {
   if(m_fill_http_header()) {
-    m_http_response = m_http_header + "\r\n" + m_http_body + "\r\n";
+    m_http_response = m_http_header + "\r\n" + m_http_body;
   } else {
-    std::cerr << "Due to file errors the http response wont be completed" << std::endl;
+    std::cerr << "ERROR: WebServer: m_compose_response: "
+              << "Due to " << m_file_path
+              << " source file errors the http response wont be completed"
+              << std::endl;
   }
 }
 
