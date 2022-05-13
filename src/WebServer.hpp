@@ -115,7 +115,8 @@ void WebServer::respond_to_all(void) {
             m_cgi_parser(
               &(*m_get_connection_by_index(i).connection_ptr->unload_data())
             );
-            m_first_user_status = PROCESSING;
+            if(m_cgi_parameter_available)
+              m_first_user_status = PROCESSING;
             continue;
           break;
           
@@ -161,6 +162,11 @@ void WebServer::m_cgi_parser(const std::string& http_request) {
   std::cerr << "INFO: WebServer: m_cgi_parser: HTTP method used: " << tmp_s << std::endl;
   ss >> tmp_s;
   std::cerr << "INFO: WebServer: m_cgi_parser: CGI string = " << tmp_s << std::endl;
+  if(tmp_s[0] != '/' || tmp_s[1] != '?') {
+    std::cerr << "WARNING: WebServer: m_cgi_parser: the request do not"
+              << " contain a CGI string" << tmp_s << std::endl;
+    return;
+  }
   tmp_s.erase(0, 2);
   for(unsigned int i = 0; i < m_n_input_parameter; ++i) {
     std::string token = tmp_s.substr(0, tmp_s.find_first_of("&"));
@@ -223,10 +229,12 @@ void WebServer::m_cgi_parser(const std::string& http_request) {
     } else {
       std::cerr << "WARNING: WebServer: m_gci_parser: Parameter name \'" << p_name 
                 << "\' not recognized." << std::endl;
+      return;
     }
   }
   m_cgi_parameter_available = true;
   std::cout << "INFO: WebServer: m_cgi_parser: Finished CGI analysis." << std::endl;
+  return;
 }
 
 bool WebServer::is_html_form_input_available(void) {
