@@ -8,7 +8,8 @@
 int main(int argc, char *argv[]){
   char port[5] = "8080";
   if(argc < 2) {
-    std::cerr << "WARNING: main: usage: " << argv[0] << " [port]" << std::endl;
+    std::cerr << "WARNING: main: usage: " << argv[0] << " [port]. " 
+              << "Using 8080" << std::endl;
   } else {
     ::strncpy(port, argv[1], 5);
   }
@@ -33,7 +34,7 @@ int main(int argc, char *argv[]){
   );
   
   for(int i = 0; ; ++i){
-    std::cerr << "\rINFO: main: processing...\t(" << i << "/" 
+    std::cerr << "INFO: main: processing...\t(" << i << "/" 
               << html_form_input.steps << ")" << std::endl;
     webserver.run_one();
     RayBenCon.write_current_data();
