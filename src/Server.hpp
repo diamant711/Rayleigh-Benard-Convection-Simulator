@@ -17,7 +17,7 @@ class Server {
   public:
     Server();
     ~Server();
-    void run_one(void);
+    void poll(void);
   protected:
     //Variables
     typedef struct {
@@ -82,8 +82,8 @@ bool Server::m_is_waiting_list_empty(void) {
   return m_connection_database.empty();
 }
 
-void Server::run_one(void) {
-  m_io_context.run_one();
+void Server::poll(void) {
+  m_io_context.poll();
 }
 
 #endif

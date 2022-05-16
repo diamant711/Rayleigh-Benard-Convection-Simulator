@@ -1,4 +1,3 @@
-
 ///////////////////////////////////////////////
 //
 //  RayleighBenardConvection.hpp specifies a class which is able to
@@ -36,6 +35,7 @@
 
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <cmath>
 #include <vector>
@@ -57,118 +57,125 @@
 class RayBenConvection {
 
   public:
+    typedef struct {
+      bool ended;
+      unsigned int step;
+      double eta;
+      double velocity;
+    } simulation_state_t;
     RayBenConvection();
     ~RayBenConvection();
-  int init(unsigned int, double, double, double, double, double );
-  bool eval_next_frame();
-  void write_current_data();
+    int init(unsigned int, double, double, double, double, double);
+    simulation_state_t eval_next_frame();
+    void write_current_data();
 
   private:
-  //variables
-  unsigned int m_END_CICLE;
-  static const unsigned int m_nx = 100;
-  static const unsigned int m_ny = 70;
-  const double m_tf = 1e3;
-  double m_dt = 1e-2;
-  const unsigned int m_nt = ((int) m_tf / m_dt) + 1;
-  const double m_H = 2;
-  const double m_L = 5;
-  const double m_dx = m_L / (m_nx - 1);
-  const double m_dy = m_H / (m_ny - 1);
-  double m_TN;  //lower temperature (cold)
-  double m_TS;  //upper temperature (hot)
-  Eigen::Matrix<double, m_nx+1, m_ny> m_u;
-  Eigen::Matrix<double, m_nx, m_ny+1> m_v;
-  Eigen::Matrix<double, m_nx, m_ny> m_p;
-  Eigen::Matrix<double, m_nx, m_ny> m_S;
-  double m_To;
-  Eigen::Matrix<double, m_nx, m_ny> m_T;
-  double m_Re;
-  double m_Pr;
-  double m_Pe;
-  double m_Ra;
-  double m_Gr;
-  Eigen::Matrix<double, m_nx, m_ny> m_Tstar;
-  Eigen::Matrix<double, m_nx+1, m_ny> m_ustar;
-  Eigen::Matrix<double, m_nx+1, m_ny> m_uhalf;
-  Eigen::Matrix<double, m_nx+1, m_ny> m_uconv;
-  Eigen::Matrix<double, m_nx, m_ny+1> m_vstar;
-  Eigen::Matrix<double, m_nx, m_ny+1> m_vhalf;
-  Eigen::Matrix<double, m_nx, m_ny+1> m_vconv;
-  double m_TnE = 0;
-  double m_TnW = 0;
-  double m_UN = 0;
-  double m_US = 0;
-  double m_UE = 0;
-  double m_UW = 0;
-  double m_VN = 0;
-  double m_VS = 0;
-  double m_VE = 0;
-  double m_VW = 0;
-  //initialisation variables
-  Eigen::Matrix<double, m_nx-1, m_ny-2> m_bcu;
-  Eigen::Matrix<double, m_nx-2, m_ny-1> m_bcv;
-  Eigen::Matrix<double, -1, 1> m_e;
-  Eigen::Matrix<double, -1, 1> m_i;
-  Eigen::Matrix<double, -1, -1> m_Ax;
-  Eigen::Matrix<double, -1, -1> m_Ay;
-  Eigen::Matrix<double, -1, -1> m_A;
-  Eigen::Matrix<double, -1, -1> m_Du;
-  Eigen::Matrix<int, 1, -1> m_pu; 
-  Eigen::Matrix<double, -1, -1> m_Duperm;
-  std::vector<Eigen::Matrix<double, -1, -1>> m_LUu;
-  Eigen::Matrix<double, -1, -1> m_Dv;
-  Eigen::Matrix<int, 1, -1> m_pv;
-  Eigen::Matrix<double, -1, -1> m_Dvperm;
-  std::vector<Eigen::Matrix<double, -1, -1>> m_LUv;
-  Eigen::Matrix<int, 1, -1> m_pp;
-  Eigen::Matrix<double, -1, -1> m_Aperm;
-  std::vector<Eigen::Matrix<double, -1, -1>> m_LUp;
-  Eigen::Matrix<double, m_nx-2, m_ny-2> m_bcT;
-  Eigen::Matrix<double, -1, -1> m_Tx;
-  Eigen::Matrix<double, -1, -1> m_Ty;
-  Eigen::Matrix<double, -1, -1> m_Tt;
-  Eigen::Matrix<int, 1, -1> m_pt;
-  Eigen::Matrix<double, -1, -1> m_Ttperm;
-  std::vector<Eigen::Matrix<double, -1, -1>> m_LUt;
-  Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lu_solver;
-  Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Uu_solver;
-  Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lv_solver;
-  Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Uv_solver;
-  Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lp_solver;
-  Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Up_solver;
-  Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lt_solver;
-  Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Ut_solver;
-  static const unsigned int m_ii = m_nx-2;
-  static const unsigned int m_jj = m_ny-2;
-  //it: ex-for counter.
-  unsigned int m_it;
-  std::ofstream m_output_header_file;
-
-  //functions
-  void m_apply_correction(void);
-  static void m_d_solve(Eigen::Matrix<double,-1,1> &,
-          const Eigen::Matrix<int,1,-1> &,
-          const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &,
-          const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &);
-  void m_ETA(int);
-
-  template <typename Scalar> 
-  Eigen::Matrix<Scalar,-1,-1> m_spdiags(const Eigen::Matrix<Scalar, -1, -1> &, 
-                                  const Eigen::Matrix<int, -1, 1> &,
-                                  size_t, size_t);
-  template <typename Scalar> 
-  Eigen::Matrix<Scalar,-1,-1> m_kron(const Eigen::Matrix<Scalar, -1, -1> &,
-                               const Eigen::Matrix<Scalar, -1, -1> &);
-
-  template <typename Scalar>
-  std::vector<Eigen::Triplet<Scalar>> m_SparseToTriplet(Eigen::SparseMatrix<Scalar> &);
-  template <typename Scalar>
-
-  Eigen::Matrix<int, 1, -1> m_my_symamd(Eigen::Matrix<Scalar, -1, -1> &); 
-
-  void m_luP(Eigen::Matrix<double,-1,-1> &, std::vector<Eigen::Matrix<double,-1,-1>> &);
-  void m_write_current_frame();
+    //variables
+    unsigned int m_END_CICLE;
+    static const unsigned int m_nx = 100;
+    static const unsigned int m_ny = 70;
+    const double m_tf = 1e3;
+    double m_dt = 1e-2;
+    const unsigned int m_nt = ((int) m_tf / m_dt) + 1;
+    const double m_H = 2;
+    const double m_L = 5;
+    const double m_dx = m_L / (m_nx - 1);
+    const double m_dy = m_H / (m_ny - 1);
+    double m_TN;  //lower temperature (cold)
+    double m_TS;  //upper temperature (hot)
+    Eigen::Matrix<double, m_nx+1, m_ny> m_u;
+    Eigen::Matrix<double, m_nx, m_ny+1> m_v;
+    Eigen::Matrix<double, m_nx, m_ny> m_p;
+    Eigen::Matrix<double, m_nx, m_ny> m_S;
+    double m_To;
+    Eigen::Matrix<double, m_nx, m_ny> m_T;
+    double m_Re;
+    double m_Pr;
+    double m_Pe;
+    double m_Ra;
+    double m_Gr;
+    Eigen::Matrix<double, m_nx, m_ny> m_Tstar;
+    Eigen::Matrix<double, m_nx+1, m_ny> m_ustar;
+    Eigen::Matrix<double, m_nx+1, m_ny> m_uhalf;
+    Eigen::Matrix<double, m_nx+1, m_ny> m_uconv;
+    Eigen::Matrix<double, m_nx, m_ny+1> m_vstar;
+    Eigen::Matrix<double, m_nx, m_ny+1> m_vhalf;
+    Eigen::Matrix<double, m_nx, m_ny+1> m_vconv;
+    double m_TnE = 0;
+    double m_TnW = 0;
+    double m_UN = 0;
+    double m_US = 0;
+    double m_UE = 0;
+    double m_UW = 0;
+    double m_VN = 0;
+    double m_VS = 0;
+    double m_VE = 0;
+    double m_VW = 0;
+    //initialisation variables
+    Eigen::Matrix<double, m_nx-1, m_ny-2> m_bcu;
+    Eigen::Matrix<double, m_nx-2, m_ny-1> m_bcv;
+    Eigen::Matrix<double, -1, 1> m_e;
+    Eigen::Matrix<double, -1, 1> m_i;
+    Eigen::Matrix<double, -1, -1> m_Ax;
+    Eigen::Matrix<double, -1, -1> m_Ay;
+    Eigen::Matrix<double, -1, -1> m_A;
+    Eigen::Matrix<double, -1, -1> m_Du;
+    Eigen::Matrix<int, 1, -1> m_pu; 
+    Eigen::Matrix<double, -1, -1> m_Duperm;
+    std::vector<Eigen::Matrix<double, -1, -1>> m_LUu;
+    Eigen::Matrix<double, -1, -1> m_Dv;
+    Eigen::Matrix<int, 1, -1> m_pv;
+    Eigen::Matrix<double, -1, -1> m_Dvperm;
+    std::vector<Eigen::Matrix<double, -1, -1>> m_LUv;
+    Eigen::Matrix<int, 1, -1> m_pp;
+    Eigen::Matrix<double, -1, -1> m_Aperm;
+    std::vector<Eigen::Matrix<double, -1, -1>> m_LUp;
+    Eigen::Matrix<double, m_nx-2, m_ny-2> m_bcT;
+    Eigen::Matrix<double, -1, -1> m_Tx;
+    Eigen::Matrix<double, -1, -1> m_Ty;
+    Eigen::Matrix<double, -1, -1> m_Tt;
+    Eigen::Matrix<int, 1, -1> m_pt;
+    Eigen::Matrix<double, -1, -1> m_Ttperm;
+    std::vector<Eigen::Matrix<double, -1, -1>> m_LUt;
+    Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lu_solver;
+    Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Uu_solver;
+    Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lv_solver;
+    Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Uv_solver;
+    Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lp_solver;
+    Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Up_solver;
+    Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lt_solver;
+    Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Ut_solver;
+    static const unsigned int m_ii = m_nx-2;
+    static const unsigned int m_jj = m_ny-2;
+    //it: ex-for counter.
+    unsigned int m_it;
+    std::ofstream m_output_header_file;
+    simulation_state_t simulation_state;
+    
+    //functions
+    void m_apply_correction(void);
+    static void m_d_solve(Eigen::Matrix<double,-1,1> &,
+            const Eigen::Matrix<int,1,-1> &,
+            const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &,
+            const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &);
+    void m_ETA(int);
+    
+    template <typename Scalar> 
+    Eigen::Matrix<Scalar,-1,-1> m_spdiags(const Eigen::Matrix<Scalar, -1, -1> &, 
+                                    const Eigen::Matrix<int, -1, 1> &,
+                                    size_t, size_t);
+    template <typename Scalar> 
+    Eigen::Matrix<Scalar,-1,-1> m_kron(const Eigen::Matrix<Scalar, -1, -1> &,
+                                 const Eigen::Matrix<Scalar, -1, -1> &);
+    
+    template <typename Scalar>
+    std::vector<Eigen::Triplet<Scalar>> m_SparseToTriplet(Eigen::SparseMatrix<Scalar> &);
+    template <typename Scalar>
+    
+    Eigen::Matrix<int, 1, -1> m_my_symamd(Eigen::Matrix<Scalar, -1, -1> &); 
+    
+    void m_luP(Eigen::Matrix<double,-1,-1> &, std::vector<Eigen::Matrix<double,-1,-1>> &);
+    void m_write_current_frame();
 };
 
 RayBenConvection::RayBenConvection() {}
@@ -244,11 +251,16 @@ void RayBenConvection::m_ETA(int n_calls){
         ).count()
     ) / 1000;
     if(delta_t > 0) {
+      simulation_state.step = n_calls;
+      simulation_state.eta = delta_t * (m_END_CICLE - n_calls);
+      simulation_state.velocity = 1.0/delta_t;
       for(int i = 0; i < 80; ++i)
         std::putc(' ', stdout);
-      std::cout << "\rETA: "<< delta_t * (m_END_CICLE - n_calls) << "s\t" 
-                << 1.0/delta_t << "c/s\t("
-                << n_calls << "/" << m_END_CICLE << ")\r";
+      std::cerr << "\rINFO: RayBenConvection: m_ETA: eta = " 
+                << std::setw(4) << std::setprecision(3)
+                << simulation_state.eta << "s\tspeed = "
+                << simulation_state.velocity << "cicle/s\tstep = "
+                << simulation_state.step << "/" << m_END_CICLE << "\r";
       ::fflush(stdout);
     }
   }
@@ -396,6 +408,7 @@ void RayBenConvection::m_write_current_frame (){
 int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_temp, 
                             double Ray_numb, double Pr_numb, double Re_numb ){
 
+  std::cerr << "INFO: RayBenConvection: init: Initializing simulation..." << std::endl;
   std::chrono::time_point<std::chrono::high_resolution_clock> init_lenght = 
     std::chrono::high_resolution_clock::now();
   Eigen::setNbThreads(NPROC);
@@ -413,7 +426,7 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
   if (END_CICLE > 6000){
     std::cout<< "The number of steps requested "<<END_CICLE<<" is too high."<<std::endl;
     return -1;
-    }
+  }
 
   if(m_TS != m_TN)
     m_To = (m_TS < m_TN) ? m_TS : m_TN;
@@ -427,10 +440,10 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
     return -3;
   }
 
-   if (m_TS >= 100){
-     std::cout << "Default parameters regard liquid water. Work in 1-99 range.";
-     return -7;
-   }
+  if (m_TS >= 100){
+    std::cout << "Default parameters regard liquid water. Work in 1-99 range.";
+    return -7;
+  }
 
   if (Ray_numb < 50 || Ray_numb > 150 ){
     std::cout << "Working range for Rayleigh number: 50-150.";
@@ -715,7 +728,7 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
 
   m_Ut_solver.compute(m_LUt[1]);
 
-  std::cout << "Time spent in init() function: "
+  std::cerr << "INFO: RayBenConvection: init: Done! Time spent during initialization function: "
   << static_cast<float>(
        std::chrono::duration_cast<std::chrono::milliseconds>(
           std::chrono::high_resolution_clock::now() - init_lenght
@@ -730,14 +743,14 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
 
 }
 
-bool RayBenConvection::eval_next_frame(){
+RayBenConvection::simulation_state_t RayBenConvection::eval_next_frame(){
 
   //const unsigned int m_ii = m_nx-2;
   //const unsigned int m_jj = m_ny-2;
 
   if (m_it < m_END_CICLE ) {
 
-   m_ETA(m_it);
+    m_ETA(m_it);
 
     m_apply_correction();
 
@@ -865,14 +878,17 @@ bool RayBenConvection::eval_next_frame(){
 
 
   if (m_it == m_END_CICLE) {
-    std::cout << "FINE" << std::endl;
-    return true;
+    std::cerr << std::endl << "INFO: RayBenConvection: eval_next_frame: " 
+              << "Simulation ended with no errors." << std::endl;
+    simulation_state.ended = true;
+    return simulation_state;
   }
 
 
   ++m_it;
 
-  return false;
+  simulation_state.ended = false;
+  return simulation_state;
 }
 
 void RayBenConvection::write_current_data(){

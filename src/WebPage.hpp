@@ -112,6 +112,7 @@ bool WebPage::m_fill_http_header(void) {
     if(content_type_ok) {
       tmp += "Content-Type: ";
       tmp += m_content_type;
+      tmp += "; charset=utf-8";
       tmp += '\r';
       tmp += '\n';
     }

@@ -19,6 +19,7 @@
 #include <iostream>
 #include <memory>
 #include <sstream>
+#include <thread>
 
 #include <boost/asio.hpp>
 
@@ -33,6 +34,7 @@ class WebServer : public TCPServer {
       SETUP,
       CGI,
       PROCESSING,
+      BAR,
       OUTPUT
     } first_user_status_t;
     typedef struct {
@@ -48,11 +50,16 @@ class WebServer : public TCPServer {
     void respond_to_all(void);
     html_form_input_t get_user_input(void);
     bool is_html_form_input_available(void);
+    void update_simulation_state(unsigned int, double, double);
   private:
     //Functions
     WebPage& m_generate_Output_page(void);
     void m_cgi_parser(const std::string &);
     //Variables
+    bool m_websocket_connected = false;
+    int m_actual_step = -1;
+    double m_actual_velocity = -1;
+    double m_actual_eta = -1;
     const unsigned int m_n_input_parameter = 6;
     WebServer::html_form_input_t m_internal_html_form_input;
     std::vector<std::unique_ptr<WebPage>> m_pages;
@@ -77,8 +84,10 @@ WebServer::WebServer(int port,
 WebServer::~WebServer() {}
 
 void WebServer::respond_to_all(void) {
+  m_get_executor().poll();
   for(size_t i = 0; i < m_get_plugged_connection(); ++i)
-    if(m_get_connection_by_index(i).connection_ptr->first_operation_ended())
+    if(m_get_connection_by_index(i).connection_ptr->first_operation_ended()
+       && !m_get_connection_by_index(i).connection_ptr->is_persistant())
       m_delete_connection_by_index(i);
 
   if(!m_is_waiting_list_empty()) {
@@ -109,25 +118,55 @@ void WebServer::respond_to_all(void) {
           break;
 
           case CGI:
-            std::cerr << "INFO: WebServer: respond_to_all: first user at "
-                      << "CGI stage" << std::endl;
-            m_get_connection_by_index(i).connection_ptr->receive();
-            m_cgi_parser(
-              &(*m_get_connection_by_index(i).connection_ptr->unload_data())
-            );
-            if(m_cgi_parameter_available)
-              m_first_user_status = PROCESSING;
+            if(m_get_connection_by_index(i).connection_ptr->is_ready_to_receive()) {
+              std::cerr << "INFO: WebServer: respond_to_all: first user at "
+                        << "CGI stage" << std::endl;
+              m_get_connection_by_index(i).connection_ptr->receive();
+              m_cgi_parser(
+                &(*m_get_connection_by_index(i).connection_ptr->unload_data())
+              );
+              if(m_cgi_parameter_available)
+                m_first_user_status = PROCESSING;
+            }
             continue;
           break;
           
           case PROCESSING:  
+            std::cerr << "INFO: WebServer: respond_to_all: first user at "
+                      << "PROCESSING stage" << std::endl;
             m_get_connection_by_index(i).connection_ptr
               ->load_data(m_pages.at(3)->get_http_response());
             m_get_connection_by_index(i).connection_ptr->send();
-            //PROGRESS BAR
+            m_first_user_status = BAR;
             continue;
           break;
-          
+ 
+          case BAR:  
+            if(!m_websocket_connected) {
+              std::cerr << "INFO: WebServer: respond_to_all: first user at "
+                        << "BAR stage" << std::endl;
+              m_get_connection_by_index(i).connection_ptr->set_persistant();
+              /*
+              m_get_connection_by_index(i).connection_ptr->load_data(
+                "HTTP/1.1 101 Switching Protocols\r\n"
+                "Upgrade: websocket\r\n"
+                "Connection: Upgrade\r\n"
+              );
+              m_get_connection_by_index(i).connection_ptr->send();
+              */
+              m_websocket_connected = true;
+            }
+            if(m_get_connection_by_index(i).connection_ptr->get_socket().available() > 0) {
+              m_get_connection_by_index(i).connection_ptr->receive();
+              //https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers
+              //continue from this
+            }
+            //m_get_connection_by_index(i).connection_ptr->receive();
+            //std::cout << *m_get_connection_by_index(i).connection_ptr->unload_data() << std::endl;
+            //send a POST request with json data about the simulation
+            continue;
+          break;         
+
           case OUTPUT:
             //raylib compilation and shipping
             continue;
@@ -239,6 +278,12 @@ void WebServer::m_cgi_parser(const std::string& http_request) {
 
 bool WebServer::is_html_form_input_available(void) {
   return m_cgi_parameter_available;
+}
+    
+void WebServer::update_simulation_state(unsigned int s, double v, double e) {
+  m_actual_step = s;
+  m_actual_velocity = v;
+  m_actual_eta = e;
 }
 
 #endif

@@ -27,6 +27,9 @@ class Connection {
     const std::shared_ptr<char> unload_data(void) const;
     boost::asio::ip::tcp::socket& get_socket(void);
     bool first_operation_ended(void);
+    bool is_ready_to_receive(void);
+    bool is_persistant(void);
+    void set_persistant(void);
   private:
     // Variables
     boost::asio::ip::tcp::socket m_socket;
@@ -35,6 +38,7 @@ class Connection {
     bool m_send_error = false;
     bool m_receive_error = false;
     bool m_first_operation_ended = false;
+    bool m_persistant = false;
     // Functions
     void m_handle_send(const boost::system::error_code&,
                        size_t /*bytes_transferred*/);
@@ -126,6 +130,22 @@ boost::asio::ip::tcp::socket& Connection::get_socket(void) {
  
 bool Connection::first_operation_ended(void) {
   return m_first_operation_ended;
+}
+
+bool Connection::is_ready_to_receive(void) {
+  if(m_socket.available() > 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+    
+void Connection::set_persistant(void) {
+  m_persistant = true;
+}
+    
+bool Connection::is_persistant(void) {
+  return m_persistant;
 }
 
 #endif

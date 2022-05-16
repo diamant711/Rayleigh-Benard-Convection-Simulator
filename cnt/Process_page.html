@@ -2,13 +2,18 @@
 <html>
   <head>
     <link rel="icon" href="data:,">
-    <title> LOADING </title>
+    <title> Processing </title>
     <style language="text/css">
     </style>
-    <script language="text/javascript">
-    </script>
   </head>
   <body>
-    <h1>LOADING<h2>
+    <script language="text/javascript">
+      let socket = new WebSocket("ws://" + location.host);
+      //while(1) {
+      //  console.log("Hello world!");
+      //}
+    </script>
+    <label for="bar">Process:</label>
+    <progress id="bar" max="1" value="0"></progress>
   </body>
 </html>

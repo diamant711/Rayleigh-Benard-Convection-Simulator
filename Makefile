@@ -27,7 +27,7 @@ OBJ_DIR = obj
 REPOS_DIR = $(TMP_DIR)/caos_tester_tmp_repos_$(USER).d
 CXX = g++
 COMMON_FLAGS = -fopenmp -pg -g -fno-math-errno -march=native -DNDEBUG
-CXXFLAGS = -O0 -I$(INC_DIR)/ -Wall -Wextra -std=c++11 $(COMMON_FLAGS)
+CXXFLAGS = -O3 -I$(INC_DIR)/ -Wall -Wextra -std=c++11 $(COMMON_FLAGS)
 LDFLAGS = $(STATIC_LIB) $(DINAMIC_LIB) $(COMMON_FLAGS)
 X_NAME = CaosTester
 RAYLIB_REPO = https://github.com/raysan5/raylib.git
