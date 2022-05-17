@@ -19,7 +19,7 @@ using boost::asio::ip::tcp;
 class TCPServer : public Server {
 
   public:
-    TCPServer(int);
+    TCPServer(boost::asio::io_context &, int);
     ~TCPServer();
   private:
     //Variables
@@ -30,8 +30,9 @@ class TCPServer : public Server {
                          const boost::system::error_code &);
 };
 
-TCPServer::TCPServer(int port) : m_acceptor(m_get_executor(), 
-                                            tcp::endpoint(tcp::v4(), port))
+TCPServer::TCPServer(boost::asio::io_context& executor, int port)
+  : Server(executor), 
+    m_acceptor(m_get_executor(), tcp::endpoint(tcp::v4(), port))
 {
   std::cerr << "INFO: TCPServer: m_handle_accept: started async accept chain operation..." << std::endl;
   m_start_accept();

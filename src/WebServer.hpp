@@ -45,7 +45,8 @@ class WebServer : public TCPServer {
       double Pr;
       double Rey;
     } html_form_input_t;
-    WebServer(int, std::string, std::string, std::string, std::string);
+    WebServer(boost::asio::io_context &, int, std::string, std::string, 
+              std::string, std::string);
     ~WebServer(void);
     void respond_to_all(void);
     html_form_input_t get_user_input(void);
@@ -69,11 +70,13 @@ class WebServer : public TCPServer {
     bool m_cgi_parameter_available = false;
 };
 
-WebServer::WebServer(int port, 
+WebServer::WebServer(boost::asio::io_context& executor, int port, 
                      std::string path_to_Error_page, 
                      std::string path_to_ServerFull_page, 
                      std::string path_to_Setup_page, 
-                     std::string path_to_Process_page) : TCPServer(port) {
+                     std::string path_to_Process_page)
+  : TCPServer(executor, port)
+{
   m_pages.clear();
   m_pages.push_back(std::unique_ptr<WebPage>(new WebPage(path_to_Error_page)));
   m_pages.push_back(std::unique_ptr<WebPage>(new WebPage(path_to_ServerFull_page)));
@@ -123,7 +126,7 @@ void WebServer::respond_to_all(void) {
                         << "CGI stage" << std::endl;
               m_get_connection_by_index(i).connection_ptr->receive();
               m_cgi_parser(
-                &(*m_get_connection_by_index(i).connection_ptr->unload_data())
+                m_get_connection_by_index(i).connection_ptr->unload_data().get()
               );
               if(m_cgi_parameter_available)
                 m_first_user_status = PROCESSING;

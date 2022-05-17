@@ -24,7 +24,7 @@ class Connection {
     void load_data(const std::vector<int> &);
     void load_data(const std::vector<unsigned char> &);
     void load_data(const boost::asio::const_buffer &);
-    const std::shared_ptr<char> unload_data(void) const;
+    const std::shared_ptr<char[]> unload_data(void) const;
     boost::asio::ip::tcp::socket& get_socket(void);
     bool first_operation_ended(void);
     bool is_ready_to_receive(void);
@@ -117,10 +117,12 @@ void Connection::load_data(const boost::asio::const_buffer &input) {
                                                                  input.size()));
 }
 
-const std::shared_ptr<char> Connection::unload_data(void) const {
-  std::shared_ptr<char> ret_ptr(new char[m_internal_receive_buffer_ptr->size()]);
-  ::memcpy(&(*ret_ptr), m_internal_receive_buffer_ptr->data(), 
-                       m_internal_receive_buffer_ptr->size());
+const std::shared_ptr<char[]> Connection::unload_data(void) const {
+  size_t size = m_internal_receive_buffer_ptr->size();
+  std::shared_ptr<char[]> ret_ptr;
+  ret_ptr.reset(new char[size]);
+  ::memcpy(ret_ptr.get(), m_internal_receive_buffer_ptr->data(), 
+                          m_internal_receive_buffer_ptr->size());
   return ret_ptr;
 }
 

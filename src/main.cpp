@@ -17,10 +17,11 @@ int main(int argc, char *argv[]){
   }
   
   RayBenConvection RayBenCon;
-  WebServer webserver(::atoi(port), "cnt/Error_page.html", 
-                                    "cnt/ServerFull_page.html", 
-                                    "cnt/Setup_page.html",
-                                    "cnt/Process_page.html");
+  boost::asio::io_context io_context;
+  WebServer webserver(io_context, ::atoi(port), "cnt/Error_page.html", 
+                                                "cnt/ServerFull_page.html", 
+                                                "cnt/Setup_page.html",
+                                                "cnt/Process_page.html");
   RayBenConvection::simulation_state_t simulation_state;
   
   while(!webserver.is_html_form_input_available()) {

@@ -15,8 +15,8 @@
 
 class Server {
   public:
-    Server();
-    ~Server();
+    Server(boost::asio::io_context &);
+    ~Server(void);
     void poll(void);
   protected:
     //Variables
@@ -42,16 +42,18 @@ class Server {
     void m_delete_connection_by_index(int);
     virtual void m_start_accept(void) {};
   private:
-    boost::asio::io_context m_io_context;
+    std::unique_ptr<boost::asio::io_context> m_io_context_ptr;
     std::vector<m_connection_database_record_t> m_connection_database;
 };
 
-Server::Server() {}
+Server::Server(boost::asio::io_context& executor) {
+  m_io_context_ptr.reset(&executor);
+}
 
-Server::~Server() {}
+Server::~Server(void) {}
 
 boost::asio::io_context& Server::m_get_executor(void) {
-  return m_io_context;
+  return *m_io_context_ptr;
 }
 
 Server::m_connection_database_record_t& Server::m_get_connection_by_index(int index) {
@@ -83,7 +85,7 @@ bool Server::m_is_waiting_list_empty(void) {
 }
 
 void Server::poll(void) {
-  m_io_context.poll();
+  m_io_context_ptr->poll();
 }
 
 #endif
