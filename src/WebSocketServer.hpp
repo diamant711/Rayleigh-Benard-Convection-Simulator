@@ -9,8 +9,16 @@
 #ifndef WEBSOCKETSERVER_HPP
 #define WEBSOCKETSERVER_HPP
 
-#include <memory>
+#include <iostream>
 #include <string>
+#include <memory>
+
+#include <boost/archive/iterators/binary_from_base64.hpp>
+#include <boost/archive/iterators/base64_from_binary.hpp>
+#include <boost/archive/iterators/transform_width.hpp>
+#include <boost/algorithm/string.hpp>
+
+#include <boost/compute/detail/sha1.hpp>
 
 #include "TCPServer"
 #include "Connection.hpp"
@@ -23,7 +31,9 @@ class WebSocketServer : TCPServer {
 
     void respond(void);
   private:
-    bool m_handshake_respond_builder(std::string &);
+    std::string m_decode64(const std::string &)
+    std::string m_encode64(const std::string &)
+    std::string& m_handshake_respond_builder(std::string &);
 
   // Variables
   typedef enum {
@@ -53,6 +63,14 @@ void WebSocketServer::respond(void) {
     }
     switch (m_status) {
       case HANDSHAKE_ANSWARE:
+        m_get_connection_by_index(i).connection_ptr->receive();
+        m_get_connection_by_index(i).connection_ptr->load_data(
+          m_handshake_respond_builder(
+            m_get_connection_by_index(i).connection_ptr->unload_data().get()
+          )
+        );
+        m_get_connection_by_index(i).connection_ptr->send();
+        m_status = UPDATING_CLIENT;
       break;
       case UPDATING_CLIENT:
       break;
@@ -62,8 +80,30 @@ void WebSocketServer::respond(void) {
   }
 }
 
-bool WebSocketServer::m_handshake_respond_builder(std::string& req) {
-  
+
+std::string m_decode64(const std::string &val) {
+    using namespace boost::archive::iterators;
+    using It = transform_width<binary_from_base64<std::string::const_iterator>, 8, 6>;
+    return boost::algorithm::trim_right_copy_if(std::string(It(std::begin(val)), It(std::end(val))), [](char c) {
+        return c == '\0';
+    });
+}
+
+std::string m_encode64(const std::string &val) {
+    using namespace boost::archive::iterators;
+    using It = base64_from_binary<transform_width<std::string::const_iterator, 6, 8>>;
+    auto tmp = std::string(It(std::begin(val)), It(std::end(val)));
+    return tmp.append((3 - val.size() % 3) % 3, '=');
+}
+
+std::string WebSocketServer::m_handshake_respond_builder(std::string& req) {
+  std::string field("Sec-WebSocket-Key: ");
+  std::string magic_word("258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
+  std::string key(req.substr(req.find(field) + field.size(), 24)); //fixed lenght?
+  key += magic_word;
+  boost::compute::detail::sha1 sha1 { key };
+  std::string s { sha1 };
+  return m_encode64(s);
 }
 
 #endif
