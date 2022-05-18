@@ -424,7 +424,8 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
   m_Gr= m_Ra / m_Pr;
 
   if (END_CICLE > 6000){
-    std::cout<< "The number of steps requested "<<END_CICLE<<" is too high."<<std::endl;
+    std::cerr << "ERROR: RayBenConvection: init: The number of steps requested "
+              << END_CICLE << " is too high." << std::endl;
     return -1;
   }
 

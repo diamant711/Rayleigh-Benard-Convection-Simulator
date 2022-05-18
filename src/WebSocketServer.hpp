@@ -10,6 +10,7 @@
 #define WEBSOCKETSERVER_HPP
 
 #include <memory>
+#include <string>
 
 #include "TCPServer"
 #include "Connection.hpp"
@@ -22,7 +23,7 @@ class WebSocketServer : TCPServer {
 
     void respond(void);
   private:
-    bool m_handshake_builder(void);
+    bool m_handshake_respond_builder(std::string &);
 
   // Variables
   typedef enum {
@@ -30,7 +31,8 @@ class WebSocketServer : TCPServer {
     UPDATING_CLIENT,
     CLOSING_CONNECTION
   } m_status_t;
-  m_status_t status;
+  bool m_connected = false;
+  m_status_t m_status;
   unique_ptr<boost::asio::io_context> m_io_context_ptr;
   unique_ptr<Connection> m_connection_ptr;
 
@@ -45,7 +47,11 @@ WebSocketServer::~WebSocketServer(void) {}
 void WebSocketServer::respond(void) {
   m_get_executor().poll();
   if(!m_is_waiting_list_empty()) {
-    switch (status) {
+    if(!m_connected) {
+      m_status = HANDSHAKE_ANSWARE;
+      m_connected = true;
+    }
+    switch (m_status) {
       case HANDSHAKE_ANSWARE:
       break;
       case UPDATING_CLIENT:
@@ -54,6 +60,10 @@ void WebSocketServer::respond(void) {
       break;
     }
   }
+}
+
+bool WebSocketServer::m_handshake_respond_builder(std::string& req) {
+  
 }
 
 #endif
