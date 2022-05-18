@@ -20,7 +20,7 @@
 
 #include <boost/compute/detail/sha1.hpp>
 
-#include "TCPServer"
+#include "TCPServer.hpp"
 #include "Connection.hpp"
 
 class WebSocketServer : TCPServer {
@@ -31,9 +31,9 @@ class WebSocketServer : TCPServer {
 
     void respond(void);
   private:
-    std::string m_decode64(const std::string &)
-    std::string m_encode64(const std::string &)
-    std::string& m_handshake_respond_builder(std::string &);
+    std::string m_decode64(const std::string);
+    std::string m_encode64(const std::string);
+    std::string m_handshake_respond_builder(std::string);
 
   // Variables
   typedef enum {
@@ -43,14 +43,14 @@ class WebSocketServer : TCPServer {
   } m_status_t;
   bool m_connected = false;
   m_status_t m_status;
-  unique_ptr<boost::asio::io_context> m_io_context_ptr;
-  unique_ptr<Connection> m_connection_ptr;
+  std::unique_ptr<boost::asio::io_context> m_io_context_ptr;
+  std::unique_ptr<Connection> m_connection_ptr;
 
 };
 
-WebSocketServer::WebSocketServer(boost::asio::io_context& executor) {
-  m_io_context_ptr.reset(&executor);
-}
+WebSocketServer::WebSocketServer(boost::asio::io_context& executor) 
+  : TCPServer(executor, 8000) 
+{}
 
 WebSocketServer::~WebSocketServer(void) {}
 
@@ -63,13 +63,17 @@ void WebSocketServer::respond(void) {
     }
     switch (m_status) {
       case HANDSHAKE_ANSWARE:
-        m_get_connection_by_index(i).connection_ptr->receive();
-        m_get_connection_by_index(i).connection_ptr->load_data(
-          m_handshake_respond_builder(
-            m_get_connection_by_index(i).connection_ptr->unload_data().get()
-          )
+        m_get_first_connection().connection_ptr->receive();
+        m_get_first_connection().connection_ptr->load_data(
+          "HTTP/1.1 101 Switching Protocols\r\n"
+          "Upgrade: websocket\r\n"
+          "Connection: Upgrade\r\n"
+          "Sec-WebSocket-Accept: " 
+          + m_handshake_respond_builder(
+            m_get_first_connection().connection_ptr->unload_data().get()
+          ) + "\r\n"
         );
-        m_get_connection_by_index(i).connection_ptr->send();
+        m_get_first_connection().connection_ptr->send();
         m_status = UPDATING_CLIENT;
       break;
       case UPDATING_CLIENT:
@@ -81,7 +85,7 @@ void WebSocketServer::respond(void) {
 }
 
 
-std::string m_decode64(const std::string &val) {
+std::string WebSocketServer::m_decode64(const std::string val) {
     using namespace boost::archive::iterators;
     using It = transform_width<binary_from_base64<std::string::const_iterator>, 8, 6>;
     return boost::algorithm::trim_right_copy_if(std::string(It(std::begin(val)), It(std::end(val))), [](char c) {
@@ -89,14 +93,14 @@ std::string m_decode64(const std::string &val) {
     });
 }
 
-std::string m_encode64(const std::string &val) {
+std::string WebSocketServer::m_encode64(const std::string val) {
     using namespace boost::archive::iterators;
     using It = base64_from_binary<transform_width<std::string::const_iterator, 6, 8>>;
     auto tmp = std::string(It(std::begin(val)), It(std::end(val)));
     return tmp.append((3 - val.size() % 3) % 3, '=');
 }
 
-std::string WebSocketServer::m_handshake_respond_builder(std::string& req) {
+std::string WebSocketServer::m_handshake_respond_builder(std::string req) {
   std::string field("Sec-WebSocket-Key: ");
   std::string magic_word("258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
   std::string key(req.substr(req.find(field) + field.size(), 24)); //fixed lenght?

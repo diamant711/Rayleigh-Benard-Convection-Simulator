@@ -34,7 +34,7 @@ class Server {
     //Functions
     boost::asio::io_context& m_get_executor(void);
     m_connection_database_record_t& m_get_connection_by_index(int);
-    m_connection_database_record_t& m_get_fist_connection(void);
+    m_connection_database_record_t& m_get_first_connection(void);
     m_connection_database_record_t& m_get_last_connection(void);
     size_t m_get_plugged_connection(void);
     bool m_is_waiting_list_empty(void);
@@ -60,7 +60,7 @@ Server::m_connection_database_record_t& Server::m_get_connection_by_index(int in
   return m_connection_database.at(index);
 }
 
-Server::m_connection_database_record_t& Server::m_get_fist_connection(void) {
+Server::m_connection_database_record_t& Server::m_get_first_connection(void) {
   return m_connection_database.front();
 }
 

@@ -7,6 +7,7 @@ HEADERS =	$(SRC_DIR)/RayBenConvection.hpp                \
 					$(SRC_DIR)/Server.hpp                          \
 					$(SRC_DIR)/TCPServer.hpp											 \
 					$(SRC_DIR)/WebServer.hpp											 \
+					$(SRC_DIR)/WebSocketServer.hpp								 \
 					$(SRC_DIR)/WebPage.hpp
 
 OBJECTS = $(OBJ_DIR)/main.o

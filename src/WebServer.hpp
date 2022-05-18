@@ -25,6 +25,7 @@
 
 #include "TCPServer.hpp"
 #include "WebPage.hpp"
+#include "WebSocketServer.hpp"
 
 class WebServer : public TCPServer {
   public:
@@ -98,7 +99,7 @@ void WebServer::respond_to_all(void) {
               << std::endl;
 
     if(!m_was_first_user_connected) {
-      m_first_user_address = m_get_fist_connection().connection_ptr
+      m_first_user_address = m_get_first_connection().connection_ptr
                                ->get_socket().remote_endpoint().address();
       m_was_first_user_connected = true;
       m_first_user_status = SETUP;
@@ -148,25 +149,10 @@ void WebServer::respond_to_all(void) {
             if(!m_websocket_connected) {
               std::cerr << "INFO: WebServer: respond_to_all: first user at "
                         << "BAR stage" << std::endl;
-              m_get_connection_by_index(i).connection_ptr->set_persistant();
-              /*
-              m_get_connection_by_index(i).connection_ptr->load_data(
-                "HTTP/1.1 101 Switching Protocols\r\n"
-                "Upgrade: websocket\r\n"
-                "Connection: Upgrade\r\n"
-              );
-              m_get_connection_by_index(i).connection_ptr->send();
-              */
+              /* qui */
               m_websocket_connected = true;
             }
-            if(m_get_connection_by_index(i).connection_ptr->get_socket().available() > 0) {
-              m_get_connection_by_index(i).connection_ptr->receive();
-              //https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers
-              //continue from this
-            }
-            //m_get_connection_by_index(i).connection_ptr->receive();
-            //std::cout << *m_get_connection_by_index(i).connection_ptr->unload_data() << std::endl;
-            //send a POST request with json data about the simulation
+            /* qui */
             continue;
           break;         
 
