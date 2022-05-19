@@ -8,20 +8,26 @@
 #include "WebPage.hpp"
 
 int main(int argc, char *argv[]){
-  char port[10] = "8080";
+  char portW[10]  = "8080";
+  char portWS[10] = "8000";
   if(argc < 2) {
-    std::cerr << "WARNING: main: usage: " << argv[0] << " [port]. " 
-              << "Using 8080" << std::endl;
+    std::cerr << "WARNING: main: usage: " << argv[0] << " [port webserver] [port websocketserver]." << std::endl
+              << "WARNING: main: Using 8080 for WebServer and 8000 for WebSocketServer" << std::endl;
+  } else if (argc == 2) {
+    std::cerr << "WARNING: main: usage: " << argv[0] << " " << argv[1] << " [port websocketserver]." << std::endl
+              << "WARNING: main: Using 8000 for WebSocketServer" << std::endl;
   } else {
-    ::strncpy(port, argv[1], 5);
+    ::strncpy(portW,  argv[1], 5);
+    ::strncpy(portWS, argv[2], 5);
   }
   
   RayBenConvection RayBenCon;
   boost::asio::io_context io_context;
-  WebServer webserver(io_context, ::atoi(port), "cnt/Error_page.html", 
-                                                "cnt/ServerFull_page.html", 
-                                                "cnt/Setup_page.html",
-                                                "cnt/Process_page.html");
+  WebServer webserver(io_context, ::atoi(portW), ::atoi(portWS),
+                                                 "cnt/Error_page.html", 
+                                                 "cnt/ServerFull_page.html", 
+                                                 "cnt/Setup_page.html",
+                                                 "cnt/Process_page.html");
   RayBenConvection::simulation_state_t simulation_state;
   
   while(!webserver.is_html_form_input_available()) {

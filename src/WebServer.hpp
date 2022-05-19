@@ -35,7 +35,6 @@ class WebServer : public TCPServer {
       SETUP,
       CGI,
       PROCESSING,
-      BAR,
       OUTPUT
     } first_user_status_t;
     typedef struct {
@@ -46,7 +45,7 @@ class WebServer : public TCPServer {
       double Pr;
       double Rey;
     } html_form_input_t;
-    WebServer(boost::asio::io_context &, int, std::string, std::string, 
+    WebServer(boost::asio::io_context &, int, int, std::string, std::string, 
               std::string, std::string);
     ~WebServer(void);
     void respond_to_all(void);
@@ -58,7 +57,8 @@ class WebServer : public TCPServer {
     WebPage& m_generate_Output_page(void);
     void m_cgi_parser(const std::string &);
     //Variables
-    bool m_websocket_connected = false;
+    std::unique_ptr<WebSocketServer> m_websocketserver_ptr;
+    bool m_start_websocket = false;
     int m_actual_step = -1;
     double m_actual_velocity = -1;
     double m_actual_eta = -1;
@@ -71,13 +71,14 @@ class WebServer : public TCPServer {
     bool m_cgi_parameter_available = false;
 };
 
-WebServer::WebServer(boost::asio::io_context& executor, int port, 
+WebServer::WebServer(boost::asio::io_context& executor, int portW, int portWS,
                      std::string path_to_Error_page, 
                      std::string path_to_ServerFull_page, 
                      std::string path_to_Setup_page, 
                      std::string path_to_Process_page)
-  : TCPServer(executor, port)
+  : TCPServer(executor, portW)
 {
+  m_websocketserver_ptr.reset(new WebSocketServer(executor, portWS));
   m_pages.clear();
   m_pages.push_back(std::unique_ptr<WebPage>(new WebPage(path_to_Error_page)));
   m_pages.push_back(std::unique_ptr<WebPage>(new WebPage(path_to_ServerFull_page)));
@@ -94,6 +95,10 @@ void WebServer::respond_to_all(void) {
        && !m_get_connection_by_index(i).connection_ptr->is_persistant())
       m_delete_connection_by_index(i);
 
+  if(m_start_websocket) {
+    m_start_websocket= m_websocketserver_ptr->respond();
+    m_first_user_status = m_start_websocket ? PROCESSING : OUTPUT;
+  }
   if(!m_is_waiting_list_empty()) {
     std::cerr << "INFO: WebServer: respond_to_all: waiting list is not empty" 
               << std::endl;
@@ -136,28 +141,18 @@ void WebServer::respond_to_all(void) {
           break;
           
           case PROCESSING:  
-            std::cerr << "INFO: WebServer: respond_to_all: first user at "
-                      << "PROCESSING stage" << std::endl;
-            m_get_connection_by_index(i).connection_ptr
-              ->load_data(m_pages.at(3)->get_http_response());
-            m_get_connection_by_index(i).connection_ptr->send();
-            m_first_user_status = BAR;
-            continue;
+            if(m_start_websocket == false) {
+              std::cerr << "INFO: WebServer: respond_to_all: first user at "
+                        << "PROCESSING stage" << std::endl;
+              m_get_connection_by_index(i).connection_ptr
+                ->load_data(m_pages.at(3)->get_http_response());
+              m_get_connection_by_index(i).connection_ptr->send();
+              m_start_websocket = true;
+            }
           break;
  
-          case BAR:  
-            if(!m_websocket_connected) {
-              std::cerr << "INFO: WebServer: respond_to_all: first user at "
-                        << "BAR stage" << std::endl;
-              /* qui */
-              m_websocket_connected = true;
-            }
-            /* qui */
-            continue;
-          break;         
-
           case OUTPUT:
-            //raylib compilation and shipping
+            //raylib compilation and shippin
             continue;
           break;
 
@@ -173,7 +168,7 @@ void WebServer::respond_to_all(void) {
         m_get_connection_by_index(i).connection_ptr->send();
       }
     }
-  }  
+  }
   return;
 }
 

@@ -26,10 +26,11 @@
 class WebSocketServer : TCPServer {
   // Functions
   public:
-    WebSocketServer(boost::asio::io_context &);
+    WebSocketServer(boost::asio::io_context &, int);
     ~WebSocketServer(void);
 
-    void respond(void);
+    bool respond(void);
+    bool full(void);
   private:
     std::string m_decode64(const std::string);
     std::string m_encode64(const std::string);
@@ -48,21 +49,26 @@ class WebSocketServer : TCPServer {
 
 };
 
-WebSocketServer::WebSocketServer(boost::asio::io_context& executor) 
-  : TCPServer(executor, 8000) 
+WebSocketServer::WebSocketServer(boost::asio::io_context& executor, int port) 
+  : TCPServer(executor, port) 
 {}
 
 WebSocketServer::~WebSocketServer(void) {}
 
-void WebSocketServer::respond(void) {
+bool WebSocketServer::respond(void) {
   m_get_executor().poll();
   if(!m_is_waiting_list_empty()) {
+    std::cerr << "INFO: WebSocketServer: respond: there is a connection!" 
+              << std::endl;
     if(!m_connected) {
       m_status = HANDSHAKE_ANSWARE;
       m_connected = true;
     }
     switch (m_status) {
       case HANDSHAKE_ANSWARE:
+        std::cerr << "INFO: WebSocketServer: respond: waiting for WS request" << std::endl;
+        while (m_get_first_connection().connection_ptr->get_socket().available() <= 0) {}
+        std::cerr << "INFO: WebSocketServer: respond: recived WS request, responding..." << std::endl;
         m_get_first_connection().connection_ptr->receive();
         m_get_first_connection().connection_ptr->load_data(
           "HTTP/1.1 101 Switching Protocols\r\n"
@@ -79,9 +85,11 @@ void WebSocketServer::respond(void) {
       case UPDATING_CLIENT:
       break;
       case CLOSING_CONNECTION:
+        return false;
       break;
     }
   }
+  return true;
 }
 
 
@@ -108,6 +116,10 @@ std::string WebSocketServer::m_handshake_respond_builder(std::string req) {
   boost::compute::detail::sha1 sha1 { key };
   std::string s { sha1 };
   return m_encode64(s);
+}
+
+bool WebSocketServer::full(void) {
+  return (!m_is_waiting_list_empty());
 }
 
 #endif
