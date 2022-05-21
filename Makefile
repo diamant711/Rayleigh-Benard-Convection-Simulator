@@ -18,7 +18,9 @@ STATIC_LIB = $(LIB_DIR)/libcolamd.a                      \
 DINAMIC_LIB = -lm                                        \
               -lpthread                                  \
               -ldl                                       \
-							-lboost_system
+							-lboost_system                             \
+							-lssl                                      \
+							-lcrypto
 
 PRJ_DIR = $(shell pwd)
 SRC_DIR = src

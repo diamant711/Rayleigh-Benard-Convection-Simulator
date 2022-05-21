@@ -10,15 +10,14 @@
 #define WEBSOCKETSERVER_HPP
 
 #include <iostream>
-#include <string>
 #include <memory>
-
-#include <boost/archive/iterators/binary_from_base64.hpp>
-#include <boost/archive/iterators/base64_from_binary.hpp>
-#include <boost/archive/iterators/transform_width.hpp>
-#include <boost/algorithm/string.hpp>
-
-#include <boost/compute/detail/sha1.hpp>
+#include <cstring>
+#include <openssl/sha.h>
+#include <string>
+#include <cassert>
+#include <limits>
+#include <stdexcept>
+#include <cctype>
 
 #include "TCPServer.hpp"
 #include "Connection.hpp"
@@ -32,8 +31,8 @@ class WebSocketServer : TCPServer {
     bool respond(void);
     bool full(void);
   private:
-    std::string m_decode64(const std::string);
-    std::string m_encode64(const std::string);
+    std::string m_base64_encode(const std::string &);
+    std::string m_base64_decode(const std::string &);
     std::string m_handshake_respond_builder(std::string);
 
   // Variables
@@ -46,7 +45,19 @@ class WebSocketServer : TCPServer {
   m_status_t m_status;
   std::unique_ptr<boost::asio::io_context> m_io_context_ptr;
   std::unique_ptr<Connection> m_connection_ptr;
+  const char m_b64_table[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno"
+                                    "pqrstuvwxyz0123456789+/";
 
+  const char m_reverse_table[128] = {
+    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 62, 64, 64, 64, 63,
+    52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 64, 64, 64, 64, 64, 64,
+    64,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
+    15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 64, 64, 64, 64, 64,
+    64, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+    41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64
+  };
 };
 
 WebSocketServer::WebSocketServer(boost::asio::io_context& executor, int port) 
@@ -92,34 +103,89 @@ bool WebSocketServer::respond(void) {
   return true;
 }
 
-
-std::string WebSocketServer::m_decode64(const std::string val) {
-    using namespace boost::archive::iterators;
-    using It = transform_width<binary_from_base64<std::string::const_iterator>, 8, 6>;
-    return boost::algorithm::trim_right_copy_if(std::string(It(std::begin(val)), It(std::end(val))), [](char c) {
-        return c == '\0';
-    });
+bool WebSocketServer::full(void) {
+  return (!m_is_waiting_list_empty());
 }
 
-std::string WebSocketServer::m_encode64(const std::string val) {
-    using namespace boost::archive::iterators;
-    using It = base64_from_binary<transform_width<std::string::const_iterator, 6, 8>>;
-    auto tmp = std::string(It(std::begin(val)), It(std::end(val)));
-    return tmp.append((3 - val.size() % 3) % 3, '=');
+::std::string WebSocketServer::m_base64_encode(const ::std::string &bindata)
+{
+   using ::std::string;
+   using ::std::numeric_limits;
+
+   if (bindata.size() > (numeric_limits<string::size_type>::max() / 4u) * 3u) {
+      throw ::std::length_error("Converting too large a string to base64.");
+   }
+
+   const ::std::size_t binlen = bindata.size();
+   // Use = signs so the end is properly padded.
+   string retval((((binlen + 2) / 3) * 4), '=');
+   ::std::size_t outpos = 0;
+   int bits_collected = 0;
+   unsigned int accumulator = 0;
+   const string::const_iterator binend = bindata.end();
+
+   for (string::const_iterator i = bindata.begin(); i != binend; ++i) {
+      accumulator = (accumulator << 8) | (*i & 0xffu);
+      bits_collected += 8;
+      while (bits_collected >= 6) {
+         bits_collected -= 6;
+         retval[outpos++] = m_b64_table[(accumulator >> bits_collected) & 0x3fu];
+      }
+   }
+   if (bits_collected > 0) { // Any trailing bits that are missing.
+      assert(bits_collected < 6);
+      accumulator <<= 6 - bits_collected;
+      retval[outpos++] = m_b64_table[accumulator & 0x3fu];
+   }
+   assert(outpos >= (retval.size() - 2));
+   assert(outpos <= retval.size());
+   return retval;
+}
+
+::std::string WebSocketServer::m_base64_decode(const ::std::string &ascdata)
+{
+   using ::std::string;
+   string retval;
+   const string::const_iterator last = ascdata.end();
+   int bits_collected = 0;
+   unsigned int accumulator = 0;
+
+   for (string::const_iterator i = ascdata.begin(); i != last; ++i) {
+      const int c = *i;
+      if (::std::isspace(c) || c == '=') {
+         // Skip whitespace and padding. Be liberal in what you accept.
+         continue;
+      }
+      if ((c > 127) || (c < 0) || (m_reverse_table[c] > 63)) {
+         throw ::std::invalid_argument("This contains characters not legal in a base64 encoded string.");
+      }
+      accumulator = (accumulator << 6) | m_reverse_table[c];
+      bits_collected += 6;
+      if (bits_collected >= 8) {
+         bits_collected -= 8;
+         retval += static_cast<char>((accumulator >> bits_collected) & 0xffu);
+      }
+   }
+   return retval;
 }
 
 std::string WebSocketServer::m_handshake_respond_builder(std::string req) {
   std::string field("Sec-WebSocket-Key: ");
   std::string magic_word("258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
   std::string key(req.substr(req.find(field) + field.size(), 24)); //fixed lenght?
+  std::cerr << "INFO: WebSocketServer: m_handshake_respond_builder: recived key "
+            << key << std::endl;
   key += magic_word;
-  boost::compute::detail::sha1 sha1 { key };
-  std::string s { sha1 };
-  return m_encode64(s);
-}
-
-bool WebSocketServer::full(void) {
-  return (!m_is_waiting_list_empty());
+  unsigned char output[20];
+  unsigned char key_c_str[key.size()];
+  ::memset(output, 0, 20);
+  ::memcpy(key_c_str, key.c_str(), key.size());
+  ::SHA1(key_c_str, key.size(), output);
+  std::string s((char *) output);
+  s = m_base64_encode(s);
+  std::cerr << "INFO: WebSocketServer: m_handshake_respond_builder: response key "
+            << s << std::endl;
+  return s;
 }
 
 #endif
