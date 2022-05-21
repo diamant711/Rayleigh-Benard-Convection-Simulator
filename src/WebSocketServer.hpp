@@ -34,7 +34,8 @@ class WebSocketServer : TCPServer {
     std::string m_base64_encode(const std::string &);
     std::string m_base64_decode(const std::string &);
     std::string m_handshake_respond_builder(std::string);
-
+    // format: eta 10velocity total
+    std::vector<unsigned char> m_frame_builder(int eta, int 10velocity, int total);
   // Variables
   typedef enum {
     HANDSHAKE_ANSWARE,
@@ -43,6 +44,8 @@ class WebSocketServer : TCPServer {
   } m_status_t;
   bool m_connected = false;
   m_status_t m_status;
+  std::string m_handshake_response;
+  std::string m_handshake_request;
   std::unique_ptr<boost::asio::io_context> m_io_context_ptr;
   std::unique_ptr<Connection> m_connection_ptr;
   const char m_b64_table[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno"
@@ -69,27 +72,26 @@ WebSocketServer::~WebSocketServer(void) {}
 bool WebSocketServer::respond(void) {
   m_get_executor().poll();
   if(!m_is_waiting_list_empty()) {
-    std::cerr << "INFO: WebSocketServer: respond: there is a connection!" 
-              << std::endl;
     if(!m_connected) {
       m_status = HANDSHAKE_ANSWARE;
       m_connected = true;
     }
     switch (m_status) {
       case HANDSHAKE_ANSWARE:
-        std::cerr << "INFO: WebSocketServer: respond: waiting for WS request" << std::endl;
+        std::cerr << "INFO: WebSocketServer: respond: waiting for WS request" 
+                  << std::endl;
         while (m_get_first_connection().connection_ptr->get_socket().available() <= 0) {}
-        std::cerr << "INFO: WebSocketServer: respond: recived WS request, responding..." << std::endl;
+        std::cerr << "INFO: WebSocketServer: respond: recived WS request, responding" 
+                  << std::endl;
         m_get_first_connection().connection_ptr->receive();
-        m_get_first_connection().connection_ptr->load_data(
-          "HTTP/1.1 101 Switching Protocols\r\n"
-          "Upgrade: websocket\r\n"
-          "Connection: Upgrade\r\n"
-          "Sec-WebSocket-Accept: " 
-          + m_handshake_respond_builder(
-            m_get_first_connection().connection_ptr->unload_data().get()
-          ) + "\r\n"
-        );
+        m_handshake_response =  "HTTP/1.1 101 Switching Protocols\r\n"
+                                "Upgrade: websocket\r\n"
+                                "Connection: Upgrade\r\n"
+                                "Sec-WebSocket-Accept: " 
+                                + m_handshake_respond_builder(
+                                  m_get_first_connection().connection_ptr->unload_data().get()
+                                ) + "\r\n\r\n";
+        m_get_first_connection().connection_ptr->load_data(m_handshake_response);
         m_get_first_connection().connection_ptr->send();
         m_status = UPDATING_CLIENT;
       break;
@@ -170,6 +172,7 @@ bool WebSocketServer::full(void) {
 }
 
 std::string WebSocketServer::m_handshake_respond_builder(std::string req) {
+  m_handshake_request = req;
   std::string field("Sec-WebSocket-Key: ");
   std::string magic_word("258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
   std::string key(req.substr(req.find(field) + field.size(), 24)); //fixed lenght?
@@ -186,6 +189,51 @@ std::string WebSocketServer::m_handshake_respond_builder(std::string req) {
   std::cerr << "INFO: WebSocketServer: m_handshake_respond_builder: response key "
             << s << std::endl;
   return s;
+}
+
+std::vector<unsigned char> WebServer::m_frame_builder(int eta, int velocity, int total) {
+  std::vector<unsigned char> frame;
+  /* 
+   * FIN  = 1
+   * RSV1 = 0
+   * RSV2 = 0
+   * RSV3 = 0
+   * OP C = 0
+   *    O = 0
+   *    D = 1
+   *    E = 0
+  */
+  frame.push_back(0b10000010);
+  /* 
+   * MASK = 1
+   * L    = 0
+   * E    = 0
+   * N    = 0
+   * G    = 1
+   * H    = 1
+   * T    = 0
+   * .    = 0
+  */
+  frame.push_back(0b10000000 + sizeof(eta) + sizeof(10velocity) + sizeof(total));
+  /* mask key = 0xA271 */
+  frame.push_back(0xA2);
+  frame.push_back(0x71);
+  /* payload eta */
+  frame.push_back(eta & 0xFF000000 >> 6);
+  frame.push_back(eta & 0x00FF0000 >> 4);
+  frame.push_back(eta & 0x0000FF00 >> 2);
+  frame.push_back(eta & 0x000000FF >> 0);
+  /* payload 10velocity */
+  frame.push_back(velocity & 0xFF000000 >> 6);
+  frame.push_back(velocity & 0x00FF0000 >> 4);
+  frame.push_back(velocity & 0x0000FF00 >> 2);
+  frame.push_back(velocity & 0x000000FF >> 0);
+  /* payload total */
+  frame.push_back(total & 0xFF000000 >> 6);
+  frame.push_back(total & 0x00FF0000 >> 4);
+  frame.push_back(total & 0x0000FF00 >> 2);
+  frame.push_back(total & 0x000000FF >> 0);
+  return frame;
 }
 
 #endif

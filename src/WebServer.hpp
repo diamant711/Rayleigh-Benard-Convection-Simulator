@@ -51,7 +51,7 @@ class WebServer : public TCPServer {
     void respond_to_all(void);
     html_form_input_t get_user_input(void);
     bool is_html_form_input_available(void);
-    void update_simulation_state(unsigned int, double, double);
+    void update_simulation_state(int, int, float);
   private:
     //Functions
     WebPage& m_generate_Output_page(void);
@@ -59,9 +59,9 @@ class WebServer : public TCPServer {
     //Variables
     std::unique_ptr<WebSocketServer> m_websocketserver_ptr;
     bool m_start_websocket = false;
-    int m_actual_step = -1;
-    double m_actual_velocity = -1;
-    double m_actual_eta = -1;
+    int m_actual_total = -1;
+    float m_actual_velocity = -1;
+    int m_actual_eta = -1;
     const unsigned int m_n_input_parameter = 6;
     WebServer::html_form_input_t m_internal_html_form_input;
     std::vector<std::unique_ptr<WebPage>> m_pages;
@@ -100,9 +100,6 @@ void WebServer::respond_to_all(void) {
     m_first_user_status = m_start_websocket ? PROCESSING : OUTPUT;
   }
   if(!m_is_waiting_list_empty()) {
-    std::cerr << "INFO: WebServer: respond_to_all: waiting list is not empty" 
-              << std::endl;
-
     if(!m_was_first_user_connected) {
       m_first_user_address = m_get_first_connection().connection_ptr
                                ->get_socket().remote_endpoint().address();

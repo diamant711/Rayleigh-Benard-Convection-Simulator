@@ -59,9 +59,9 @@ class RayBenConvection {
   public:
     typedef struct {
       bool ended;
-      unsigned int step;
-      double eta;
-      double velocity;
+      int total;
+      int eta;
+      float velocity;
     } simulation_state_t;
     RayBenConvection();
     ~RayBenConvection();
@@ -251,7 +251,7 @@ void RayBenConvection::m_ETA(int n_calls){
         ).count()
     ) / 1000;
     if(delta_t > 0) {
-      simulation_state.step = n_calls;
+      simulation_state.total = m_END_CICLE;
       simulation_state.eta = delta_t * (m_END_CICLE - n_calls);
       simulation_state.velocity = 1.0/delta_t;
       for(int i = 0; i < 80; ++i)
@@ -260,7 +260,7 @@ void RayBenConvection::m_ETA(int n_calls){
                 << std::setw(4) << std::setprecision(3)
                 << simulation_state.eta << "s\tspeed = "
                 << simulation_state.velocity << "cicle/s\tstep = "
-                << simulation_state.step << "/" << m_END_CICLE << "\r";
+                << n_calls << "/" << simulation_state.total << "\r";
       ::fflush(stdout);
     }
   }

@@ -49,7 +49,7 @@ int main(int argc, char *argv[]){
     webserver.respond_to_all();
     simulation_state = RayBenCon.eval_next_frame();
     webserver.update_simulation_state(
-      simulation_state.step,
+      simulation_state.total,
       simulation_state.velocity,
       simulation_state.eta
     );
