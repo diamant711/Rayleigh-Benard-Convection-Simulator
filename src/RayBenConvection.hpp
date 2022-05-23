@@ -54,12 +54,21 @@
 }
 */
 
+//! RayBenConvection is the core of the numerical simulation.
+/*!
+  RayleighBenardConvection.hpp specifies a class which is able to
+  perform perturbative calculations on a fixed environment,
+  describing fluid m_dyamics evolution according to Navier-Stokes equations.
+*/
+
 class RayBenConvection {
 
   public:
+
+    //! Struct that represent the advancement of the simulation. 
     typedef struct {
-      bool ended;
-      int total;
+      bool ended;  /*! This parameter returns if the simulation has ended without errors  */
+      int total;   
       int eta;
       float velocity;
     } simulation_state_t;
