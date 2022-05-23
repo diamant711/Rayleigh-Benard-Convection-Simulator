@@ -51,7 +51,7 @@ class WebServer : public TCPServer {
     void respond_to_all(void);
     html_form_input_t get_user_input(void);
     bool is_html_form_input_available(void);
-    void update_simulation_state(int, int, float);
+    void update_simulation_state(int, float, int);
   private:
     //Functions
     WebPage& m_generate_Output_page(void);
@@ -96,7 +96,8 @@ void WebServer::respond_to_all(void) {
       m_delete_connection_by_index(i);
 
   if(m_start_websocket) {
-    m_start_websocket= m_websocketserver_ptr->respond();
+    m_start_websocket = m_websocketserver_ptr->respond();
+    m_websocketserver_ptr->update_simulation_data(m_actual_total, m_actual_velocity, m_actual_eta);
     m_first_user_status = m_start_websocket ? PROCESSING : OUTPUT;
   }
   if(!m_is_waiting_list_empty()) {
@@ -261,8 +262,8 @@ bool WebServer::is_html_form_input_available(void) {
   return m_cgi_parameter_available;
 }
     
-void WebServer::update_simulation_state(unsigned int s, double v, double e) {
-  m_actual_step = s;
+void WebServer::update_simulation_state(int e, float v, int t) {
+  m_actual_total = t;
   m_actual_velocity = v;
   m_actual_eta = e;
 }

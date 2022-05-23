@@ -30,18 +30,22 @@ class WebSocketServer : TCPServer {
 
     bool respond(void);
     bool full(void);
+    void update_simulation_data(int, float, int);
   private:
     std::string m_base64_encode(const std::string &);
     std::string m_base64_decode(const std::string &);
     std::string m_handshake_respond_builder(std::string);
-    // format: eta 10velocity total
-    std::vector<unsigned char> m_frame_builder(int eta, int 10velocity, int total);
+    // format: eta velociry10 total
+    std::vector<unsigned char> m_frame_builder(void);
   // Variables
   typedef enum {
     HANDSHAKE_ANSWARE,
     UPDATING_CLIENT,
     CLOSING_CONNECTION
   } m_status_t;
+  int m_actual_total;
+  int m_actual_velocity10;
+  int m_actual_eta;
   bool m_connected = false;
   m_status_t m_status;
   std::string m_handshake_response;
@@ -96,6 +100,8 @@ bool WebSocketServer::respond(void) {
         m_status = UPDATING_CLIENT;
       break;
       case UPDATING_CLIENT:
+        m_get_first_connection().connection_ptr->load_data(m_frame_builder());
+        m_get_first_connection().connection_ptr->send();
       break;
       case CLOSING_CONNECTION:
         return false;
@@ -191,7 +197,7 @@ std::string WebSocketServer::m_handshake_respond_builder(std::string req) {
   return s;
 }
 
-std::vector<unsigned char> WebServer::m_frame_builder(int eta, int velocity, int total) {
+std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
   std::vector<unsigned char> frame;
   /* 
    * FIN  = 1
@@ -214,26 +220,32 @@ std::vector<unsigned char> WebServer::m_frame_builder(int eta, int velocity, int
    * T    = 0
    * .    = 0
   */
-  frame.push_back(0b10000000 + sizeof(eta) + sizeof(10velocity) + sizeof(total));
+  frame.push_back(0b10000000 + sizeof(m_actual_eta) + sizeof(m_actual_velocity10) + sizeof(m_actual_total));
   /* mask key = 0xA271 */
   frame.push_back(0xA2);
   frame.push_back(0x71);
   /* payload eta */
-  frame.push_back(eta & 0xFF000000 >> 6);
-  frame.push_back(eta & 0x00FF0000 >> 4);
-  frame.push_back(eta & 0x0000FF00 >> 2);
-  frame.push_back(eta & 0x000000FF >> 0);
-  /* payload 10velocity */
-  frame.push_back(velocity & 0xFF000000 >> 6);
-  frame.push_back(velocity & 0x00FF0000 >> 4);
-  frame.push_back(velocity & 0x0000FF00 >> 2);
-  frame.push_back(velocity & 0x000000FF >> 0);
+  frame.push_back(m_actual_eta & 0xFF000000 >> 6);
+  frame.push_back(m_actual_eta & 0x00FF0000 >> 4);
+  frame.push_back(m_actual_eta & 0x0000FF00 >> 2);
+  frame.push_back(m_actual_eta & 0x000000FF >> 0);
+  /* payload velocity10 */
+  frame.push_back(m_actual_velocity10 & 0xFF000000 >> 6);
+  frame.push_back(m_actual_velocity10 & 0x00FF0000 >> 4);
+  frame.push_back(m_actual_velocity10 & 0x0000FF00 >> 2);
+  frame.push_back(m_actual_velocity10 & 0x000000FF >> 0);
   /* payload total */
-  frame.push_back(total & 0xFF000000 >> 6);
-  frame.push_back(total & 0x00FF0000 >> 4);
-  frame.push_back(total & 0x0000FF00 >> 2);
-  frame.push_back(total & 0x000000FF >> 0);
+  frame.push_back(m_actual_total & 0xFF000000 >> 6);
+  frame.push_back(m_actual_total & 0x00FF0000 >> 4);
+  frame.push_back(m_actual_total & 0x0000FF00 >> 2);
+  frame.push_back(m_actual_total & 0x000000FF >> 0);
   return frame;
+}
+    
+void WebSocketServer::update_simulation_data(int total, float velocity, int eta) {
+  m_actual_total = total;
+  m_actual_velocity10 = static_cast<int>(10 * velocity);
+  m_actual_eta = eta;
 }
 
 #endif
