@@ -3,23 +3,14 @@
   <head>
     <link rel="icon" href="data:,">
     <title> Processing </title>
-    <style language="text/css">
-    </style>
-  </head>
-  <body>
-    <label for="bar">Process:</label>
-    <progress id="bar" max="1" value="0"></progress>
-    <script language="text/javascript">
-      console.log("oh");
-      document.onload = function setup() {
+    <script type="text/javascript">
+      function init() {
         let socket = new WebSocket("ws://" + location.hostname + ":8000");
         socket.onopen = function(e) {
-          alert("[open] Connessione stabilita");
-          alert("Invio al server");
-          socket.send("Il mio nome è John");
+          console.log("INFO: init: Connessione stabilita");
         };
         socket.onmessage = function(event) {
-          alert(`[message] Ricezione dati dal server: ${event.data}`);
+          console.log(`[message] Ricezione dati dal server: ${event.data}`);
         };
         socket.onclose = function(event) {
           if (event.wasClean) {
@@ -34,7 +25,11 @@
           alert(`[error] ${error.message}`);
         };
       }
+      window.onload = init;
     </script>
-
+  </head>
+  <body>
+    <label for="bar">Process:</label>
+    <progress id="bar" max="1" value="0"></progress>
   </body>
 </html>
