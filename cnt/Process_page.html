@@ -5,8 +5,13 @@
     <title> Processing </title>
     <style language="text/css">
     </style>
+  </head>
+  <body>
+    <label for="bar">Process:</label>
+    <progress id="bar" max="1" value="0"></progress>
     <script language="text/javascript">
-      function setup() {
+      console.log("oh");
+      document.onload = function setup() {
         let socket = new WebSocket("ws://" + location.hostname + ":8000");
         socket.onopen = function(e) {
           alert("[open] Connessione stabilita");
@@ -31,9 +36,5 @@
       }
     </script>
 
-  </head>
-  <body onload="setup();">
-    <label for="bar">Process:</label>
-    <progress id="bar" max="1" value="0"></progress>
   </body>
 </html>
