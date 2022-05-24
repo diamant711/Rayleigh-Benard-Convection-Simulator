@@ -10,22 +10,22 @@
           console.log("INFO: init: Connessione stabilita");
         };
         socket.onmessage = function(event) {
-          console.log(`[message] Ricezione dati dal server: ${event.data}`);
+          console.log(`Ricezione dati dal server: ${event.data}`);
         };
         socket.onclose = function(event) {
           if (event.wasClean) {
-            alert(`[close] Connessione chiusa con successo, code=${event.code} reason=${event.reason}`);
+            console.log("ERROR: socket.onclose: Connessione chiusa con successo");
           } else {
             // e.g. processo del server terminato o connessione già
             // in questo caso event.code solitamente è 1006
-            alert('[close] Connection morta.');
+            console.log('ERROR: socket.onclose: Connection morta.');
           }
         };
         socket.onerror = function(error) {
-          alert(`[error] ${error.message}`);
+          console.log(`ERROR: socket.onerror: ${error.message}`);
         };
       }
-      window.onload = init;
+      //window.onload = init;
     </script>
   </head>
   <body>

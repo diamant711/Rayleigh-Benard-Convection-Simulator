@@ -242,7 +242,7 @@ std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
   return frame;
 }
     
-void WebSocketServer::update_simulation_data(int total, float velocity, int eta) {
+void WebSocketServer::update_simulation_data(int eta, float velocity, int total) {
   m_actual_total = total;
   m_actual_velocity10 = static_cast<int>(10 * velocity);
   m_actual_eta = eta;
