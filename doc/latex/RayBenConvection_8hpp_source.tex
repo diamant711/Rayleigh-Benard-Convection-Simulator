@@ -19,13 +19,13 @@
 \DoxyCodeLine{15 \textcolor{comment}{ *     server web?}}
 \DoxyCodeLine{16 \textcolor{comment}{ * X -\/ Quali parametri l'utente può modificare?}}
 \DoxyCodeLine{17 \textcolor{comment}{ *}}
-\DoxyCodeLine{18 \textcolor{comment}{ *LEGENDA ERRORI: }}
+\DoxyCodeLine{18 \textcolor{comment}{ *LEGENDA ERRORI:}}
 \DoxyCodeLine{19 \textcolor{comment}{ * return -\/1  END\_CICLE > 6000}}
 \DoxyCodeLine{20 \textcolor{comment}{ * return -\/2  m\_TS=m\_TN}}
 \DoxyCodeLine{21 \textcolor{comment}{ * return -\/3  m\_TN <= 0 oppure m\_TN >= m\_TS}}
 \DoxyCodeLine{22 \textcolor{comment}{ * return -\/4  Ray\_numb < 50 || > 150}}
 \DoxyCodeLine{23 \textcolor{comment}{ * return -\/5  Pr\_numb < 5 || > 9}}
-\DoxyCodeLine{24 \textcolor{comment}{ * return -\/6  Re\_numb < 70 || > 130 }}
+\DoxyCodeLine{24 \textcolor{comment}{ * return -\/6  Re\_numb < 70 || > 130}}
 \DoxyCodeLine{25 \textcolor{comment}{ * return -\/7  m\_TS >= 100}}
 \DoxyCodeLine{26 \textcolor{comment}{}}
 \DoxyCodeLine{27 \textcolor{comment}{ ******************************************************************/}}
@@ -81,8 +81,8 @@
 \DoxyCodeLine{94     \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} = 1e-\/2;}
 \DoxyCodeLine{96     \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{classRayBenConvection_a6a6f9567a98085c522e319da90d0b6c6}{m\_nt}} = ((int) \mbox{\hyperlink{classRayBenConvection_a8b38201fb9bd541ccb0974df9d61c22c}{m\_tf}} / \mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}}) + 1;}
 \DoxyCodeLine{98 }
-\DoxyCodeLine{101     \textcolor{keyword}{const} \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_a500821275948ffaeb5dbac835f618515}{m\_H}} = 2;}
-\DoxyCodeLine{103 }
+\DoxyCodeLine{104     \textcolor{keyword}{const} \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_a500821275948ffaeb5dbac835f618515}{m\_H}} = 2;}
+\DoxyCodeLine{106 }
 \DoxyCodeLine{109     \textcolor{keyword}{const} \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_a018296501774061a9fc4d07ee3ccc684}{m\_L}} = 5;}
 \DoxyCodeLine{111     \textcolor{keyword}{const} \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}} = \mbox{\hyperlink{classRayBenConvection_a018296501774061a9fc4d07ee3ccc684}{m\_L}} / (\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}} -\/ 1);}
 \DoxyCodeLine{113     \textcolor{keyword}{const} \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}} = \mbox{\hyperlink{classRayBenConvection_a500821275948ffaeb5dbac835f618515}{m\_H}} / (\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}} -\/ 1);}
@@ -99,830 +99,829 @@
 \DoxyCodeLine{131     \textcolor{keywordtype}{double} m\_Pe;}
 \DoxyCodeLine{133     \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_a6eade7fabf66cfd00e19bdbc7f057341}{m\_Ra}};}
 \DoxyCodeLine{135     \textcolor{keywordtype}{double} m\_Gr;}
-\DoxyCodeLine{136 }
-\DoxyCodeLine{137     Eigen::Matrix<double, m\_nx, m\_ny> m\_Tstar;}
-\DoxyCodeLine{138     Eigen::Matrix<double, m\_nx+1, m\_ny> m\_ustar;}
-\DoxyCodeLine{139     Eigen::Matrix<double, m\_nx+1, m\_ny> m\_uhalf;}
-\DoxyCodeLine{140     Eigen::Matrix<double, m\_nx+1, m\_ny> m\_uconv;}
-\DoxyCodeLine{141     Eigen::Matrix<double, m\_nx, m\_ny+1> m\_vstar;}
-\DoxyCodeLine{142     Eigen::Matrix<double, m\_nx, m\_ny+1> m\_vhalf;}
-\DoxyCodeLine{143     Eigen::Matrix<double, m\_nx, m\_ny+1> m\_vconv;}
-\DoxyCodeLine{144     \textcolor{keywordtype}{double} m\_TnE = 0;}
-\DoxyCodeLine{145     \textcolor{keywordtype}{double} m\_TnW = 0;}
-\DoxyCodeLine{146     \textcolor{keywordtype}{double} m\_UN = 0;}
-\DoxyCodeLine{147     \textcolor{keywordtype}{double} m\_US = 0;}
-\DoxyCodeLine{148     \textcolor{keywordtype}{double} m\_UE = 0;}
-\DoxyCodeLine{149     \textcolor{keywordtype}{double} m\_UW = 0;}
-\DoxyCodeLine{150     \textcolor{keywordtype}{double} m\_VN = 0;}
-\DoxyCodeLine{151     \textcolor{keywordtype}{double} m\_VS = 0;}
-\DoxyCodeLine{152     \textcolor{keywordtype}{double} m\_VE = 0;}
-\DoxyCodeLine{153     \textcolor{keywordtype}{double} m\_VW = 0;}
-\DoxyCodeLine{154     \textcolor{comment}{//initialisation variables}}
-\DoxyCodeLine{155     Eigen::Matrix<double, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/1, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2> m\_bcu;}
-\DoxyCodeLine{156     Eigen::Matrix<double, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/1> m\_bcv;}
-\DoxyCodeLine{157     Eigen::Matrix<double, -\/1, 1> m\_e;}
-\DoxyCodeLine{158     Eigen::Matrix<double, -\/1, 1> m\_i;}
-\DoxyCodeLine{159     Eigen::Matrix<double, -\/1, -\/1> m\_Ax;}
-\DoxyCodeLine{160     Eigen::Matrix<double, -\/1, -\/1> m\_Ay;}
-\DoxyCodeLine{161     Eigen::Matrix<double, -\/1, -\/1> m\_A;}
-\DoxyCodeLine{162     Eigen::Matrix<double, -\/1, -\/1> m\_Du;}
-\DoxyCodeLine{163     Eigen::Matrix<int, 1, -\/1> m\_pu;}
-\DoxyCodeLine{164     Eigen::Matrix<double, -\/1, -\/1> m\_Duperm;}
-\DoxyCodeLine{165     std::vector<Eigen::Matrix<double, -\/1, -\/1>> m\_LUu;}
-\DoxyCodeLine{166     Eigen::Matrix<double, -\/1, -\/1> m\_Dv;}
-\DoxyCodeLine{167     Eigen::Matrix<int, 1, -\/1> m\_pv;}
-\DoxyCodeLine{168     Eigen::Matrix<double, -\/1, -\/1> m\_Dvperm;}
-\DoxyCodeLine{169     std::vector<Eigen::Matrix<double, -\/1, -\/1>> m\_LUv;}
-\DoxyCodeLine{170     Eigen::Matrix<int, 1, -\/1> m\_pp;}
-\DoxyCodeLine{171     Eigen::Matrix<double, -\/1, -\/1> m\_Aperm;}
-\DoxyCodeLine{172     std::vector<Eigen::Matrix<double, -\/1, -\/1>> m\_LUp;}
-\DoxyCodeLine{173     Eigen::Matrix<double, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2> m\_bcT;}
-\DoxyCodeLine{174     Eigen::Matrix<double, -\/1, -\/1> m\_Tx;}
-\DoxyCodeLine{175     Eigen::Matrix<double, -\/1, -\/1> m\_Ty;}
-\DoxyCodeLine{176     Eigen::Matrix<double, -\/1, -\/1> m\_Tt;}
-\DoxyCodeLine{177     Eigen::Matrix<int, 1, -\/1> m\_pt;}
-\DoxyCodeLine{178     Eigen::Matrix<double, -\/1, -\/1> m\_Ttperm;}
-\DoxyCodeLine{179     std::vector<Eigen::Matrix<double, -\/1, -\/1>> m\_LUt;}
-\DoxyCodeLine{180     Eigen::PartialPivLU<Eigen::Matrix<double, -\/1, -\/1>> m\_Lu\_solver;}
-\DoxyCodeLine{181     Eigen::PartialPivLU<Eigen::Matrix<double, -\/1, -\/1>> m\_Uu\_solver;}
-\DoxyCodeLine{182     Eigen::PartialPivLU<Eigen::Matrix<double, -\/1, -\/1>> m\_Lv\_solver;}
-\DoxyCodeLine{183     Eigen::PartialPivLU<Eigen::Matrix<double, -\/1, -\/1>> m\_Uv\_solver;}
-\DoxyCodeLine{184     Eigen::PartialPivLU<Eigen::Matrix<double, -\/1, -\/1>> m\_Lp\_solver;}
-\DoxyCodeLine{185     Eigen::PartialPivLU<Eigen::Matrix<double, -\/1, -\/1>> m\_Up\_solver;}
-\DoxyCodeLine{186     Eigen::PartialPivLU<Eigen::Matrix<double, -\/1, -\/1>> m\_Lt\_solver;}
-\DoxyCodeLine{187     Eigen::PartialPivLU<Eigen::Matrix<double, -\/1, -\/1>> m\_Ut\_solver;}
-\DoxyCodeLine{189     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}} = \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2;}
-\DoxyCodeLine{191     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}} = \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2;}
-\DoxyCodeLine{193     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}{m\_it}};}
-\DoxyCodeLine{195     std::ofstream \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}};}
-\DoxyCodeLine{196     \mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t}{simulation\_state\_t}} simulation\_state;}
-\DoxyCodeLine{197 }
-\DoxyCodeLine{198     \textcolor{comment}{//functions}}
-\DoxyCodeLine{199     \textcolor{keywordtype}{void} m\_apply\_correction(\textcolor{keywordtype}{void});}
-\DoxyCodeLine{200     \textcolor{keyword}{static} \textcolor{keywordtype}{void} m\_d\_solve(Eigen::Matrix<double,-\/1,1> \&,}
-\DoxyCodeLine{201             \textcolor{keyword}{const} Eigen::Matrix<int,1,-\/1> \&,}
-\DoxyCodeLine{202             \textcolor{keyword}{const} Eigen::PartialPivLU<Eigen::Matrix<double,-\/1,-\/1>> \&,}
-\DoxyCodeLine{203             \textcolor{keyword}{const} Eigen::PartialPivLU<Eigen::Matrix<double,-\/1,-\/1>> \&);}
-\DoxyCodeLine{204     \textcolor{keywordtype}{void} m\_ETA(\textcolor{keywordtype}{int});}
-\DoxyCodeLine{205     }
-\DoxyCodeLine{206     \textcolor{keyword}{template} <\textcolor{keyword}{typename} Scalar> }
-\DoxyCodeLine{207     Eigen::Matrix<Scalar,-\/1,-\/1> m\_spdiags(\textcolor{keyword}{const} Eigen::Matrix<Scalar, -\/1, -\/1> \&, }
-\DoxyCodeLine{208                                     \textcolor{keyword}{const} Eigen::Matrix<int, -\/1, 1> \&,}
-\DoxyCodeLine{209                                     \textcolor{keywordtype}{size\_t}, \textcolor{keywordtype}{size\_t});}
-\DoxyCodeLine{210     \textcolor{keyword}{template} <\textcolor{keyword}{typename} Scalar> }
-\DoxyCodeLine{211     Eigen::Matrix<Scalar,-\/1,-\/1> m\_kron(\textcolor{keyword}{const} Eigen::Matrix<Scalar, -\/1, -\/1> \&,}
-\DoxyCodeLine{212                                  \textcolor{keyword}{const} Eigen::Matrix<Scalar, -\/1, -\/1> \&);}
-\DoxyCodeLine{213     }
-\DoxyCodeLine{214     \textcolor{keyword}{template} <\textcolor{keyword}{typename} Scalar>}
-\DoxyCodeLine{215     std::vector<Eigen::Triplet<Scalar>> m\_SparseToTriplet(Eigen::SparseMatrix<Scalar> \&);}
-\DoxyCodeLine{216     \textcolor{keyword}{template} <\textcolor{keyword}{typename} Scalar>}
-\DoxyCodeLine{217     }
-\DoxyCodeLine{218     Eigen::Matrix<int, 1, -\/1> m\_my\_symamd(Eigen::Matrix<Scalar, -\/1, -\/1> \&); }
-\DoxyCodeLine{219     }
-\DoxyCodeLine{220     \textcolor{keywordtype}{void} m\_luP(Eigen::Matrix<double,-\/1,-\/1> \&, std::vector<Eigen::Matrix<double,-\/1,-\/1>> \&);}
-\DoxyCodeLine{221     \textcolor{keywordtype}{void} m\_write\_current\_frame();}
-\DoxyCodeLine{222 \};}
-\DoxyCodeLine{223 }
-\DoxyCodeLine{224 \mbox{\hyperlink{classRayBenConvection_ab8e70c8b84cee13bfe7a56300542d39b}{RayBenConvection::RayBenConvection}}() \{\}}
-\DoxyCodeLine{225 }
-\DoxyCodeLine{226 \mbox{\hyperlink{classRayBenConvection_ad210586418c880516f3f619e29ff536f}{RayBenConvection::\string~RayBenConvection}}() \{\}}
-\DoxyCodeLine{227 }
-\DoxyCodeLine{228 \textcolor{keywordtype}{void} RayBenConvection::m\_apply\_correction(\textcolor{keywordtype}{void}) \{}
-\DoxyCodeLine{229   \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.rows(); ++i) \{}
-\DoxyCodeLine{230     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k = 0; k < \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.cols(); ++k) \{}
-\DoxyCodeLine{231       \textcolor{keywordflow}{if}((\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}(i, k) < \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}}) || (\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}(i, k) > \mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}})) \{}
-\DoxyCodeLine{232         \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}(i, k) = \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}};}
-\DoxyCodeLine{233       \}}
-\DoxyCodeLine{234     \}}
-\DoxyCodeLine{235   \}}
-\DoxyCodeLine{236 \}}
-\DoxyCodeLine{237 }
-\DoxyCodeLine{238 \textcolor{comment}{//void RayBenConvection::m\_printColor (Color c) \{}}
-\DoxyCodeLine{239 \textcolor{comment}{//  ::printf("{}(\%d, \%d, \%d, \%d)\(\backslash\)n"{}, c.r, c.g, c.b, c.a);}}
-\DoxyCodeLine{240 \textcolor{comment}{//\}}}
+\DoxyCodeLine{137     Eigen::Matrix<double, m\_nx, m\_ny> \mbox{\hyperlink{classRayBenConvection_a0369de1dcfd6a9c4681a22ef77281bad}{m\_Tstar}};}
+\DoxyCodeLine{139     Eigen::Matrix<double, m\_nx+1, m\_ny> \mbox{\hyperlink{classRayBenConvection_a22bceb43d4d9ba695f21bf1306a8f354}{m\_ustar}};}
+\DoxyCodeLine{141     Eigen::Matrix<double, m\_nx+1, m\_ny> \mbox{\hyperlink{classRayBenConvection_ab1204d12009f19080daa8e48072854cd}{m\_uhalf}};}
+\DoxyCodeLine{143     Eigen::Matrix<double, m\_nx+1, m\_ny> \mbox{\hyperlink{classRayBenConvection_a316a9e7f0c079b6fba771d7b15bd6647}{m\_uconv}};}
+\DoxyCodeLine{145     Eigen::Matrix<double, m\_nx, m\_ny+1> \mbox{\hyperlink{classRayBenConvection_a8e8d1bec9c3fbd2876adc957f4ed767d}{m\_vstar}};}
+\DoxyCodeLine{147     Eigen::Matrix<double, m\_nx, m\_ny+1> \mbox{\hyperlink{classRayBenConvection_aeada1a30f797e981b52d3b4e0640b198}{m\_vhalf}};}
+\DoxyCodeLine{149     Eigen::Matrix<double, m\_nx, m\_ny+1> \mbox{\hyperlink{classRayBenConvection_a2e5088ea41b7faad0bcc9bfda83939ef}{m\_vconv}};}
+\DoxyCodeLine{151     \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_aeb469e88e053251916cbcf2e0dd1919a}{m\_TnE}} = 0;}
+\DoxyCodeLine{153     \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_a643232d08102a38ddd0ec9a618b55afd}{m\_TnW}} = 0;}
+\DoxyCodeLine{155     \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_aab15fee9f0b6d470dd9d02d85439a7a8}{m\_UN}} = 0;}
+\DoxyCodeLine{157     \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_a99f0d9ab29a2db33829175a790fa9bc7}{m\_US}} = 0;}
+\DoxyCodeLine{159     \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_ad3b4ec6a6500a9b9355c60d66a62091b}{m\_UE}} = 0;}
+\DoxyCodeLine{161     \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_a56534034d797d9099f53367d4828f0c7}{m\_UW}} = 0;}
+\DoxyCodeLine{163     \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_ace7b32dda44cace25edfe8e481601733}{m\_VN}} = 0;}
+\DoxyCodeLine{165     \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_afc0d1ada59367f173257a20e2cea845b}{m\_VS}} = 0;}
+\DoxyCodeLine{167     \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_abfccbde057005c07f8ee2b76ef68e4f7}{m\_VE}} = 0;}
+\DoxyCodeLine{169     \textcolor{keywordtype}{double} \mbox{\hyperlink{classRayBenConvection_aee29299c3f2cf435a3d179d4dcd9b0a1}{m\_VW}} = 0;}
+\DoxyCodeLine{170     \textcolor{comment}{//initialisation variables}}
+\DoxyCodeLine{171     Eigen::Matrix<double, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/1, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2> m\_bcu;}
+\DoxyCodeLine{172     Eigen::Matrix<double, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/1> m\_bcv;}
+\DoxyCodeLine{173     Eigen::Matrix<double, -\/1, 1> m\_e;}
+\DoxyCodeLine{174     Eigen::Matrix<double, -\/1, 1> m\_i;}
+\DoxyCodeLine{175     Eigen::Matrix<double, -\/1, -\/1> m\_Ax;}
+\DoxyCodeLine{176     Eigen::Matrix<double, -\/1, -\/1> m\_Ay;}
+\DoxyCodeLine{177     Eigen::Matrix<double, -\/1, -\/1> m\_A;}
+\DoxyCodeLine{178     Eigen::Matrix<double, -\/1, -\/1> m\_Du;}
+\DoxyCodeLine{179     Eigen::Matrix<int, 1, -\/1> m\_pu;}
+\DoxyCodeLine{180     Eigen::Matrix<double, -\/1, -\/1> m\_Duperm;}
+\DoxyCodeLine{181     std::vector<Eigen::Matrix<double, -\/1, -\/1>> m\_LUu;}
+\DoxyCodeLine{182     Eigen::Matrix<double, -\/1, -\/1> m\_Dv;}
+\DoxyCodeLine{183     Eigen::Matrix<int, 1, -\/1> m\_pv;}
+\DoxyCodeLine{184     Eigen::Matrix<double, -\/1, -\/1> m\_Dvperm;}
+\DoxyCodeLine{185     std::vector<Eigen::Matrix<double, -\/1, -\/1>> m\_LUv;}
+\DoxyCodeLine{186     Eigen::Matrix<int, 1, -\/1> m\_pp;}
+\DoxyCodeLine{187     Eigen::Matrix<double, -\/1, -\/1> m\_Aperm;}
+\DoxyCodeLine{188     std::vector<Eigen::Matrix<double, -\/1, -\/1>> m\_LUp;}
+\DoxyCodeLine{189     Eigen::Matrix<double, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2> m\_bcT;}
+\DoxyCodeLine{190     Eigen::Matrix<double, -\/1, -\/1> m\_Tx;}
+\DoxyCodeLine{191     Eigen::Matrix<double, -\/1, -\/1> m\_Ty;}
+\DoxyCodeLine{192     Eigen::Matrix<double, -\/1, -\/1> m\_Tt;}
+\DoxyCodeLine{193     Eigen::Matrix<int, 1, -\/1> m\_pt;}
+\DoxyCodeLine{194     Eigen::Matrix<double, -\/1, -\/1> m\_Ttperm;}
+\DoxyCodeLine{195     std::vector<Eigen::Matrix<double, -\/1, -\/1>> m\_LUt;}
+\DoxyCodeLine{196     Eigen::PartialPivLU<Eigen::Matrix<double, -\/1, -\/1>> m\_Lu\_solver;}
+\DoxyCodeLine{197     Eigen::PartialPivLU<Eigen::Matrix<double, -\/1, -\/1>> m\_Uu\_solver;}
+\DoxyCodeLine{198     Eigen::PartialPivLU<Eigen::Matrix<double, -\/1, -\/1>> m\_Lv\_solver;}
+\DoxyCodeLine{199     Eigen::PartialPivLU<Eigen::Matrix<double, -\/1, -\/1>> m\_Uv\_solver;}
+\DoxyCodeLine{200     Eigen::PartialPivLU<Eigen::Matrix<double, -\/1, -\/1>> m\_Lp\_solver;}
+\DoxyCodeLine{201     Eigen::PartialPivLU<Eigen::Matrix<double, -\/1, -\/1>> m\_Up\_solver;}
+\DoxyCodeLine{202     Eigen::PartialPivLU<Eigen::Matrix<double, -\/1, -\/1>> m\_Lt\_solver;}
+\DoxyCodeLine{203     Eigen::PartialPivLU<Eigen::Matrix<double, -\/1, -\/1>> m\_Ut\_solver;}
+\DoxyCodeLine{205     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}} = \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2;}
+\DoxyCodeLine{207     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}} = \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2;}
+\DoxyCodeLine{209     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}{m\_it}};}
+\DoxyCodeLine{211     std::ofstream \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}};}
+\DoxyCodeLine{212     \mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t}{simulation\_state\_t}} simulation\_state;}
+\DoxyCodeLine{213 }
+\DoxyCodeLine{214     \textcolor{comment}{//functions}}
+\DoxyCodeLine{215     \textcolor{keywordtype}{void} m\_apply\_correction(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{216     \textcolor{keyword}{static} \textcolor{keywordtype}{void} m\_d\_solve(Eigen::Matrix<double,-\/1,1> \&,}
+\DoxyCodeLine{217             \textcolor{keyword}{const} Eigen::Matrix<int,1,-\/1> \&,}
+\DoxyCodeLine{218             \textcolor{keyword}{const} Eigen::PartialPivLU<Eigen::Matrix<double,-\/1,-\/1>> \&,}
+\DoxyCodeLine{219             \textcolor{keyword}{const} Eigen::PartialPivLU<Eigen::Matrix<double,-\/1,-\/1>> \&);}
+\DoxyCodeLine{220     \textcolor{keywordtype}{void} m\_ETA(\textcolor{keywordtype}{int});}
+\DoxyCodeLine{221     }
+\DoxyCodeLine{222     \textcolor{keyword}{template} <\textcolor{keyword}{typename} Scalar> }
+\DoxyCodeLine{223     Eigen::Matrix<Scalar,-\/1,-\/1> m\_spdiags(\textcolor{keyword}{const} Eigen::Matrix<Scalar, -\/1, -\/1> \&, }
+\DoxyCodeLine{224                                     \textcolor{keyword}{const} Eigen::Matrix<int, -\/1, 1> \&,}
+\DoxyCodeLine{225                                     \textcolor{keywordtype}{size\_t}, \textcolor{keywordtype}{size\_t});}
+\DoxyCodeLine{226     \textcolor{keyword}{template} <\textcolor{keyword}{typename} Scalar> }
+\DoxyCodeLine{227     Eigen::Matrix<Scalar,-\/1,-\/1> m\_kron(\textcolor{keyword}{const} Eigen::Matrix<Scalar, -\/1, -\/1> \&,}
+\DoxyCodeLine{228                                  \textcolor{keyword}{const} Eigen::Matrix<Scalar, -\/1, -\/1> \&);}
+\DoxyCodeLine{229     }
+\DoxyCodeLine{230     \textcolor{keyword}{template} <\textcolor{keyword}{typename} Scalar>}
+\DoxyCodeLine{231     std::vector<Eigen::Triplet<Scalar>> m\_SparseToTriplet(Eigen::SparseMatrix<Scalar> \&);}
+\DoxyCodeLine{232     \textcolor{keyword}{template} <\textcolor{keyword}{typename} Scalar>}
+\DoxyCodeLine{233     }
+\DoxyCodeLine{234     Eigen::Matrix<int, 1, -\/1> m\_my\_symamd(Eigen::Matrix<Scalar, -\/1, -\/1> \&); }
+\DoxyCodeLine{235     }
+\DoxyCodeLine{236     \textcolor{keywordtype}{void} m\_luP(Eigen::Matrix<double,-\/1,-\/1> \&, std::vector<Eigen::Matrix<double,-\/1,-\/1>> \&);}
+\DoxyCodeLine{237     \textcolor{keywordtype}{void} m\_write\_current\_frame();}
+\DoxyCodeLine{238 \};}
+\DoxyCodeLine{239 }
+\DoxyCodeLine{240 \mbox{\hyperlink{classRayBenConvection_ab8e70c8b84cee13bfe7a56300542d39b}{RayBenConvection::RayBenConvection}}() \{\}}
 \DoxyCodeLine{241 }
-\DoxyCodeLine{242 \textcolor{comment}{//Color RayBenConvection::m\_TtoC (double cold\_temp, double hot\_temp,  double T) \{}}
-\DoxyCodeLine{243   \textcolor{comment}{/*}}
-\DoxyCodeLine{244 \textcolor{comment}{  (x -\/ in\_min) * (out\_max -\/ out\_min) / (in\_max -\/ in\_min) + out\_min}}
-\DoxyCodeLine{245 \textcolor{comment}{  */}}
-\DoxyCodeLine{246 \textcolor{comment}{//  if ((T <= hot\_temp) \&\& (T >= cold\_temp)) \{}}
-\DoxyCodeLine{247 \textcolor{comment}{//    int index = (T -\/ cold\_temp) * (jet.size() -\/ 1) / ( hot\_temp -\/ cold\_temp );}}
-\DoxyCodeLine{248 \textcolor{comment}{//    return jet[index];}}
-\DoxyCodeLine{249 \textcolor{comment}{//  \} else \{}}
-\DoxyCodeLine{250 \textcolor{comment}{//    return (Color)\{0, 0, 0, 0\};}}
-\DoxyCodeLine{251 \textcolor{comment}{//  \}}}
-\DoxyCodeLine{252 \textcolor{comment}{//\}}}
+\DoxyCodeLine{242 \mbox{\hyperlink{classRayBenConvection_ad210586418c880516f3f619e29ff536f}{RayBenConvection::\string~RayBenConvection}}() \{\}}
+\DoxyCodeLine{243 }
+\DoxyCodeLine{244 \textcolor{keywordtype}{void} RayBenConvection::m\_apply\_correction(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{245   \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.rows(); ++i) \{}
+\DoxyCodeLine{246     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k = 0; k < \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.cols(); ++k) \{}
+\DoxyCodeLine{247       \textcolor{keywordflow}{if}((\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}(i, k) < \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}}) || (\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}(i, k) > \mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}})) \{}
+\DoxyCodeLine{248         \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}(i, k) = \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}};}
+\DoxyCodeLine{249       \}}
+\DoxyCodeLine{250     \}}
+\DoxyCodeLine{251   \}}
+\DoxyCodeLine{252 \}}
 \DoxyCodeLine{253 }
-\DoxyCodeLine{254 }
-\DoxyCodeLine{255 \textcolor{keywordtype}{void} RayBenConvection::m\_d\_solve(Eigen::Matrix<double,-\/1,1> \&mat,}
-\DoxyCodeLine{256            \textcolor{keyword}{const} Eigen::Matrix<int,1,-\/1> \&perm,}
-\DoxyCodeLine{257            \textcolor{keyword}{const} Eigen::PartialPivLU<Eigen::Matrix<double,-\/1,-\/1>> \&L,}
-\DoxyCodeLine{258            \textcolor{keyword}{const} Eigen::PartialPivLU<Eigen::Matrix<double,-\/1,-\/1>> \&U) \{}
-\DoxyCodeLine{259   mat(perm) = \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double},-\/1,-\/1\textcolor{keyword}{>}>(U.solve(L.solve(mat(perm))));}
-\DoxyCodeLine{260 \}}
-\DoxyCodeLine{261 }
-\DoxyCodeLine{262 }
-\DoxyCodeLine{263 \textcolor{comment}{//void RayBenConvection::m\_Draw(double cold\_temp, double hot\_temp, const Eigen::Matrix<double, -\/1, -\/1> \&T)}}
-\DoxyCodeLine{264 \textcolor{comment}{//\{}}
-\DoxyCodeLine{265 \textcolor{comment}{//  const unsigned int nx = T.rows();}}
-\DoxyCodeLine{266 \textcolor{comment}{//  const unsigned int ny = T.cols();}}
-\DoxyCodeLine{267 \textcolor{comment}{//  ::BeginDrawing();}}
-\DoxyCodeLine{268 \textcolor{comment}{//    ::ClearBackground((Color)\{ 255, 255, 255, 255\});}}
-\DoxyCodeLine{269 \textcolor{comment}{//    for(unsigned int i = 0; i < nx; ++i) \{}}
-\DoxyCodeLine{270 \textcolor{comment}{//      for(unsigned int k = 0; k < ny; ++k) \{}}
-\DoxyCodeLine{271 \textcolor{comment}{//        ::DrawRectangle((WINDOW\_WIDTH/2 -\/ nx*PIXEL/2) + i*PIXEL, }}
-\DoxyCodeLine{272 \textcolor{comment}{//                       (WINDOW\_HEIGHT/2 + ny*PIXEL/2) -\/ k*PIXEL, }}
-\DoxyCodeLine{273 \textcolor{comment}{//                       PIXEL, PIXEL, m\_TtoC(cold\_temp, hot\_temp, T(i, k)));}}
-\DoxyCodeLine{274 \textcolor{comment}{//      \}}}
-\DoxyCodeLine{275 \textcolor{comment}{//    \}}}
-\DoxyCodeLine{276   }
-\DoxyCodeLine{277 \textcolor{comment}{//    int posY = 5;}}
-\DoxyCodeLine{278 \textcolor{comment}{//    for(unsigned int i = 0; i < jet.size(); ++i) \{}}
-\DoxyCodeLine{279 \textcolor{comment}{//      ::DrawRectangle(5, posY, 5, 1, jet[i]);}}
-\DoxyCodeLine{280 \textcolor{comment}{//      posY += 1;}}
-\DoxyCodeLine{281 \textcolor{comment}{//    \}}}
-\DoxyCodeLine{282 \textcolor{comment}{//  ::EndDrawing();}}
-\DoxyCodeLine{283 \textcolor{comment}{//\}}}
-\DoxyCodeLine{284 }
-\DoxyCodeLine{285 \textcolor{keywordtype}{void} RayBenConvection::m\_ETA(\textcolor{keywordtype}{int} n\_calls)\{}
-\DoxyCodeLine{286   \textcolor{keyword}{static} std::chrono::time\_point<std::chrono::high\_resolution\_clock> old\_time;}
-\DoxyCodeLine{287   \textcolor{keywordtype}{float} delta\_t;}
-\DoxyCodeLine{288 }
-\DoxyCodeLine{289   ++n\_calls;}
-\DoxyCodeLine{290   \textcolor{keywordflow}{if}(n\_calls > 1) \{}
-\DoxyCodeLine{291     delta\_t = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(}
-\DoxyCodeLine{292         std::chrono::duration\_cast<std::chrono::milliseconds>(}
-\DoxyCodeLine{293           std::chrono::high\_resolution\_clock::now() -\/ old\_time}
-\DoxyCodeLine{294         ).count()}
-\DoxyCodeLine{295     ) / 1000;}
-\DoxyCodeLine{296     \textcolor{keywordflow}{if}(delta\_t > 0) \{}
-\DoxyCodeLine{297       simulation\_state.\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t_a5c1453843717f44c32e784bc9cbdffc9}{total}} = \mbox{\hyperlink{classRayBenConvection_a30361d2ad21ab61d60fb8bb21fba82de}{m\_END\_CICLE}};}
-\DoxyCodeLine{298       simulation\_state.\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t_a7636474465caaee02b54a95190f43c49}{eta}} = delta\_t * (\mbox{\hyperlink{classRayBenConvection_a30361d2ad21ab61d60fb8bb21fba82de}{m\_END\_CICLE}} -\/ n\_calls);}
-\DoxyCodeLine{299       simulation\_state.\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t_adc0f5503c9337c5406e05342a408ae92}{velocity}} = 1.0/delta\_t;}
-\DoxyCodeLine{300       \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < 80; ++i)}
-\DoxyCodeLine{301         std::putc(\textcolor{charliteral}{' '}, stdout);}
-\DoxyCodeLine{302       std::cerr << \textcolor{stringliteral}{"{}\(\backslash\)rINFO: RayBenConvection: m\_ETA: eta = "{}} }
-\DoxyCodeLine{303                 << std::setw(4) << std::setprecision(3)}
-\DoxyCodeLine{304                 << simulation\_state.\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t_a7636474465caaee02b54a95190f43c49}{eta}} << \textcolor{stringliteral}{"{}s\(\backslash\)tspeed = "{}}}
-\DoxyCodeLine{305                 << simulation\_state.\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t_adc0f5503c9337c5406e05342a408ae92}{velocity}} << \textcolor{stringliteral}{"{}cicle/s\(\backslash\)tstep = "{}}}
-\DoxyCodeLine{306                 << n\_calls << \textcolor{stringliteral}{"{}/"{}} << simulation\_state.\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t_a5c1453843717f44c32e784bc9cbdffc9}{total}} << \textcolor{stringliteral}{"{}\(\backslash\)r"{}};}
-\DoxyCodeLine{307       ::fflush(stdout);}
-\DoxyCodeLine{308     \}}
-\DoxyCodeLine{309   \}}
-\DoxyCodeLine{310   old\_time = std::chrono::high\_resolution\_clock::now();}
-\DoxyCodeLine{311   \textcolor{keywordflow}{return};}
-\DoxyCodeLine{312 \}}
-\DoxyCodeLine{313 }
-\DoxyCodeLine{314 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Scalar> }
-\DoxyCodeLine{315 Eigen::Matrix<Scalar,-\/1,-\/1> RayBenConvection::m\_spdiags(\textcolor{keyword}{const} Eigen::Matrix<Scalar, -\/1, -\/1>\& B, }
-\DoxyCodeLine{316                                     \textcolor{keyword}{const} Eigen::Matrix<int, -\/1, 1>\& d,}
-\DoxyCodeLine{317                                     \textcolor{keywordtype}{size\_t} m, \textcolor{keywordtype}{size\_t} n) \{}
-\DoxyCodeLine{318   Eigen::SparseMatrix<Scalar> A(m,n);}
-\DoxyCodeLine{319 }
-\DoxyCodeLine{320   \textcolor{keyword}{typedef} Eigen::Triplet<Scalar> T;}
-\DoxyCodeLine{321   std::vector<T> triplets;}
-\DoxyCodeLine{322   triplets.reserve(std::min(m,n)*d.size());}
-\DoxyCodeLine{323 }
-\DoxyCodeLine{324   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k = 0; k < d.size(); k++) \{}
-\DoxyCodeLine{325     \textcolor{keywordtype}{int} i\_min = std::max(0, -\/d(k));}
-\DoxyCodeLine{326     \textcolor{keywordtype}{int} i\_max = std::min(m -\/ 1, n -\/ d(k) -\/ 1);}
-\DoxyCodeLine{327     \textcolor{keywordtype}{int} B\_im\_dx\_start = m >= n ? d(k) : 0;}
-\DoxyCodeLine{328 }
-\DoxyCodeLine{329     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = i\_min; i <= i\_max; i++) \{}
-\DoxyCodeLine{330       triplets.push\_back( T(i, i+d(k), B(B\_im\_dx\_start + i, k)) );}
-\DoxyCodeLine{331     \}}
-\DoxyCodeLine{332   \}}
-\DoxyCodeLine{333 }
-\DoxyCodeLine{334   A.setFromTriplets(triplets.begin(), triplets.end());}
+\DoxyCodeLine{254 \textcolor{comment}{//void RayBenConvection::m\_printColor (Color c) \{}}
+\DoxyCodeLine{255 \textcolor{comment}{//  ::printf("{}(\%d, \%d, \%d, \%d)\(\backslash\)n"{}, c.r, c.g, c.b, c.a);}}
+\DoxyCodeLine{256 \textcolor{comment}{//\}}}
+\DoxyCodeLine{257 }
+\DoxyCodeLine{258 \textcolor{comment}{//Color RayBenConvection::m\_TtoC (double cold\_temp, double hot\_temp,  double T) \{}}
+\DoxyCodeLine{259   \textcolor{comment}{/*}}
+\DoxyCodeLine{260 \textcolor{comment}{  (x -\/ in\_min) * (out\_max -\/ out\_min) / (in\_max -\/ in\_min) + out\_min}}
+\DoxyCodeLine{261 \textcolor{comment}{  */}}
+\DoxyCodeLine{262 \textcolor{comment}{//  if ((T <= hot\_temp) \&\& (T >= cold\_temp)) \{}}
+\DoxyCodeLine{263 \textcolor{comment}{//    int index = (T -\/ cold\_temp) * (jet.size() -\/ 1) / ( hot\_temp -\/ cold\_temp );}}
+\DoxyCodeLine{264 \textcolor{comment}{//    return jet[index];}}
+\DoxyCodeLine{265 \textcolor{comment}{//  \} else \{}}
+\DoxyCodeLine{266 \textcolor{comment}{//    return (Color)\{0, 0, 0, 0\};}}
+\DoxyCodeLine{267 \textcolor{comment}{//  \}}}
+\DoxyCodeLine{268 \textcolor{comment}{//\}}}
+\DoxyCodeLine{269 }
+\DoxyCodeLine{270 }
+\DoxyCodeLine{271 \textcolor{keywordtype}{void} RayBenConvection::m\_d\_solve(Eigen::Matrix<double,-\/1,1> \&mat,}
+\DoxyCodeLine{272            \textcolor{keyword}{const} Eigen::Matrix<int,1,-\/1> \&perm,}
+\DoxyCodeLine{273            \textcolor{keyword}{const} Eigen::PartialPivLU<Eigen::Matrix<double,-\/1,-\/1>> \&L,}
+\DoxyCodeLine{274            \textcolor{keyword}{const} Eigen::PartialPivLU<Eigen::Matrix<double,-\/1,-\/1>> \&U) \{}
+\DoxyCodeLine{275   mat(perm) = \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double},-\/1,-\/1\textcolor{keyword}{>}>(U.solve(L.solve(mat(perm))));}
+\DoxyCodeLine{276 \}}
+\DoxyCodeLine{277 }
+\DoxyCodeLine{278 }
+\DoxyCodeLine{279 \textcolor{comment}{//void RayBenConvection::m\_Draw(double cold\_temp, double hot\_temp, const Eigen::Matrix<double, -\/1, -\/1> \&T)}}
+\DoxyCodeLine{280 \textcolor{comment}{//\{}}
+\DoxyCodeLine{281 \textcolor{comment}{//  const unsigned int nx = T.rows();}}
+\DoxyCodeLine{282 \textcolor{comment}{//  const unsigned int ny = T.cols();}}
+\DoxyCodeLine{283 \textcolor{comment}{//  ::BeginDrawing();}}
+\DoxyCodeLine{284 \textcolor{comment}{//    ::ClearBackground((Color)\{ 255, 255, 255, 255\});}}
+\DoxyCodeLine{285 \textcolor{comment}{//    for(unsigned int i = 0; i < nx; ++i) \{}}
+\DoxyCodeLine{286 \textcolor{comment}{//      for(unsigned int k = 0; k < ny; ++k) \{}}
+\DoxyCodeLine{287 \textcolor{comment}{//        ::DrawRectangle((WINDOW\_WIDTH/2 -\/ nx*PIXEL/2) + i*PIXEL, }}
+\DoxyCodeLine{288 \textcolor{comment}{//                       (WINDOW\_HEIGHT/2 + ny*PIXEL/2) -\/ k*PIXEL, }}
+\DoxyCodeLine{289 \textcolor{comment}{//                       PIXEL, PIXEL, m\_TtoC(cold\_temp, hot\_temp, T(i, k)));}}
+\DoxyCodeLine{290 \textcolor{comment}{//      \}}}
+\DoxyCodeLine{291 \textcolor{comment}{//    \}}}
+\DoxyCodeLine{292   }
+\DoxyCodeLine{293 \textcolor{comment}{//    int posY = 5;}}
+\DoxyCodeLine{294 \textcolor{comment}{//    for(unsigned int i = 0; i < jet.size(); ++i) \{}}
+\DoxyCodeLine{295 \textcolor{comment}{//      ::DrawRectangle(5, posY, 5, 1, jet[i]);}}
+\DoxyCodeLine{296 \textcolor{comment}{//      posY += 1;}}
+\DoxyCodeLine{297 \textcolor{comment}{//    \}}}
+\DoxyCodeLine{298 \textcolor{comment}{//  ::EndDrawing();}}
+\DoxyCodeLine{299 \textcolor{comment}{//\}}}
+\DoxyCodeLine{300 }
+\DoxyCodeLine{301 \textcolor{keywordtype}{void} RayBenConvection::m\_ETA(\textcolor{keywordtype}{int} n\_calls)\{}
+\DoxyCodeLine{302   \textcolor{keyword}{static} std::chrono::time\_point<std::chrono::high\_resolution\_clock> old\_time;}
+\DoxyCodeLine{303   \textcolor{keywordtype}{float} delta\_t;}
+\DoxyCodeLine{304 }
+\DoxyCodeLine{305   ++n\_calls;}
+\DoxyCodeLine{306   \textcolor{keywordflow}{if}(n\_calls > 1) \{}
+\DoxyCodeLine{307     delta\_t = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(}
+\DoxyCodeLine{308         std::chrono::duration\_cast<std::chrono::milliseconds>(}
+\DoxyCodeLine{309           std::chrono::high\_resolution\_clock::now() -\/ old\_time}
+\DoxyCodeLine{310         ).count()}
+\DoxyCodeLine{311     ) / 1000;}
+\DoxyCodeLine{312     \textcolor{keywordflow}{if}(delta\_t > 0) \{}
+\DoxyCodeLine{313       simulation\_state.\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t_a5c1453843717f44c32e784bc9cbdffc9}{total}} = \mbox{\hyperlink{classRayBenConvection_a30361d2ad21ab61d60fb8bb21fba82de}{m\_END\_CICLE}};}
+\DoxyCodeLine{314       simulation\_state.\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t_a7636474465caaee02b54a95190f43c49}{eta}} = delta\_t * (\mbox{\hyperlink{classRayBenConvection_a30361d2ad21ab61d60fb8bb21fba82de}{m\_END\_CICLE}} -\/ n\_calls);}
+\DoxyCodeLine{315       simulation\_state.\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t_adc0f5503c9337c5406e05342a408ae92}{velocity}} = 1.0/delta\_t;}
+\DoxyCodeLine{316       \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < 80; ++i)}
+\DoxyCodeLine{317         std::putc(\textcolor{charliteral}{' '}, stdout);}
+\DoxyCodeLine{318       std::cerr << \textcolor{stringliteral}{"{}\(\backslash\)rINFO: RayBenConvection: m\_ETA: eta = "{}} }
+\DoxyCodeLine{319                 << std::setw(4) << std::setprecision(3)}
+\DoxyCodeLine{320                 << simulation\_state.\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t_a7636474465caaee02b54a95190f43c49}{eta}} << \textcolor{stringliteral}{"{}s\(\backslash\)tspeed = "{}}}
+\DoxyCodeLine{321                 << simulation\_state.\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t_adc0f5503c9337c5406e05342a408ae92}{velocity}} << \textcolor{stringliteral}{"{}cicle/s\(\backslash\)tstep = "{}}}
+\DoxyCodeLine{322                 << n\_calls << \textcolor{stringliteral}{"{}/"{}} << simulation\_state.\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t_a5c1453843717f44c32e784bc9cbdffc9}{total}} << \textcolor{stringliteral}{"{}\(\backslash\)r"{}};}
+\DoxyCodeLine{323       ::fflush(stdout);}
+\DoxyCodeLine{324     \}}
+\DoxyCodeLine{325   \}}
+\DoxyCodeLine{326   old\_time = std::chrono::high\_resolution\_clock::now();}
+\DoxyCodeLine{327   \textcolor{keywordflow}{return};}
+\DoxyCodeLine{328 \}}
+\DoxyCodeLine{329 }
+\DoxyCodeLine{330 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Scalar> }
+\DoxyCodeLine{331 Eigen::Matrix<Scalar,-\/1,-\/1> RayBenConvection::m\_spdiags(\textcolor{keyword}{const} Eigen::Matrix<Scalar, -\/1, -\/1>\& B, }
+\DoxyCodeLine{332                                     \textcolor{keyword}{const} Eigen::Matrix<int, -\/1, 1>\& d,}
+\DoxyCodeLine{333                                     \textcolor{keywordtype}{size\_t} m, \textcolor{keywordtype}{size\_t} n) \{}
+\DoxyCodeLine{334   Eigen::SparseMatrix<Scalar> A(m,n);}
 \DoxyCodeLine{335 }
-\DoxyCodeLine{336   \textcolor{keywordflow}{return} Eigen::Matrix<Scalar, -\/1, -\/1>(A);}
-\DoxyCodeLine{337 \}}
-\DoxyCodeLine{338 }
-\DoxyCodeLine{339 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Scalar> }
-\DoxyCodeLine{340 Eigen::Matrix<Scalar,-\/1,-\/1> RayBenConvection::m\_kron(\textcolor{keyword}{const} Eigen::Matrix<Scalar, -\/1, -\/1>\& B, }
-\DoxyCodeLine{341                                  \textcolor{keyword}{const} Eigen::Matrix<Scalar, -\/1, -\/1>\& d) \{}
-\DoxyCodeLine{342   Eigen::Matrix<Scalar, -\/1, -\/1> A;}
-\DoxyCodeLine{343   A.resize(B.rows()*d.rows(), B.cols()*d.cols());}
-\DoxyCodeLine{344   }
-\DoxyCodeLine{345   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < B.rows(); i++) }
-\DoxyCodeLine{346     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} j = 0; j < B.cols(); j++) }
-\DoxyCodeLine{347       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} h = 0; h < d.rows(); h++) }
-\DoxyCodeLine{348         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k = 0; k < d.cols(); k++)}
-\DoxyCodeLine{349           A(i*d.rows() + h, j * d.cols() + k) = B(i, j) * d(h, k);  }
-\DoxyCodeLine{350 }
-\DoxyCodeLine{351   \textcolor{keywordflow}{return} Eigen::Matrix<Scalar, -\/1, -\/1>(A);}
-\DoxyCodeLine{352 \}}
-\DoxyCodeLine{353 }
-\DoxyCodeLine{354 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Scalar>}
-\DoxyCodeLine{355 std::vector<Eigen::Triplet<Scalar>> RayBenConvection::m\_SparseToTriplet(Eigen::SparseMatrix<Scalar> \&A)}
-\DoxyCodeLine{356 \{}
-\DoxyCodeLine{357   std::vector<Eigen::Triplet<Scalar>> A\_Triplet;}
-\DoxyCodeLine{358   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k = 0; k < A.outerSize(); ++k)}
-\DoxyCodeLine{359   \{}
-\DoxyCodeLine{360       \textcolor{keywordflow}{for} (Eigen::InnerIterator<Eigen::SparseMatrix<Scalar>> it(A, k); it; ++it)}
-\DoxyCodeLine{361       \{}
-\DoxyCodeLine{362           A\_Triplet.push\_back(Eigen::Triplet<Scalar>(it.row(), it.col(), it.value()));}
-\DoxyCodeLine{363       \}}
-\DoxyCodeLine{364   \}}
-\DoxyCodeLine{365   \textcolor{keywordflow}{return} A\_Triplet;}
-\DoxyCodeLine{366 \}}
-\DoxyCodeLine{367 }
-\DoxyCodeLine{368 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Scalar>}
-\DoxyCodeLine{369 Eigen::Matrix<int, 1, -\/1> RayBenConvection::m\_my\_symamd(Eigen::Matrix<Scalar, -\/1, -\/1> \&mat) \{}
-\DoxyCodeLine{370   \textcolor{keywordflow}{if} (mat.rows() != mat.cols()) \{}
-\DoxyCodeLine{371     std::cerr << \textcolor{stringliteral}{"{}symamd: Matrice non quadrata!"{}} << std::endl;}
-\DoxyCodeLine{372     exit(1);}
-\DoxyCodeLine{373   \}}
-\DoxyCodeLine{374   Eigen::SparseMatrix<Scalar> spmat(mat.sparseView()); }
-\DoxyCodeLine{375   \textcolor{keywordtype}{int} A[spmat.nonZeros()];}
-\DoxyCodeLine{376   \textcolor{keywordtype}{int} p[mat.cols()+1];}
-\DoxyCodeLine{377   \textcolor{keywordtype}{int} perm[mat.cols()+1];}
-\DoxyCodeLine{378   \textcolor{keywordtype}{int} stats [COLAMD\_STATS];}
-\DoxyCodeLine{379   \textcolor{keywordtype}{int} retcode;}
-\DoxyCodeLine{380 }
-\DoxyCodeLine{381   ::memset(A, 0, (spmat.nonZeros()) * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}));}
-\DoxyCodeLine{382   ::memset(p, 0, (mat.cols()+1) * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}));}
-\DoxyCodeLine{383   ::memset(perm, 0, (mat.cols()+1) * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}));}
-\DoxyCodeLine{384   ::memset(stats, 0, COLAMD\_STATS * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}));}
-\DoxyCodeLine{385 }
-\DoxyCodeLine{386   \textcolor{keywordtype}{int} A\_i = 0, old\_A\_i = 0, p\_i = 1;}
-\DoxyCodeLine{387   p[0] = 0;}
-\DoxyCodeLine{388   \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < mat.cols(); ++i) \{}
-\DoxyCodeLine{389     old\_A\_i = A\_i;}
-\DoxyCodeLine{390     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k = 0; k < mat.rows(); ++k) \{}
-\DoxyCodeLine{391       \textcolor{keywordflow}{if}(mat(k,i) != 0) \{}
-\DoxyCodeLine{392         A[A\_i] = k;}
-\DoxyCodeLine{393         A\_i++;}
-\DoxyCodeLine{394       \}}
-\DoxyCodeLine{395     \}}
-\DoxyCodeLine{396     \textcolor{keywordflow}{if}(old\_A\_i < A\_i)\{}
-\DoxyCodeLine{397       p[p\_i] = A\_i;}
-\DoxyCodeLine{398       p\_i++;}
-\DoxyCodeLine{399     \}}
-\DoxyCodeLine{400   \}}
-\DoxyCodeLine{401   p[mat.cols()] = spmat.nonZeros();}
-\DoxyCodeLine{402 }
-\DoxyCodeLine{403   retcode = symamd(mat.cols(), A, p, perm, (\textcolor{keywordtype}{double} *) NULL, stats, \&calloc, \&free);}
-\DoxyCodeLine{404 }
-\DoxyCodeLine{405   \textcolor{keywordflow}{if}(retcode == 1)\{ }
-\DoxyCodeLine{406     Eigen::Matrix<int, 1, -\/1> permMat;}
-\DoxyCodeLine{407     permMat.resize(1, mat.cols());}
-\DoxyCodeLine{408     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < mat.cols(); ++i)}
-\DoxyCodeLine{409       permMat(0, i) = perm[i];}
-\DoxyCodeLine{410     \textcolor{keywordflow}{return} permMat;}
-\DoxyCodeLine{411   \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (retcode == 0) \{}
-\DoxyCodeLine{412     std::cerr << \textcolor{stringliteral}{"{}symamd: something wrong..."{}} << std::endl;}
-\DoxyCodeLine{413     \textcolor{keywordflow}{return} Eigen::Matrix<int,1,1>(0);}
-\DoxyCodeLine{414   \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{415     std::cerr << \textcolor{stringliteral}{"{}symamd: something really wrong happened!"{}} << std::endl;}
-\DoxyCodeLine{416     \textcolor{keywordflow}{return} Eigen::Matrix<int,1,1>(0);}
-\DoxyCodeLine{417   \}}
-\DoxyCodeLine{418 \}}
-\DoxyCodeLine{419 }
-\DoxyCodeLine{420 \textcolor{keywordtype}{void} RayBenConvection::m\_luP(Eigen::Matrix<double,-\/1,-\/1> \&mat,}
-\DoxyCodeLine{421          std::vector<Eigen::Matrix<double,-\/1,-\/1>> \&ret\_vett)\{}
-\DoxyCodeLine{422 }
-\DoxyCodeLine{423   Eigen::SparseMatrix<double> spmat = mat.sparseView();}
-\DoxyCodeLine{424   Eigen::PartialPivLU<Eigen::Matrix<double,-\/1,-\/1>> LU\_dec(spmat);}
-\DoxyCodeLine{425 }
-\DoxyCodeLine{426   Eigen::Matrix<double,-\/1,-\/1> LU\_mat(LU\_dec.matrixLU());}
-\DoxyCodeLine{427   Eigen::Matrix<double,-\/1,-\/1> L\_mat = LU\_mat.triangularView<Eigen::UpLoType::UnitLower>();}
-\DoxyCodeLine{428   Eigen::Matrix<double,-\/1,-\/1> U\_mat = LU\_mat.triangularView<Eigen::UpLoType::Upper>();}
-\DoxyCodeLine{429   Eigen::Matrix<double,-\/1,-\/1> PL\_mat = LU\_dec.permutationP().transpose() * L\_mat;}
-\DoxyCodeLine{430 }
-\DoxyCodeLine{431   ret\_vett.clear();}
-\DoxyCodeLine{432   ret\_vett.push\_back(PL\_mat); \textcolor{comment}{//[0]}}
-\DoxyCodeLine{433   ret\_vett.push\_back(U\_mat); \textcolor{comment}{//[1]}}
-\DoxyCodeLine{434 }
-\DoxyCodeLine{435   \textcolor{keywordflow}{return};}
-\DoxyCodeLine{436 \}}
-\DoxyCodeLine{437 }
-\DoxyCodeLine{438 \textcolor{keywordtype}{void} RayBenConvection::m\_write\_current\_frame ()\{}
-\DoxyCodeLine{439   \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} << \textcolor{stringliteral}{"{}\{"{}};}
-\DoxyCodeLine{440     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i = 0; i < \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}; i++) \{}
-\DoxyCodeLine{441       \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} << \textcolor{stringliteral}{"{}\{"{}};}
-\DoxyCodeLine{442         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j = 0; j < \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}; j++)}
-\DoxyCodeLine{443           \textcolor{keywordflow}{if} (j < \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}} -\/ 1)}
-\DoxyCodeLine{444             \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} << \textcolor{stringliteral}{"{}\(\backslash\)t"{}} << \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}(j, i) << \textcolor{stringliteral}{"{}, "{}};}
-\DoxyCodeLine{445           \textcolor{keywordflow}{else} \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} << \textcolor{stringliteral}{"{}\(\backslash\)t"{}} << \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}(j, i); }
-\DoxyCodeLine{446       \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} << \textcolor{stringliteral}{"{}\},\(\backslash\)n "{}};}
-\DoxyCodeLine{447       \}}
-\DoxyCodeLine{448   \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} << \textcolor{stringliteral}{"{}\}"{}};}
-\DoxyCodeLine{449 \};}
+\DoxyCodeLine{336   \textcolor{keyword}{typedef} Eigen::Triplet<Scalar> T;}
+\DoxyCodeLine{337   std::vector<T> triplets;}
+\DoxyCodeLine{338   triplets.reserve(std::min(m,n)*d.size());}
+\DoxyCodeLine{339 }
+\DoxyCodeLine{340   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k = 0; k < d.size(); k++) \{}
+\DoxyCodeLine{341     \textcolor{keywordtype}{int} i\_min = std::max(0, -\/d(k));}
+\DoxyCodeLine{342     \textcolor{keywordtype}{int} i\_max = std::min(m -\/ 1, n -\/ d(k) -\/ 1);}
+\DoxyCodeLine{343     \textcolor{keywordtype}{int} B\_im\_dx\_start = m >= n ? d(k) : 0;}
+\DoxyCodeLine{344 }
+\DoxyCodeLine{345     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = i\_min; i <= i\_max; i++) \{}
+\DoxyCodeLine{346       triplets.push\_back( T(i, i+d(k), B(B\_im\_dx\_start + i, k)) );}
+\DoxyCodeLine{347     \}}
+\DoxyCodeLine{348   \}}
+\DoxyCodeLine{349 }
+\DoxyCodeLine{350   A.setFromTriplets(triplets.begin(), triplets.end());}
+\DoxyCodeLine{351 }
+\DoxyCodeLine{352   \textcolor{keywordflow}{return} Eigen::Matrix<Scalar, -\/1, -\/1>(A);}
+\DoxyCodeLine{353 \}}
+\DoxyCodeLine{354 }
+\DoxyCodeLine{355 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Scalar> }
+\DoxyCodeLine{356 Eigen::Matrix<Scalar,-\/1,-\/1> RayBenConvection::m\_kron(\textcolor{keyword}{const} Eigen::Matrix<Scalar, -\/1, -\/1>\& B, }
+\DoxyCodeLine{357                                  \textcolor{keyword}{const} Eigen::Matrix<Scalar, -\/1, -\/1>\& d) \{}
+\DoxyCodeLine{358   Eigen::Matrix<Scalar, -\/1, -\/1> A;}
+\DoxyCodeLine{359   A.resize(B.rows()*d.rows(), B.cols()*d.cols());}
+\DoxyCodeLine{360   }
+\DoxyCodeLine{361   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < B.rows(); i++) }
+\DoxyCodeLine{362     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} j = 0; j < B.cols(); j++) }
+\DoxyCodeLine{363       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} h = 0; h < d.rows(); h++) }
+\DoxyCodeLine{364         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k = 0; k < d.cols(); k++)}
+\DoxyCodeLine{365           A(i*d.rows() + h, j * d.cols() + k) = B(i, j) * d(h, k);  }
+\DoxyCodeLine{366 }
+\DoxyCodeLine{367   \textcolor{keywordflow}{return} Eigen::Matrix<Scalar, -\/1, -\/1>(A);}
+\DoxyCodeLine{368 \}}
+\DoxyCodeLine{369 }
+\DoxyCodeLine{370 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Scalar>}
+\DoxyCodeLine{371 std::vector<Eigen::Triplet<Scalar>> RayBenConvection::m\_SparseToTriplet(Eigen::SparseMatrix<Scalar> \&A)}
+\DoxyCodeLine{372 \{}
+\DoxyCodeLine{373   std::vector<Eigen::Triplet<Scalar>> A\_Triplet;}
+\DoxyCodeLine{374   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k = 0; k < A.outerSize(); ++k)}
+\DoxyCodeLine{375   \{}
+\DoxyCodeLine{376       \textcolor{keywordflow}{for} (Eigen::InnerIterator<Eigen::SparseMatrix<Scalar>> it(A, k); it; ++it)}
+\DoxyCodeLine{377       \{}
+\DoxyCodeLine{378           A\_Triplet.push\_back(Eigen::Triplet<Scalar>(it.row(), it.col(), it.value()));}
+\DoxyCodeLine{379       \}}
+\DoxyCodeLine{380   \}}
+\DoxyCodeLine{381   \textcolor{keywordflow}{return} A\_Triplet;}
+\DoxyCodeLine{382 \}}
+\DoxyCodeLine{383 }
+\DoxyCodeLine{384 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Scalar>}
+\DoxyCodeLine{385 Eigen::Matrix<int, 1, -\/1> RayBenConvection::m\_my\_symamd(Eigen::Matrix<Scalar, -\/1, -\/1> \&mat) \{}
+\DoxyCodeLine{386   \textcolor{keywordflow}{if} (mat.rows() != mat.cols()) \{}
+\DoxyCodeLine{387     std::cerr << \textcolor{stringliteral}{"{}symamd: Matrice non quadrata!"{}} << std::endl;}
+\DoxyCodeLine{388     exit(1);}
+\DoxyCodeLine{389   \}}
+\DoxyCodeLine{390   Eigen::SparseMatrix<Scalar> spmat(mat.sparseView()); }
+\DoxyCodeLine{391   \textcolor{keywordtype}{int} A[spmat.nonZeros()];}
+\DoxyCodeLine{392   \textcolor{keywordtype}{int} p[mat.cols()+1];}
+\DoxyCodeLine{393   \textcolor{keywordtype}{int} perm[mat.cols()+1];}
+\DoxyCodeLine{394   \textcolor{keywordtype}{int} stats [COLAMD\_STATS];}
+\DoxyCodeLine{395   \textcolor{keywordtype}{int} retcode;}
+\DoxyCodeLine{396 }
+\DoxyCodeLine{397   ::memset(A, 0, (spmat.nonZeros()) * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}));}
+\DoxyCodeLine{398   ::memset(p, 0, (mat.cols()+1) * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}));}
+\DoxyCodeLine{399   ::memset(perm, 0, (mat.cols()+1) * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}));}
+\DoxyCodeLine{400   ::memset(stats, 0, COLAMD\_STATS * \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}));}
+\DoxyCodeLine{401 }
+\DoxyCodeLine{402   \textcolor{keywordtype}{int} A\_i = 0, old\_A\_i = 0, p\_i = 1;}
+\DoxyCodeLine{403   p[0] = 0;}
+\DoxyCodeLine{404   \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < mat.cols(); ++i) \{}
+\DoxyCodeLine{405     old\_A\_i = A\_i;}
+\DoxyCodeLine{406     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k = 0; k < mat.rows(); ++k) \{}
+\DoxyCodeLine{407       \textcolor{keywordflow}{if}(mat(k,i) != 0) \{}
+\DoxyCodeLine{408         A[A\_i] = k;}
+\DoxyCodeLine{409         A\_i++;}
+\DoxyCodeLine{410       \}}
+\DoxyCodeLine{411     \}}
+\DoxyCodeLine{412     \textcolor{keywordflow}{if}(old\_A\_i < A\_i)\{}
+\DoxyCodeLine{413       p[p\_i] = A\_i;}
+\DoxyCodeLine{414       p\_i++;}
+\DoxyCodeLine{415     \}}
+\DoxyCodeLine{416   \}}
+\DoxyCodeLine{417   p[mat.cols()] = spmat.nonZeros();}
+\DoxyCodeLine{418 }
+\DoxyCodeLine{419   retcode = symamd(mat.cols(), A, p, perm, (\textcolor{keywordtype}{double} *) NULL, stats, \&calloc, \&free);}
+\DoxyCodeLine{420 }
+\DoxyCodeLine{421   \textcolor{keywordflow}{if}(retcode == 1)\{ }
+\DoxyCodeLine{422     Eigen::Matrix<int, 1, -\/1> permMat;}
+\DoxyCodeLine{423     permMat.resize(1, mat.cols());}
+\DoxyCodeLine{424     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < mat.cols(); ++i)}
+\DoxyCodeLine{425       permMat(0, i) = perm[i];}
+\DoxyCodeLine{426     \textcolor{keywordflow}{return} permMat;}
+\DoxyCodeLine{427   \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (retcode == 0) \{}
+\DoxyCodeLine{428     std::cerr << \textcolor{stringliteral}{"{}symamd: something wrong..."{}} << std::endl;}
+\DoxyCodeLine{429     \textcolor{keywordflow}{return} Eigen::Matrix<int,1,1>(0);}
+\DoxyCodeLine{430   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{431     std::cerr << \textcolor{stringliteral}{"{}symamd: something really wrong happened!"{}} << std::endl;}
+\DoxyCodeLine{432     \textcolor{keywordflow}{return} Eigen::Matrix<int,1,1>(0);}
+\DoxyCodeLine{433   \}}
+\DoxyCodeLine{434 \}}
+\DoxyCodeLine{435 }
+\DoxyCodeLine{436 \textcolor{keywordtype}{void} RayBenConvection::m\_luP(Eigen::Matrix<double,-\/1,-\/1> \&mat,}
+\DoxyCodeLine{437          std::vector<Eigen::Matrix<double,-\/1,-\/1>> \&ret\_vett)\{}
+\DoxyCodeLine{438 }
+\DoxyCodeLine{439   Eigen::SparseMatrix<double> spmat = mat.sparseView();}
+\DoxyCodeLine{440   Eigen::PartialPivLU<Eigen::Matrix<double,-\/1,-\/1>> LU\_dec(spmat);}
+\DoxyCodeLine{441 }
+\DoxyCodeLine{442   Eigen::Matrix<double,-\/1,-\/1> LU\_mat(LU\_dec.matrixLU());}
+\DoxyCodeLine{443   Eigen::Matrix<double,-\/1,-\/1> L\_mat = LU\_mat.triangularView<Eigen::UpLoType::UnitLower>();}
+\DoxyCodeLine{444   Eigen::Matrix<double,-\/1,-\/1> U\_mat = LU\_mat.triangularView<Eigen::UpLoType::Upper>();}
+\DoxyCodeLine{445   Eigen::Matrix<double,-\/1,-\/1> PL\_mat = LU\_dec.permutationP().transpose() * L\_mat;}
+\DoxyCodeLine{446 }
+\DoxyCodeLine{447   ret\_vett.clear();}
+\DoxyCodeLine{448   ret\_vett.push\_back(PL\_mat); \textcolor{comment}{//[0]}}
+\DoxyCodeLine{449   ret\_vett.push\_back(U\_mat); \textcolor{comment}{//[1]}}
 \DoxyCodeLine{450 }
-\DoxyCodeLine{452 }
-\DoxyCodeLine{463 \textcolor{keywordtype}{int} \mbox{\hyperlink{classRayBenConvection_af068a10b389817887e3f91bf9bff965a}{RayBenConvection::init}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} END\_CICLE, \textcolor{keywordtype}{double} cold\_temp, \textcolor{keywordtype}{double} hot\_temp, }
-\DoxyCodeLine{464                             \textcolor{keywordtype}{double} Ray\_numb, \textcolor{keywordtype}{double} Pr\_numb, \textcolor{keywordtype}{double} Re\_numb )\{}
-\DoxyCodeLine{465 }
-\DoxyCodeLine{466   std::cerr << \textcolor{stringliteral}{"{}INFO: RayBenConvection: init: Initializing simulation..."{}} << std::endl;}
-\DoxyCodeLine{467   std::chrono::time\_point<std::chrono::high\_resolution\_clock> init\_lenght = }
-\DoxyCodeLine{468     std::chrono::high\_resolution\_clock::now();}
-\DoxyCodeLine{469   Eigen::setNbThreads(NPROC);}
-\DoxyCodeLine{470 }
-\DoxyCodeLine{471   \textcolor{keywordtype}{int} ret\_value = 0;}
-\DoxyCodeLine{472   \mbox{\hyperlink{classRayBenConvection_a30361d2ad21ab61d60fb8bb21fba82de}{m\_END\_CICLE}} = END\_CICLE;}
-\DoxyCodeLine{473   \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}} = cold\_temp;}
-\DoxyCodeLine{474   \mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} = hot\_temp;}
-\DoxyCodeLine{475   \mbox{\hyperlink{classRayBenConvection_a6eade7fabf66cfd00e19bdbc7f057341}{m\_Ra}} = Ray\_numb;}
-\DoxyCodeLine{476   \mbox{\hyperlink{classRayBenConvection_af246c10dd8e2c4f9fe3951d74453e9e0}{m\_Pr}} = Pr\_numb;}
-\DoxyCodeLine{477   \mbox{\hyperlink{classRayBenConvection_a9558a662a91ef2887302e7f8913654b9}{m\_Re}} = Re\_numb;}
-\DoxyCodeLine{478   m\_Pe = \mbox{\hyperlink{classRayBenConvection_a9558a662a91ef2887302e7f8913654b9}{m\_Re}} * \mbox{\hyperlink{classRayBenConvection_af246c10dd8e2c4f9fe3951d74453e9e0}{m\_Pr}};}
-\DoxyCodeLine{479   m\_Gr= \mbox{\hyperlink{classRayBenConvection_a6eade7fabf66cfd00e19bdbc7f057341}{m\_Ra}} / \mbox{\hyperlink{classRayBenConvection_af246c10dd8e2c4f9fe3951d74453e9e0}{m\_Pr}};}
-\DoxyCodeLine{480 }
-\DoxyCodeLine{481   \textcolor{keywordflow}{if} (END\_CICLE > 6000)\{}
-\DoxyCodeLine{482     std::cerr << \textcolor{stringliteral}{"{}ERROR: RayBenConvection: init: The number of steps requested "{}}}
-\DoxyCodeLine{483               << END\_CICLE << \textcolor{stringliteral}{"{} is too high."{}} << std::endl;}
-\DoxyCodeLine{484     \textcolor{keywordflow}{return} -\/1;}
-\DoxyCodeLine{485   \}}
+\DoxyCodeLine{451   \textcolor{keywordflow}{return};}
+\DoxyCodeLine{452 \}}
+\DoxyCodeLine{453 }
+\DoxyCodeLine{454 \textcolor{keywordtype}{void} RayBenConvection::m\_write\_current\_frame ()\{}
+\DoxyCodeLine{455   \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} << \textcolor{stringliteral}{"{}\{"{}};}
+\DoxyCodeLine{456     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i = 0; i < \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}; i++) \{}
+\DoxyCodeLine{457       \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} << \textcolor{stringliteral}{"{}\{"{}};}
+\DoxyCodeLine{458         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} j = 0; j < \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}; j++)}
+\DoxyCodeLine{459           \textcolor{keywordflow}{if} (j < \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}} -\/ 1)}
+\DoxyCodeLine{460             \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} << \textcolor{stringliteral}{"{}\(\backslash\)t"{}} << \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}(j, i) << \textcolor{stringliteral}{"{}, "{}};}
+\DoxyCodeLine{461           \textcolor{keywordflow}{else} \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} << \textcolor{stringliteral}{"{}\(\backslash\)t"{}} << \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}(j, i); }
+\DoxyCodeLine{462       \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} << \textcolor{stringliteral}{"{}\},\(\backslash\)n "{}};}
+\DoxyCodeLine{463       \}}
+\DoxyCodeLine{464   \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} << \textcolor{stringliteral}{"{}\}"{}};}
+\DoxyCodeLine{465 \};}
+\DoxyCodeLine{466 }
+\DoxyCodeLine{468 }
+\DoxyCodeLine{479 \textcolor{keywordtype}{int} \mbox{\hyperlink{classRayBenConvection_af068a10b389817887e3f91bf9bff965a}{RayBenConvection::init}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} END\_CICLE, \textcolor{keywordtype}{double} cold\_temp, \textcolor{keywordtype}{double} hot\_temp, }
+\DoxyCodeLine{480                             \textcolor{keywordtype}{double} Ray\_numb, \textcolor{keywordtype}{double} Pr\_numb, \textcolor{keywordtype}{double} Re\_numb )\{}
+\DoxyCodeLine{481 }
+\DoxyCodeLine{482   std::cerr << \textcolor{stringliteral}{"{}INFO: RayBenConvection: init: Initializing simulation..."{}} << std::endl;}
+\DoxyCodeLine{483   std::chrono::time\_point<std::chrono::high\_resolution\_clock> init\_lenght = }
+\DoxyCodeLine{484     std::chrono::high\_resolution\_clock::now();}
+\DoxyCodeLine{485   Eigen::setNbThreads(NPROC);}
 \DoxyCodeLine{486 }
-\DoxyCodeLine{487   \textcolor{keywordflow}{if}(\mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} != \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}})}
-\DoxyCodeLine{488     \mbox{\hyperlink{classRayBenConvection_abfa7478fe1bf2a2744403d17ca248a3d}{m\_To}} = (\mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} < \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}}) ? \mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} : \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}};}
-\DoxyCodeLine{489   \textcolor{keywordflow}{else}\{}
-\DoxyCodeLine{490     std::cout << \textcolor{stringliteral}{"{}Please, remeber to provide two different temperatures."{}};}
-\DoxyCodeLine{491     \textcolor{keywordflow}{return} -\/2;}
-\DoxyCodeLine{492   \}}
-\DoxyCodeLine{493 }
-\DoxyCodeLine{494   \textcolor{keywordflow}{if} (m\_TN <= 0 || m\_TN >= 100)\{}
-\DoxyCodeLine{495     std::cout << \textcolor{stringliteral}{"{}Default parameters regard liquid water. Work in 1-\/99 range."{}};}
-\DoxyCodeLine{496     \textcolor{keywordflow}{return} -\/3;}
-\DoxyCodeLine{497   \}}
-\DoxyCodeLine{498 }
-\DoxyCodeLine{499   \textcolor{keywordflow}{if} (\mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} >= 100)\{}
-\DoxyCodeLine{500     std::cout << \textcolor{stringliteral}{"{}Default parameters regard liquid water. Work in 1-\/99 range."{}};}
-\DoxyCodeLine{501     \textcolor{keywordflow}{return} -\/7;}
-\DoxyCodeLine{502   \}}
-\DoxyCodeLine{503 }
-\DoxyCodeLine{504   \textcolor{keywordflow}{if} (Ray\_numb < 50 || Ray\_numb > 150 )\{}
-\DoxyCodeLine{505     std::cout << \textcolor{stringliteral}{"{}Working range for Rayleigh number: 50-\/150."{}};}
-\DoxyCodeLine{506     \textcolor{keywordflow}{return} -\/4;}
-\DoxyCodeLine{507   \}}
-\DoxyCodeLine{508 }
-\DoxyCodeLine{509   \textcolor{keywordflow}{if} (Pr\_numb < 5 || Pr\_numb > 9)\{}
-\DoxyCodeLine{510     std::cout << \textcolor{stringliteral}{"{}Working range for Prandtl number: 5-\/9."{}};}
-\DoxyCodeLine{511     \textcolor{keywordflow}{return} -\/5;}
-\DoxyCodeLine{512   \}}
-\DoxyCodeLine{513 }
-\DoxyCodeLine{514   \textcolor{keywordflow}{if} (Re\_numb < 70 ||  Re\_numb > 130)\{}
-\DoxyCodeLine{515     std::cout << \textcolor{stringliteral}{"{}Working range for Reynolds number: 70-\/130."{}};}
-\DoxyCodeLine{516     \textcolor{keywordflow}{return} -\/6;}
-\DoxyCodeLine{517   \}}
-\DoxyCodeLine{518 }
-\DoxyCodeLine{519   \textcolor{keywordflow}{if} (\mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}} < 4)\{}
-\DoxyCodeLine{520     std::cout << \textcolor{stringliteral}{"{}Working with linear parameters. Liquid water "{}}}
-\DoxyCodeLine{521                  \textcolor{stringliteral}{"{}below of 4 Celsius does not follow linear behaviour."{}} << std::endl;}
-\DoxyCodeLine{522     std::cout << \textcolor{stringliteral}{"{}A simulation will be provided but the user is "{}}}
-\DoxyCodeLine{523                  \textcolor{stringliteral}{"{}advised to change working parameters."{}} << std::endl;}
-\DoxyCodeLine{524     ret\_value += 0b00010000000000000000000000000000;}
-\DoxyCodeLine{525   \}}
-\DoxyCodeLine{526 }
-\DoxyCodeLine{527   \textcolor{keywordflow}{if} (\mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} -\/ \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}} > 10)\{}
-\DoxyCodeLine{528     std::cout << \textcolor{stringliteral}{"{}Warning: with this temperature range the linear"{}} }
-\DoxyCodeLine{529                 \textcolor{stringliteral}{"{} model validity is not guaranteed."{}} << std::endl;}
-\DoxyCodeLine{530     std::cout << \textcolor{stringliteral}{"{}The duration of the simulation will depend on the temperature range,"{}} }
-\DoxyCodeLine{531                  \textcolor{stringliteral}{"{}so nsteps requested cannot be assured."{}} << std::endl; }
-\DoxyCodeLine{532     ret\_value += 0b00100000000000000000000000000000;}
+\DoxyCodeLine{487   \textcolor{keywordtype}{int} ret\_value = 0;}
+\DoxyCodeLine{488   \mbox{\hyperlink{classRayBenConvection_a30361d2ad21ab61d60fb8bb21fba82de}{m\_END\_CICLE}} = END\_CICLE;}
+\DoxyCodeLine{489   \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}} = cold\_temp;}
+\DoxyCodeLine{490   \mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} = hot\_temp;}
+\DoxyCodeLine{491   \mbox{\hyperlink{classRayBenConvection_a6eade7fabf66cfd00e19bdbc7f057341}{m\_Ra}} = Ray\_numb;}
+\DoxyCodeLine{492   \mbox{\hyperlink{classRayBenConvection_af246c10dd8e2c4f9fe3951d74453e9e0}{m\_Pr}} = Pr\_numb;}
+\DoxyCodeLine{493   \mbox{\hyperlink{classRayBenConvection_a9558a662a91ef2887302e7f8913654b9}{m\_Re}} = Re\_numb;}
+\DoxyCodeLine{494   m\_Pe = \mbox{\hyperlink{classRayBenConvection_a9558a662a91ef2887302e7f8913654b9}{m\_Re}} * \mbox{\hyperlink{classRayBenConvection_af246c10dd8e2c4f9fe3951d74453e9e0}{m\_Pr}};}
+\DoxyCodeLine{495   m\_Gr= \mbox{\hyperlink{classRayBenConvection_a6eade7fabf66cfd00e19bdbc7f057341}{m\_Ra}} / \mbox{\hyperlink{classRayBenConvection_af246c10dd8e2c4f9fe3951d74453e9e0}{m\_Pr}};}
+\DoxyCodeLine{496 }
+\DoxyCodeLine{497   \textcolor{keywordflow}{if} (END\_CICLE > 6000)\{}
+\DoxyCodeLine{498     std::cerr << \textcolor{stringliteral}{"{}ERROR: RayBenConvection: init: The number of steps requested "{}}}
+\DoxyCodeLine{499               << END\_CICLE << \textcolor{stringliteral}{"{} is too high."{}} << std::endl;}
+\DoxyCodeLine{500     \textcolor{keywordflow}{return} -\/1;}
+\DoxyCodeLine{501   \}}
+\DoxyCodeLine{502 }
+\DoxyCodeLine{503   \textcolor{keywordflow}{if}(\mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} != \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}})}
+\DoxyCodeLine{504     \mbox{\hyperlink{classRayBenConvection_abfa7478fe1bf2a2744403d17ca248a3d}{m\_To}} = (\mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} < \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}}) ? \mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} : \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}};}
+\DoxyCodeLine{505   \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{506     std::cout << \textcolor{stringliteral}{"{}Please, remeber to provide two different temperatures."{}};}
+\DoxyCodeLine{507     \textcolor{keywordflow}{return} -\/2;}
+\DoxyCodeLine{508   \}}
+\DoxyCodeLine{509 }
+\DoxyCodeLine{510   \textcolor{keywordflow}{if} (m\_TN <= 0 || m\_TN >= 100)\{}
+\DoxyCodeLine{511     std::cout << \textcolor{stringliteral}{"{}Default parameters regard liquid water. Work in 1-\/99 range."{}};}
+\DoxyCodeLine{512     \textcolor{keywordflow}{return} -\/3;}
+\DoxyCodeLine{513   \}}
+\DoxyCodeLine{514 }
+\DoxyCodeLine{515   \textcolor{keywordflow}{if} (\mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} >= 100)\{}
+\DoxyCodeLine{516     std::cout << \textcolor{stringliteral}{"{}Default parameters regard liquid water. Work in 1-\/99 range."{}};}
+\DoxyCodeLine{517     \textcolor{keywordflow}{return} -\/7;}
+\DoxyCodeLine{518   \}}
+\DoxyCodeLine{519 }
+\DoxyCodeLine{520   \textcolor{keywordflow}{if} (Ray\_numb < 50 || Ray\_numb > 150 )\{}
+\DoxyCodeLine{521     std::cout << \textcolor{stringliteral}{"{}Working range for Rayleigh number: 50-\/150."{}};}
+\DoxyCodeLine{522     \textcolor{keywordflow}{return} -\/4;}
+\DoxyCodeLine{523   \}}
+\DoxyCodeLine{524 }
+\DoxyCodeLine{525   \textcolor{keywordflow}{if} (Pr\_numb < 5 || Pr\_numb > 9)\{}
+\DoxyCodeLine{526     std::cout << \textcolor{stringliteral}{"{}Working range for Prandtl number: 5-\/9."{}};}
+\DoxyCodeLine{527     \textcolor{keywordflow}{return} -\/5;}
+\DoxyCodeLine{528   \}}
+\DoxyCodeLine{529 }
+\DoxyCodeLine{530   \textcolor{keywordflow}{if} (Re\_numb < 70 ||  Re\_numb > 130)\{}
+\DoxyCodeLine{531     std::cout << \textcolor{stringliteral}{"{}Working range for Reynolds number: 70-\/130."{}};}
+\DoxyCodeLine{532     \textcolor{keywordflow}{return} -\/6;}
 \DoxyCodeLine{533   \}}
 \DoxyCodeLine{534 }
-\DoxyCodeLine{535   \textcolor{comment}{//m\_dt correction:}}
-\DoxyCodeLine{536   \mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} = \mbox{\hyperlink{classRayBenConvection_a8b38201fb9bd541ccb0974df9d61c22c}{m\_tf}} / \mbox{\hyperlink{classRayBenConvection_a6a6f9567a98085c522e319da90d0b6c6}{m\_nt}};}
-\DoxyCodeLine{537 }
-\DoxyCodeLine{538   \textcolor{comment}{//initialising calculation maxtrices:}}
-\DoxyCodeLine{539   m\_u.setZero();}
-\DoxyCodeLine{540   m\_v.setZero();}
-\DoxyCodeLine{541   m\_p.setZero();}
-\DoxyCodeLine{542   m\_S.setZero();}
-\DoxyCodeLine{543   \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.setConstant(\mbox{\hyperlink{classRayBenConvection_abfa7478fe1bf2a2744403d17ca248a3d}{m\_To}});}
-\DoxyCodeLine{544 }
-\DoxyCodeLine{545   m\_Tstar = \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}};}
-\DoxyCodeLine{546   m\_ustar = m\_u;}
-\DoxyCodeLine{547   m\_uhalf = m\_u;}
-\DoxyCodeLine{548   m\_uconv = m\_u;}
-\DoxyCodeLine{549   m\_vstar = m\_v;}
-\DoxyCodeLine{550   m\_vhalf = m\_v;}
-\DoxyCodeLine{551   m\_vconv = m\_v;}
-\DoxyCodeLine{552 }
-\DoxyCodeLine{553   \textcolor{comment}{//IMPLICIT DIFFUSION:-\/}}
-\DoxyCodeLine{554   \textcolor{comment}{//B.C vector(for u)}}
-\DoxyCodeLine{555   m\_bcu.setZero(),}
-\DoxyCodeLine{556   m\_bcu.row(0).setConstant(2 * m\_UW / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2));}
-\DoxyCodeLine{557   m\_bcu.row(m\_bcu.rows()-\/1).setConstant(2 * m\_UE / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2));}
-\DoxyCodeLine{558   m\_bcu.col(0).setConstant(m\_US / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2));}
-\DoxyCodeLine{559   m\_bcu.col(m\_bcu.cols()-\/1).setConstant(m\_UN / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2));}
+\DoxyCodeLine{535   \textcolor{keywordflow}{if} (\mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}} < 4)\{}
+\DoxyCodeLine{536     std::cout << \textcolor{stringliteral}{"{}Working with linear parameters. Liquid water "{}}}
+\DoxyCodeLine{537                  \textcolor{stringliteral}{"{}below of 4 Celsius does not follow linear behaviour."{}} << std::endl;}
+\DoxyCodeLine{538     std::cout << \textcolor{stringliteral}{"{}A simulation will be provided but the user is "{}}}
+\DoxyCodeLine{539                  \textcolor{stringliteral}{"{}advised to change working parameters."{}} << std::endl;}
+\DoxyCodeLine{540     ret\_value += 0b00010000000000000000000000000000;}
+\DoxyCodeLine{541   \}}
+\DoxyCodeLine{542 }
+\DoxyCodeLine{543   \textcolor{keywordflow}{if} (\mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} -\/ \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}} > 10)\{}
+\DoxyCodeLine{544     std::cout << \textcolor{stringliteral}{"{}Warning: with this temperature range the linear"{}} }
+\DoxyCodeLine{545                 \textcolor{stringliteral}{"{} model validity is not guaranteed."{}} << std::endl;}
+\DoxyCodeLine{546     std::cout << \textcolor{stringliteral}{"{}The duration of the simulation will depend on the temperature range,"{}} }
+\DoxyCodeLine{547                  \textcolor{stringliteral}{"{}so nsteps requested cannot be assured."{}} << std::endl; }
+\DoxyCodeLine{548     ret\_value += 0b00100000000000000000000000000000;}
+\DoxyCodeLine{549   \}}
+\DoxyCodeLine{550 }
+\DoxyCodeLine{551   \textcolor{comment}{//m\_dt correction:}}
+\DoxyCodeLine{552   \mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} = \mbox{\hyperlink{classRayBenConvection_a8b38201fb9bd541ccb0974df9d61c22c}{m\_tf}} / \mbox{\hyperlink{classRayBenConvection_a6a6f9567a98085c522e319da90d0b6c6}{m\_nt}};}
+\DoxyCodeLine{553 }
+\DoxyCodeLine{554   \textcolor{comment}{//initialising calculation maxtrices:}}
+\DoxyCodeLine{555   m\_u.setZero();}
+\DoxyCodeLine{556   m\_v.setZero();}
+\DoxyCodeLine{557   m\_p.setZero();}
+\DoxyCodeLine{558   m\_S.setZero();}
+\DoxyCodeLine{559   \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.setConstant(\mbox{\hyperlink{classRayBenConvection_abfa7478fe1bf2a2744403d17ca248a3d}{m\_To}});}
 \DoxyCodeLine{560 }
-\DoxyCodeLine{561   \textcolor{comment}{//B.Cs at the corners:}}
-\DoxyCodeLine{562   m\_bcu(0, 0)                       = 2 * m\_UW / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2) + m\_US / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
-\DoxyCodeLine{563   m\_bcu(m\_bcu.rows()-\/1, 0)            = 2 * m\_UE / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2) + m\_US / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
-\DoxyCodeLine{564   m\_bcu(0, (\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2)-\/1)                = 2 * m\_UW / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2) + m\_UN / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
-\DoxyCodeLine{565   m\_bcu(m\_bcu.rows()-\/1, m\_bcu.cols()-\/1) = 2 * m\_UE / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2) + m\_UN / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
-\DoxyCodeLine{566   m\_bcu = \mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} * m\_bcu / \mbox{\hyperlink{classRayBenConvection_a9558a662a91ef2887302e7f8913654b9}{m\_Re}};}
-\DoxyCodeLine{567 }
-\DoxyCodeLine{568   \textcolor{comment}{//B.C vector(for v)}}
-\DoxyCodeLine{569   m\_bcv.setZero();}
-\DoxyCodeLine{570   m\_bcv.row(0).setConstant(2 * m\_VW / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2));}
-\DoxyCodeLine{571   m\_bcv.row(m\_bcv.rows()-\/1).setConstant(2 * m\_VE / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2));}
-\DoxyCodeLine{572   m\_bcv.col(0).setConstant(m\_VS / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2)); }
-\DoxyCodeLine{573   m\_bcv.col(m\_bcv.cols()-\/1).setConstant(m\_VN / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2));}
-\DoxyCodeLine{574   }
-\DoxyCodeLine{575   \textcolor{comment}{//B.Cs at the corners:}}
-\DoxyCodeLine{576   m\_bcv(0, 0)                       = 2 * m\_VW / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2) + m\_VS / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
-\DoxyCodeLine{577   m\_bcv(m\_bcv.rows()-\/1, 0)            = 2 * m\_VE / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2) + m\_VS / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
-\DoxyCodeLine{578   m\_bcv(0, m\_bcv.cols()-\/1)            = 2 * m\_VW / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2) + m\_VN / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
-\DoxyCodeLine{579   m\_bcv(m\_bcv.rows()-\/1, m\_bcv.cols()-\/1) = 2 * m\_VE / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2) + m\_VN / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
-\DoxyCodeLine{580   m\_bcv = \mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} * m\_bcv / \mbox{\hyperlink{classRayBenConvection_a9558a662a91ef2887302e7f8913654b9}{m\_Re}};}
-\DoxyCodeLine{581 }
-\DoxyCodeLine{582   \textcolor{comment}{//Initialising central difference operator(for u)}}
-\DoxyCodeLine{583   m\_e.resize(\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/1, 1);}
-\DoxyCodeLine{584   m\_i.resize(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2, 1);}
-\DoxyCodeLine{585   m\_e.setOnes();}
-\DoxyCodeLine{586   m\_i.setOnes();}
-\DoxyCodeLine{587 }
-\DoxyCodeLine{588   m\_Ax = m\_spdiags(}
-\DoxyCodeLine{589     \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_e * Eigen::Matrix<double, 1, 3>(1, -\/2, 1)),}
-\DoxyCodeLine{590     Eigen::Matrix<int, 1, 3> (-\/1, 0, 1), }
-\DoxyCodeLine{591     \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/1, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/1}
-\DoxyCodeLine{592     );}
-\DoxyCodeLine{593 }
-\DoxyCodeLine{594   m\_Ay = m\_spdiags(}
-\DoxyCodeLine{595     \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_i * Eigen::Matrix<double, 1, 3>(1, -\/2, 1)),}
-\DoxyCodeLine{596     Eigen::Matrix<int, 1, 3> (-\/1, 0, 1), }
-\DoxyCodeLine{597     \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2}
-\DoxyCodeLine{598     );}
-\DoxyCodeLine{599   }
-\DoxyCodeLine{600   m\_Ax(0, 0) = -\/3;}
-\DoxyCodeLine{601   m\_Ax(m\_Ax.rows()-\/1, m\_Ax.rows()-\/1) = -\/3; }
-\DoxyCodeLine{602    }
-\DoxyCodeLine{603   m\_A = m\_kron<double>(}
-\DoxyCodeLine{604         \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Ay/std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2)), }
-\DoxyCodeLine{605         Eigen::Matrix<double, m\_nx-\/1, m\_nx-\/1>::Identity()}
-\DoxyCodeLine{606         )}
-\DoxyCodeLine{607         + m\_kron<double>(}
-\DoxyCodeLine{608         Eigen::Matrix<double, m\_ny-\/2, m\_ny-\/2>::Identity(),}
-\DoxyCodeLine{609         \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Ax/std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2))}
-\DoxyCodeLine{610         );}
-\DoxyCodeLine{611   }
-\DoxyCodeLine{612   m\_Du = Eigen::Matrix<double, (\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/1)*(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2), (\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/1)*(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2)>::Identity() -\/ \mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} * m\_A/\mbox{\hyperlink{classRayBenConvection_a9558a662a91ef2887302e7f8913654b9}{m\_Re}};}
-\DoxyCodeLine{613   m\_pu = m\_my\_symamd(m\_Du);}
-\DoxyCodeLine{614   }
-\DoxyCodeLine{615   m\_Duperm = m\_Du(m\_pu,m\_pu);}
-\DoxyCodeLine{616   }
-\DoxyCodeLine{617   m\_luP(m\_Duperm, m\_LUu);}
-\DoxyCodeLine{618   }
-\DoxyCodeLine{619   \textcolor{comment}{//Central difference operator(for v)}}
-\DoxyCodeLine{620   m\_e.resize(\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, 1);}
-\DoxyCodeLine{621   m\_e.setOnes();}
-\DoxyCodeLine{622   m\_i.resize(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/1, 1);}
-\DoxyCodeLine{623   m\_i.setOnes();}
-\DoxyCodeLine{624   }
-\DoxyCodeLine{625   m\_Ax = m\_spdiags(}
-\DoxyCodeLine{626     \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_e * Eigen::Matrix<double, 1, 3>(1, -\/2, 1)),}
-\DoxyCodeLine{627     Eigen::Matrix<int, 1, 3> (-\/1, 0, 1), }
-\DoxyCodeLine{628     \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2}
-\DoxyCodeLine{629     );}
+\DoxyCodeLine{561   \mbox{\hyperlink{classRayBenConvection_a0369de1dcfd6a9c4681a22ef77281bad}{m\_Tstar}} = \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}};}
+\DoxyCodeLine{562   \mbox{\hyperlink{classRayBenConvection_a22bceb43d4d9ba695f21bf1306a8f354}{m\_ustar}} = m\_u;}
+\DoxyCodeLine{563   \mbox{\hyperlink{classRayBenConvection_ab1204d12009f19080daa8e48072854cd}{m\_uhalf}} = m\_u;}
+\DoxyCodeLine{564   \mbox{\hyperlink{classRayBenConvection_a316a9e7f0c079b6fba771d7b15bd6647}{m\_uconv}} = m\_u;}
+\DoxyCodeLine{565   \mbox{\hyperlink{classRayBenConvection_a8e8d1bec9c3fbd2876adc957f4ed767d}{m\_vstar}} = m\_v;}
+\DoxyCodeLine{566   \mbox{\hyperlink{classRayBenConvection_aeada1a30f797e981b52d3b4e0640b198}{m\_vhalf}} = m\_v;}
+\DoxyCodeLine{567   \mbox{\hyperlink{classRayBenConvection_a2e5088ea41b7faad0bcc9bfda83939ef}{m\_vconv}} = m\_v;}
+\DoxyCodeLine{568 }
+\DoxyCodeLine{569   \textcolor{comment}{//IMPLICIT DIFFUSION:-\/}}
+\DoxyCodeLine{570   \textcolor{comment}{//B.C vector(for u)}}
+\DoxyCodeLine{571   m\_bcu.setZero(),}
+\DoxyCodeLine{572   m\_bcu.row(0).setConstant(2 * \mbox{\hyperlink{classRayBenConvection_a56534034d797d9099f53367d4828f0c7}{m\_UW}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2));}
+\DoxyCodeLine{573   m\_bcu.row(m\_bcu.rows()-\/1).setConstant(2 * \mbox{\hyperlink{classRayBenConvection_ad3b4ec6a6500a9b9355c60d66a62091b}{m\_UE}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2));}
+\DoxyCodeLine{574   m\_bcu.col(0).setConstant(\mbox{\hyperlink{classRayBenConvection_a99f0d9ab29a2db33829175a790fa9bc7}{m\_US}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2));}
+\DoxyCodeLine{575   m\_bcu.col(m\_bcu.cols()-\/1).setConstant(\mbox{\hyperlink{classRayBenConvection_aab15fee9f0b6d470dd9d02d85439a7a8}{m\_UN}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2));}
+\DoxyCodeLine{576 }
+\DoxyCodeLine{577   \textcolor{comment}{//B.Cs at the corners:}}
+\DoxyCodeLine{578   m\_bcu(0, 0)                       = 2 * \mbox{\hyperlink{classRayBenConvection_a56534034d797d9099f53367d4828f0c7}{m\_UW}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2) + \mbox{\hyperlink{classRayBenConvection_a99f0d9ab29a2db33829175a790fa9bc7}{m\_US}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
+\DoxyCodeLine{579   m\_bcu(m\_bcu.rows()-\/1, 0)            = 2 * \mbox{\hyperlink{classRayBenConvection_ad3b4ec6a6500a9b9355c60d66a62091b}{m\_UE}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2) + \mbox{\hyperlink{classRayBenConvection_a99f0d9ab29a2db33829175a790fa9bc7}{m\_US}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
+\DoxyCodeLine{580   m\_bcu(0, (\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2)-\/1)                = 2 * \mbox{\hyperlink{classRayBenConvection_a56534034d797d9099f53367d4828f0c7}{m\_UW}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2) + \mbox{\hyperlink{classRayBenConvection_aab15fee9f0b6d470dd9d02d85439a7a8}{m\_UN}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
+\DoxyCodeLine{581   m\_bcu(m\_bcu.rows()-\/1, m\_bcu.cols()-\/1) = 2 * \mbox{\hyperlink{classRayBenConvection_ad3b4ec6a6500a9b9355c60d66a62091b}{m\_UE}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2) + \mbox{\hyperlink{classRayBenConvection_aab15fee9f0b6d470dd9d02d85439a7a8}{m\_UN}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
+\DoxyCodeLine{582   m\_bcu = \mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} * m\_bcu / \mbox{\hyperlink{classRayBenConvection_a9558a662a91ef2887302e7f8913654b9}{m\_Re}};}
+\DoxyCodeLine{583 }
+\DoxyCodeLine{584   \textcolor{comment}{//B.C vector(for v)}}
+\DoxyCodeLine{585   m\_bcv.setZero();}
+\DoxyCodeLine{586   m\_bcv.row(0).setConstant(2 * \mbox{\hyperlink{classRayBenConvection_aee29299c3f2cf435a3d179d4dcd9b0a1}{m\_VW}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2));}
+\DoxyCodeLine{587   m\_bcv.row(m\_bcv.rows()-\/1).setConstant(2 * \mbox{\hyperlink{classRayBenConvection_abfccbde057005c07f8ee2b76ef68e4f7}{m\_VE}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2));}
+\DoxyCodeLine{588   m\_bcv.col(0).setConstant(\mbox{\hyperlink{classRayBenConvection_afc0d1ada59367f173257a20e2cea845b}{m\_VS}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2)); }
+\DoxyCodeLine{589   m\_bcv.col(m\_bcv.cols()-\/1).setConstant(\mbox{\hyperlink{classRayBenConvection_ace7b32dda44cace25edfe8e481601733}{m\_VN}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2));}
+\DoxyCodeLine{590   }
+\DoxyCodeLine{591   \textcolor{comment}{//B.Cs at the corners:}}
+\DoxyCodeLine{592   m\_bcv(0, 0)                       = 2 * \mbox{\hyperlink{classRayBenConvection_aee29299c3f2cf435a3d179d4dcd9b0a1}{m\_VW}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2) + \mbox{\hyperlink{classRayBenConvection_afc0d1ada59367f173257a20e2cea845b}{m\_VS}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
+\DoxyCodeLine{593   m\_bcv(m\_bcv.rows()-\/1, 0)            = 2 * \mbox{\hyperlink{classRayBenConvection_abfccbde057005c07f8ee2b76ef68e4f7}{m\_VE}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2) + \mbox{\hyperlink{classRayBenConvection_afc0d1ada59367f173257a20e2cea845b}{m\_VS}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
+\DoxyCodeLine{594   m\_bcv(0, m\_bcv.cols()-\/1)            = 2 * \mbox{\hyperlink{classRayBenConvection_aee29299c3f2cf435a3d179d4dcd9b0a1}{m\_VW}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2) + \mbox{\hyperlink{classRayBenConvection_ace7b32dda44cace25edfe8e481601733}{m\_VN}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
+\DoxyCodeLine{595   m\_bcv(m\_bcv.rows()-\/1, m\_bcv.cols()-\/1) = 2 * \mbox{\hyperlink{classRayBenConvection_abfccbde057005c07f8ee2b76ef68e4f7}{m\_VE}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2) + \mbox{\hyperlink{classRayBenConvection_ace7b32dda44cace25edfe8e481601733}{m\_VN}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
+\DoxyCodeLine{596   m\_bcv = \mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} * m\_bcv / \mbox{\hyperlink{classRayBenConvection_a9558a662a91ef2887302e7f8913654b9}{m\_Re}};}
+\DoxyCodeLine{597 }
+\DoxyCodeLine{598   \textcolor{comment}{//Initialising central difference operator(for u)}}
+\DoxyCodeLine{599   m\_e.resize(\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/1, 1);}
+\DoxyCodeLine{600   m\_i.resize(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2, 1);}
+\DoxyCodeLine{601   m\_e.setOnes();}
+\DoxyCodeLine{602   m\_i.setOnes();}
+\DoxyCodeLine{603 }
+\DoxyCodeLine{604   m\_Ax = m\_spdiags(}
+\DoxyCodeLine{605     \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_e * Eigen::Matrix<double, 1, 3>(1, -\/2, 1)),}
+\DoxyCodeLine{606     Eigen::Matrix<int, 1, 3> (-\/1, 0, 1), }
+\DoxyCodeLine{607     \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/1, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/1}
+\DoxyCodeLine{608     );}
+\DoxyCodeLine{609 }
+\DoxyCodeLine{610   m\_Ay = m\_spdiags(}
+\DoxyCodeLine{611     \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_i * Eigen::Matrix<double, 1, 3>(1, -\/2, 1)),}
+\DoxyCodeLine{612     Eigen::Matrix<int, 1, 3> (-\/1, 0, 1), }
+\DoxyCodeLine{613     \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2}
+\DoxyCodeLine{614     );}
+\DoxyCodeLine{615   }
+\DoxyCodeLine{616   m\_Ax(0, 0) = -\/3;}
+\DoxyCodeLine{617   m\_Ax(m\_Ax.rows()-\/1, m\_Ax.rows()-\/1) = -\/3; }
+\DoxyCodeLine{618    }
+\DoxyCodeLine{619   m\_A = m\_kron<double>(}
+\DoxyCodeLine{620         \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Ay/std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2)), }
+\DoxyCodeLine{621         Eigen::Matrix<double, m\_nx-\/1, m\_nx-\/1>::Identity()}
+\DoxyCodeLine{622         )}
+\DoxyCodeLine{623         + m\_kron<double>(}
+\DoxyCodeLine{624         Eigen::Matrix<double, m\_ny-\/2, m\_ny-\/2>::Identity(),}
+\DoxyCodeLine{625         \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Ax/std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2))}
+\DoxyCodeLine{626         );}
+\DoxyCodeLine{627   }
+\DoxyCodeLine{628   m\_Du = Eigen::Matrix<double, (\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/1)*(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2), (\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/1)*(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2)>::Identity() -\/ \mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} * m\_A/\mbox{\hyperlink{classRayBenConvection_a9558a662a91ef2887302e7f8913654b9}{m\_Re}};}
+\DoxyCodeLine{629   m\_pu = m\_my\_symamd(m\_Du);}
 \DoxyCodeLine{630   }
-\DoxyCodeLine{631   m\_Ay = m\_spdiags(}
-\DoxyCodeLine{632     \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_i * Eigen::Matrix<double, 1, 3>(1, -\/2, 1)),}
-\DoxyCodeLine{633     Eigen::Matrix<int, 1, 3> (-\/1, 0, 1), }
-\DoxyCodeLine{634     \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/1, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/1}
-\DoxyCodeLine{635     ); }
-\DoxyCodeLine{636   }
-\DoxyCodeLine{637   m\_Ay(0, 0) = -\/3;}
-\DoxyCodeLine{638   m\_Ay(m\_Ay.rows()-\/1, m\_Ay.cols()-\/1) = -\/3; }
-\DoxyCodeLine{639    }
-\DoxyCodeLine{640   m\_A = m\_kron<double>(}
-\DoxyCodeLine{641         \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Ay/std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2)), }
-\DoxyCodeLine{642         Eigen::Matrix<double, m\_nx-\/2, m\_nx-\/2>::Identity()}
-\DoxyCodeLine{643       )}
-\DoxyCodeLine{644     + m\_kron<double>(}
-\DoxyCodeLine{645         Eigen::Matrix<double, m\_ny-\/1, m\_ny-\/1>::Identity(),}
-\DoxyCodeLine{646         \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Ax/std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2))}
-\DoxyCodeLine{647       );}
-\DoxyCodeLine{648 }
-\DoxyCodeLine{649   m\_Dv = Eigen::Matrix<double, (\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2)*(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/1), (\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2)*(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/1)>::Identity() -\/ \mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} * m\_A/\mbox{\hyperlink{classRayBenConvection_a9558a662a91ef2887302e7f8913654b9}{m\_Re}};}
-\DoxyCodeLine{650   m\_pv = m\_my\_symamd(m\_Dv);}
-\DoxyCodeLine{651 }
-\DoxyCodeLine{652   m\_Dvperm = m\_Dv(m\_pv,m\_pv);}
-\DoxyCodeLine{653 }
-\DoxyCodeLine{654   m\_luP(m\_Dvperm, m\_LUv);}
-\DoxyCodeLine{655 }
-\DoxyCodeLine{656   \textcolor{comment}{//}}
-\DoxyCodeLine{657   \textcolor{comment}{//Calculating the coefficient matrix for the PPE}}
-\DoxyCodeLine{658   m\_e.resize(\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, 1);}
-\DoxyCodeLine{659   m\_e.setOnes();}
-\DoxyCodeLine{660   m\_i.resize(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2, 1);}
-\DoxyCodeLine{661   m\_i.setOnes();}
-\DoxyCodeLine{662 }
-\DoxyCodeLine{663   m\_Ax = m\_spdiags(}
-\DoxyCodeLine{664     \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_e * Eigen::Matrix<double, 1, 3>(1, -\/2, 1)),}
-\DoxyCodeLine{665     Eigen::Matrix<int, 1, 3> (-\/1, 0, 1), }
-\DoxyCodeLine{666     \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2}
-\DoxyCodeLine{667     ); }
-\DoxyCodeLine{668 }
-\DoxyCodeLine{669   m\_Ay = m\_spdiags(}
-\DoxyCodeLine{670     \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_i * Eigen::Matrix<double, 1, 3>(1, -\/2, 1)),}
-\DoxyCodeLine{671     Eigen::Matrix<int, 1, 3> (-\/1, 0, 1), }
-\DoxyCodeLine{672     \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2}
-\DoxyCodeLine{673     ); }
-\DoxyCodeLine{674   }
-\DoxyCodeLine{675   m\_Ax(0, 0) = -\/1;}
-\DoxyCodeLine{676   m\_Ay(0, 0) = -\/1;}
-\DoxyCodeLine{677   m\_Ax(m\_Ax.rows()-\/1, m\_Ax.cols()-\/1) = -\/1;}
-\DoxyCodeLine{678   m\_Ay(m\_Ay.rows()-\/1, m\_Ay.cols()-\/1) = -\/1;}
-\DoxyCodeLine{679 }
-\DoxyCodeLine{680 }
-\DoxyCodeLine{681   m\_A = m\_kron<double>(}
-\DoxyCodeLine{682         \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Ay/std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2)), }
-\DoxyCodeLine{683         Eigen::Matrix<double, m\_nx-\/2, m\_nx-\/2>::Identity()}
-\DoxyCodeLine{684       )}
-\DoxyCodeLine{685     + m\_kron<double>(}
-\DoxyCodeLine{686         Eigen::Matrix<double, m\_ny-\/2, m\_ny-\/2>::Identity(),}
-\DoxyCodeLine{687         \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Ax/std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2))}
-\DoxyCodeLine{688       );}
-\DoxyCodeLine{689 }
-\DoxyCodeLine{690   m\_pp = m\_my\_symamd(m\_A);}
-\DoxyCodeLine{691 }
-\DoxyCodeLine{692   m\_Aperm = m\_A(m\_pp,m\_pp);}
-\DoxyCodeLine{693 }
-\DoxyCodeLine{694   m\_luP(m\_Aperm, m\_LUp);}
+\DoxyCodeLine{631   m\_Duperm = m\_Du(m\_pu,m\_pu);}
+\DoxyCodeLine{632   }
+\DoxyCodeLine{633   m\_luP(m\_Duperm, m\_LUu);}
+\DoxyCodeLine{634   }
+\DoxyCodeLine{635   \textcolor{comment}{//Central difference operator(for v)}}
+\DoxyCodeLine{636   m\_e.resize(\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, 1);}
+\DoxyCodeLine{637   m\_e.setOnes();}
+\DoxyCodeLine{638   m\_i.resize(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/1, 1);}
+\DoxyCodeLine{639   m\_i.setOnes();}
+\DoxyCodeLine{640   }
+\DoxyCodeLine{641   m\_Ax = m\_spdiags(}
+\DoxyCodeLine{642     \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_e * Eigen::Matrix<double, 1, 3>(1, -\/2, 1)),}
+\DoxyCodeLine{643     Eigen::Matrix<int, 1, 3> (-\/1, 0, 1), }
+\DoxyCodeLine{644     \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2}
+\DoxyCodeLine{645     );}
+\DoxyCodeLine{646   }
+\DoxyCodeLine{647   m\_Ay = m\_spdiags(}
+\DoxyCodeLine{648     \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_i * Eigen::Matrix<double, 1, 3>(1, -\/2, 1)),}
+\DoxyCodeLine{649     Eigen::Matrix<int, 1, 3> (-\/1, 0, 1), }
+\DoxyCodeLine{650     \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/1, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/1}
+\DoxyCodeLine{651     ); }
+\DoxyCodeLine{652   }
+\DoxyCodeLine{653   m\_Ay(0, 0) = -\/3;}
+\DoxyCodeLine{654   m\_Ay(m\_Ay.rows()-\/1, m\_Ay.cols()-\/1) = -\/3; }
+\DoxyCodeLine{655    }
+\DoxyCodeLine{656   m\_A = m\_kron<double>(}
+\DoxyCodeLine{657         \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Ay/std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2)), }
+\DoxyCodeLine{658         Eigen::Matrix<double, m\_nx-\/2, m\_nx-\/2>::Identity()}
+\DoxyCodeLine{659       )}
+\DoxyCodeLine{660     + m\_kron<double>(}
+\DoxyCodeLine{661         Eigen::Matrix<double, m\_ny-\/1, m\_ny-\/1>::Identity(),}
+\DoxyCodeLine{662         \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Ax/std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2))}
+\DoxyCodeLine{663       );}
+\DoxyCodeLine{664 }
+\DoxyCodeLine{665   m\_Dv = Eigen::Matrix<double, (\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2)*(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/1), (\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2)*(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/1)>::Identity() -\/ \mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} * m\_A/\mbox{\hyperlink{classRayBenConvection_a9558a662a91ef2887302e7f8913654b9}{m\_Re}};}
+\DoxyCodeLine{666   m\_pv = m\_my\_symamd(m\_Dv);}
+\DoxyCodeLine{667 }
+\DoxyCodeLine{668   m\_Dvperm = m\_Dv(m\_pv,m\_pv);}
+\DoxyCodeLine{669 }
+\DoxyCodeLine{670   m\_luP(m\_Dvperm, m\_LUv);}
+\DoxyCodeLine{671 }
+\DoxyCodeLine{672   \textcolor{comment}{//}}
+\DoxyCodeLine{673   \textcolor{comment}{//Calculating the coefficient matrix for the PPE}}
+\DoxyCodeLine{674   m\_e.resize(\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, 1);}
+\DoxyCodeLine{675   m\_e.setOnes();}
+\DoxyCodeLine{676   m\_i.resize(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2, 1);}
+\DoxyCodeLine{677   m\_i.setOnes();}
+\DoxyCodeLine{678 }
+\DoxyCodeLine{679   m\_Ax = m\_spdiags(}
+\DoxyCodeLine{680     \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_e * Eigen::Matrix<double, 1, 3>(1, -\/2, 1)),}
+\DoxyCodeLine{681     Eigen::Matrix<int, 1, 3> (-\/1, 0, 1), }
+\DoxyCodeLine{682     \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2}
+\DoxyCodeLine{683     ); }
+\DoxyCodeLine{684 }
+\DoxyCodeLine{685   m\_Ay = m\_spdiags(}
+\DoxyCodeLine{686     \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_i * Eigen::Matrix<double, 1, 3>(1, -\/2, 1)),}
+\DoxyCodeLine{687     Eigen::Matrix<int, 1, 3> (-\/1, 0, 1), }
+\DoxyCodeLine{688     \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2}
+\DoxyCodeLine{689     ); }
+\DoxyCodeLine{690   }
+\DoxyCodeLine{691   m\_Ax(0, 0) = -\/1;}
+\DoxyCodeLine{692   m\_Ay(0, 0) = -\/1;}
+\DoxyCodeLine{693   m\_Ax(m\_Ax.rows()-\/1, m\_Ax.cols()-\/1) = -\/1;}
+\DoxyCodeLine{694   m\_Ay(m\_Ay.rows()-\/1, m\_Ay.cols()-\/1) = -\/1;}
 \DoxyCodeLine{695 }
-\DoxyCodeLine{696   \textcolor{comment}{//\%\%}}
-\DoxyCodeLine{697   \textcolor{comment}{//\%B.C vector(for T)}}
-\DoxyCodeLine{698   m\_bcT.setZero();}
-\DoxyCodeLine{699   m\_bcT.row(0).setConstant(-\/ m\_TnW / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}}); }
-\DoxyCodeLine{700   m\_bcT.row(m\_bcT.rows()-\/1).setConstant(m\_TnE / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}});}
-\DoxyCodeLine{701   m\_bcT.col(0).setConstant(\mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2)); }
-\DoxyCodeLine{702   m\_bcT.col(m\_bcT.cols()-\/1).setConstant(\mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2));}
-\DoxyCodeLine{703 }
-\DoxyCodeLine{704   \textcolor{comment}{//\%B.Cs at the corners:}}
-\DoxyCodeLine{705   m\_bcT(0, 0)                       = -\/ m\_TnW / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}} + \mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
-\DoxyCodeLine{706   m\_bcT(m\_bcT.rows()-\/1, 0)            = m\_TnE / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}} + \mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
-\DoxyCodeLine{707   m\_bcT(0, m\_bcT.cols()-\/1)            = -\/ m\_TnW / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}} + \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
-\DoxyCodeLine{708   m\_bcT(m\_bcT.rows()-\/1, m\_bcT.cols()-\/1) = m\_TnE / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}} + \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
-\DoxyCodeLine{709   m\_bcT = \mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} * m\_bcT / m\_Pe;}
-\DoxyCodeLine{710 }
-\DoxyCodeLine{711   \textcolor{comment}{//Central difference operator(for T)}}
-\DoxyCodeLine{712   m\_e.resize(\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, 1);}
-\DoxyCodeLine{713   m\_e.setOnes();}
-\DoxyCodeLine{714   m\_i.resize(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2, 1);}
-\DoxyCodeLine{715   m\_i.setOnes();}
-\DoxyCodeLine{716 }
-\DoxyCodeLine{717   m\_Tx = m\_spdiags(}
-\DoxyCodeLine{718     \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_e * Eigen::Matrix<double, 1, 3>(1, -\/2, 1)),}
-\DoxyCodeLine{719     Eigen::Matrix<int, 1, 3> (-\/1, 0, 1),}
-\DoxyCodeLine{720     \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2}
-\DoxyCodeLine{721     );}
-\DoxyCodeLine{722 }
-\DoxyCodeLine{723   m\_Ty = m\_spdiags(}
-\DoxyCodeLine{724     \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_i * Eigen::Matrix<double, 1, 3>(1, -\/2, 1)),}
-\DoxyCodeLine{725     Eigen::Matrix<int, 1, 3> (-\/1, 0, 1),}
-\DoxyCodeLine{726     \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2}
-\DoxyCodeLine{727     );}
-\DoxyCodeLine{728 }
-\DoxyCodeLine{729   m\_Tx(0, 0) = -\/1;}
-\DoxyCodeLine{730   m\_Tx(m\_Tx.rows()-\/1, m\_Tx.cols()-\/1) = -\/1; }
-\DoxyCodeLine{731 }
-\DoxyCodeLine{732   m\_Tt = m\_kron<double>(}
-\DoxyCodeLine{733         \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Ty/std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2)),}
-\DoxyCodeLine{734   Eigen::Matrix<double, m\_nx-\/2, m\_nx-\/2>::Identity()}
-\DoxyCodeLine{735       )}
-\DoxyCodeLine{736       + m\_kron<double>(}
-\DoxyCodeLine{737         Eigen::Matrix<double, m\_ny-\/2, m\_ny-\/2>::Identity(),}
-\DoxyCodeLine{738         \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Tx/std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2))}
-\DoxyCodeLine{739       );}
-\DoxyCodeLine{740 }
-\DoxyCodeLine{741   m\_Tt = Eigen::Matrix<double, (\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2)*(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2), (\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2)*(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2)>::Identity() -\/ \mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} * m\_Tt/m\_Pe;}
-\DoxyCodeLine{742 }
-\DoxyCodeLine{743   m\_pt = m\_my\_symamd(m\_Tt);}
+\DoxyCodeLine{696 }
+\DoxyCodeLine{697   m\_A = m\_kron<double>(}
+\DoxyCodeLine{698         \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Ay/std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2)), }
+\DoxyCodeLine{699         Eigen::Matrix<double, m\_nx-\/2, m\_nx-\/2>::Identity()}
+\DoxyCodeLine{700       )}
+\DoxyCodeLine{701     + m\_kron<double>(}
+\DoxyCodeLine{702         Eigen::Matrix<double, m\_ny-\/2, m\_ny-\/2>::Identity(),}
+\DoxyCodeLine{703         \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Ax/std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2))}
+\DoxyCodeLine{704       );}
+\DoxyCodeLine{705 }
+\DoxyCodeLine{706   m\_pp = m\_my\_symamd(m\_A);}
+\DoxyCodeLine{707 }
+\DoxyCodeLine{708   m\_Aperm = m\_A(m\_pp,m\_pp);}
+\DoxyCodeLine{709 }
+\DoxyCodeLine{710   m\_luP(m\_Aperm, m\_LUp);}
+\DoxyCodeLine{711 }
+\DoxyCodeLine{712   \textcolor{comment}{//\%\%}}
+\DoxyCodeLine{713   \textcolor{comment}{//\%B.C vector(for T)}}
+\DoxyCodeLine{714   m\_bcT.setZero();}
+\DoxyCodeLine{715   m\_bcT.row(0).setConstant(-\/ \mbox{\hyperlink{classRayBenConvection_a643232d08102a38ddd0ec9a618b55afd}{m\_TnW}} / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}}); }
+\DoxyCodeLine{716   m\_bcT.row(m\_bcT.rows()-\/1).setConstant(\mbox{\hyperlink{classRayBenConvection_aeb469e88e053251916cbcf2e0dd1919a}{m\_TnE}} / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}});}
+\DoxyCodeLine{717   m\_bcT.col(0).setConstant(\mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2)); }
+\DoxyCodeLine{718   m\_bcT.col(m\_bcT.cols()-\/1).setConstant(\mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2));}
+\DoxyCodeLine{719 }
+\DoxyCodeLine{720   \textcolor{comment}{//\%B.Cs at the corners:}}
+\DoxyCodeLine{721   m\_bcT(0, 0)                       = -\/ \mbox{\hyperlink{classRayBenConvection_a643232d08102a38ddd0ec9a618b55afd}{m\_TnW}} / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}} + \mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
+\DoxyCodeLine{722   m\_bcT(m\_bcT.rows()-\/1, 0)            = \mbox{\hyperlink{classRayBenConvection_aeb469e88e053251916cbcf2e0dd1919a}{m\_TnE}} / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}} + \mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
+\DoxyCodeLine{723   m\_bcT(0, m\_bcT.cols()-\/1)            = -\/ \mbox{\hyperlink{classRayBenConvection_a643232d08102a38ddd0ec9a618b55afd}{m\_TnW}} / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}} + \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
+\DoxyCodeLine{724   m\_bcT(m\_bcT.rows()-\/1, m\_bcT.cols()-\/1) = \mbox{\hyperlink{classRayBenConvection_aeb469e88e053251916cbcf2e0dd1919a}{m\_TnE}} / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}} + \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}} / std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2);}
+\DoxyCodeLine{725   m\_bcT = \mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} * m\_bcT / m\_Pe;}
+\DoxyCodeLine{726 }
+\DoxyCodeLine{727   \textcolor{comment}{//Central difference operator(for T)}}
+\DoxyCodeLine{728   m\_e.resize(\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, 1);}
+\DoxyCodeLine{729   m\_e.setOnes();}
+\DoxyCodeLine{730   m\_i.resize(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2, 1);}
+\DoxyCodeLine{731   m\_i.setOnes();}
+\DoxyCodeLine{732 }
+\DoxyCodeLine{733   m\_Tx = m\_spdiags(}
+\DoxyCodeLine{734     \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_e * Eigen::Matrix<double, 1, 3>(1, -\/2, 1)),}
+\DoxyCodeLine{735     Eigen::Matrix<int, 1, 3> (-\/1, 0, 1),}
+\DoxyCodeLine{736     \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2}
+\DoxyCodeLine{737     );}
+\DoxyCodeLine{738 }
+\DoxyCodeLine{739   m\_Ty = m\_spdiags(}
+\DoxyCodeLine{740     \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_i * Eigen::Matrix<double, 1, 3>(1, -\/2, 1)),}
+\DoxyCodeLine{741     Eigen::Matrix<int, 1, 3> (-\/1, 0, 1),}
+\DoxyCodeLine{742     \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2}
+\DoxyCodeLine{743     );}
 \DoxyCodeLine{744 }
-\DoxyCodeLine{745   m\_Ttperm = m\_Tt(m\_pt,m\_pt);}
-\DoxyCodeLine{746 }
-\DoxyCodeLine{747   m\_luP(m\_Ttperm, m\_LUt);}
-\DoxyCodeLine{748 }
-\DoxyCodeLine{749   \textcolor{comment}{//\%\%}}
-\DoxyCodeLine{750   \textcolor{comment}{//\%Boundary conditions}}
-\DoxyCodeLine{751   \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.row(0) = \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.row(1) -\/ Eigen::Matrix<double, 1, m\_ny>::Constant(m\_TnW * \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}});}
-\DoxyCodeLine{752   \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.row(\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.rows()-\/1) = \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.row(\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.rows()-\/2) + Eigen::Matrix<double, 1, m\_ny>::Constant(m\_TnE * \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}});}
-\DoxyCodeLine{753   \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.col(0).setConstant(\mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}});}
-\DoxyCodeLine{754   \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.col(\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.cols()-\/1).setConstant(\mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}});}
-\DoxyCodeLine{755 }
-\DoxyCodeLine{756   m\_u.row(0) = Eigen::Matrix<double, 1, m\_ny>::Constant(2 * m\_UW) -\/ m\_u.row(1);}
-\DoxyCodeLine{757   m\_u.row(m\_u.rows()-\/1) = Eigen::Matrix<double, 1, m\_ny>::Constant(2 * m\_UE) -\/ m\_u.row(m\_u.rows()-\/2);}
-\DoxyCodeLine{758   m\_u.col(0).setConstant(m\_US);}
-\DoxyCodeLine{759   m\_u.col(m\_u.cols()-\/1).setConstant(m\_UN);}
+\DoxyCodeLine{745   m\_Tx(0, 0) = -\/1;}
+\DoxyCodeLine{746   m\_Tx(m\_Tx.rows()-\/1, m\_Tx.cols()-\/1) = -\/1; }
+\DoxyCodeLine{747 }
+\DoxyCodeLine{748   m\_Tt = m\_kron<double>(}
+\DoxyCodeLine{749         \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Ty/std::pow(\mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}},2)),}
+\DoxyCodeLine{750   Eigen::Matrix<double, m\_nx-\/2, m\_nx-\/2>::Identity()}
+\DoxyCodeLine{751       )}
+\DoxyCodeLine{752       + m\_kron<double>(}
+\DoxyCodeLine{753         Eigen::Matrix<double, m\_ny-\/2, m\_ny-\/2>::Identity(),}
+\DoxyCodeLine{754         \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Tx/std::pow(\mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}},2))}
+\DoxyCodeLine{755       );}
+\DoxyCodeLine{756 }
+\DoxyCodeLine{757   m\_Tt = Eigen::Matrix<double, (\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2)*(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2), (\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2)*(\mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2)>::Identity() -\/ \mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} * m\_Tt/m\_Pe;}
+\DoxyCodeLine{758 }
+\DoxyCodeLine{759   m\_pt = m\_my\_symamd(m\_Tt);}
 \DoxyCodeLine{760 }
-\DoxyCodeLine{761   m\_v.row(0).setConstant(m\_VW);}
-\DoxyCodeLine{762   m\_v.row(m\_v.rows()-\/1).setConstant(m\_VE);}
-\DoxyCodeLine{763   m\_v.col(0) = Eigen::Matrix<double, m\_nx, 1>::Constant(2 * m\_VS) -\/ m\_v.col(1);}
-\DoxyCodeLine{764   m\_v.col(m\_v.cols()-\/1) = Eigen::Matrix<double, m\_nx, 1>::Constant(2 * m\_VN) -\/ m\_v.col(m\_v.cols()-\/2);}
-\DoxyCodeLine{765 }
-\DoxyCodeLine{766   \textcolor{comment}{//FIXME: questo commento annuncia l'inizio del for?  }}
-\DoxyCodeLine{767   \textcolor{comment}{//\%\%}}
-\DoxyCodeLine{768   \textcolor{comment}{//\%Evaluating temperature and velocity field at each time step}}
-\DoxyCodeLine{769 }
-\DoxyCodeLine{770   \textcolor{comment}{//Easying solver calculations: eleoicca stuff}}
-\DoxyCodeLine{771   m\_Lu\_solver.compute(m\_LUu[0]);}
-\DoxyCodeLine{772 }
-\DoxyCodeLine{773   m\_Uu\_solver.compute(m\_LUu[1]);}
-\DoxyCodeLine{774 }
-\DoxyCodeLine{775   m\_Lv\_solver.compute(m\_LUv[0]);}
+\DoxyCodeLine{761   m\_Ttperm = m\_Tt(m\_pt,m\_pt);}
+\DoxyCodeLine{762 }
+\DoxyCodeLine{763   m\_luP(m\_Ttperm, m\_LUt);}
+\DoxyCodeLine{764 }
+\DoxyCodeLine{765   \textcolor{comment}{//\%\%}}
+\DoxyCodeLine{766   \textcolor{comment}{//\%Boundary conditions}}
+\DoxyCodeLine{767   \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.row(0) = \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.row(1) -\/ Eigen::Matrix<double, 1, m\_ny>::Constant(\mbox{\hyperlink{classRayBenConvection_a643232d08102a38ddd0ec9a618b55afd}{m\_TnW}} * \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}});}
+\DoxyCodeLine{768   \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.row(\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.rows()-\/1) = \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.row(\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.rows()-\/2) + Eigen::Matrix<double, 1, m\_ny>::Constant(\mbox{\hyperlink{classRayBenConvection_aeb469e88e053251916cbcf2e0dd1919a}{m\_TnE}} * \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}});}
+\DoxyCodeLine{769   \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.col(0).setConstant(\mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}});}
+\DoxyCodeLine{770   \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.col(\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.cols()-\/1).setConstant(\mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}});}
+\DoxyCodeLine{771 }
+\DoxyCodeLine{772   m\_u.row(0) = Eigen::Matrix<double, 1, m\_ny>::Constant(2 * \mbox{\hyperlink{classRayBenConvection_a56534034d797d9099f53367d4828f0c7}{m\_UW}}) -\/ m\_u.row(1);}
+\DoxyCodeLine{773   m\_u.row(m\_u.rows()-\/1) = Eigen::Matrix<double, 1, m\_ny>::Constant(2 * \mbox{\hyperlink{classRayBenConvection_ad3b4ec6a6500a9b9355c60d66a62091b}{m\_UE}}) -\/ m\_u.row(m\_u.rows()-\/2);}
+\DoxyCodeLine{774   m\_u.col(0).setConstant(\mbox{\hyperlink{classRayBenConvection_a99f0d9ab29a2db33829175a790fa9bc7}{m\_US}});}
+\DoxyCodeLine{775   m\_u.col(m\_u.cols()-\/1).setConstant(\mbox{\hyperlink{classRayBenConvection_aab15fee9f0b6d470dd9d02d85439a7a8}{m\_UN}});}
 \DoxyCodeLine{776 }
-\DoxyCodeLine{777   m\_Uv\_solver.compute(m\_LUv[1]);}
-\DoxyCodeLine{778 }
-\DoxyCodeLine{779   m\_Lp\_solver.compute(m\_LUp[0]);}
-\DoxyCodeLine{780 }
-\DoxyCodeLine{781   m\_Up\_solver.compute(m\_LUp[1]);}
-\DoxyCodeLine{782 }
-\DoxyCodeLine{783   m\_Lt\_solver.compute(m\_LUt[0]);}
-\DoxyCodeLine{784 }
-\DoxyCodeLine{785   m\_Ut\_solver.compute(m\_LUt[1]);}
-\DoxyCodeLine{786 }
-\DoxyCodeLine{787   std::cerr << \textcolor{stringliteral}{"{}INFO: RayBenConvection: init: Done! Time spent during initialization function: "{}}}
-\DoxyCodeLine{788   << \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(}
-\DoxyCodeLine{789        std::chrono::duration\_cast<std::chrono::milliseconds>(}
-\DoxyCodeLine{790           std::chrono::high\_resolution\_clock::now() -\/ init\_lenght}
-\DoxyCodeLine{791        ).count()}
-\DoxyCodeLine{792      ) / 1000}
-\DoxyCodeLine{793   << \textcolor{stringliteral}{"{}s"{}} << std::endl;}
+\DoxyCodeLine{777   m\_v.row(0).setConstant(\mbox{\hyperlink{classRayBenConvection_aee29299c3f2cf435a3d179d4dcd9b0a1}{m\_VW}});}
+\DoxyCodeLine{778   m\_v.row(m\_v.rows()-\/1).setConstant(\mbox{\hyperlink{classRayBenConvection_abfccbde057005c07f8ee2b76ef68e4f7}{m\_VE}});}
+\DoxyCodeLine{779   m\_v.col(0) = Eigen::Matrix<double, m\_nx, 1>::Constant(2 * \mbox{\hyperlink{classRayBenConvection_afc0d1ada59367f173257a20e2cea845b}{m\_VS}}) -\/ m\_v.col(1);}
+\DoxyCodeLine{780   m\_v.col(m\_v.cols()-\/1) = Eigen::Matrix<double, m\_nx, 1>::Constant(2 * \mbox{\hyperlink{classRayBenConvection_ace7b32dda44cace25edfe8e481601733}{m\_VN}}) -\/ m\_v.col(m\_v.cols()-\/2);}
+\DoxyCodeLine{781 }
+\DoxyCodeLine{782   \textcolor{comment}{//FIXME: questo commento annuncia l'inizio del for?  }}
+\DoxyCodeLine{783   \textcolor{comment}{//\%\%}}
+\DoxyCodeLine{784   \textcolor{comment}{//\%Evaluating temperature and velocity field at each time step}}
+\DoxyCodeLine{785 }
+\DoxyCodeLine{786   \textcolor{comment}{//Easying solver calculations: eleoicca stuff}}
+\DoxyCodeLine{787   m\_Lu\_solver.compute(m\_LUu[0]);}
+\DoxyCodeLine{788 }
+\DoxyCodeLine{789   m\_Uu\_solver.compute(m\_LUu[1]);}
+\DoxyCodeLine{790 }
+\DoxyCodeLine{791   m\_Lv\_solver.compute(m\_LUv[0]);}
+\DoxyCodeLine{792 }
+\DoxyCodeLine{793   m\_Uv\_solver.compute(m\_LUv[1]);}
 \DoxyCodeLine{794 }
-\DoxyCodeLine{795   \mbox{\hyperlink{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}{m\_it}}=0;}
+\DoxyCodeLine{795   m\_Lp\_solver.compute(m\_LUp[0]);}
 \DoxyCodeLine{796 }
-\DoxyCodeLine{797 }
-\DoxyCodeLine{798   \textcolor{keywordflow}{return} ret\_value;}
-\DoxyCodeLine{799 }
-\DoxyCodeLine{800 \}}
-\DoxyCodeLine{801 }
-\DoxyCodeLine{802 \mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t}{RayBenConvection::simulation\_state\_t}} RayBenConvection::eval\_next\_frame()\{}
-\DoxyCodeLine{803 }
-\DoxyCodeLine{804   \textcolor{comment}{//const unsigned int m\_ii = m\_nx-\/2;}}
-\DoxyCodeLine{805   \textcolor{comment}{//const unsigned int m\_jj = m\_ny-\/2;}}
-\DoxyCodeLine{806 }
-\DoxyCodeLine{807   \textcolor{keywordflow}{if} (\mbox{\hyperlink{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}{m\_it}} < \mbox{\hyperlink{classRayBenConvection_a30361d2ad21ab61d60fb8bb21fba82de}{m\_END\_CICLE}} ) \{}
-\DoxyCodeLine{808 }
-\DoxyCodeLine{809     m\_ETA(\mbox{\hyperlink{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}{m\_it}});}
+\DoxyCodeLine{797   m\_Up\_solver.compute(m\_LUp[1]);}
+\DoxyCodeLine{798 }
+\DoxyCodeLine{799   m\_Lt\_solver.compute(m\_LUt[0]);}
+\DoxyCodeLine{800 }
+\DoxyCodeLine{801   m\_Ut\_solver.compute(m\_LUt[1]);}
+\DoxyCodeLine{802 }
+\DoxyCodeLine{803   std::cerr << \textcolor{stringliteral}{"{}INFO: RayBenConvection: init: Done! Time spent during initialization function: "{}}}
+\DoxyCodeLine{804   << \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(}
+\DoxyCodeLine{805        std::chrono::duration\_cast<std::chrono::milliseconds>(}
+\DoxyCodeLine{806           std::chrono::high\_resolution\_clock::now() -\/ init\_lenght}
+\DoxyCodeLine{807        ).count()}
+\DoxyCodeLine{808      ) / 1000}
+\DoxyCodeLine{809   << \textcolor{stringliteral}{"{}s"{}} << std::endl;}
 \DoxyCodeLine{810 }
-\DoxyCodeLine{811     m\_apply\_correction();}
+\DoxyCodeLine{811   \mbox{\hyperlink{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}{m\_it}}=0;}
 \DoxyCodeLine{812 }
 \DoxyCodeLine{813 }
-\DoxyCodeLine{814     Eigen::Matrix<double, -\/1, -\/1> Tn(\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}});}
-\DoxyCodeLine{815     m\_Tstar.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = (Tn.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}).array() -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}} / 2)}
-\DoxyCodeLine{816       * (m\_u.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}).array() * (Tn.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + Tn.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() }
-\DoxyCodeLine{817       -\/ m\_u.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}).array() * (Tn.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + Tn.block(0,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array()) }
-\DoxyCodeLine{818       -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / \mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}} / 2)}
-\DoxyCodeLine{819       * (m\_v.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}).array() * (Tn.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + Tn.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array()}
-\DoxyCodeLine{820       -\/ m\_v.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}).array() * (Tn.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + Tn.block(1,0,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array())).matrix();}
-\DoxyCodeLine{821 }
-\DoxyCodeLine{822     Eigen::Matrix<double, -\/1, 1> t;}
-\DoxyCodeLine{823     t.resize(m\_bcT.rows()*m\_bcT.cols(), 1);}
-\DoxyCodeLine{824     t.col(0) = (m\_Tstar.block(1,1,m\_Tstar.rows()-\/2,m\_Tstar.cols()-\/2) + m\_bcT).reshaped(m\_bcT.rows()*m\_bcT.cols(), 1);}
-\DoxyCodeLine{825 }
-\DoxyCodeLine{826     t(m\_pt) = \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Ut\_solver.solve(m\_Lt\_solver.solve(t(m\_pt))));}
-\DoxyCodeLine{827 }
-\DoxyCodeLine{828     Eigen::Matrix<double, -\/1, -\/1> new\_t = t.reshaped(\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2);}
+\DoxyCodeLine{814   \textcolor{keywordflow}{return} ret\_value;}
+\DoxyCodeLine{815 }
+\DoxyCodeLine{816 \}}
+\DoxyCodeLine{817 }
+\DoxyCodeLine{818 \mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t}{RayBenConvection::simulation\_state\_t}} RayBenConvection::eval\_next\_frame()\{}
+\DoxyCodeLine{819 }
+\DoxyCodeLine{820   \textcolor{comment}{//const unsigned int m\_ii = m\_nx-\/2;}}
+\DoxyCodeLine{821   \textcolor{comment}{//const unsigned int m\_jj = m\_ny-\/2;}}
+\DoxyCodeLine{822 }
+\DoxyCodeLine{823   \textcolor{keywordflow}{if} (\mbox{\hyperlink{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}{m\_it}} < \mbox{\hyperlink{classRayBenConvection_a30361d2ad21ab61d60fb8bb21fba82de}{m\_END\_CICLE}} ) \{}
+\DoxyCodeLine{824 }
+\DoxyCodeLine{825     m\_ETA(\mbox{\hyperlink{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}{m\_it}});}
+\DoxyCodeLine{826 }
+\DoxyCodeLine{827     m\_apply\_correction();}
+\DoxyCodeLine{828 }
 \DoxyCodeLine{829 }
-\DoxyCodeLine{830     \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.block(1,1,\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.rows()-\/2,\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.cols()-\/2) = new\_t;}
-\DoxyCodeLine{831 }
-\DoxyCodeLine{832     \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.row(0) = \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.row(1) -\/ Eigen::Matrix<double, 1, m\_ny>::Constant(m\_TnW * \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}});}
-\DoxyCodeLine{833     \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.row(\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.rows()-\/1) = \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.row(\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.rows()-\/2) + Eigen::Matrix<double, 1, m\_ny>::Constant(m\_TnE * \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}});}
-\DoxyCodeLine{834 }
-\DoxyCodeLine{835     \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.col(0).setConstant(\mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}});}
-\DoxyCodeLine{836     \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.col(\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.cols()-\/1).setConstant(\mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}});}
+\DoxyCodeLine{830     Eigen::Matrix<double, -\/1, -\/1> Tn(\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}});}
+\DoxyCodeLine{831     \mbox{\hyperlink{classRayBenConvection_a0369de1dcfd6a9c4681a22ef77281bad}{m\_Tstar}}.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = (Tn.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}).array() -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}} / 2)}
+\DoxyCodeLine{832       * (m\_u.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}).array() * (Tn.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + Tn.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() }
+\DoxyCodeLine{833       -\/ m\_u.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}).array() * (Tn.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + Tn.block(0,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array()) }
+\DoxyCodeLine{834       -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / \mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}} / 2)}
+\DoxyCodeLine{835       * (m\_v.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}).array() * (Tn.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + Tn.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array()}
+\DoxyCodeLine{836       -\/ m\_v.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}).array() * (Tn.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + Tn.block(1,0,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array())).matrix();}
 \DoxyCodeLine{837 }
-\DoxyCodeLine{838     Eigen::Matrix<double, -\/1, -\/1> un = m\_u;}
-\DoxyCodeLine{839     Eigen::Matrix<double, -\/1, -\/1> vn = m\_v;}
-\DoxyCodeLine{840 }
-\DoxyCodeLine{841     \textcolor{comment}{//\%Predictor step(Lax-\/Friedrich)}}
-\DoxyCodeLine{842     m\_uhalf.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = (0.5 * (un.block(3,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + un.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}} / 8)}
-\DoxyCodeLine{843                     * (un.block(3,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + un.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array().square() -\/ (un.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
-\DoxyCodeLine{844                     + un.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array().square() -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / \mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}} / 8) * ((un.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
-\DoxyCodeLine{845                     + un.block(2,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() * (vn.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + vn.block(2,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array()}
-\DoxyCodeLine{846                     -\/ (un.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + un.block(2,0,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() * (vn.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
-\DoxyCodeLine{847                     + vn.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array())).matrix();}
-\DoxyCodeLine{848     m\_vhalf.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = (0.5 * (vn.block(1,3,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + vn.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}} / 8)}
-\DoxyCodeLine{849                     * ((un.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + un.block(2,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() * (vn.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) }
-\DoxyCodeLine{850                     + vn.block(2,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() -\/ (un.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + un.block(1,0,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array()}
-\DoxyCodeLine{851                     * (vn.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
-\DoxyCodeLine{852                     + vn.block(0,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array()) -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / \mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}} / 8) * ((vn.block(1,3,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) }
-\DoxyCodeLine{853                     + vn.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array().square() -\/ (vn.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
-\DoxyCodeLine{854                     + vn.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array().square())).matrix();}
-\DoxyCodeLine{855     \textcolor{comment}{//\%Corrector step(Leapfrog)}}
-\DoxyCodeLine{856     m\_uconv.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = (un.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}).array() -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / (4 * \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}})) * ((m\_uhalf.block(3,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) }
-\DoxyCodeLine{857                     + m\_uhalf.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array().square() -\/ (m\_uhalf.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
-\DoxyCodeLine{858                     + m\_uhalf.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array().square()) -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / (4 * \mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}})) * ((m\_uhalf.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) }
-\DoxyCodeLine{859                     + m\_uhalf.block(2,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() * (m\_vhalf.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + m\_vhalf.block(2,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array()}
-\DoxyCodeLine{860                     -\/ (m\_uhalf.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + m\_uhalf.block(2,0,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() * (m\_vhalf.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) }
-\DoxyCodeLine{861                     + m\_vhalf.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array())).matrix();}
-\DoxyCodeLine{862     m\_vconv.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = (vn.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}).array() -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / (4 * \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}})) * ((m\_uhalf.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) }
-\DoxyCodeLine{863                     + m\_uhalf.block(2,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() * (m\_vhalf.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + m\_vhalf.block(2,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array()}
-\DoxyCodeLine{864                     -\/ (m\_uhalf.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + m\_uhalf.block(1,0,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() * (m\_vhalf.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
-\DoxyCodeLine{865                     + m\_vhalf.block(0,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array()) -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / (4 * \mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}})) * ((m\_vhalf.block(1,3,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
-\DoxyCodeLine{866                     + m\_vhalf.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array().square() }
-\DoxyCodeLine{867                     -\/ (m\_vhalf.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + m\_vhalf.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array().square())).matrix();}
-\DoxyCodeLine{868     \textcolor{comment}{//\%Buoyancy term (Boussinesq aproximation):}}
-\DoxyCodeLine{869     m\_vconv.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = m\_vconv.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + (m\_Gr / std::pow(\mbox{\hyperlink{classRayBenConvection_a9558a662a91ef2887302e7f8913654b9}{m\_Re}}, 2)) * (0.5 * (\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
-\DoxyCodeLine{870                     + \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})) -\/ Eigen::Matrix<double, m\_ii, m\_jj>::Constant(\mbox{\hyperlink{classRayBenConvection_abfa7478fe1bf2a2744403d17ca248a3d}{m\_To}}));}
-\DoxyCodeLine{871 }
-\DoxyCodeLine{872     \textcolor{comment}{//\%(2) Implicit central difference (spatial)}}
-\DoxyCodeLine{873     Eigen::Matrix<double, -\/1, 1> U;}
-\DoxyCodeLine{874     U.resize(m\_bcu.rows()*m\_bcu.cols(), 1);}
-\DoxyCodeLine{875 }
-\DoxyCodeLine{876     U.col(0) = (m\_uconv.block(1,1,m\_uconv.rows()-\/2,m\_uconv.cols()-\/2) + m\_bcu).reshaped(m\_bcu.rows()*m\_bcu.cols(), 1);}
-\DoxyCodeLine{877 }
-\DoxyCodeLine{878     Eigen::Matrix<double, -\/1, 1> V;}
-\DoxyCodeLine{879     V.resize(m\_bcv.rows()*m\_bcv.cols(), 1);}
-\DoxyCodeLine{880 }
-\DoxyCodeLine{881     V.col(0) = (m\_vconv.block(1,1,m\_vconv.rows()-\/2,m\_vconv.cols()-\/2) + m\_bcv).reshaped(m\_bcv.rows()*m\_bcv.cols(), 1);}
-\DoxyCodeLine{882 }
-\DoxyCodeLine{883     std::thread t1(m\_d\_solve, std::ref(U), std::ref(m\_pu), std::ref(m\_Lu\_solver), std::ref(m\_Uu\_solver));}
-\DoxyCodeLine{884     std::thread t2(m\_d\_solve, std::ref(V), std::ref(m\_pv), std::ref(m\_Lv\_solver), std::ref(m\_Uv\_solver));}
-\DoxyCodeLine{885 }
-\DoxyCodeLine{886     t1.join();}
-\DoxyCodeLine{887     t2.join();}
-\DoxyCodeLine{888 }
-\DoxyCodeLine{889     Eigen::Matrix<double, -\/1, -\/1> new\_U = U.reshaped(\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/1, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2);}
-\DoxyCodeLine{890 }
-\DoxyCodeLine{891     m\_ustar.block(1,1,m\_ustar.rows()-\/2,m\_ustar.cols()-\/2) = new\_U;}
-\DoxyCodeLine{892 }
-\DoxyCodeLine{893     Eigen::Matrix<double, -\/1, -\/1> new\_V = V.reshaped(\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/1);}
-\DoxyCodeLine{894 }
-\DoxyCodeLine{895     m\_vstar.block(1,1,m\_vstar.rows()-\/2,m\_vstar.cols()-\/2) = new\_V;}
+\DoxyCodeLine{838     Eigen::Matrix<double, -\/1, 1> t;}
+\DoxyCodeLine{839     t.resize(m\_bcT.rows()*m\_bcT.cols(), 1);}
+\DoxyCodeLine{840     t.col(0) = (\mbox{\hyperlink{classRayBenConvection_a0369de1dcfd6a9c4681a22ef77281bad}{m\_Tstar}}.block(1,1,\mbox{\hyperlink{classRayBenConvection_a0369de1dcfd6a9c4681a22ef77281bad}{m\_Tstar}}.rows()-\/2,\mbox{\hyperlink{classRayBenConvection_a0369de1dcfd6a9c4681a22ef77281bad}{m\_Tstar}}.cols()-\/2) + m\_bcT).reshaped(m\_bcT.rows()*m\_bcT.cols(), 1);}
+\DoxyCodeLine{841 }
+\DoxyCodeLine{842     t(m\_pt) = \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Ut\_solver.solve(m\_Lt\_solver.solve(t(m\_pt))));}
+\DoxyCodeLine{843 }
+\DoxyCodeLine{844     Eigen::Matrix<double, -\/1, -\/1> new\_t = t.reshaped(\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2);}
+\DoxyCodeLine{845 }
+\DoxyCodeLine{846     \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.block(1,1,\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.rows()-\/2,\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.cols()-\/2) = new\_t;}
+\DoxyCodeLine{847 }
+\DoxyCodeLine{848     \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.row(0) = \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.row(1) -\/ Eigen::Matrix<double, 1, m\_ny>::Constant(\mbox{\hyperlink{classRayBenConvection_a643232d08102a38ddd0ec9a618b55afd}{m\_TnW}} * \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}});}
+\DoxyCodeLine{849     \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.row(\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.rows()-\/1) = \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.row(\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.rows()-\/2) + Eigen::Matrix<double, 1, m\_ny>::Constant(\mbox{\hyperlink{classRayBenConvection_aeb469e88e053251916cbcf2e0dd1919a}{m\_TnE}} * \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}});}
+\DoxyCodeLine{850 }
+\DoxyCodeLine{851     \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.col(0).setConstant(\mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}});}
+\DoxyCodeLine{852     \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.col(\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.cols()-\/1).setConstant(\mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}});}
+\DoxyCodeLine{853 }
+\DoxyCodeLine{854     Eigen::Matrix<double, -\/1, -\/1> un = m\_u;}
+\DoxyCodeLine{855     Eigen::Matrix<double, -\/1, -\/1> vn = m\_v;}
+\DoxyCodeLine{856 }
+\DoxyCodeLine{857     \textcolor{comment}{//\%Predictor step(Lax-\/Friedrich)}}
+\DoxyCodeLine{858     \mbox{\hyperlink{classRayBenConvection_ab1204d12009f19080daa8e48072854cd}{m\_uhalf}}.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = (0.5 * (un.block(3,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + un.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}} / 8)}
+\DoxyCodeLine{859                     * (un.block(3,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + un.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array().square() -\/ (un.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
+\DoxyCodeLine{860                     + un.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array().square() -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / \mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}} / 8) * ((un.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
+\DoxyCodeLine{861                     + un.block(2,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() * (vn.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + vn.block(2,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array()}
+\DoxyCodeLine{862                     -\/ (un.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + un.block(2,0,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() * (vn.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
+\DoxyCodeLine{863                     + vn.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array())).matrix();}
+\DoxyCodeLine{864     \mbox{\hyperlink{classRayBenConvection_aeada1a30f797e981b52d3b4e0640b198}{m\_vhalf}}.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = (0.5 * (vn.block(1,3,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + vn.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}} / 8)}
+\DoxyCodeLine{865                     * ((un.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + un.block(2,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() * (vn.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) }
+\DoxyCodeLine{866                     + vn.block(2,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() -\/ (un.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + un.block(1,0,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array()}
+\DoxyCodeLine{867                     * (vn.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
+\DoxyCodeLine{868                     + vn.block(0,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array()) -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / \mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}} / 8) * ((vn.block(1,3,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) }
+\DoxyCodeLine{869                     + vn.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array().square() -\/ (vn.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
+\DoxyCodeLine{870                     + vn.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array().square())).matrix();}
+\DoxyCodeLine{871     \textcolor{comment}{//\%Corrector step(Leapfrog)}}
+\DoxyCodeLine{872     \mbox{\hyperlink{classRayBenConvection_a316a9e7f0c079b6fba771d7b15bd6647}{m\_uconv}}.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = (un.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}).array() -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / (4 * \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}})) * ((\mbox{\hyperlink{classRayBenConvection_ab1204d12009f19080daa8e48072854cd}{m\_uhalf}}.block(3,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) }
+\DoxyCodeLine{873                     + \mbox{\hyperlink{classRayBenConvection_ab1204d12009f19080daa8e48072854cd}{m\_uhalf}}.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array().square() -\/ (\mbox{\hyperlink{classRayBenConvection_ab1204d12009f19080daa8e48072854cd}{m\_uhalf}}.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
+\DoxyCodeLine{874                     + \mbox{\hyperlink{classRayBenConvection_ab1204d12009f19080daa8e48072854cd}{m\_uhalf}}.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array().square()) -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / (4 * \mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}})) * ((\mbox{\hyperlink{classRayBenConvection_ab1204d12009f19080daa8e48072854cd}{m\_uhalf}}.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) }
+\DoxyCodeLine{875                     + \mbox{\hyperlink{classRayBenConvection_ab1204d12009f19080daa8e48072854cd}{m\_uhalf}}.block(2,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() * (\mbox{\hyperlink{classRayBenConvection_aeada1a30f797e981b52d3b4e0640b198}{m\_vhalf}}.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + \mbox{\hyperlink{classRayBenConvection_aeada1a30f797e981b52d3b4e0640b198}{m\_vhalf}}.block(2,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array()}
+\DoxyCodeLine{876                     -\/ (\mbox{\hyperlink{classRayBenConvection_ab1204d12009f19080daa8e48072854cd}{m\_uhalf}}.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + \mbox{\hyperlink{classRayBenConvection_ab1204d12009f19080daa8e48072854cd}{m\_uhalf}}.block(2,0,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() * (\mbox{\hyperlink{classRayBenConvection_aeada1a30f797e981b52d3b4e0640b198}{m\_vhalf}}.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) }
+\DoxyCodeLine{877                     + \mbox{\hyperlink{classRayBenConvection_aeada1a30f797e981b52d3b4e0640b198}{m\_vhalf}}.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array())).matrix();}
+\DoxyCodeLine{878     \mbox{\hyperlink{classRayBenConvection_a2e5088ea41b7faad0bcc9bfda83939ef}{m\_vconv}}.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = (vn.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}).array() -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / (4 * \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}})) * ((\mbox{\hyperlink{classRayBenConvection_ab1204d12009f19080daa8e48072854cd}{m\_uhalf}}.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) }
+\DoxyCodeLine{879                     + \mbox{\hyperlink{classRayBenConvection_ab1204d12009f19080daa8e48072854cd}{m\_uhalf}}.block(2,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() * (\mbox{\hyperlink{classRayBenConvection_aeada1a30f797e981b52d3b4e0640b198}{m\_vhalf}}.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + \mbox{\hyperlink{classRayBenConvection_aeada1a30f797e981b52d3b4e0640b198}{m\_vhalf}}.block(2,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array()}
+\DoxyCodeLine{880                     -\/ (\mbox{\hyperlink{classRayBenConvection_ab1204d12009f19080daa8e48072854cd}{m\_uhalf}}.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + \mbox{\hyperlink{classRayBenConvection_ab1204d12009f19080daa8e48072854cd}{m\_uhalf}}.block(1,0,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array() * (\mbox{\hyperlink{classRayBenConvection_aeada1a30f797e981b52d3b4e0640b198}{m\_vhalf}}.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
+\DoxyCodeLine{881                     + \mbox{\hyperlink{classRayBenConvection_aeada1a30f797e981b52d3b4e0640b198}{m\_vhalf}}.block(0,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array()) -\/ (\mbox{\hyperlink{classRayBenConvection_ae106f4c67cc111c54d23730e8e7fa7e6}{m\_dt}} / (4 * \mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}})) * ((\mbox{\hyperlink{classRayBenConvection_aeada1a30f797e981b52d3b4e0640b198}{m\_vhalf}}.block(1,3,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
+\DoxyCodeLine{882                     + \mbox{\hyperlink{classRayBenConvection_aeada1a30f797e981b52d3b4e0640b198}{m\_vhalf}}.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array().square() }
+\DoxyCodeLine{883                     -\/ (\mbox{\hyperlink{classRayBenConvection_aeada1a30f797e981b52d3b4e0640b198}{m\_vhalf}}.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + \mbox{\hyperlink{classRayBenConvection_aeada1a30f797e981b52d3b4e0640b198}{m\_vhalf}}.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})).array().square())).matrix();}
+\DoxyCodeLine{884     \textcolor{comment}{//\%Buoyancy term (Boussinesq aproximation):}}
+\DoxyCodeLine{885     \mbox{\hyperlink{classRayBenConvection_a2e5088ea41b7faad0bcc9bfda83939ef}{m\_vconv}}.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = \mbox{\hyperlink{classRayBenConvection_a2e5088ea41b7faad0bcc9bfda83939ef}{m\_vconv}}.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) + (m\_Gr / std::pow(\mbox{\hyperlink{classRayBenConvection_a9558a662a91ef2887302e7f8913654b9}{m\_Re}}, 2)) * (0.5 * (\mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})}
+\DoxyCodeLine{886                     + \mbox{\hyperlink{classRayBenConvection_aecfd1a81f7bc8e559a3d17237ebf227c}{m\_T}}.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})) -\/ Eigen::Matrix<double, m\_ii, m\_jj>::Constant(\mbox{\hyperlink{classRayBenConvection_abfa7478fe1bf2a2744403d17ca248a3d}{m\_To}}));}
+\DoxyCodeLine{887 }
+\DoxyCodeLine{888     \textcolor{comment}{//\%(2) Implicit central difference (spatial)}}
+\DoxyCodeLine{889     Eigen::Matrix<double, -\/1, 1> U;}
+\DoxyCodeLine{890     U.resize(m\_bcu.rows()*m\_bcu.cols(), 1);}
+\DoxyCodeLine{891 }
+\DoxyCodeLine{892     U.col(0) = (\mbox{\hyperlink{classRayBenConvection_a316a9e7f0c079b6fba771d7b15bd6647}{m\_uconv}}.block(1,1,\mbox{\hyperlink{classRayBenConvection_a316a9e7f0c079b6fba771d7b15bd6647}{m\_uconv}}.rows()-\/2,\mbox{\hyperlink{classRayBenConvection_a316a9e7f0c079b6fba771d7b15bd6647}{m\_uconv}}.cols()-\/2) + m\_bcu).reshaped(m\_bcu.rows()*m\_bcu.cols(), 1);}
+\DoxyCodeLine{893 }
+\DoxyCodeLine{894     Eigen::Matrix<double, -\/1, 1> V;}
+\DoxyCodeLine{895     V.resize(m\_bcv.rows()*m\_bcv.cols(), 1);}
 \DoxyCodeLine{896 }
-\DoxyCodeLine{897     \textcolor{comment}{//\%Pressure Poisson equation(elliptic):}}
-\DoxyCodeLine{898     m\_S.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = (m\_ustar.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) -\/ m\_ustar.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})) / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}}}
-\DoxyCodeLine{899                             + (m\_vstar.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) -\/ m\_vstar.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})) / \mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}};}
-\DoxyCodeLine{900 }
-\DoxyCodeLine{901     Eigen::Matrix<double, -\/1, 1> s;}
-\DoxyCodeLine{902     s.resize((m\_S.rows()-\/2)*(m\_S.cols()-\/2), 1);}
-\DoxyCodeLine{903 }
-\DoxyCodeLine{904     s.col(0) = m\_S.block(1,1,m\_S.rows()-\/2,m\_S.cols()-\/2).reshaped((m\_S.rows()-\/2)*(m\_S.cols()-\/2), 1);}
-\DoxyCodeLine{905 }
-\DoxyCodeLine{906     s(m\_pp) = \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Up\_solver.solve(m\_Lp\_solver.solve(s(m\_pp))));}
-\DoxyCodeLine{907 }
-\DoxyCodeLine{908     Eigen::Matrix<double, -\/1, -\/1> new\_s = s.reshaped(\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2);}
-\DoxyCodeLine{909 }
-\DoxyCodeLine{910     m\_p.block(1,1,new\_s.rows(),new\_s.cols()) = new\_s;}
-\DoxyCodeLine{911 }
-\DoxyCodeLine{912     m\_p.row(0) = m\_p.row(1);}
-\DoxyCodeLine{913     m\_p.row(m\_p.rows()-\/1) = m\_p.row(m\_p.rows()-\/2);}
-\DoxyCodeLine{914 }
-\DoxyCodeLine{915     m\_p.col(0) = m\_p.col(1);}
-\DoxyCodeLine{916     m\_p.col(m\_p.cols()-\/1) = m\_p.col(m\_p.cols()-\/2);}
-\DoxyCodeLine{917 }
-\DoxyCodeLine{918     m\_u.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = m\_ustar.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) -\/ (m\_p.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) -\/ m\_p.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})) / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}};}
-\DoxyCodeLine{919     m\_v.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = m\_vstar.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) -\/ (m\_p.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) -\/ m\_p.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})) / \mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}};}
-\DoxyCodeLine{920 }
-\DoxyCodeLine{921     m\_u.row(0) = Eigen::Matrix<double, 1, m\_ny>::Constant(2*m\_UW) -\/ m\_u.row(1);}
-\DoxyCodeLine{922     m\_u.row(m\_u.rows()-\/1) = Eigen::Matrix<double, 1, m\_ny>::Constant(2*m\_UE) -\/ m\_u.row(m\_u.rows()-\/2);}
+\DoxyCodeLine{897     V.col(0) = (\mbox{\hyperlink{classRayBenConvection_a2e5088ea41b7faad0bcc9bfda83939ef}{m\_vconv}}.block(1,1,\mbox{\hyperlink{classRayBenConvection_a2e5088ea41b7faad0bcc9bfda83939ef}{m\_vconv}}.rows()-\/2,\mbox{\hyperlink{classRayBenConvection_a2e5088ea41b7faad0bcc9bfda83939ef}{m\_vconv}}.cols()-\/2) + m\_bcv).reshaped(m\_bcv.rows()*m\_bcv.cols(), 1);}
+\DoxyCodeLine{898 }
+\DoxyCodeLine{899     std::thread t1(m\_d\_solve, std::ref(U), std::ref(m\_pu), std::ref(m\_Lu\_solver), std::ref(m\_Uu\_solver));}
+\DoxyCodeLine{900     std::thread t2(m\_d\_solve, std::ref(V), std::ref(m\_pv), std::ref(m\_Lv\_solver), std::ref(m\_Uv\_solver));}
+\DoxyCodeLine{901 }
+\DoxyCodeLine{902     t1.join();}
+\DoxyCodeLine{903     t2.join();}
+\DoxyCodeLine{904 }
+\DoxyCodeLine{905     Eigen::Matrix<double, -\/1, -\/1> new\_U = U.reshaped(\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/1, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2);}
+\DoxyCodeLine{906 }
+\DoxyCodeLine{907     \mbox{\hyperlink{classRayBenConvection_a22bceb43d4d9ba695f21bf1306a8f354}{m\_ustar}}.block(1,1,\mbox{\hyperlink{classRayBenConvection_a22bceb43d4d9ba695f21bf1306a8f354}{m\_ustar}}.rows()-\/2,\mbox{\hyperlink{classRayBenConvection_a22bceb43d4d9ba695f21bf1306a8f354}{m\_ustar}}.cols()-\/2) = new\_U;}
+\DoxyCodeLine{908 }
+\DoxyCodeLine{909     Eigen::Matrix<double, -\/1, -\/1> new\_V = V.reshaped(\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/1);}
+\DoxyCodeLine{910 }
+\DoxyCodeLine{911     \mbox{\hyperlink{classRayBenConvection_a8e8d1bec9c3fbd2876adc957f4ed767d}{m\_vstar}}.block(1,1,\mbox{\hyperlink{classRayBenConvection_a8e8d1bec9c3fbd2876adc957f4ed767d}{m\_vstar}}.rows()-\/2,\mbox{\hyperlink{classRayBenConvection_a8e8d1bec9c3fbd2876adc957f4ed767d}{m\_vstar}}.cols()-\/2) = new\_V;}
+\DoxyCodeLine{912 }
+\DoxyCodeLine{913     \textcolor{comment}{//\%Pressure Poisson equation(elliptic):}}
+\DoxyCodeLine{914     m\_S.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = (\mbox{\hyperlink{classRayBenConvection_a22bceb43d4d9ba695f21bf1306a8f354}{m\_ustar}}.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) -\/ \mbox{\hyperlink{classRayBenConvection_a22bceb43d4d9ba695f21bf1306a8f354}{m\_ustar}}.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})) / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}}}
+\DoxyCodeLine{915                             + (\mbox{\hyperlink{classRayBenConvection_a8e8d1bec9c3fbd2876adc957f4ed767d}{m\_vstar}}.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) -\/ \mbox{\hyperlink{classRayBenConvection_a8e8d1bec9c3fbd2876adc957f4ed767d}{m\_vstar}}.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})) / \mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}};}
+\DoxyCodeLine{916 }
+\DoxyCodeLine{917     Eigen::Matrix<double, -\/1, 1> s;}
+\DoxyCodeLine{918     s.resize((m\_S.rows()-\/2)*(m\_S.cols()-\/2), 1);}
+\DoxyCodeLine{919 }
+\DoxyCodeLine{920     s.col(0) = m\_S.block(1,1,m\_S.rows()-\/2,m\_S.cols()-\/2).reshaped((m\_S.rows()-\/2)*(m\_S.cols()-\/2), 1);}
+\DoxyCodeLine{921 }
+\DoxyCodeLine{922     s(m\_pp) = \textcolor{keyword}{static\_cast<}Eigen::Matrix<\textcolor{keywordtype}{double}, -\/1, -\/1\textcolor{keyword}{>}>(m\_Up\_solver.solve(m\_Lp\_solver.solve(s(m\_pp))));}
 \DoxyCodeLine{923 }
-\DoxyCodeLine{924     m\_u.col(0).setConstant(m\_US);}
-\DoxyCodeLine{925     m\_u.col(m\_u.cols()-\/1).setConstant(m\_UN);}
-\DoxyCodeLine{926 }
-\DoxyCodeLine{927     m\_v.row(0).setConstant(m\_VW);}
-\DoxyCodeLine{928     m\_v.row(m\_v.rows()-\/1).setConstant(m\_VE);}
-\DoxyCodeLine{929 }
-\DoxyCodeLine{930     m\_v.col(0) = Eigen::Matrix<double, m\_nx, 1>::Constant(2*m\_VS) -\/ m\_v.col(1);}
-\DoxyCodeLine{931     m\_v.col(m\_v.cols()-\/1) = Eigen::Matrix<double, m\_nx, 1>::Constant(2*m\_VN) -\/ m\_v.col(m\_v.cols()-\/2);}
-\DoxyCodeLine{932 }
-\DoxyCodeLine{933   \}}
-\DoxyCodeLine{934 }
-\DoxyCodeLine{935 }
-\DoxyCodeLine{936   \textcolor{keywordflow}{if} (\mbox{\hyperlink{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}{m\_it}} == \mbox{\hyperlink{classRayBenConvection_a30361d2ad21ab61d60fb8bb21fba82de}{m\_END\_CICLE}}) \{}
-\DoxyCodeLine{937     std::cerr << std::endl << \textcolor{stringliteral}{"{}INFO: RayBenConvection: eval\_next\_frame: "{}} }
-\DoxyCodeLine{938               << \textcolor{stringliteral}{"{}Simulation ended with no errors."{}} << std::endl;}
-\DoxyCodeLine{939     simulation\_state.\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t_ade312d660fc2a60c05ea13f92b4ae736}{ended}} = \textcolor{keyword}{true};}
-\DoxyCodeLine{940     \textcolor{keywordflow}{return} simulation\_state;}
-\DoxyCodeLine{941   \}}
+\DoxyCodeLine{924     Eigen::Matrix<double, -\/1, -\/1> new\_s = s.reshaped(\mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}}-\/2);}
+\DoxyCodeLine{925 }
+\DoxyCodeLine{926     m\_p.block(1,1,new\_s.rows(),new\_s.cols()) = new\_s;}
+\DoxyCodeLine{927 }
+\DoxyCodeLine{928     m\_p.row(0) = m\_p.row(1);}
+\DoxyCodeLine{929     m\_p.row(m\_p.rows()-\/1) = m\_p.row(m\_p.rows()-\/2);}
+\DoxyCodeLine{930 }
+\DoxyCodeLine{931     m\_p.col(0) = m\_p.col(1);}
+\DoxyCodeLine{932     m\_p.col(m\_p.cols()-\/1) = m\_p.col(m\_p.cols()-\/2);}
+\DoxyCodeLine{933 }
+\DoxyCodeLine{934     m\_u.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = \mbox{\hyperlink{classRayBenConvection_a22bceb43d4d9ba695f21bf1306a8f354}{m\_ustar}}.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) -\/ (m\_p.block(2,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) -\/ m\_p.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})) / \mbox{\hyperlink{classRayBenConvection_a2bb417e336a4ae74e517e2eba04d179d}{m\_dx}};}
+\DoxyCodeLine{935     m\_v.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) = \mbox{\hyperlink{classRayBenConvection_a8e8d1bec9c3fbd2876adc957f4ed767d}{m\_vstar}}.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) -\/ (m\_p.block(1,2,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}}) -\/ m\_p.block(1,1,\mbox{\hyperlink{classRayBenConvection_ad5d8335e885b5f4d0860b379d785eb24}{m\_ii}},\mbox{\hyperlink{classRayBenConvection_a3f18799795eb3b79188f14aeed0c427b}{m\_jj}})) / \mbox{\hyperlink{classRayBenConvection_a6d70b64b68c44a8b5f4ed5ca86dfcf71}{m\_dy}};}
+\DoxyCodeLine{936 }
+\DoxyCodeLine{937     m\_u.row(0) = Eigen::Matrix<double, 1, m\_ny>::Constant(2*\mbox{\hyperlink{classRayBenConvection_a56534034d797d9099f53367d4828f0c7}{m\_UW}}) -\/ m\_u.row(1);}
+\DoxyCodeLine{938     m\_u.row(m\_u.rows()-\/1) = Eigen::Matrix<double, 1, m\_ny>::Constant(2*\mbox{\hyperlink{classRayBenConvection_ad3b4ec6a6500a9b9355c60d66a62091b}{m\_UE}}) -\/ m\_u.row(m\_u.rows()-\/2);}
+\DoxyCodeLine{939 }
+\DoxyCodeLine{940     m\_u.col(0).setConstant(\mbox{\hyperlink{classRayBenConvection_a99f0d9ab29a2db33829175a790fa9bc7}{m\_US}});}
+\DoxyCodeLine{941     m\_u.col(m\_u.cols()-\/1).setConstant(\mbox{\hyperlink{classRayBenConvection_aab15fee9f0b6d470dd9d02d85439a7a8}{m\_UN}});}
 \DoxyCodeLine{942 }
-\DoxyCodeLine{943 }
-\DoxyCodeLine{944   ++\mbox{\hyperlink{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}{m\_it}};}
+\DoxyCodeLine{943     m\_v.row(0).setConstant(\mbox{\hyperlink{classRayBenConvection_aee29299c3f2cf435a3d179d4dcd9b0a1}{m\_VW}});}
+\DoxyCodeLine{944     m\_v.row(m\_v.rows()-\/1).setConstant(\mbox{\hyperlink{classRayBenConvection_abfccbde057005c07f8ee2b76ef68e4f7}{m\_VE}});}
 \DoxyCodeLine{945 }
-\DoxyCodeLine{946   simulation\_state.\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t_ade312d660fc2a60c05ea13f92b4ae736}{ended}} = \textcolor{keyword}{false};}
-\DoxyCodeLine{947   \textcolor{keywordflow}{return} simulation\_state;}
-\DoxyCodeLine{948 \}}
-\DoxyCodeLine{949 }
-\DoxyCodeLine{950 \textcolor{keywordtype}{void} RayBenConvection::write\_current\_data()\{}
-\DoxyCodeLine{951   \textcolor{keywordflow}{if} (\mbox{\hyperlink{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}{m\_it}} == 0) \{}
-\DoxyCodeLine{952     \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}}.open(OUTPUT\_HEADER\_FILE\_NAME, std::ios\_base::out);}
-\DoxyCodeLine{953     std::cout << \textcolor{stringliteral}{"{}File aperto"{}}; }
-\DoxyCodeLine{954     \textcolor{keywordflow}{if} (! \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}}.is\_open())\{}
-\DoxyCodeLine{955       std::cerr <<\textcolor{stringliteral}{"{}Failed opening output\_header\_file. Exiting..."{}} <<std::endl;}
-\DoxyCodeLine{956       \textcolor{keywordflow}{return};}
-\DoxyCodeLine{957     \}}
-\DoxyCodeLine{958     \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} << \textcolor{stringliteral}{"{}\#define NX "{}} << \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}} << \textcolor{stringliteral}{"{}\(\backslash\)n"{}} }
-\DoxyCodeLine{959                             \textcolor{stringliteral}{"{}\#define NY "{}} << \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}} << \textcolor{stringliteral}{"{}\(\backslash\)n"{}}}
-\DoxyCodeLine{960                             \textcolor{stringliteral}{"{}\#define N\_STEPS "{}} << \mbox{\hyperlink{classRayBenConvection_a30361d2ad21ab61d60fb8bb21fba82de}{m\_END\_CICLE}} << \textcolor{stringliteral}{"{}\(\backslash\)n"{}} }
-\DoxyCodeLine{961                             \textcolor{stringliteral}{"{}const double cold\_temp = "{}} << \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}} << \textcolor{stringliteral}{"{};\(\backslash\)n"{}}}
-\DoxyCodeLine{962                             \textcolor{stringliteral}{"{}const double hot\_temp = "{}} << \mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} << \textcolor{stringliteral}{"{};\(\backslash\)n"{}}}
-\DoxyCodeLine{963                             \textcolor{stringliteral}{"{}const double T [NX][NY][N\_STEPS] = \{\(\backslash\)n"{}};}
-\DoxyCodeLine{964     m\_write\_current\_frame();}
-\DoxyCodeLine{965   \}}
-\DoxyCodeLine{966   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}{m\_it}} == \mbox{\hyperlink{classRayBenConvection_a30361d2ad21ab61d60fb8bb21fba82de}{m\_END\_CICLE}})\{}
-\DoxyCodeLine{967     \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} << \textcolor{stringliteral}{"{}\}; "{}};}
-\DoxyCodeLine{968     \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}}.close();}
-\DoxyCodeLine{969   std::cout << \textcolor{stringliteral}{"{}File chiuso"{}};}
-\DoxyCodeLine{970   \}}
-\DoxyCodeLine{971   \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{972     \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} <<\textcolor{stringliteral}{"{},\(\backslash\)n"{}};}
-\DoxyCodeLine{973     m\_write\_current\_frame();}
-\DoxyCodeLine{974   \}}
-\DoxyCodeLine{975 \}}
+\DoxyCodeLine{946     m\_v.col(0) = Eigen::Matrix<double, m\_nx, 1>::Constant(2*\mbox{\hyperlink{classRayBenConvection_afc0d1ada59367f173257a20e2cea845b}{m\_VS}}) -\/ m\_v.col(1);}
+\DoxyCodeLine{947     m\_v.col(m\_v.cols()-\/1) = Eigen::Matrix<double, m\_nx, 1>::Constant(2*\mbox{\hyperlink{classRayBenConvection_ace7b32dda44cace25edfe8e481601733}{m\_VN}}) -\/ m\_v.col(m\_v.cols()-\/2);}
+\DoxyCodeLine{948 }
+\DoxyCodeLine{949   \}}
+\DoxyCodeLine{950 }
+\DoxyCodeLine{951 }
+\DoxyCodeLine{952   \textcolor{keywordflow}{if} (\mbox{\hyperlink{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}{m\_it}} == \mbox{\hyperlink{classRayBenConvection_a30361d2ad21ab61d60fb8bb21fba82de}{m\_END\_CICLE}}) \{}
+\DoxyCodeLine{953     std::cerr << std::endl << \textcolor{stringliteral}{"{}INFO: RayBenConvection: eval\_next\_frame: "{}} }
+\DoxyCodeLine{954               << \textcolor{stringliteral}{"{}Simulation ended with no errors."{}} << std::endl;}
+\DoxyCodeLine{955     simulation\_state.\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t_ade312d660fc2a60c05ea13f92b4ae736}{ended}} = \textcolor{keyword}{true};}
+\DoxyCodeLine{956     \textcolor{keywordflow}{return} simulation\_state;}
+\DoxyCodeLine{957   \}}
+\DoxyCodeLine{958 }
+\DoxyCodeLine{959 }
+\DoxyCodeLine{960   ++\mbox{\hyperlink{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}{m\_it}};}
+\DoxyCodeLine{961 }
+\DoxyCodeLine{962   simulation\_state.\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t_ade312d660fc2a60c05ea13f92b4ae736}{ended}} = \textcolor{keyword}{false};}
+\DoxyCodeLine{963   \textcolor{keywordflow}{return} simulation\_state;}
+\DoxyCodeLine{964 \}}
+\DoxyCodeLine{965 }
+\DoxyCodeLine{966 \textcolor{keywordtype}{void} RayBenConvection::write\_current\_data()\{}
+\DoxyCodeLine{967   \textcolor{keywordflow}{if} (\mbox{\hyperlink{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}{m\_it}} == 0) \{}
+\DoxyCodeLine{968     \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}}.open(OUTPUT\_HEADER\_FILE\_NAME, std::ios\_base::out);}
+\DoxyCodeLine{969     std::cout << \textcolor{stringliteral}{"{}File aperto"{}}; }
+\DoxyCodeLine{970     \textcolor{keywordflow}{if} (! \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}}.is\_open())\{}
+\DoxyCodeLine{971       std::cerr <<\textcolor{stringliteral}{"{}Failed opening output\_header\_file. Exiting..."{}} <<std::endl;}
+\DoxyCodeLine{972       \textcolor{keywordflow}{return};}
+\DoxyCodeLine{973     \}}
+\DoxyCodeLine{974     \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} << \textcolor{stringliteral}{"{}\#define NX "{}} << \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\_nx}} << \textcolor{stringliteral}{"{}\(\backslash\)n"{}} }
+\DoxyCodeLine{975                             \textcolor{stringliteral}{"{}\#define NY "{}} << \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\_ny}} << \textcolor{stringliteral}{"{}\(\backslash\)n"{}}}
+\DoxyCodeLine{976                             \textcolor{stringliteral}{"{}\#define N\_STEPS "{}} << \mbox{\hyperlink{classRayBenConvection_a30361d2ad21ab61d60fb8bb21fba82de}{m\_END\_CICLE}} << \textcolor{stringliteral}{"{}\(\backslash\)n"{}} }
+\DoxyCodeLine{977                             \textcolor{stringliteral}{"{}const double cold\_temp = "{}} << \mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\_TN}} << \textcolor{stringliteral}{"{};\(\backslash\)n"{}}}
+\DoxyCodeLine{978                             \textcolor{stringliteral}{"{}const double hot\_temp = "{}} << \mbox{\hyperlink{classRayBenConvection_ac1331aa9a8a5f7b079af0df68bc3dcfc}{m\_TS}} << \textcolor{stringliteral}{"{};\(\backslash\)n"{}}}
+\DoxyCodeLine{979                             \textcolor{stringliteral}{"{}const double T [NX][NY][N\_STEPS] = \{\(\backslash\)n"{}};}
+\DoxyCodeLine{980     m\_write\_current\_frame();}
+\DoxyCodeLine{981   \}}
+\DoxyCodeLine{982   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}{m\_it}} == \mbox{\hyperlink{classRayBenConvection_a30361d2ad21ab61d60fb8bb21fba82de}{m\_END\_CICLE}})\{}
+\DoxyCodeLine{983     \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} << \textcolor{stringliteral}{"{}\}; "{}};}
+\DoxyCodeLine{984     \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}}.close();}
+\DoxyCodeLine{985   std::cout << \textcolor{stringliteral}{"{}File chiuso"{}};}
+\DoxyCodeLine{986   \}}
+\DoxyCodeLine{987   \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{988     \mbox{\hyperlink{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}{m\_output\_header\_file}} <<\textcolor{stringliteral}{"{},\(\backslash\)n"{}};}
+\DoxyCodeLine{989     m\_write\_current\_frame();}
+\DoxyCodeLine{990   \}}
+\DoxyCodeLine{991 \}}
 
 \end{DoxyCode}

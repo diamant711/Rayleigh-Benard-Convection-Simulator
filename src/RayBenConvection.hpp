@@ -15,13 +15,13 @@
  *     server web?
  * X - Quali parametri l'utente può modificare?
  *
- *LEGENDA ERRORI: 
+ *LEGENDA ERRORI:
  * return -1  END_CICLE > 6000
  * return -2  m_TS=m_TN
  * return -3  m_TN <= 0 oppure m_TN >= m_TS
  * return -4  Ray_numb < 50 || > 150
  * return -5  Pr_numb < 5 || > 9
- * return -6  Re_numb < 70 || > 130 
+ * return -6  Re_numb < 70 || > 130
  * return -7  m_TS >= 100
 
  ******************************************************************/
@@ -96,15 +96,15 @@ class RayBenConvection {
     const unsigned int m_nt = ((int) m_tf / m_dt) + 1;
     //! height of the box of the simulation.
     /*!
-     \sa m_L
+     The ratio of m_H and m_L is an important physical parameter for the simulation,
+     which influences all other parameters, such as m_Pr, m_Re, m_Ra. 
+     Since it is not possible to forsee how changing this ratio will modify the other parameters,
+     the user must not have access to m_H and m_L.
     */
     const double m_H = 2;
     //! lenght of the box of the simulation.
     /*!
-    The ratio of m_H and m_L is an important physical parameter for the simulation,
-    which influences all other parameters, such as m_Pr, m_Re, m_Ra. 
-    Since it is not possible to forsee how changing this ratio will modify the other parameters,
-    the user must not have access to m_H and m_L.
+    \sa m_H
     */
     const double m_L = 5;
     //! interval of x coordinate used for perturbative calculation.
@@ -133,23 +133,39 @@ class RayBenConvection {
     double m_Ra;
     //!
     double m_Gr;
-
+    //! Eigen matrix used for perturbative calculation.
     Eigen::Matrix<double, m_nx, m_ny> m_Tstar;
+    //! Eigen matrix used for perturbative calculation.
     Eigen::Matrix<double, m_nx+1, m_ny> m_ustar;
+    //! Eigen matrix used for perturbative calculation.
     Eigen::Matrix<double, m_nx+1, m_ny> m_uhalf;
+    //! Eigen matrix used for perturbative calculation.
     Eigen::Matrix<double, m_nx+1, m_ny> m_uconv;
+    //! Eigen matrix used for perturbative calculation.
     Eigen::Matrix<double, m_nx, m_ny+1> m_vstar;
+    //! Eigen matrix used for perturbative calculation.
     Eigen::Matrix<double, m_nx, m_ny+1> m_vhalf;
+    //! Eigen matrix used for perturbative calculation.
     Eigen::Matrix<double, m_nx, m_ny+1> m_vconv;
+    //! implementation detail.
     double m_TnE = 0;
+    //! implementation detail.
     double m_TnW = 0;
+    //! implementation detail.
     double m_UN = 0;
+    //! implementation detail.
     double m_US = 0;
+    //! implementation detail.
     double m_UE = 0;
+    //! implementation detail.
     double m_UW = 0;
+    //! implementation detail.
     double m_VN = 0;
+    //! implementation detail.
     double m_VS = 0;
+    //! implementation detail.
     double m_VE = 0;
+    //! implementation detail.
     double m_VW = 0;
     //initialisation variables
     Eigen::Matrix<double, m_nx-1, m_ny-2> m_bcu;
