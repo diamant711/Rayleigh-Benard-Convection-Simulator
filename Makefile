@@ -27,7 +27,7 @@ SRC_DIR = src
 INC_DIR = inc
 LIB_DIR = lib
 OBJ_DIR = obj
-REPOS_DIR = $(TMP_DIR)/caos_tester_tmp_repos_$(USER).d
+REPOS_DIR = $(TMP_DIR)/rbcs_tmp_repos_$(USER).d
 CXX = g++
 COMMON_FLAGS = -fopenmp -pg -g -fno-math-errno -march=native -DNDEBUG
 CXXFLAGS = -O3 -I$(INC_DIR)/ -Wall -Wextra -std=c++11 $(COMMON_FLAGS)
@@ -52,7 +52,7 @@ $(OBJ_DIR)/%.o:: $(SRC_DIR)/%.cpp $(HEADERS)
 	@$(CXX) $(<D)/$(<F) $(CXXFLAGS) -c -o $(@D)/$(@F)
 
 raylib: src/raylib_page.c 
-	$(EMSDK_SDK_COMPILER) $< lib/libraylib.a -o $@.html -DPLATFORM_WEB -Os -Wall -s USE_GLFW=3 --shell-file /temporanea/caos_tester_tmp_repos_$(USER).d/emsdk/upstream/emscripten/src/shell.html
+	$(EMSDK_SDK_COMPILER) $< lib/libraylib.a -o $@.html -DPLATFORM_WEB -Os -Wall -s USE_GLFW=3 --shell-file /temporanea/rbcs_tmp_repos_$(USER).d/emsdk/upstream/emscripten/src/shell.html
 
 env: ;
 	@if [ ! -e $(OBJ_DIR) ] || [ ! -d $(OBJ_DIR) ] ; then\
