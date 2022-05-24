@@ -32,7 +32,7 @@ CXX = g++
 COMMON_FLAGS = -fopenmp -pg -g -fno-math-errno -march=native -DNDEBUG
 CXXFLAGS = -O3 -I$(INC_DIR)/ -Wall -Wextra -std=c++11 $(COMMON_FLAGS)
 LDFLAGS = $(STATIC_LIB) $(DINAMIC_LIB) $(COMMON_FLAGS)
-X_NAME = CaosTester
+X_NAME = Rayleigh-Benard-Convection-Simulator
 RAYLIB_REPO = https://github.com/raysan5/raylib.git
 RAYLIB_LIB_FILE = $(PRJ_DIR)/$(LIB_DIR)/libraylib.a
 EMSDK_REPO = https://github.com/emscripten-core/emsdk.git
