@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['total_0',['total',['../structRayBenConvection_1_1simulation__state__t.html#a5c1453843717f44c32e784bc9cbdffc9',1,'RayBenConvection::simulation_state_t']]]
+  ['simulation_5fstate_0',['simulation_state',['../classRayBenConvection.html#a4922c04914255acd890452879eee7a8e',1,'RayBenConvection']]]
 ];

@@ -34,9 +34,8 @@ void {\bfseries write\+\_\+current\+\_\+data} (void)
 \doxysubsection*{Private Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classRayBenConvection_a834f45458ac6473a81c3457603809cd3}\label{classRayBenConvection_a834f45458ac6473a81c3457603809cd3}} 
-void {\bfseries m\+\_\+apply\+\_\+correction} (void)
-\item 
+void \mbox{\hyperlink{classRayBenConvection_a834f45458ac6473a81c3457603809cd3}{m\+\_\+apply\+\_\+correction}} (void)
+\begin{DoxyCompactList}\small\item\em This function applies small corrections on m\+\_\+T matrix. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a0ccc61d1f3f7e417ac6397d11d2a5633}\label{classRayBenConvection_a0ccc61d1f3f7e417ac6397d11d2a5633}} 
 void {\bfseries m\+\_\+\+ETA} (int)
 \item 
@@ -61,9 +60,8 @@ void {\bfseries m\+\_\+write\+\_\+current\+\_\+frame} ()
 \doxysubsection*{Static Private Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classRayBenConvection_a103559797e2c0013967de38b22af97f2}\label{classRayBenConvection_a103559797e2c0013967de38b22af97f2}} 
-static void {\bfseries m\+\_\+d\+\_\+solve} (Eigen\+::\+Matrix$<$ double,-\/1, 1 $>$ \&, const Eigen\+::\+Matrix$<$ int, 1,-\/1 $>$ \&, const Eigen\+::\+Partial\+Piv\+LU$<$ Eigen\+::\+Matrix$<$ double,-\/1,-\/1 $>$ $>$ \&, const Eigen\+::\+Partial\+Piv\+LU$<$ Eigen\+::\+Matrix$<$ double,-\/1,-\/1 $>$ $>$ \&)
-\end{DoxyCompactItemize}
+static void \mbox{\hyperlink{classRayBenConvection_a103559797e2c0013967de38b22af97f2}{m\+\_\+d\+\_\+solve}} (Eigen\+::\+Matrix$<$ double,-\/1, 1 $>$ \&, const Eigen\+::\+Matrix$<$ int, 1,-\/1 $>$ \&, const Eigen\+::\+Partial\+Piv\+LU$<$ Eigen\+::\+Matrix$<$ double,-\/1,-\/1 $>$ $>$ \&, const Eigen\+::\+Partial\+Piv\+LU$<$ Eigen\+::\+Matrix$<$ double,-\/1,-\/1 $>$ $>$ \&)
+\begin{DoxyCompactList}\small\item\em This function returns a permutated matrix, following Eigen Partial Pivoting operation. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -97,16 +95,16 @@ double {\bfseries m\+\_\+\+TS}
 \begin{DoxyCompactList}\small\item\em higher temperature \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_ac9933db8381584f9d732b85391da2533}\label{classRayBenConvection_ac9933db8381584f9d732b85391da2533}} 
 Eigen\+::\+Matrix$<$ double, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\+\_\+nx}}+1, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\+\_\+ny}} $>$ {\bfseries m\+\_\+u}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used for perturbative calculation. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_af863193c10cffeaf20f749df0ec845a5}\label{classRayBenConvection_af863193c10cffeaf20f749df0ec845a5}} 
 Eigen\+::\+Matrix$<$ double, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\+\_\+nx}}, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\+\_\+ny}}+1 $>$ {\bfseries m\+\_\+v}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used for perturbative calculation on the fluid\textquotesingle{}s velocity. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a66828b8a9611c0a5dac1eeb64d1fa614}\label{classRayBenConvection_a66828b8a9611c0a5dac1eeb64d1fa614}} 
 Eigen\+::\+Matrix$<$ double, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\+\_\+nx}}, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\+\_\+ny}} $>$ {\bfseries m\+\_\+p}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used for perturbative calculation on the fluid\textquotesingle{}s pressure. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a2bf183a03e99f6a9b2a6f4139f780ec3}\label{classRayBenConvection_a2bf183a03e99f6a9b2a6f4139f780ec3}} 
 Eigen\+::\+Matrix$<$ double, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\+\_\+nx}}, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\+\_\+ny}} $>$ {\bfseries m\+\_\+S}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used for perturbative calculation on the fluid\textquotesingle{}s pressure. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_abfa7478fe1bf2a2744403d17ca248a3d}\label{classRayBenConvection_abfa7478fe1bf2a2744403d17ca248a3d}} 
 double {\bfseries m\+\_\+\+To}
 \begin{DoxyCompactList}\small\item\em implementation detail. \end{DoxyCompactList}\item 
@@ -181,111 +179,110 @@ double {\bfseries m\+\_\+\+VW} = 0
 \begin{DoxyCompactList}\small\item\em implementation detail. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_ab25ed57d64bce95a1f0b385151be1a41}\label{classRayBenConvection_ab25ed57d64bce95a1f0b385151be1a41}} 
 Eigen\+::\+Matrix$<$ double, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\+\_\+nx}}-\/1, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\+\_\+ny}}-\/2 $>$ {\bfseries m\+\_\+bcu}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used for boundary conditions. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_ae8a99eaf006353101cd1cb4cd6803da4}\label{classRayBenConvection_ae8a99eaf006353101cd1cb4cd6803da4}} 
 Eigen\+::\+Matrix$<$ double, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\+\_\+nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\+\_\+ny}}-\/1 $>$ {\bfseries m\+\_\+bcv}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used for boundary conditions. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_abbc6bb7a871ccde05c4b5a9519eb7cd8}\label{classRayBenConvection_abbc6bb7a871ccde05c4b5a9519eb7cd8}} 
 Eigen\+::\+Matrix$<$ double, -\/1, 1 $>$ {\bfseries m\+\_\+e}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used for calculations support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_ada01bc16d6b738fef671eb8c21461d40}\label{classRayBenConvection_ada01bc16d6b738fef671eb8c21461d40}} 
 Eigen\+::\+Matrix$<$ double, -\/1, 1 $>$ {\bfseries m\+\_\+i}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used for calculations support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a355433f2d50e67c93b922803b52afcb6}\label{classRayBenConvection_a355433f2d50e67c93b922803b52afcb6}} 
 Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ {\bfseries m\+\_\+\+Ax}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a87b2a19b366009db54a377461aaf2768}\label{classRayBenConvection_a87b2a19b366009db54a377461aaf2768}} 
 Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ {\bfseries m\+\_\+\+Ay}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a279afbe74b425c0a05bdcc3f854ebe79}\label{classRayBenConvection_a279afbe74b425c0a05bdcc3f854ebe79}} 
 Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ {\bfseries m\+\_\+A}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_aa94ce938fcecf4c51febe3c19efca332}\label{classRayBenConvection_aa94ce938fcecf4c51febe3c19efca332}} 
 Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ {\bfseries m\+\_\+\+Du}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_ae3f0ffb3cfe0c04d2ad97caa1b66657d}\label{classRayBenConvection_ae3f0ffb3cfe0c04d2ad97caa1b66657d}} 
 Eigen\+::\+Matrix$<$ int, 1, -\/1 $>$ {\bfseries m\+\_\+pu}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_afc73f1c4923484d2891bb9a9b48620bb}\label{classRayBenConvection_afc73f1c4923484d2891bb9a9b48620bb}} 
 Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ {\bfseries m\+\_\+\+Duperm}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a2c0c7f84f7a1a702878f9980a4772bc0}\label{classRayBenConvection_a2c0c7f84f7a1a702878f9980a4772bc0}} 
 std\+::vector$<$ Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ $>$ {\bfseries m\+\_\+\+LUu}
-\item 
+\begin{DoxyCompactList}\small\item\em std vector of Eigen matrices. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a750b160d5cfc7fd029936245e9b2ba76}\label{classRayBenConvection_a750b160d5cfc7fd029936245e9b2ba76}} 
 Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ {\bfseries m\+\_\+\+Dv}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_aa052588ce5527b7315207f19504843c5}\label{classRayBenConvection_aa052588ce5527b7315207f19504843c5}} 
 Eigen\+::\+Matrix$<$ int, 1, -\/1 $>$ {\bfseries m\+\_\+pv}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a566fcdb354ab8ab44549aa1698e69ea3}\label{classRayBenConvection_a566fcdb354ab8ab44549aa1698e69ea3}} 
 Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ {\bfseries m\+\_\+\+Dvperm}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_ad5c82fe9e0b516b933e43ed7e8e3401f}\label{classRayBenConvection_ad5c82fe9e0b516b933e43ed7e8e3401f}} 
 std\+::vector$<$ Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ $>$ {\bfseries m\+\_\+\+LUv}
 \item 
 \mbox{\Hypertarget{classRayBenConvection_a1feee928e15de6738a5c468fc10ab263}\label{classRayBenConvection_a1feee928e15de6738a5c468fc10ab263}} 
 Eigen\+::\+Matrix$<$ int, 1, -\/1 $>$ {\bfseries m\+\_\+pp}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a529194ad06a9e9a2f13259c7620aeade}\label{classRayBenConvection_a529194ad06a9e9a2f13259c7620aeade}} 
 Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ {\bfseries m\+\_\+\+Aperm}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_ac749448feff68e1d70ba6df4c6b6308d}\label{classRayBenConvection_ac749448feff68e1d70ba6df4c6b6308d}} 
 std\+::vector$<$ Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ $>$ {\bfseries m\+\_\+\+LUp}
-\item 
+\begin{DoxyCompactList}\small\item\em std vector of Eigen matrices. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a0bce1c4229b75dd03d882abcc7612e8c}\label{classRayBenConvection_a0bce1c4229b75dd03d882abcc7612e8c}} 
 Eigen\+::\+Matrix$<$ double, \mbox{\hyperlink{classRayBenConvection_a00ece8699bc4531e4dc5edfe2cfcfd7b}{m\+\_\+nx}}-\/2, \mbox{\hyperlink{classRayBenConvection_aa2e29e985716895f8f19e3930078ec00}{m\+\_\+ny}}-\/2 $>$ {\bfseries m\+\_\+bcT}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_aecd4a1a57801dd8f6b8287b3903de288}\label{classRayBenConvection_aecd4a1a57801dd8f6b8287b3903de288}} 
 Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ {\bfseries m\+\_\+\+Tx}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_accf0b01090460e7a90bbae1e983b27b9}\label{classRayBenConvection_accf0b01090460e7a90bbae1e983b27b9}} 
 Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ {\bfseries m\+\_\+\+Ty}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_af531dfbb0312d1411695bc513f9fc3ab}\label{classRayBenConvection_af531dfbb0312d1411695bc513f9fc3ab}} 
 Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ {\bfseries m\+\_\+\+Tt}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a29a766e0a44d52126e84113fab8bc790}\label{classRayBenConvection_a29a766e0a44d52126e84113fab8bc790}} 
 Eigen\+::\+Matrix$<$ int, 1, -\/1 $>$ {\bfseries m\+\_\+pt}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a20f9d47123df134ba81616d5c9ce7829}\label{classRayBenConvection_a20f9d47123df134ba81616d5c9ce7829}} 
 Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ {\bfseries m\+\_\+\+Ttperm}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen matrix used as calculation support. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a9fe814ef49f949598da4f414870da1d3}\label{classRayBenConvection_a9fe814ef49f949598da4f414870da1d3}} 
 std\+::vector$<$ Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ $>$ {\bfseries m\+\_\+\+LUt}
-\item 
+\begin{DoxyCompactList}\small\item\em std vector of Eigen matrices. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_aaf54f2309f7ac98e9f2cc449eae6bd37}\label{classRayBenConvection_aaf54f2309f7ac98e9f2cc449eae6bd37}} 
 Eigen\+::\+Partial\+Piv\+LU$<$ Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ $>$ {\bfseries m\+\_\+\+Lu\+\_\+solver}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen Partial\+Piv\+Lu matrix, used for perfoming partial pivot. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_abc851be2138ae32b40834060bffe5a69}\label{classRayBenConvection_abc851be2138ae32b40834060bffe5a69}} 
 Eigen\+::\+Partial\+Piv\+LU$<$ Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ $>$ {\bfseries m\+\_\+\+Uu\+\_\+solver}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen Partial\+Piv\+Lu matrix, used for perfoming partial pivot. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_ab7a3c25d7d180499643a96b52c376ef8}\label{classRayBenConvection_ab7a3c25d7d180499643a96b52c376ef8}} 
 Eigen\+::\+Partial\+Piv\+LU$<$ Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ $>$ {\bfseries m\+\_\+\+Lv\+\_\+solver}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen Partial\+Piv\+Lu matrix, used for perfoming partial pivot. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a41024c3b9faa8588e3ecd679203b2e4c}\label{classRayBenConvection_a41024c3b9faa8588e3ecd679203b2e4c}} 
 Eigen\+::\+Partial\+Piv\+LU$<$ Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ $>$ {\bfseries m\+\_\+\+Uv\+\_\+solver}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen Partial\+Piv\+Lu matrix, used for perfoming partial pivot. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a6287ec3344a639bccc0ae10bb04aa900}\label{classRayBenConvection_a6287ec3344a639bccc0ae10bb04aa900}} 
 Eigen\+::\+Partial\+Piv\+LU$<$ Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ $>$ {\bfseries m\+\_\+\+Lp\+\_\+solver}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen Partial\+Piv\+Lu matrix, used for perfoming partial pivot. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_ad38e2b16fa2e62e025fdcf2951266761}\label{classRayBenConvection_ad38e2b16fa2e62e025fdcf2951266761}} 
 Eigen\+::\+Partial\+Piv\+LU$<$ Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ $>$ {\bfseries m\+\_\+\+Up\+\_\+solver}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen Partial\+Piv\+Lu matrix, used for perfoming partial pivot. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a8d69aac2c20b371f05105b46b893f76c}\label{classRayBenConvection_a8d69aac2c20b371f05105b46b893f76c}} 
 Eigen\+::\+Partial\+Piv\+LU$<$ Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ $>$ {\bfseries m\+\_\+\+Lt\+\_\+solver}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen Partial\+Piv\+Lu matrix, used for perfoming partial pivot. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a02288b2063d3f4a257791f0fe5933b81}\label{classRayBenConvection_a02288b2063d3f4a257791f0fe5933b81}} 
 Eigen\+::\+Partial\+Piv\+LU$<$ Eigen\+::\+Matrix$<$ double, -\/1, -\/1 $>$ $>$ {\bfseries m\+\_\+\+Ut\+\_\+solver}
-\item 
+\begin{DoxyCompactList}\small\item\em Eigen Partial\+Piv\+Lu matrix, used for perfoming partial pivot. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}\label{classRayBenConvection_af8611d2ad5bd585ec902c30895c8a916}} 
 unsigned int {\bfseries m\+\_\+it}
 \begin{DoxyCompactList}\small\item\em current step of the simulation. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}\label{classRayBenConvection_a1efa7e03cd0d72a7901f47dd575bfdc5}} 
 std\+::ofstream {\bfseries m\+\_\+output\+\_\+header\+\_\+file}
 \begin{DoxyCompactList}\small\item\em output .h file, in which all temperature datas of the simulation are saved. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classRayBenConvection_a4922c04914255acd890452879eee7a8e}\label{classRayBenConvection_a4922c04914255acd890452879eee7a8e}} 
-\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t}{simulation\+\_\+state\+\_\+t}} {\bfseries simulation\+\_\+state}
+\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t}{simulation\+\_\+state\+\_\+t}} \mbox{\hyperlink{classRayBenConvection_a4922c04914255acd890452879eee7a8e}{simulation\+\_\+state}}
 \end{DoxyCompactItemize}
 \doxysubsection*{Static Private Attributes}
 \begin{DoxyCompactItemize}
@@ -337,6 +334,40 @@ The parameter inserted by the user are thoughtfully checked to ensure the validi
 {\em Re\+\_\+numb} & Reynolds number. \\
 \hline
 \end{DoxyParams}
+\mbox{\Hypertarget{classRayBenConvection_a834f45458ac6473a81c3457603809cd3}\label{classRayBenConvection_a834f45458ac6473a81c3457603809cd3}} 
+\index{RayBenConvection@{RayBenConvection}!m\_apply\_correction@{m\_apply\_correction}}
+\index{m\_apply\_correction@{m\_apply\_correction}!RayBenConvection@{RayBenConvection}}
+\doxysubsubsection{\texorpdfstring{m\_apply\_correction()}{m\_apply\_correction()}}
+{\footnotesize\ttfamily void Ray\+Ben\+Convection\+::m\+\_\+apply\+\_\+correction (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+This function applies small corrections on m\+\_\+T matrix. 
+
+During the perturbative calculations, small errors due to the truncation of the decimals may occur, resulting in temperatures lower than m\+\_\+\+TN. Since these values do not hold any physical value nor represent a calculation error, this function replaces them with m\+\_\+\+TN. \begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classRayBenConvection_a0fade52114cb600deba397e9c3d86b12}{m\+\_\+\+TN}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classRayBenConvection_a103559797e2c0013967de38b22af97f2}\label{classRayBenConvection_a103559797e2c0013967de38b22af97f2}} 
+\index{RayBenConvection@{RayBenConvection}!m\_d\_solve@{m\_d\_solve}}
+\index{m\_d\_solve@{m\_d\_solve}!RayBenConvection@{RayBenConvection}}
+\doxysubsubsection{\texorpdfstring{m\_d\_solve()}{m\_d\_solve()}}
+{\footnotesize\ttfamily void Ray\+Ben\+Convection\+::m\+\_\+d\+\_\+solve (\begin{DoxyParamCaption}\item[{Eigen\+::\+Matrix$<$ double,-\/1, 1 $>$ \&}]{mat,  }\item[{const Eigen\+::\+Matrix$<$ int, 1,-\/1 $>$ \&}]{perm,  }\item[{const Eigen\+::\+Partial\+Piv\+LU$<$ Eigen\+::\+Matrix$<$ double,-\/1,-\/1 $>$ $>$ \&}]{L,  }\item[{const Eigen\+::\+Partial\+Piv\+LU$<$ Eigen\+::\+Matrix$<$ double,-\/1,-\/1 $>$ $>$ \&}]{U }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+This function returns a permutated matrix, following Eigen Partial Pivoting operation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mat} & Eigen matrix to be permutated. \\
+\hline
+{\em perm} & Eigen vector of permutation. \\
+\hline
+{\em L} & Eigen Partial\+Piv\+Lu matrix. \\
+\hline
+{\em U} & Eigen Partial\+Piv\+Lu matrix. \\
+\hline
+\end{DoxyParams}
 
 
 \doxysubsection{Member Data Documentation}
@@ -362,6 +393,15 @@ lenght of the box of the simulation.
 
 \begin{DoxySeeAlso}{See also}
 \mbox{\hyperlink{classRayBenConvection_a500821275948ffaeb5dbac835f618515}{m\+\_\+H}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classRayBenConvection_a4922c04914255acd890452879eee7a8e}\label{classRayBenConvection_a4922c04914255acd890452879eee7a8e}} 
+\index{RayBenConvection@{RayBenConvection}!simulation\_state@{simulation\_state}}
+\index{simulation\_state@{simulation\_state}!RayBenConvection@{RayBenConvection}}
+\doxysubsubsection{\texorpdfstring{simulation\_state}{simulation\_state}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t}{simulation\+\_\+state\+\_\+t}} Ray\+Ben\+Convection\+::simulation\+\_\+state\hspace{0.3cm}{\ttfamily [private]}}
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structRayBenConvection_1_1simulation__state__t}{simulation\+\_\+state\+\_\+t}} 
 \end{DoxySeeAlso}
 
 

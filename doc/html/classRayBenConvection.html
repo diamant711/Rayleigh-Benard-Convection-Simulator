@@ -107,8 +107,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>write_current_data</b
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a834f45458ac6473a81c3457603809cd3"><td class="memItemLeft" align="right" valign="top"><a id="a834f45458ac6473a81c3457603809cd3" name="a834f45458ac6473a81c3457603809cd3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>m_apply_correction</b> (void)</td></tr>
+<tr class="memitem:a834f45458ac6473a81c3457603809cd3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRayBenConvection.html#a834f45458ac6473a81c3457603809cd3">m_apply_correction</a> (void)</td></tr>
+<tr class="memdesc:a834f45458ac6473a81c3457603809cd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function applies small corrections on m_T matrix.  <a href="classRayBenConvection.html#a834f45458ac6473a81c3457603809cd3">More...</a><br /></td></tr>
 <tr class="separator:a834f45458ac6473a81c3457603809cd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ccc61d1f3f7e417ac6397d11d2a5633"><td class="memItemLeft" align="right" valign="top"><a id="a0ccc61d1f3f7e417ac6397d11d2a5633" name="a0ccc61d1f3f7e417ac6397d11d2a5633"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>m_ETA</b> (int)</td></tr>
@@ -138,8 +138,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>m_write_current_frame
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a103559797e2c0013967de38b22af97f2"><td class="memItemLeft" align="right" valign="top"><a id="a103559797e2c0013967de38b22af97f2" name="a103559797e2c0013967de38b22af97f2"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>m_d_solve</b> (Eigen::Matrix&lt; double,-1, 1 &gt; &amp;, const Eigen::Matrix&lt; int, 1,-1 &gt; &amp;, const Eigen::PartialPivLU&lt; Eigen::Matrix&lt; double,-1,-1 &gt; &gt; &amp;, const Eigen::PartialPivLU&lt; Eigen::Matrix&lt; double,-1,-1 &gt; &gt; &amp;)</td></tr>
+<tr class="memitem:a103559797e2c0013967de38b22af97f2"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRayBenConvection.html#a103559797e2c0013967de38b22af97f2">m_d_solve</a> (Eigen::Matrix&lt; double,-1, 1 &gt; &amp;, const Eigen::Matrix&lt; int, 1,-1 &gt; &amp;, const Eigen::PartialPivLU&lt; Eigen::Matrix&lt; double,-1,-1 &gt; &gt; &amp;, const Eigen::PartialPivLU&lt; Eigen::Matrix&lt; double,-1,-1 &gt; &gt; &amp;)</td></tr>
+<tr class="memdesc:a103559797e2c0013967de38b22af97f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function returns a permutated matrix, following Eigen Partial Pivoting operation.  <a href="classRayBenConvection.html#a103559797e2c0013967de38b22af97f2">More...</a><br /></td></tr>
 <tr class="separator:a103559797e2c0013967de38b22af97f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
@@ -184,15 +184,19 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>m_TS</b></td></tr>
 <tr class="separator:ac1331aa9a8a5f7b079af0df68bc3dcfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9933db8381584f9d732b85391da2533"><td class="memItemLeft" align="right" valign="top"><a id="ac9933db8381584f9d732b85391da2533" name="ac9933db8381584f9d732b85391da2533"></a>
 Eigen::Matrix&lt; double, <a class="el" href="classRayBenConvection.html#a00ece8699bc4531e4dc5edfe2cfcfd7b">m_nx</a>+1, <a class="el" href="classRayBenConvection.html#aa2e29e985716895f8f19e3930078ec00">m_ny</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_u</b></td></tr>
+<tr class="memdesc:ac9933db8381584f9d732b85391da2533"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used for perturbative calculation. <br /></td></tr>
 <tr class="separator:ac9933db8381584f9d732b85391da2533"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af863193c10cffeaf20f749df0ec845a5"><td class="memItemLeft" align="right" valign="top"><a id="af863193c10cffeaf20f749df0ec845a5" name="af863193c10cffeaf20f749df0ec845a5"></a>
 Eigen::Matrix&lt; double, <a class="el" href="classRayBenConvection.html#a00ece8699bc4531e4dc5edfe2cfcfd7b">m_nx</a>, <a class="el" href="classRayBenConvection.html#aa2e29e985716895f8f19e3930078ec00">m_ny</a>+1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_v</b></td></tr>
+<tr class="memdesc:af863193c10cffeaf20f749df0ec845a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used for perturbative calculation on the fluid's velocity. <br /></td></tr>
 <tr class="separator:af863193c10cffeaf20f749df0ec845a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66828b8a9611c0a5dac1eeb64d1fa614"><td class="memItemLeft" align="right" valign="top"><a id="a66828b8a9611c0a5dac1eeb64d1fa614" name="a66828b8a9611c0a5dac1eeb64d1fa614"></a>
 Eigen::Matrix&lt; double, <a class="el" href="classRayBenConvection.html#a00ece8699bc4531e4dc5edfe2cfcfd7b">m_nx</a>, <a class="el" href="classRayBenConvection.html#aa2e29e985716895f8f19e3930078ec00">m_ny</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_p</b></td></tr>
+<tr class="memdesc:a66828b8a9611c0a5dac1eeb64d1fa614"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used for perturbative calculation on the fluid's pressure. <br /></td></tr>
 <tr class="separator:a66828b8a9611c0a5dac1eeb64d1fa614"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2bf183a03e99f6a9b2a6f4139f780ec3"><td class="memItemLeft" align="right" valign="top"><a id="a2bf183a03e99f6a9b2a6f4139f780ec3" name="a2bf183a03e99f6a9b2a6f4139f780ec3"></a>
 Eigen::Matrix&lt; double, <a class="el" href="classRayBenConvection.html#a00ece8699bc4531e4dc5edfe2cfcfd7b">m_nx</a>, <a class="el" href="classRayBenConvection.html#aa2e29e985716895f8f19e3930078ec00">m_ny</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_S</b></td></tr>
+<tr class="memdesc:a2bf183a03e99f6a9b2a6f4139f780ec3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used for perturbative calculation on the fluid's pressure. <br /></td></tr>
 <tr class="separator:a2bf183a03e99f6a9b2a6f4139f780ec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfa7478fe1bf2a2744403d17ca248a3d"><td class="memItemLeft" align="right" valign="top"><a id="abfa7478fe1bf2a2744403d17ca248a3d" name="abfa7478fe1bf2a2744403d17ca248a3d"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>m_To</b></td></tr>
@@ -290,102 +294,134 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>m_VW</b> = 0</td></
 <tr class="separator:aee29299c3f2cf435a3d179d4dcd9b0a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab25ed57d64bce95a1f0b385151be1a41"><td class="memItemLeft" align="right" valign="top"><a id="ab25ed57d64bce95a1f0b385151be1a41" name="ab25ed57d64bce95a1f0b385151be1a41"></a>
 Eigen::Matrix&lt; double, <a class="el" href="classRayBenConvection.html#a00ece8699bc4531e4dc5edfe2cfcfd7b">m_nx</a>-1, <a class="el" href="classRayBenConvection.html#aa2e29e985716895f8f19e3930078ec00">m_ny</a>-2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_bcu</b></td></tr>
+<tr class="memdesc:ab25ed57d64bce95a1f0b385151be1a41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used for boundary conditions. <br /></td></tr>
 <tr class="separator:ab25ed57d64bce95a1f0b385151be1a41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8a99eaf006353101cd1cb4cd6803da4"><td class="memItemLeft" align="right" valign="top"><a id="ae8a99eaf006353101cd1cb4cd6803da4" name="ae8a99eaf006353101cd1cb4cd6803da4"></a>
 Eigen::Matrix&lt; double, <a class="el" href="classRayBenConvection.html#a00ece8699bc4531e4dc5edfe2cfcfd7b">m_nx</a>-2, <a class="el" href="classRayBenConvection.html#aa2e29e985716895f8f19e3930078ec00">m_ny</a>-1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_bcv</b></td></tr>
+<tr class="memdesc:ae8a99eaf006353101cd1cb4cd6803da4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used for boundary conditions. <br /></td></tr>
 <tr class="separator:ae8a99eaf006353101cd1cb4cd6803da4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbc6bb7a871ccde05c4b5a9519eb7cd8"><td class="memItemLeft" align="right" valign="top"><a id="abbc6bb7a871ccde05c4b5a9519eb7cd8" name="abbc6bb7a871ccde05c4b5a9519eb7cd8"></a>
 Eigen::Matrix&lt; double, -1, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_e</b></td></tr>
+<tr class="memdesc:abbc6bb7a871ccde05c4b5a9519eb7cd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used for calculations support. <br /></td></tr>
 <tr class="separator:abbc6bb7a871ccde05c4b5a9519eb7cd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada01bc16d6b738fef671eb8c21461d40"><td class="memItemLeft" align="right" valign="top"><a id="ada01bc16d6b738fef671eb8c21461d40" name="ada01bc16d6b738fef671eb8c21461d40"></a>
 Eigen::Matrix&lt; double, -1, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_i</b></td></tr>
+<tr class="memdesc:ada01bc16d6b738fef671eb8c21461d40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used for calculations support. <br /></td></tr>
 <tr class="separator:ada01bc16d6b738fef671eb8c21461d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a355433f2d50e67c93b922803b52afcb6"><td class="memItemLeft" align="right" valign="top"><a id="a355433f2d50e67c93b922803b52afcb6" name="a355433f2d50e67c93b922803b52afcb6"></a>
 Eigen::Matrix&lt; double, -1, -1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Ax</b></td></tr>
+<tr class="memdesc:a355433f2d50e67c93b922803b52afcb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:a355433f2d50e67c93b922803b52afcb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87b2a19b366009db54a377461aaf2768"><td class="memItemLeft" align="right" valign="top"><a id="a87b2a19b366009db54a377461aaf2768" name="a87b2a19b366009db54a377461aaf2768"></a>
 Eigen::Matrix&lt; double, -1, -1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Ay</b></td></tr>
+<tr class="memdesc:a87b2a19b366009db54a377461aaf2768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:a87b2a19b366009db54a377461aaf2768"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a279afbe74b425c0a05bdcc3f854ebe79"><td class="memItemLeft" align="right" valign="top"><a id="a279afbe74b425c0a05bdcc3f854ebe79" name="a279afbe74b425c0a05bdcc3f854ebe79"></a>
 Eigen::Matrix&lt; double, -1, -1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_A</b></td></tr>
+<tr class="memdesc:a279afbe74b425c0a05bdcc3f854ebe79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:a279afbe74b425c0a05bdcc3f854ebe79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa94ce938fcecf4c51febe3c19efca332"><td class="memItemLeft" align="right" valign="top"><a id="aa94ce938fcecf4c51febe3c19efca332" name="aa94ce938fcecf4c51febe3c19efca332"></a>
 Eigen::Matrix&lt; double, -1, -1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Du</b></td></tr>
+<tr class="memdesc:aa94ce938fcecf4c51febe3c19efca332"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:aa94ce938fcecf4c51febe3c19efca332"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3f0ffb3cfe0c04d2ad97caa1b66657d"><td class="memItemLeft" align="right" valign="top"><a id="ae3f0ffb3cfe0c04d2ad97caa1b66657d" name="ae3f0ffb3cfe0c04d2ad97caa1b66657d"></a>
 Eigen::Matrix&lt; int, 1, -1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_pu</b></td></tr>
+<tr class="memdesc:ae3f0ffb3cfe0c04d2ad97caa1b66657d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:ae3f0ffb3cfe0c04d2ad97caa1b66657d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc73f1c4923484d2891bb9a9b48620bb"><td class="memItemLeft" align="right" valign="top"><a id="afc73f1c4923484d2891bb9a9b48620bb" name="afc73f1c4923484d2891bb9a9b48620bb"></a>
 Eigen::Matrix&lt; double, -1, -1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Duperm</b></td></tr>
+<tr class="memdesc:afc73f1c4923484d2891bb9a9b48620bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:afc73f1c4923484d2891bb9a9b48620bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c0c7f84f7a1a702878f9980a4772bc0"><td class="memItemLeft" align="right" valign="top"><a id="a2c0c7f84f7a1a702878f9980a4772bc0" name="a2c0c7f84f7a1a702878f9980a4772bc0"></a>
 std::vector&lt; Eigen::Matrix&lt; double, -1, -1 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_LUu</b></td></tr>
+<tr class="memdesc:a2c0c7f84f7a1a702878f9980a4772bc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">std vector of Eigen matrices. <br /></td></tr>
 <tr class="separator:a2c0c7f84f7a1a702878f9980a4772bc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a750b160d5cfc7fd029936245e9b2ba76"><td class="memItemLeft" align="right" valign="top"><a id="a750b160d5cfc7fd029936245e9b2ba76" name="a750b160d5cfc7fd029936245e9b2ba76"></a>
 Eigen::Matrix&lt; double, -1, -1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Dv</b></td></tr>
+<tr class="memdesc:a750b160d5cfc7fd029936245e9b2ba76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:a750b160d5cfc7fd029936245e9b2ba76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa052588ce5527b7315207f19504843c5"><td class="memItemLeft" align="right" valign="top"><a id="aa052588ce5527b7315207f19504843c5" name="aa052588ce5527b7315207f19504843c5"></a>
 Eigen::Matrix&lt; int, 1, -1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_pv</b></td></tr>
+<tr class="memdesc:aa052588ce5527b7315207f19504843c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:aa052588ce5527b7315207f19504843c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a566fcdb354ab8ab44549aa1698e69ea3"><td class="memItemLeft" align="right" valign="top"><a id="a566fcdb354ab8ab44549aa1698e69ea3" name="a566fcdb354ab8ab44549aa1698e69ea3"></a>
 Eigen::Matrix&lt; double, -1, -1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Dvperm</b></td></tr>
+<tr class="memdesc:a566fcdb354ab8ab44549aa1698e69ea3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:a566fcdb354ab8ab44549aa1698e69ea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5c82fe9e0b516b933e43ed7e8e3401f"><td class="memItemLeft" align="right" valign="top"><a id="ad5c82fe9e0b516b933e43ed7e8e3401f" name="ad5c82fe9e0b516b933e43ed7e8e3401f"></a>
 std::vector&lt; Eigen::Matrix&lt; double, -1, -1 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_LUv</b></td></tr>
 <tr class="separator:ad5c82fe9e0b516b933e43ed7e8e3401f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1feee928e15de6738a5c468fc10ab263"><td class="memItemLeft" align="right" valign="top"><a id="a1feee928e15de6738a5c468fc10ab263" name="a1feee928e15de6738a5c468fc10ab263"></a>
 Eigen::Matrix&lt; int, 1, -1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_pp</b></td></tr>
+<tr class="memdesc:a1feee928e15de6738a5c468fc10ab263"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:a1feee928e15de6738a5c468fc10ab263"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a529194ad06a9e9a2f13259c7620aeade"><td class="memItemLeft" align="right" valign="top"><a id="a529194ad06a9e9a2f13259c7620aeade" name="a529194ad06a9e9a2f13259c7620aeade"></a>
 Eigen::Matrix&lt; double, -1, -1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Aperm</b></td></tr>
+<tr class="memdesc:a529194ad06a9e9a2f13259c7620aeade"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:a529194ad06a9e9a2f13259c7620aeade"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac749448feff68e1d70ba6df4c6b6308d"><td class="memItemLeft" align="right" valign="top"><a id="ac749448feff68e1d70ba6df4c6b6308d" name="ac749448feff68e1d70ba6df4c6b6308d"></a>
 std::vector&lt; Eigen::Matrix&lt; double, -1, -1 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_LUp</b></td></tr>
+<tr class="memdesc:ac749448feff68e1d70ba6df4c6b6308d"><td class="mdescLeft">&#160;</td><td class="mdescRight">std vector of Eigen matrices. <br /></td></tr>
 <tr class="separator:ac749448feff68e1d70ba6df4c6b6308d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0bce1c4229b75dd03d882abcc7612e8c"><td class="memItemLeft" align="right" valign="top"><a id="a0bce1c4229b75dd03d882abcc7612e8c" name="a0bce1c4229b75dd03d882abcc7612e8c"></a>
 Eigen::Matrix&lt; double, <a class="el" href="classRayBenConvection.html#a00ece8699bc4531e4dc5edfe2cfcfd7b">m_nx</a>-2, <a class="el" href="classRayBenConvection.html#aa2e29e985716895f8f19e3930078ec00">m_ny</a>-2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_bcT</b></td></tr>
+<tr class="memdesc:a0bce1c4229b75dd03d882abcc7612e8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:a0bce1c4229b75dd03d882abcc7612e8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aecd4a1a57801dd8f6b8287b3903de288"><td class="memItemLeft" align="right" valign="top"><a id="aecd4a1a57801dd8f6b8287b3903de288" name="aecd4a1a57801dd8f6b8287b3903de288"></a>
 Eigen::Matrix&lt; double, -1, -1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Tx</b></td></tr>
+<tr class="memdesc:aecd4a1a57801dd8f6b8287b3903de288"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:aecd4a1a57801dd8f6b8287b3903de288"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:accf0b01090460e7a90bbae1e983b27b9"><td class="memItemLeft" align="right" valign="top"><a id="accf0b01090460e7a90bbae1e983b27b9" name="accf0b01090460e7a90bbae1e983b27b9"></a>
 Eigen::Matrix&lt; double, -1, -1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Ty</b></td></tr>
+<tr class="memdesc:accf0b01090460e7a90bbae1e983b27b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:accf0b01090460e7a90bbae1e983b27b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af531dfbb0312d1411695bc513f9fc3ab"><td class="memItemLeft" align="right" valign="top"><a id="af531dfbb0312d1411695bc513f9fc3ab" name="af531dfbb0312d1411695bc513f9fc3ab"></a>
 Eigen::Matrix&lt; double, -1, -1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Tt</b></td></tr>
+<tr class="memdesc:af531dfbb0312d1411695bc513f9fc3ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:af531dfbb0312d1411695bc513f9fc3ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29a766e0a44d52126e84113fab8bc790"><td class="memItemLeft" align="right" valign="top"><a id="a29a766e0a44d52126e84113fab8bc790" name="a29a766e0a44d52126e84113fab8bc790"></a>
 Eigen::Matrix&lt; int, 1, -1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_pt</b></td></tr>
+<tr class="memdesc:a29a766e0a44d52126e84113fab8bc790"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:a29a766e0a44d52126e84113fab8bc790"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20f9d47123df134ba81616d5c9ce7829"><td class="memItemLeft" align="right" valign="top"><a id="a20f9d47123df134ba81616d5c9ce7829" name="a20f9d47123df134ba81616d5c9ce7829"></a>
 Eigen::Matrix&lt; double, -1, -1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Ttperm</b></td></tr>
+<tr class="memdesc:a20f9d47123df134ba81616d5c9ce7829"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen matrix used as calculation support. <br /></td></tr>
 <tr class="separator:a20f9d47123df134ba81616d5c9ce7829"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fe814ef49f949598da4f414870da1d3"><td class="memItemLeft" align="right" valign="top"><a id="a9fe814ef49f949598da4f414870da1d3" name="a9fe814ef49f949598da4f414870da1d3"></a>
 std::vector&lt; Eigen::Matrix&lt; double, -1, -1 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_LUt</b></td></tr>
+<tr class="memdesc:a9fe814ef49f949598da4f414870da1d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">std vector of Eigen matrices. <br /></td></tr>
 <tr class="separator:a9fe814ef49f949598da4f414870da1d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf54f2309f7ac98e9f2cc449eae6bd37"><td class="memItemLeft" align="right" valign="top"><a id="aaf54f2309f7ac98e9f2cc449eae6bd37" name="aaf54f2309f7ac98e9f2cc449eae6bd37"></a>
 Eigen::PartialPivLU&lt; Eigen::Matrix&lt; double, -1, -1 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Lu_solver</b></td></tr>
+<tr class="memdesc:aaf54f2309f7ac98e9f2cc449eae6bd37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen PartialPivLu matrix, used for perfoming partial pivot. <br /></td></tr>
 <tr class="separator:aaf54f2309f7ac98e9f2cc449eae6bd37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc851be2138ae32b40834060bffe5a69"><td class="memItemLeft" align="right" valign="top"><a id="abc851be2138ae32b40834060bffe5a69" name="abc851be2138ae32b40834060bffe5a69"></a>
 Eigen::PartialPivLU&lt; Eigen::Matrix&lt; double, -1, -1 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Uu_solver</b></td></tr>
+<tr class="memdesc:abc851be2138ae32b40834060bffe5a69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen PartialPivLu matrix, used for perfoming partial pivot. <br /></td></tr>
 <tr class="separator:abc851be2138ae32b40834060bffe5a69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7a3c25d7d180499643a96b52c376ef8"><td class="memItemLeft" align="right" valign="top"><a id="ab7a3c25d7d180499643a96b52c376ef8" name="ab7a3c25d7d180499643a96b52c376ef8"></a>
 Eigen::PartialPivLU&lt; Eigen::Matrix&lt; double, -1, -1 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Lv_solver</b></td></tr>
+<tr class="memdesc:ab7a3c25d7d180499643a96b52c376ef8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen PartialPivLu matrix, used for perfoming partial pivot. <br /></td></tr>
 <tr class="separator:ab7a3c25d7d180499643a96b52c376ef8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41024c3b9faa8588e3ecd679203b2e4c"><td class="memItemLeft" align="right" valign="top"><a id="a41024c3b9faa8588e3ecd679203b2e4c" name="a41024c3b9faa8588e3ecd679203b2e4c"></a>
 Eigen::PartialPivLU&lt; Eigen::Matrix&lt; double, -1, -1 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Uv_solver</b></td></tr>
+<tr class="memdesc:a41024c3b9faa8588e3ecd679203b2e4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen PartialPivLu matrix, used for perfoming partial pivot. <br /></td></tr>
 <tr class="separator:a41024c3b9faa8588e3ecd679203b2e4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6287ec3344a639bccc0ae10bb04aa900"><td class="memItemLeft" align="right" valign="top"><a id="a6287ec3344a639bccc0ae10bb04aa900" name="a6287ec3344a639bccc0ae10bb04aa900"></a>
 Eigen::PartialPivLU&lt; Eigen::Matrix&lt; double, -1, -1 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Lp_solver</b></td></tr>
+<tr class="memdesc:a6287ec3344a639bccc0ae10bb04aa900"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen PartialPivLu matrix, used for perfoming partial pivot. <br /></td></tr>
 <tr class="separator:a6287ec3344a639bccc0ae10bb04aa900"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad38e2b16fa2e62e025fdcf2951266761"><td class="memItemLeft" align="right" valign="top"><a id="ad38e2b16fa2e62e025fdcf2951266761" name="ad38e2b16fa2e62e025fdcf2951266761"></a>
 Eigen::PartialPivLU&lt; Eigen::Matrix&lt; double, -1, -1 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Up_solver</b></td></tr>
+<tr class="memdesc:ad38e2b16fa2e62e025fdcf2951266761"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen PartialPivLu matrix, used for perfoming partial pivot. <br /></td></tr>
 <tr class="separator:ad38e2b16fa2e62e025fdcf2951266761"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d69aac2c20b371f05105b46b893f76c"><td class="memItemLeft" align="right" valign="top"><a id="a8d69aac2c20b371f05105b46b893f76c" name="a8d69aac2c20b371f05105b46b893f76c"></a>
 Eigen::PartialPivLU&lt; Eigen::Matrix&lt; double, -1, -1 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Lt_solver</b></td></tr>
+<tr class="memdesc:a8d69aac2c20b371f05105b46b893f76c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen PartialPivLu matrix, used for perfoming partial pivot. <br /></td></tr>
 <tr class="separator:a8d69aac2c20b371f05105b46b893f76c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02288b2063d3f4a257791f0fe5933b81"><td class="memItemLeft" align="right" valign="top"><a id="a02288b2063d3f4a257791f0fe5933b81" name="a02288b2063d3f4a257791f0fe5933b81"></a>
 Eigen::PartialPivLU&lt; Eigen::Matrix&lt; double, -1, -1 &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_Ut_solver</b></td></tr>
+<tr class="memdesc:a02288b2063d3f4a257791f0fe5933b81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Eigen PartialPivLu matrix, used for perfoming partial pivot. <br /></td></tr>
 <tr class="separator:a02288b2063d3f4a257791f0fe5933b81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8611d2ad5bd585ec902c30895c8a916"><td class="memItemLeft" align="right" valign="top"><a id="af8611d2ad5bd585ec902c30895c8a916" name="af8611d2ad5bd585ec902c30895c8a916"></a>
 unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>m_it</b></td></tr>
@@ -395,8 +431,7 @@ unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>m_it</b></td>
 std::ofstream&#160;</td><td class="memItemRight" valign="bottom"><b>m_output_header_file</b></td></tr>
 <tr class="memdesc:a1efa7e03cd0d72a7901f47dd575bfdc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">output .h file, in which all temperature datas of the simulation are saved. <br /></td></tr>
 <tr class="separator:a1efa7e03cd0d72a7901f47dd575bfdc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4922c04914255acd890452879eee7a8e"><td class="memItemLeft" align="right" valign="top"><a id="a4922c04914255acd890452879eee7a8e" name="a4922c04914255acd890452879eee7a8e"></a>
-<a class="el" href="structRayBenConvection_1_1simulation__state__t.html">simulation_state_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>simulation_state</b></td></tr>
+<tr class="memitem:a4922c04914255acd890452879eee7a8e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structRayBenConvection_1_1simulation__state__t.html">simulation_state_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classRayBenConvection.html#a4922c04914255acd890452879eee7a8e">simulation_state</a></td></tr>
 <tr class="separator:a4922c04914255acd890452879eee7a8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
@@ -488,6 +523,94 @@ static const unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>
 
 </div>
 </div>
+<a id="a834f45458ac6473a81c3457603809cd3" name="a834f45458ac6473a81c3457603809cd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a834f45458ac6473a81c3457603809cd3">&#9670;&nbsp;</a></span>m_apply_correction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RayBenConvection::m_apply_correction </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This function applies small corrections on m_T matrix. </p>
+<p >During the perturbative calculations, small errors due to the truncation of the decimals may occur, resulting in temperatures lower than m_TN. Since these values do not hold any physical value nor represent a calculation error, this function replaces them with m_TN. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classRayBenConvection.html#a0fade52114cb600deba397e9c3d86b12" title="lower temperature">m_TN</a> </dd></dl>
+
+</div>
+</div>
+<a id="a103559797e2c0013967de38b22af97f2" name="a103559797e2c0013967de38b22af97f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a103559797e2c0013967de38b22af97f2">&#9670;&nbsp;</a></span>m_d_solve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RayBenConvection::m_d_solve </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Matrix&lt; double,-1, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>mat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Matrix&lt; int, 1,-1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>perm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::PartialPivLU&lt; Eigen::Matrix&lt; double,-1,-1 &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>L</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::PartialPivLU&lt; Eigen::Matrix&lt; double,-1,-1 &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>U</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This function returns a permutated matrix, following Eigen Partial Pivoting operation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mat</td><td>Eigen matrix to be permutated. </td></tr>
+    <tr><td class="paramname">perm</td><td>Eigen vector of permutation. </td></tr>
+    <tr><td class="paramname">L</td><td>Eigen PartialPivLu matrix. </td></tr>
+    <tr><td class="paramname">U</td><td>Eigen PartialPivLu matrix. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a500821275948ffaeb5dbac835f618515" name="a500821275948ffaeb5dbac835f618515"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a500821275948ffaeb5dbac835f618515">&#9670;&nbsp;</a></span>m_H</h2>
@@ -536,6 +659,29 @@ static const unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>
 
 <p>lenght of the box of the simulation. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classRayBenConvection.html#a500821275948ffaeb5dbac835f618515" title="height of the box of the simulation.">m_H</a> </dd></dl>
+
+</div>
+</div>
+<a id="a4922c04914255acd890452879eee7a8e" name="a4922c04914255acd890452879eee7a8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4922c04914255acd890452879eee7a8e">&#9670;&nbsp;</a></span>simulation_state</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structRayBenConvection_1_1simulation__state__t.html">simulation_state_t</a> RayBenConvection::simulation_state</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structRayBenConvection_1_1simulation__state__t.html" title="This struct represents the advancement of the simulation.">simulation_state_t</a> </dd></dl>
 
 </div>
 </div>

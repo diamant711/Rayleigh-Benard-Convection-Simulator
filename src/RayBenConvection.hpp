@@ -115,9 +115,13 @@ class RayBenConvection {
     double m_TN;
     //! higher temperature
     double m_TS;
+    //! Eigen matrix used for perturbative calculation.
     Eigen::Matrix<double, m_nx+1, m_ny> m_u;
+    //! Eigen matrix used for perturbative calculation on the fluid's velocity.
     Eigen::Matrix<double, m_nx, m_ny+1> m_v;
+    //! Eigen matrix used for perturbative calculation on the fluid's pressure.
     Eigen::Matrix<double, m_nx, m_ny> m_p;
+    //! Eigen matrix used for perturbative calculation on the fluid's pressure.
     Eigen::Matrix<double, m_nx, m_ny> m_S;
     //! implementation detail.
     double m_To;
@@ -167,39 +171,71 @@ class RayBenConvection {
     double m_VE = 0;
     //! implementation detail.
     double m_VW = 0;
-    //initialisation variables
+    //! Eigen matrix used for boundary conditions.
     Eigen::Matrix<double, m_nx-1, m_ny-2> m_bcu;
+    //! Eigen matrix used for boundary conditions.
     Eigen::Matrix<double, m_nx-2, m_ny-1> m_bcv;
+    //! Eigen matrix used for calculations support.
     Eigen::Matrix<double, -1, 1> m_e;
+    //! Eigen matrix used for calculations support.
     Eigen::Matrix<double, -1, 1> m_i;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<double, -1, -1> m_Ax;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<double, -1, -1> m_Ay;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<double, -1, -1> m_A;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<double, -1, -1> m_Du;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<int, 1, -1> m_pu;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<double, -1, -1> m_Duperm;
+    //! std vector of Eigen matrices.
     std::vector<Eigen::Matrix<double, -1, -1>> m_LUu;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<double, -1, -1> m_Dv;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<int, 1, -1> m_pv;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<double, -1, -1> m_Dvperm;
+    // std vector of Eigen matrices.
     std::vector<Eigen::Matrix<double, -1, -1>> m_LUv;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<int, 1, -1> m_pp;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<double, -1, -1> m_Aperm;
+    //! std vector of Eigen matrices.
     std::vector<Eigen::Matrix<double, -1, -1>> m_LUp;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<double, m_nx-2, m_ny-2> m_bcT;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<double, -1, -1> m_Tx;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<double, -1, -1> m_Ty;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<double, -1, -1> m_Tt;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<int, 1, -1> m_pt;
+    //! Eigen matrix used as calculation support.
     Eigen::Matrix<double, -1, -1> m_Ttperm;
+    //! std vector of Eigen matrices.
     std::vector<Eigen::Matrix<double, -1, -1>> m_LUt;
+    //! Eigen PartialPivLu matrix, used for perfoming partial pivot.
     Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lu_solver;
+    //! Eigen PartialPivLu matrix, used for perfoming partial pivot.
     Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Uu_solver;
+    //! Eigen PartialPivLu matrix, used for perfoming partial pivot.
     Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lv_solver;
+    //! Eigen PartialPivLu matrix, used for perfoming partial pivot.
     Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Uv_solver;
+    //! Eigen PartialPivLu matrix, used for perfoming partial pivot.
     Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lp_solver;
+    //! Eigen PartialPivLu matrix, used for perfoming partial pivot.
     Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Up_solver;
+    //! Eigen PartialPivLu matrix, used for perfoming partial pivot.
     Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lt_solver;
+    //! Eigen PartialPivLu matrix, used for perfoming partial pivot.
     Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Ut_solver;
     //! implementation detail.
     static const unsigned int m_ii = m_nx-2;
@@ -209,6 +245,9 @@ class RayBenConvection {
     unsigned int m_it;
     //! output .h file, in which all temperature datas of the simulation are saved. 
     std::ofstream m_output_header_file;
+    /*!
+     \sa simulation_state_t
+    */
     simulation_state_t simulation_state;
 
     //functions
@@ -218,7 +257,7 @@ class RayBenConvection {
             const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &,
             const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &);
     void m_ETA(int);
-    
+
     template <typename Scalar> 
     Eigen::Matrix<Scalar,-1,-1> m_spdiags(const Eigen::Matrix<Scalar, -1, -1> &, 
                                     const Eigen::Matrix<int, -1, 1> &,
@@ -226,13 +265,13 @@ class RayBenConvection {
     template <typename Scalar> 
     Eigen::Matrix<Scalar,-1,-1> m_kron(const Eigen::Matrix<Scalar, -1, -1> &,
                                  const Eigen::Matrix<Scalar, -1, -1> &);
-    
+
     template <typename Scalar>
     std::vector<Eigen::Triplet<Scalar>> m_SparseToTriplet(Eigen::SparseMatrix<Scalar> &);
     template <typename Scalar>
-    
+
     Eigen::Matrix<int, 1, -1> m_my_symamd(Eigen::Matrix<Scalar, -1, -1> &); 
-    
+
     void m_luP(Eigen::Matrix<double,-1,-1> &, std::vector<Eigen::Matrix<double,-1,-1>> &);
     void m_write_current_frame();
 };
@@ -241,6 +280,14 @@ RayBenConvection::RayBenConvection() {}
 
 RayBenConvection::~RayBenConvection() {}
 
+//! This function applies small corrections on m_T matrix.
+/*!
+ During the perturbative calculations, small errors due to the truncation of the decimals may occur,
+ resulting in temperatures lower than m_TN.
+ Since these values do not hold any physical value nor represent a calculation error,
+ this function replaces them with m_TN.
+ \sa m_TN
+*/
 void RayBenConvection::m_apply_correction(void) {
   for(int i = 0; i < m_T.rows(); ++i) {
     for(int k = 0; k < m_T.cols(); ++k) {
@@ -267,7 +314,13 @@ void RayBenConvection::m_apply_correction(void) {
 //  }
 //}
 
-
+//! This function returns a permutated matrix, following Eigen  Partial Pivoting operation.
+/*!
+ \param mat Eigen matrix to be permutated.
+ \param perm Eigen vector of permutation.
+ \param L Eigen PartialPivLu matrix.
+ \param U Eigen PartialPivLu matrix.
+*/
 void RayBenConvection::m_d_solve(Eigen::Matrix<double,-1,1> &mat,
            const Eigen::Matrix<int,1,-1> &perm,
            const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &L,
