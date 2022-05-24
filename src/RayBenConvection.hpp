@@ -1,7 +1,7 @@
 /******************************************************************
  * TODO list:
  * X - Metodi privati vanno rinominati con il prefisso m_
- * 2 - Dopo aver scritto la documentazione sulla matematica: m_ii, m_jj -> nx-2, ny-2
+       * 2 - Dopo aver scritto la documentazione sulla matematica: m_ii, m_jj -> nx-2, ny-2
  * X - write_current_frame() deve scrivere un file .h che conterra' una
  *     dichiarazione di una variabile globale dal nome poco rilevante che sara' 
  *     del tipo double[nx][ny][5000] ad ogni chiamata del metodo in oggetto
@@ -351,6 +351,12 @@ void RayBenConvection::m_d_solve(Eigen::Matrix<double,-1,1> &mat,
 //  ::EndDrawing();
 //}
 
+//! This function returns the estimated time to the end of the simulation.
+/*!
+ While performing the calculation, parameters of simulation_state_t are set.
+ \param n_calls number of steps the simulation has run.
+ \sa simulation_state_t.
+*/
 void RayBenConvection::m_ETA(int n_calls){
   static std::chrono::time_point<std::chrono::high_resolution_clock> old_time;
   float delta_t;
@@ -368,7 +374,7 @@ void RayBenConvection::m_ETA(int n_calls){
       simulation_state.velocity = 1.0/delta_t;
       for(int i = 0; i < 80; ++i)
         std::putc(' ', stdout);
-      std::cerr << "\rINFO: RayBenConvection: m_ETA: eta = " 
+      std::cerr << "\rINFO: RayBenConvection: m_ETA: eta = "
                 << std::setw(4) << std::setprecision(3)
                 << simulation_state.eta << "s\tspeed = "
                 << simulation_state.velocity << "cicle/s\tstep = "
@@ -380,8 +386,9 @@ void RayBenConvection::m_ETA(int n_calls){
   return;
 }
 
-template <typename Scalar> 
-Eigen::Matrix<Scalar,-1,-1> RayBenConvection::m_spdiags(const Eigen::Matrix<Scalar, -1, -1>& B, 
+//! This function returns an Eigen sparce diagonal matrix.
+template <typename Scalar>
+Eigen::Matrix<Scalar,-1,-1> RayBenConvection::m_spdiags(const Eigen::Matrix<Scalar, -1, -1>& B,
                                     const Eigen::Matrix<int, -1, 1>& d,
                                     size_t m, size_t n) {
   Eigen::SparseMatrix<Scalar> A(m,n);
@@ -405,12 +412,12 @@ Eigen::Matrix<Scalar,-1,-1> RayBenConvection::m_spdiags(const Eigen::Matrix<Scal
   return Eigen::Matrix<Scalar, -1, -1>(A);
 }
 
+//! This function returns the Kronecher product of two constant Eigen matrices.
 template <typename Scalar> 
 Eigen::Matrix<Scalar,-1,-1> RayBenConvection::m_kron(const Eigen::Matrix<Scalar, -1, -1>& B, 
                                  const Eigen::Matrix<Scalar, -1, -1>& d) {
   Eigen::Matrix<Scalar, -1, -1> A;
   A.resize(B.rows()*d.rows(), B.cols()*d.cols());
-  
   for (int i = 0; i < B.rows(); i++) 
     for (int j = 0; j < B.cols(); j++) 
       for (int h = 0; h < d.rows(); h++) 
@@ -420,6 +427,7 @@ Eigen::Matrix<Scalar,-1,-1> RayBenConvection::m_kron(const Eigen::Matrix<Scalar,
   return Eigen::Matrix<Scalar, -1, -1>(A);
 }
 
+//! This function converts Eigen sparce matrix to an std vector of Eigen Triplets.
 template <typename Scalar>
 std::vector<Eigen::Triplet<Scalar>> RayBenConvection::m_SparseToTriplet(Eigen::SparseMatrix<Scalar> &A)
 {
@@ -434,6 +442,12 @@ std::vector<Eigen::Triplet<Scalar>> RayBenConvection::m_SparseToTriplet(Eigen::S
   return A_Triplet;
 }
 
+//! This function returns a permutation vector.
+/*! 
+ Calling p = symamd(S) returns the permutation vector p such that S(p,p)
+ tends to have a sparser Cholesky factor than S.
+ \param mat must be a symmetric positive definite Eigen matrix.
+*/
 template <typename Scalar>
 Eigen::Matrix<int, 1, -1> RayBenConvection::m_my_symamd(Eigen::Matrix<Scalar, -1, -1> &mat) {
   if (mat.rows() != mat.cols()) {
@@ -485,7 +499,17 @@ Eigen::Matrix<int, 1, -1> RayBenConvection::m_my_symamd(Eigen::Matrix<Scalar, -1
     return Eigen::Matrix<int,1,1>(0);
   }
 }
+//**************************************** TODO non cancellare gli spazi qui sotto perf.
 
+//! This function resolves Partial Pivoting calculations with LU decomposition.
+/*!
+ Calling this function will return an std vector of Eigen Matrices
+ consisting of the two matrices L and U obtained during the decomposition.                                  
+ The input matrix A is decomposed as A = PLU where L is unit-lower-triangular,
+ U is upper-triangular, and P is a permutation matrix.
+ \param mat must be a square invertible matrix.
+ \param ret_vett ret_vett[0] = PL matrix, ret_vett[1] = U matrix.
+*/
 void RayBenConvection::m_luP(Eigen::Matrix<double,-1,-1> &mat,
          std::vector<Eigen::Matrix<double,-1,-1>> &ret_vett){
 
@@ -504,6 +528,11 @@ void RayBenConvection::m_luP(Eigen::Matrix<double,-1,-1> &mat,
   return;
 }
 
+//! This function writes in the output file the m_T(i, j) matrix.
+/*!
+ The output is in C format.
+ \sa write_current_data()
+*/
 void RayBenConvection::m_write_current_frame (){
   m_output_header_file << "{";
     for (unsigned int i = 0; i < m_ny; i++) {
@@ -520,8 +549,6 @@ void RayBenConvection::m_write_current_frame (){
 //! This function initialises the private members of the function from the users' input.
 /*!
  The parameter inserted by the user are thoughtfully checked to ensure the validity of the simulation.
-*/
-/*!
  \param END_CICLE total numer of steps.
  \param cold_temp lower wall temperature. 
  \param hot_temp higher wall temperature.
@@ -604,7 +631,7 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
   //m_dt correction:
   m_dt = m_tf / m_nt;
 
-  //initialising calculation maxtrices:
+  //initialising calculation matrices:
   m_u.setZero();
   m_v.setZero();
   m_p.setZero();
@@ -638,9 +665,9 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
   m_bcv.setZero();
   m_bcv.row(0).setConstant(2 * m_VW / std::pow(m_dx,2));
   m_bcv.row(m_bcv.rows()-1).setConstant(2 * m_VE / std::pow(m_dx,2));
-  m_bcv.col(0).setConstant(m_VS / std::pow(m_dy,2)); 
+  m_bcv.col(0).setConstant(m_VS / std::pow(m_dy,2));
   m_bcv.col(m_bcv.cols()-1).setConstant(m_VN / std::pow(m_dy,2));
-  
+
   //B.Cs at the corners:
   m_bcv(0, 0)                       = 2 * m_VW / std::pow(m_dx,2) + m_VS / std::pow(m_dy,2);
   m_bcv(m_bcv.rows()-1, 0)            = 2 * m_VE / std::pow(m_dx,2) + m_VS / std::pow(m_dy,2);
@@ -656,7 +683,7 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
 
   m_Ax = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_e * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
-    Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
+    Eigen::Matrix<int, 1, 3> (-1, 0, 1),
     m_nx-1, m_nx-1
     );
 
@@ -665,10 +692,10 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
     Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
     m_ny-2, m_ny-2
     );
-  
+
   m_Ax(0, 0) = -3;
   m_Ax(m_Ax.rows()-1, m_Ax.rows()-1) = -3; 
-   
+
   m_A = m_kron<double>(
         static_cast<Eigen::Matrix<double, -1, -1>>(m_Ay/std::pow(m_dy,2)), 
         Eigen::Matrix<double, m_nx-1, m_nx-1>::Identity()
@@ -677,35 +704,35 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
         Eigen::Matrix<double, m_ny-2, m_ny-2>::Identity(),
         static_cast<Eigen::Matrix<double, -1, -1>>(m_Ax/std::pow(m_dx,2))
         );
-  
+
   m_Du = Eigen::Matrix<double, (m_nx-1)*(m_ny-2), (m_nx-1)*(m_ny-2)>::Identity() - m_dt * m_A/m_Re;
   m_pu = m_my_symamd(m_Du);
-  
+
   m_Duperm = m_Du(m_pu,m_pu);
-  
+
   m_luP(m_Duperm, m_LUu);
-  
+
   //Central difference operator(for v)
   m_e.resize(m_nx-2, 1);
   m_e.setOnes();
   m_i.resize(m_ny-1, 1);
   m_i.setOnes();
-  
+
   m_Ax = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_e * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
     Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
     m_nx-2, m_nx-2
     );
-  
+
   m_Ay = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_i * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
     Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
     m_ny-1, m_ny-1
     ); 
-  
+
   m_Ay(0, 0) = -3;
   m_Ay(m_Ay.rows()-1, m_Ay.cols()-1) = -3; 
-   
+
   m_A = m_kron<double>(
         static_cast<Eigen::Matrix<double, -1, -1>>(m_Ay/std::pow(m_dy,2)), 
         Eigen::Matrix<double, m_nx-2, m_nx-2>::Identity()
@@ -731,9 +758,9 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
 
   m_Ax = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_e * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
-    Eigen::Matrix<int, 1, 3> (-1, 0, 1), 
+    Eigen::Matrix<int, 1, 3> (-1, 0, 1),
     m_nx-2, m_nx-2
-    ); 
+    );
 
   m_Ay = m_spdiags(
     static_cast<Eigen::Matrix<double, -1, -1>>(m_i * Eigen::Matrix<double, 1, 3>(1, -2, 1)),
@@ -832,11 +859,10 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
   m_v.col(0) = Eigen::Matrix<double, m_nx, 1>::Constant(2 * m_VS) - m_v.col(1);
   m_v.col(m_v.cols()-1) = Eigen::Matrix<double, m_nx, 1>::Constant(2 * m_VN) - m_v.col(m_v.cols()-2);
 
-  //FIXME: questo commento annuncia l'inizio del for?  
   //%%
   //%Evaluating temperature and velocity field at each time step
 
-  //Easying solver calculations: eleoicca stuff
+  //LU decomposition calcolation:
   m_Lu_solver.compute(m_LUu[0]);
 
   m_Uu_solver.compute(m_LUu[1]);
@@ -868,10 +894,8 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
 
 }
 
+//! This function performs the perturbative calculations.
 RayBenConvection::simulation_state_t RayBenConvection::eval_next_frame(){
-
-  //const unsigned int m_ii = m_nx-2;
-  //const unsigned int m_jj = m_ny-2;
 
   if (m_it < m_END_CICLE ) {
 
@@ -1001,7 +1025,6 @@ RayBenConvection::simulation_state_t RayBenConvection::eval_next_frame(){
 
   }
 
-
   if (m_it == m_END_CICLE) {
     std::cerr << std::endl << "INFO: RayBenConvection: eval_next_frame: " 
               << "Simulation ended with no errors." << std::endl;
@@ -1009,12 +1032,19 @@ RayBenConvection::simulation_state_t RayBenConvection::eval_next_frame(){
     return simulation_state;
   }
 
-
   ++m_it;
 
   simulation_state.ended = false;
   return simulation_state;
 }
+
+//! This function writes on the output header file the values of the m_T matrix's elements computed during the simulation.
+/*!
+This public function creates the C format output. It is called once in every eval_next_frame iteration,
+and it checks if the simulation has reached its end. 
+\sa eval_next_frame()
+\sa m_write_current_frame()
+*/
 
 void RayBenConvection::write_current_data(){
   if (m_it == 0) {
