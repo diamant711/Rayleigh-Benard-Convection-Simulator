@@ -96,8 +96,8 @@ void WebServer::respond_to_all(void) {
       m_delete_connection_by_index(i);
 
   if(m_start_websocket) {
-    m_start_websocket = m_websocketserver_ptr->respond();
     m_websocketserver_ptr->update_simulation_data(m_actual_total, m_actual_velocity, m_actual_eta);
+    m_start_websocket = m_websocketserver_ptr->respond();
     m_first_user_status = m_start_websocket ? PROCESSING : OUTPUT;
   }
   if(!m_is_waiting_list_empty()) {
