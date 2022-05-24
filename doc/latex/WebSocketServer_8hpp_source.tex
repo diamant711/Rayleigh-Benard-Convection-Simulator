@@ -1,0 +1,256 @@
+\hypertarget{WebSocketServer_8hpp_source}{}\doxysection{Web\+Socket\+Server.\+hpp}
+\label{WebSocketServer_8hpp_source}\index{src/WebSocketServer.hpp@{src/WebSocketServer.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 }
+\DoxyCodeLine{2 \textcolor{comment}{// }}
+\DoxyCodeLine{3 \textcolor{comment}{// This class implement a WebSocket in order to comunicate with the JavaScript }}
+\DoxyCodeLine{4 \textcolor{comment}{// client side application this class uses non-\/async operation in order to sync}}
+\DoxyCodeLine{5 \textcolor{comment}{// with the main program}}
+\DoxyCodeLine{6 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#ifndef WEBSOCKETSERVER\_HPP}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#define WEBSOCKETSERVER\_HPP}}
+\DoxyCodeLine{11 }
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#include <iostream>}}
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#include <memory>}}
+\DoxyCodeLine{14 \textcolor{preprocessor}{\#include <cstring>}}
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#include <openssl/sha.h>}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{17 \textcolor{preprocessor}{\#include <cassert>}}
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include <limits>}}
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#include <stdexcept>}}
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#include <cctype>}}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#include "{}TCPServer.hpp"{}}}
+\DoxyCodeLine{23 \textcolor{preprocessor}{\#include "{}Connection.hpp"{}}}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25 \textcolor{keyword}{class }\mbox{\hyperlink{classWebSocketServer}{WebSocketServer}} : \mbox{\hyperlink{classTCPServer}{TCPServer}} \{}
+\DoxyCodeLine{26   \textcolor{comment}{// Functions}}
+\DoxyCodeLine{27   \textcolor{keyword}{public}:}
+\DoxyCodeLine{28     \mbox{\hyperlink{classWebSocketServer}{WebSocketServer}}(boost::asio::io\_context \&, \textcolor{keywordtype}{int});}
+\DoxyCodeLine{29     \mbox{\hyperlink{classWebSocketServer}{\string~WebSocketServer}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31     \textcolor{keywordtype}{bool} respond(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{32     \textcolor{keywordtype}{bool} full(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{33     \textcolor{keywordtype}{void} update\_simulation\_data(\textcolor{keywordtype}{int}, \textcolor{keywordtype}{float}, \textcolor{keywordtype}{int});}
+\DoxyCodeLine{34   \textcolor{keyword}{private}:}
+\DoxyCodeLine{35     std::string m\_base64\_encode(\textcolor{keyword}{const} std::string \&);}
+\DoxyCodeLine{36     std::string m\_base64\_decode(\textcolor{keyword}{const} std::string \&);}
+\DoxyCodeLine{37     std::string m\_handshake\_respond\_builder(std::string);}
+\DoxyCodeLine{38     \textcolor{comment}{// format: eta velociry10 total}}
+\DoxyCodeLine{39     std::vector<unsigned char> m\_frame\_builder(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{40   \textcolor{comment}{// Variables}}
+\DoxyCodeLine{41   \textcolor{keyword}{typedef} \textcolor{keyword}{enum} \{}
+\DoxyCodeLine{42     HANDSHAKE\_ANSWARE,}
+\DoxyCodeLine{43     UPDATING\_CLIENT,}
+\DoxyCodeLine{44     CLOSING\_CONNECTION}
+\DoxyCodeLine{45   \} m\_status\_t;}
+\DoxyCodeLine{46   \textcolor{keywordtype}{int} m\_actual\_total;}
+\DoxyCodeLine{47   \textcolor{keywordtype}{int} m\_actual\_velocity10;}
+\DoxyCodeLine{48   \textcolor{keywordtype}{int} m\_actual\_eta;}
+\DoxyCodeLine{49   \textcolor{keywordtype}{bool} m\_connected = \textcolor{keyword}{false};}
+\DoxyCodeLine{50   m\_status\_t m\_status;}
+\DoxyCodeLine{51   std::string m\_handshake\_response;}
+\DoxyCodeLine{52   std::string m\_handshake\_request;}
+\DoxyCodeLine{53   std::unique\_ptr<boost::asio::io\_context> m\_io\_context\_ptr;}
+\DoxyCodeLine{54   std::unique\_ptr<Connection> m\_connection\_ptr;}
+\DoxyCodeLine{55   \textcolor{keyword}{const} \textcolor{keywordtype}{char} m\_b64\_table[65] = \textcolor{stringliteral}{"{}ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno"{}}}
+\DoxyCodeLine{56                                     \textcolor{stringliteral}{"{}pqrstuvwxyz0123456789+/"{}};}
+\DoxyCodeLine{57 }
+\DoxyCodeLine{58   \textcolor{keyword}{const} \textcolor{keywordtype}{char} m\_reverse\_table[128] = \{}
+\DoxyCodeLine{59     64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,}
+\DoxyCodeLine{60     64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,}
+\DoxyCodeLine{61     64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 62, 64, 64, 64, 63,}
+\DoxyCodeLine{62     52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 64, 64, 64, 64, 64, 64,}
+\DoxyCodeLine{63     64,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,}
+\DoxyCodeLine{64     15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 64, 64, 64, 64, 64,}
+\DoxyCodeLine{65     64, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,}
+\DoxyCodeLine{66     41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64}
+\DoxyCodeLine{67   \};}
+\DoxyCodeLine{68 \};}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{70 WebSocketServer::WebSocketServer(boost::asio::io\_context\& executor, \textcolor{keywordtype}{int} port) }
+\DoxyCodeLine{71   : \mbox{\hyperlink{classTCPServer}{TCPServer}}(executor, port) }
+\DoxyCodeLine{72 \{\}}
+\DoxyCodeLine{73 }
+\DoxyCodeLine{74 WebSocketServer::\string~WebSocketServer(\textcolor{keywordtype}{void}) \{\}}
+\DoxyCodeLine{75 }
+\DoxyCodeLine{76 \textcolor{keywordtype}{bool} WebSocketServer::respond(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{77   m\_get\_executor().poll();}
+\DoxyCodeLine{78   \textcolor{keywordflow}{if}(!m\_is\_waiting\_list\_empty()) \{}
+\DoxyCodeLine{79     \textcolor{keywordflow}{if}(!m\_connected) \{}
+\DoxyCodeLine{80       m\_status = HANDSHAKE\_ANSWARE;}
+\DoxyCodeLine{81       m\_connected = \textcolor{keyword}{true};}
+\DoxyCodeLine{82     \}}
+\DoxyCodeLine{83     \textcolor{keywordflow}{switch} (m\_status) \{}
+\DoxyCodeLine{84       \textcolor{keywordflow}{case} HANDSHAKE\_ANSWARE:}
+\DoxyCodeLine{85         std::cerr << \textcolor{stringliteral}{"{}INFO: WebSocketServer: respond: waiting for WS request"{}} }
+\DoxyCodeLine{86                   << std::endl;}
+\DoxyCodeLine{87         \textcolor{keywordflow}{while} (m\_get\_first\_connection().connection\_ptr-\/>get\_socket().available() <= 0) \{\}}
+\DoxyCodeLine{88         std::cerr << \textcolor{stringliteral}{"{}INFO: WebSocketServer: respond: recived WS request, responding"{}} }
+\DoxyCodeLine{89                   << std::endl;}
+\DoxyCodeLine{90         m\_get\_first\_connection().connection\_ptr-\/>receive();}
+\DoxyCodeLine{91         m\_handshake\_response =  \textcolor{stringliteral}{"{}HTTP/1.1 101 Switching Protocols\(\backslash\)r\(\backslash\)n"{}}}
+\DoxyCodeLine{92                                 \textcolor{stringliteral}{"{}Upgrade: websocket\(\backslash\)r\(\backslash\)n"{}}}
+\DoxyCodeLine{93                                 \textcolor{stringliteral}{"{}Connection: Upgrade\(\backslash\)r\(\backslash\)n"{}}}
+\DoxyCodeLine{94                                 \textcolor{stringliteral}{"{}Sec-\/WebSocket-\/Accept: "{}} }
+\DoxyCodeLine{95                                 + m\_handshake\_respond\_builder(}
+\DoxyCodeLine{96                                   m\_get\_first\_connection().connection\_ptr-\/>unload\_data().get()}
+\DoxyCodeLine{97                                 ) + \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n\(\backslash\)r\(\backslash\)n"{}};}
+\DoxyCodeLine{98         m\_get\_first\_connection().connection\_ptr-\/>load\_data(m\_handshake\_response);}
+\DoxyCodeLine{99         m\_get\_first\_connection().connection\_ptr-\/>send();}
+\DoxyCodeLine{100         m\_status = UPDATING\_CLIENT;}
+\DoxyCodeLine{101       \textcolor{keywordflow}{break};}
+\DoxyCodeLine{102       \textcolor{keywordflow}{case} UPDATING\_CLIENT:}
+\DoxyCodeLine{103         m\_get\_first\_connection().connection\_ptr-\/>load\_data(m\_frame\_builder());}
+\DoxyCodeLine{104         m\_get\_first\_connection().connection\_ptr-\/>send();}
+\DoxyCodeLine{105       \textcolor{keywordflow}{break};}
+\DoxyCodeLine{106       \textcolor{keywordflow}{case} CLOSING\_CONNECTION:}
+\DoxyCodeLine{107         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{108       \textcolor{keywordflow}{break};}
+\DoxyCodeLine{109     \}}
+\DoxyCodeLine{110   \}}
+\DoxyCodeLine{111   \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{112 \}}
+\DoxyCodeLine{113 }
+\DoxyCodeLine{114 \textcolor{keywordtype}{bool} WebSocketServer::full(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{115   \textcolor{keywordflow}{return} (!m\_is\_waiting\_list\_empty());}
+\DoxyCodeLine{116 \}}
+\DoxyCodeLine{117 }
+\DoxyCodeLine{118 ::std::string WebSocketServer::m\_base64\_encode(const ::std::string \&bindata)}
+\DoxyCodeLine{119 \{}
+\DoxyCodeLine{120    using ::std::string;}
+\DoxyCodeLine{121    using ::std::numeric\_limits;}
+\DoxyCodeLine{122 }
+\DoxyCodeLine{123    \textcolor{keywordflow}{if} (bindata.size() > (numeric\_limits<string::size\_type>::max() / 4u) * 3u) \{}
+\DoxyCodeLine{124       throw ::std::length\_error(\textcolor{stringliteral}{"{}Converting too large a string to base64."{}});}
+\DoxyCodeLine{125    \}}
+\DoxyCodeLine{126 }
+\DoxyCodeLine{127    const ::std::size\_t binlen = bindata.size();}
+\DoxyCodeLine{128    \textcolor{comment}{// Use = signs so the end is properly padded.}}
+\DoxyCodeLine{129    \textcolor{keywordtype}{string} retval((((binlen + 2) / 3) * 4), \textcolor{charliteral}{'='});}
+\DoxyCodeLine{130    ::std::size\_t outpos = 0;}
+\DoxyCodeLine{131    \textcolor{keywordtype}{int} bits\_collected = 0;}
+\DoxyCodeLine{132    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} accumulator = 0;}
+\DoxyCodeLine{133    \textcolor{keyword}{const} string::const\_iterator binend = bindata.end();}
+\DoxyCodeLine{134 }
+\DoxyCodeLine{135    \textcolor{keywordflow}{for} (string::const\_iterator i = bindata.begin(); i != binend; ++i) \{}
+\DoxyCodeLine{136       accumulator = (accumulator << 8) | (*i \& 0xffu);}
+\DoxyCodeLine{137       bits\_collected += 8;}
+\DoxyCodeLine{138       \textcolor{keywordflow}{while} (bits\_collected >= 6) \{}
+\DoxyCodeLine{139          bits\_collected -\/= 6;}
+\DoxyCodeLine{140          retval[outpos++] = m\_b64\_table[(accumulator >> bits\_collected) \& 0x3fu];}
+\DoxyCodeLine{141       \}}
+\DoxyCodeLine{142    \}}
+\DoxyCodeLine{143    \textcolor{keywordflow}{if} (bits\_collected > 0) \{ \textcolor{comment}{// Any trailing bits that are missing.}}
+\DoxyCodeLine{144       assert(bits\_collected < 6);}
+\DoxyCodeLine{145       accumulator <<= 6 -\/ bits\_collected;}
+\DoxyCodeLine{146       retval[outpos++] = m\_b64\_table[accumulator \& 0x3fu];}
+\DoxyCodeLine{147    \}}
+\DoxyCodeLine{148    assert(outpos >= (retval.size() -\/ 2));}
+\DoxyCodeLine{149    assert(outpos <= retval.size());}
+\DoxyCodeLine{150    \textcolor{keywordflow}{return} retval;}
+\DoxyCodeLine{151 \}}
+\DoxyCodeLine{152 }
+\DoxyCodeLine{153 ::std::string WebSocketServer::m\_base64\_decode(const ::std::string \&ascdata)}
+\DoxyCodeLine{154 \{}
+\DoxyCodeLine{155    using ::std::string;}
+\DoxyCodeLine{156    \textcolor{keywordtype}{string} retval;}
+\DoxyCodeLine{157    \textcolor{keyword}{const} string::const\_iterator last = ascdata.end();}
+\DoxyCodeLine{158    \textcolor{keywordtype}{int} bits\_collected = 0;}
+\DoxyCodeLine{159    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} accumulator = 0;}
+\DoxyCodeLine{160 }
+\DoxyCodeLine{161    \textcolor{keywordflow}{for} (string::const\_iterator i = ascdata.begin(); i != last; ++i) \{}
+\DoxyCodeLine{162       \textcolor{keyword}{const} \textcolor{keywordtype}{int} c = *i;}
+\DoxyCodeLine{163       \textcolor{keywordflow}{if} (::std::isspace(c) || c == \textcolor{charliteral}{'='}) \{}
+\DoxyCodeLine{164          \textcolor{comment}{// Skip whitespace and padding. Be liberal in what you accept.}}
+\DoxyCodeLine{165          \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{166       \}}
+\DoxyCodeLine{167       \textcolor{keywordflow}{if} ((c > 127) || (c < 0) || (m\_reverse\_table[c] > 63)) \{}
+\DoxyCodeLine{168          throw ::std::invalid\_argument(\textcolor{stringliteral}{"{}This contains characters not legal in a base64 encoded string."{}});}
+\DoxyCodeLine{169       \}}
+\DoxyCodeLine{170       accumulator = (accumulator << 6) | m\_reverse\_table[c];}
+\DoxyCodeLine{171       bits\_collected += 6;}
+\DoxyCodeLine{172       \textcolor{keywordflow}{if} (bits\_collected >= 8) \{}
+\DoxyCodeLine{173          bits\_collected -\/= 8;}
+\DoxyCodeLine{174          retval += \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}((accumulator >> bits\_collected) \& 0xffu);}
+\DoxyCodeLine{175       \}}
+\DoxyCodeLine{176    \}}
+\DoxyCodeLine{177    \textcolor{keywordflow}{return} retval;}
+\DoxyCodeLine{178 \}}
+\DoxyCodeLine{179 }
+\DoxyCodeLine{180 std::string WebSocketServer::m\_handshake\_respond\_builder(std::string req) \{}
+\DoxyCodeLine{181   m\_handshake\_request = req;}
+\DoxyCodeLine{182   std::string field(\textcolor{stringliteral}{"{}Sec-\/WebSocket-\/Key: "{}});}
+\DoxyCodeLine{183   std::string magic\_word(\textcolor{stringliteral}{"{}258EAFA5-\/E914-\/47DA-\/95CA-\/C5AB0DC85B11"{}});}
+\DoxyCodeLine{184   std::string key(req.substr(req.find(field) + field.size(), 24)); \textcolor{comment}{//fixed lenght?}}
+\DoxyCodeLine{185   std::cerr << \textcolor{stringliteral}{"{}INFO: WebSocketServer: m\_handshake\_respond\_builder: recived key "{}}}
+\DoxyCodeLine{186             << key << std::endl;}
+\DoxyCodeLine{187   key += magic\_word;}
+\DoxyCodeLine{188   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} output[20];}
+\DoxyCodeLine{189   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} key\_c\_str[key.size()];}
+\DoxyCodeLine{190   ::memset(output, 0, 20);}
+\DoxyCodeLine{191   ::memcpy(key\_c\_str, key.c\_str(), key.size());}
+\DoxyCodeLine{192   ::SHA1(key\_c\_str, key.size(), output);}
+\DoxyCodeLine{193   std::string s((\textcolor{keywordtype}{char} *) output);}
+\DoxyCodeLine{194   s = m\_base64\_encode(s);}
+\DoxyCodeLine{195   std::cerr << \textcolor{stringliteral}{"{}INFO: WebSocketServer: m\_handshake\_respond\_builder: response key "{}}}
+\DoxyCodeLine{196             << s << std::endl;}
+\DoxyCodeLine{197   \textcolor{keywordflow}{return} s;}
+\DoxyCodeLine{198 \}}
+\DoxyCodeLine{199 }
+\DoxyCodeLine{200 std::vector<unsigned char> WebSocketServer::m\_frame\_builder(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{201   std::vector<unsigned char> frame;}
+\DoxyCodeLine{202   \textcolor{comment}{/* }}
+\DoxyCodeLine{203 \textcolor{comment}{   * FIN  = 1}}
+\DoxyCodeLine{204 \textcolor{comment}{   * RSV1 = 0}}
+\DoxyCodeLine{205 \textcolor{comment}{   * RSV2 = 0}}
+\DoxyCodeLine{206 \textcolor{comment}{   * RSV3 = 0}}
+\DoxyCodeLine{207 \textcolor{comment}{   * OP C = 0}}
+\DoxyCodeLine{208 \textcolor{comment}{   *    O = 0}}
+\DoxyCodeLine{209 \textcolor{comment}{   *    D = 1}}
+\DoxyCodeLine{210 \textcolor{comment}{   *    E = 0}}
+\DoxyCodeLine{211 \textcolor{comment}{  */}}
+\DoxyCodeLine{212   frame.push\_back(0b10000010);}
+\DoxyCodeLine{213   \textcolor{comment}{/* }}
+\DoxyCodeLine{214 \textcolor{comment}{   * MASK = 1}}
+\DoxyCodeLine{215 \textcolor{comment}{   * L    = 0}}
+\DoxyCodeLine{216 \textcolor{comment}{   * E    = 0}}
+\DoxyCodeLine{217 \textcolor{comment}{   * N    = 0}}
+\DoxyCodeLine{218 \textcolor{comment}{   * G    = 1}}
+\DoxyCodeLine{219 \textcolor{comment}{   * H    = 1}}
+\DoxyCodeLine{220 \textcolor{comment}{   * T    = 0}}
+\DoxyCodeLine{221 \textcolor{comment}{   * .    = 0}}
+\DoxyCodeLine{222 \textcolor{comment}{  */}}
+\DoxyCodeLine{223   frame.push\_back(0b10000000 + \textcolor{keyword}{sizeof}(m\_actual\_eta) + \textcolor{keyword}{sizeof}(m\_actual\_velocity10) + \textcolor{keyword}{sizeof}(m\_actual\_total));}
+\DoxyCodeLine{224   \textcolor{comment}{/* mask key = 0xA271 */}}
+\DoxyCodeLine{225   frame.push\_back(0xA2);}
+\DoxyCodeLine{226   frame.push\_back(0x71);}
+\DoxyCodeLine{227   \textcolor{comment}{/* payload eta */}}
+\DoxyCodeLine{228   frame.push\_back(m\_actual\_eta \& 0xFF000000 >> 6);}
+\DoxyCodeLine{229   frame.push\_back(m\_actual\_eta \& 0x00FF0000 >> 4);}
+\DoxyCodeLine{230   frame.push\_back(m\_actual\_eta \& 0x0000FF00 >> 2);}
+\DoxyCodeLine{231   frame.push\_back(m\_actual\_eta \& 0x000000FF >> 0);}
+\DoxyCodeLine{232   \textcolor{comment}{/* payload velocity10 */}}
+\DoxyCodeLine{233   frame.push\_back(m\_actual\_velocity10 \& 0xFF000000 >> 6);}
+\DoxyCodeLine{234   frame.push\_back(m\_actual\_velocity10 \& 0x00FF0000 >> 4);}
+\DoxyCodeLine{235   frame.push\_back(m\_actual\_velocity10 \& 0x0000FF00 >> 2);}
+\DoxyCodeLine{236   frame.push\_back(m\_actual\_velocity10 \& 0x000000FF >> 0);}
+\DoxyCodeLine{237   \textcolor{comment}{/* payload total */}}
+\DoxyCodeLine{238   frame.push\_back(m\_actual\_total \& 0xFF000000 >> 6);}
+\DoxyCodeLine{239   frame.push\_back(m\_actual\_total \& 0x00FF0000 >> 4);}
+\DoxyCodeLine{240   frame.push\_back(m\_actual\_total \& 0x0000FF00 >> 2);}
+\DoxyCodeLine{241   frame.push\_back(m\_actual\_total \& 0x000000FF >> 0);}
+\DoxyCodeLine{242   \textcolor{keywordflow}{return} frame;}
+\DoxyCodeLine{243 \}}
+\DoxyCodeLine{244     }
+\DoxyCodeLine{245 \textcolor{keywordtype}{void} WebSocketServer::update\_simulation\_data(\textcolor{keywordtype}{int} eta, \textcolor{keywordtype}{float} velocity, \textcolor{keywordtype}{int} total) \{}
+\DoxyCodeLine{246   m\_actual\_total = total;}
+\DoxyCodeLine{247   m\_actual\_velocity10 = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(10 * velocity);}
+\DoxyCodeLine{248   m\_actual\_eta = eta;}
+\DoxyCodeLine{249 \}}
+\DoxyCodeLine{250 }
+\DoxyCodeLine{251 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

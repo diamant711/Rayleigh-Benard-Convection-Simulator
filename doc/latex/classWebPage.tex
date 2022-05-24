@@ -1,0 +1,72 @@
+\hypertarget{classWebPage}{}\doxysection{Web\+Page Class Reference}
+\label{classWebPage}\index{WebPage@{WebPage}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structWebPage_1_1status__code__t}{status\+\_\+code\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWebPage_ae7b11a4ea176f0585ca82cdb0d044748}\label{classWebPage_ae7b11a4ea176f0585ca82cdb0d044748}} 
+{\bfseries Web\+Page} (const char $\ast$)
+\item 
+\mbox{\Hypertarget{classWebPage_a17fe87535276a46472379d1d2ea44b3e}\label{classWebPage_a17fe87535276a46472379d1d2ea44b3e}} 
+{\bfseries Web\+Page} (const std\+::string \&)
+\item 
+\mbox{\Hypertarget{classWebPage_a3a2c64ad959db4fef3d2b858d598f215}\label{classWebPage_a3a2c64ad959db4fef3d2b858d598f215}} 
+const std\+::string \& {\bfseries get\+\_\+http\+\_\+response} (void) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWebPage_a80fddd638764c011e64e33e4aa5ea512}\label{classWebPage_a80fddd638764c011e64e33e4aa5ea512}} 
+const std\+::string {\bfseries m\+\_\+get\+\_\+extension\+\_\+from\+\_\+path} (const std\+::string \&)
+\item 
+\mbox{\Hypertarget{classWebPage_a1a819342d70543895197d25b3e2c2575}\label{classWebPage_a1a819342d70543895197d25b3e2c2575}} 
+const std\+::string {\bfseries m\+\_\+get\+\_\+extension\+\_\+from\+\_\+path} (const char $\ast$)
+\item 
+\mbox{\Hypertarget{classWebPage_a951038e1d9a65fbd051775dc4501db66}\label{classWebPage_a951038e1d9a65fbd051775dc4501db66}} 
+bool {\bfseries m\+\_\+fill\+\_\+http\+\_\+header} (void)
+\item 
+\mbox{\Hypertarget{classWebPage_ab33bf779309961cc8b7aacacccd99cc0}\label{classWebPage_ab33bf779309961cc8b7aacacccd99cc0}} 
+void {\bfseries m\+\_\+compose\+\_\+response} (void)
+\item 
+\mbox{\Hypertarget{classWebPage_aaf620298a73e0f2f497318e327694cb9}\label{classWebPage_aaf620298a73e0f2f497318e327694cb9}} 
+std\+::string {\bfseries m\+\_\+itos} (int)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classWebPage_ac463d108eb7c486466a147de77fd7dc7}\label{classWebPage_ac463d108eb7c486466a147de77fd7dc7}} 
+std\+::string {\bfseries m\+\_\+file\+\_\+path}
+\item 
+\mbox{\Hypertarget{classWebPage_a7677f59f5ddb7d734145af43147df528}\label{classWebPage_a7677f59f5ddb7d734145af43147df528}} 
+std\+::ifstream {\bfseries m\+\_\+input\+\_\+file}
+\item 
+\mbox{\Hypertarget{classWebPage_ab9f0e6264c808f5122c0220dd4f0b780}\label{classWebPage_ab9f0e6264c808f5122c0220dd4f0b780}} 
+std\+::string {\bfseries m\+\_\+content\+\_\+type}
+\item 
+\mbox{\Hypertarget{classWebPage_a8d41fbde96f7afeb4e3456b2d9d74273}\label{classWebPage_a8d41fbde96f7afeb4e3456b2d9d74273}} 
+std\+::string {\bfseries m\+\_\+http\+\_\+header}
+\item 
+\mbox{\Hypertarget{classWebPage_a74920bd87774975ea2c8a6fff05023cc}\label{classWebPage_a74920bd87774975ea2c8a6fff05023cc}} 
+std\+::string {\bfseries m\+\_\+http\+\_\+body}
+\item 
+\mbox{\Hypertarget{classWebPage_a92a5611cc4725adec71a49fa38df608b}\label{classWebPage_a92a5611cc4725adec71a49fa38df608b}} 
+std\+::string {\bfseries m\+\_\+http\+\_\+response}
+\item 
+\mbox{\Hypertarget{classWebPage_ab4a9e46bfe76672b04a675a72522b0d2}\label{classWebPage_ab4a9e46bfe76672b04a675a72522b0d2}} 
+std\+::string {\bfseries m\+\_\+content\+\_\+length}
+\item 
+\mbox{\Hypertarget{classWebPage_a462dc2e4375a0d33e355155084f12481}\label{classWebPage_a462dc2e4375a0d33e355155084f12481}} 
+\mbox{\hyperlink{structWebPage_1_1status__code__t}{status\+\_\+code\+\_\+t}} {\bfseries m\+\_\+status\+\_\+code} = \{200, \char`\"{}OK\char`\"{}\}
+\item 
+\mbox{\Hypertarget{classWebPage_a0b08421fe9f79823b0cce53c1961205a}\label{classWebPage_a0b08421fe9f79823b0cce53c1961205a}} 
+bool {\bfseries m\+\_\+ready\+\_\+to\+\_\+ship} = false
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Web\+Page.\+hpp\end{DoxyCompactItemize}

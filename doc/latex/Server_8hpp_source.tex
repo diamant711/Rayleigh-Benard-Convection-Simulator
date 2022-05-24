@@ -1,0 +1,96 @@
+\hypertarget{Server_8hpp_source}{}\doxysection{Server.\+hpp}
+\label{Server_8hpp_source}\index{src/Server.hpp@{src/Server.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 }
+\DoxyCodeLine{2 \textcolor{comment}{//}}
+\DoxyCodeLine{3 \textcolor{comment}{//  Server.hpp specifies a class which define the base virtual methods that }}
+\DoxyCodeLine{4 \textcolor{comment}{//  define an asyncronus server}}
+\DoxyCodeLine{5 \textcolor{comment}{//}}
+\DoxyCodeLine{7 \textcolor{comment}{}\textcolor{preprocessor}{\#ifndef SERVER\_HPP}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#define SERVER\_HPP}}
+\DoxyCodeLine{9 }
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{11 }
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#include <boost/asio.hpp>}}
+\DoxyCodeLine{13 }
+\DoxyCodeLine{14 \textcolor{preprocessor}{\#include "{}Connection.hpp"{}}}
+\DoxyCodeLine{15 }
+\DoxyCodeLine{16 \textcolor{keyword}{class }\mbox{\hyperlink{classServer}{Server}} \{}
+\DoxyCodeLine{17   \textcolor{keyword}{public}:}
+\DoxyCodeLine{18     \mbox{\hyperlink{classServer}{Server}}(boost::asio::io\_context \&);}
+\DoxyCodeLine{19     \mbox{\hyperlink{classServer}{\string~Server}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{20     \textcolor{keywordtype}{void} poll(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{21   \textcolor{keyword}{protected}:}
+\DoxyCodeLine{22     \textcolor{comment}{//Variables}}
+\DoxyCodeLine{23     \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\{}
+\DoxyCodeLine{24       std::shared\_ptr<Connection> connection\_ptr;}
+\DoxyCodeLine{25       \textcolor{comment}{/*}}
+\DoxyCodeLine{26 \textcolor{comment}{       *   status\_id  = 0 UNCATEGORIZED}}
+\DoxyCodeLine{27 \textcolor{comment}{       *   status\_id != 0 inheritance categorization}}
+\DoxyCodeLine{28 \textcolor{comment}{       */}}
+\DoxyCodeLine{29       \textcolor{keywordtype}{int} status\_id = 0;}
+\DoxyCodeLine{30       \textcolor{keywordtype}{bool} end\_of\_life = \textcolor{keyword}{false};}
+\DoxyCodeLine{31       boost::asio::ip::address remote\_ip;}
+\DoxyCodeLine{32       \textcolor{keywordtype}{int} port = -\/1;}
+\DoxyCodeLine{33     \} \mbox{\hyperlink{structServer_1_1m__connection__database__record__t}{m\_connection\_database\_record\_t}};}
+\DoxyCodeLine{34     \textcolor{comment}{//Functions}}
+\DoxyCodeLine{35     boost::asio::io\_context\& m\_get\_executor(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{36     \mbox{\hyperlink{structServer_1_1m__connection__database__record__t}{m\_connection\_database\_record\_t}}\& m\_get\_connection\_by\_index(\textcolor{keywordtype}{int});}
+\DoxyCodeLine{37     \mbox{\hyperlink{structServer_1_1m__connection__database__record__t}{m\_connection\_database\_record\_t}}\& m\_get\_first\_connection(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{38     \mbox{\hyperlink{structServer_1_1m__connection__database__record__t}{m\_connection\_database\_record\_t}}\& m\_get\_last\_connection(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{39     \textcolor{keywordtype}{size\_t} m\_get\_plugged\_connection(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{40     \textcolor{keywordtype}{bool} m\_is\_waiting\_list\_empty(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{41     \textcolor{keywordtype}{void} m\_insert\_new\_connection(\mbox{\hyperlink{structServer_1_1m__connection__database__record__t}{m\_connection\_database\_record\_t}} \&);}
+\DoxyCodeLine{42     \textcolor{keywordtype}{void} m\_delete\_connection\_by\_index(\textcolor{keywordtype}{int});}
+\DoxyCodeLine{43     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} m\_start\_accept(\textcolor{keywordtype}{void}) \{\};}
+\DoxyCodeLine{44   \textcolor{keyword}{private}:}
+\DoxyCodeLine{45     std::unique\_ptr<boost::asio::io\_context> m\_io\_context\_ptr;}
+\DoxyCodeLine{46     std::vector<m\_connection\_database\_record\_t> m\_connection\_database;}
+\DoxyCodeLine{47 \};}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{49 Server::Server(boost::asio::io\_context\& executor) \{}
+\DoxyCodeLine{50   m\_io\_context\_ptr.reset(\&executor);}
+\DoxyCodeLine{51 \}}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{53 Server::\string~Server(\textcolor{keywordtype}{void}) \{\}}
+\DoxyCodeLine{54 }
+\DoxyCodeLine{55 boost::asio::io\_context\& Server::m\_get\_executor(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{56   \textcolor{keywordflow}{return} *m\_io\_context\_ptr;}
+\DoxyCodeLine{57 \}}
+\DoxyCodeLine{58 }
+\DoxyCodeLine{59 \mbox{\hyperlink{structServer_1_1m__connection__database__record__t}{Server::m\_connection\_database\_record\_t}}\& Server::m\_get\_connection\_by\_index(\textcolor{keywordtype}{int} index) \{}
+\DoxyCodeLine{60   \textcolor{keywordflow}{return} m\_connection\_database.at(index);}
+\DoxyCodeLine{61 \}}
+\DoxyCodeLine{62 }
+\DoxyCodeLine{63 \mbox{\hyperlink{structServer_1_1m__connection__database__record__t}{Server::m\_connection\_database\_record\_t}}\& Server::m\_get\_first\_connection(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{64   \textcolor{keywordflow}{return} m\_connection\_database.front();}
+\DoxyCodeLine{65 \}}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67 \mbox{\hyperlink{structServer_1_1m__connection__database__record__t}{Server::m\_connection\_database\_record\_t}}\& Server::m\_get\_last\_connection(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{68   \textcolor{keywordflow}{return} m\_connection\_database.back();}
+\DoxyCodeLine{69 \}}
+\DoxyCodeLine{70 }
+\DoxyCodeLine{71 \textcolor{keywordtype}{size\_t} Server::m\_get\_plugged\_connection(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{72   \textcolor{keywordflow}{return} m\_connection\_database.size();}
+\DoxyCodeLine{73 \}}
+\DoxyCodeLine{74 }
+\DoxyCodeLine{75 \textcolor{keywordtype}{void} Server::m\_insert\_new\_connection(\mbox{\hyperlink{structServer_1_1m__connection__database__record__t}{Server::m\_connection\_database\_record\_t}}\& new\_connection) \{}
+\DoxyCodeLine{76   m\_connection\_database.push\_back(new\_connection);}
+\DoxyCodeLine{77 \}}
+\DoxyCodeLine{78 }
+\DoxyCodeLine{79 \textcolor{keywordtype}{void} Server::m\_delete\_connection\_by\_index(\textcolor{keywordtype}{int} index) \{}
+\DoxyCodeLine{80   m\_connection\_database.erase(m\_connection\_database.cbegin() + index);}
+\DoxyCodeLine{81 \}}
+\DoxyCodeLine{82     }
+\DoxyCodeLine{83 \textcolor{keywordtype}{bool} Server::m\_is\_waiting\_list\_empty(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{84   \textcolor{keywordflow}{return} m\_connection\_database.empty();}
+\DoxyCodeLine{85 \}}
+\DoxyCodeLine{86 }
+\DoxyCodeLine{87 \textcolor{keywordtype}{void} Server::poll(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{88   m\_io\_context\_ptr-\/>poll();}
+\DoxyCodeLine{89 \}}
+\DoxyCodeLine{90 }
+\DoxyCodeLine{91 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

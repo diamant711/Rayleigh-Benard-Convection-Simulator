@@ -1,0 +1,276 @@
+\hypertarget{WebServer_8hpp_source}{}\doxysection{Web\+Server.\+hpp}
+\label{WebServer_8hpp_source}\index{src/WebServer.hpp@{src/WebServer.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 }
+\DoxyCodeLine{2 \textcolor{comment}{//}}
+\DoxyCodeLine{3 \textcolor{comment}{//  WebServer.hpp specifies a class which define an asyncronus server that}}
+\DoxyCodeLine{4 \textcolor{comment}{//  serve web content}}
+\DoxyCodeLine{5 \textcolor{comment}{//}}
+\DoxyCodeLine{7 \textcolor{comment}{}\textcolor{comment}{/******************************************************************************}}
+\DoxyCodeLine{8 \textcolor{comment}{ *}}
+\DoxyCodeLine{9 \textcolor{comment}{ * m\_pages fixed indexing:}}
+\DoxyCodeLine{10 \textcolor{comment}{ *  0 -\/ Error page}}
+\DoxyCodeLine{11 \textcolor{comment}{ *  1 -\/ ServerFull page}}
+\DoxyCodeLine{12 \textcolor{comment}{ *  2 -\/ Setup page}}
+\DoxyCodeLine{13 \textcolor{comment}{ *  3 -\/ Process page}}
+\DoxyCodeLine{14 \textcolor{comment}{ *}}
+\DoxyCodeLine{15 \textcolor{comment}{ *****************************************************************************/}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#ifndef WEBSERVER\_HPP}}
+\DoxyCodeLine{17 \textcolor{preprocessor}{\#define WEBSERVER\_HPP}}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#include <iostream>}}
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#include <memory>}}
+\DoxyCodeLine{21 \textcolor{preprocessor}{\#include <sstream>}}
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#include <thread>}}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#include <boost/asio.hpp>}}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26 \textcolor{preprocessor}{\#include "{}TCPServer.hpp"{}}}
+\DoxyCodeLine{27 \textcolor{preprocessor}{\#include "{}WebPage.hpp"{}}}
+\DoxyCodeLine{28 \textcolor{preprocessor}{\#include "{}WebSocketServer.hpp"{}}}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30 \textcolor{keyword}{class }\mbox{\hyperlink{classWebServer}{WebServer}} : \textcolor{keyword}{public} \mbox{\hyperlink{classTCPServer}{TCPServer}} \{}
+\DoxyCodeLine{31   \textcolor{keyword}{public}:}
+\DoxyCodeLine{32     \textcolor{keyword}{typedef} \textcolor{keyword}{enum} \{}
+\DoxyCodeLine{33       NO\_FIRST\_USER,}
+\DoxyCodeLine{34       ERROR,}
+\DoxyCodeLine{35       SETUP,}
+\DoxyCodeLine{36       CGI,}
+\DoxyCodeLine{37       PROCESSING,}
+\DoxyCodeLine{38       OUTPUT}
+\DoxyCodeLine{39     \} first\_user\_status\_t;}
+\DoxyCodeLine{40     \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\{}
+\DoxyCodeLine{41       \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} steps;}
+\DoxyCodeLine{42       \textcolor{keywordtype}{double} cwt;}
+\DoxyCodeLine{43       \textcolor{keywordtype}{double} hwt;}
+\DoxyCodeLine{44       \textcolor{keywordtype}{double} Ray;}
+\DoxyCodeLine{45       \textcolor{keywordtype}{double} Pr;}
+\DoxyCodeLine{46       \textcolor{keywordtype}{double} Rey;}
+\DoxyCodeLine{47     \} \mbox{\hyperlink{structWebServer_1_1html__form__input__t}{html\_form\_input\_t}};}
+\DoxyCodeLine{48     \mbox{\hyperlink{classWebServer}{WebServer}}(boost::asio::io\_context \&, \textcolor{keywordtype}{int}, \textcolor{keywordtype}{int}, std::string, std::string, }
+\DoxyCodeLine{49               std::string, std::string);}
+\DoxyCodeLine{50     \mbox{\hyperlink{classWebServer}{\string~WebServer}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{51     \textcolor{keywordtype}{void} respond\_to\_all(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{52     \mbox{\hyperlink{structWebServer_1_1html__form__input__t}{html\_form\_input\_t}} get\_user\_input(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{53     \textcolor{keywordtype}{bool} is\_html\_form\_input\_available(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{54     \textcolor{keywordtype}{void} update\_simulation\_state(\textcolor{keywordtype}{int}, \textcolor{keywordtype}{float}, \textcolor{keywordtype}{int});}
+\DoxyCodeLine{55   \textcolor{keyword}{private}:}
+\DoxyCodeLine{56     \textcolor{comment}{//Functions}}
+\DoxyCodeLine{57     \mbox{\hyperlink{classWebPage}{WebPage}}\& m\_generate\_Output\_page(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{58     \textcolor{keywordtype}{void} m\_cgi\_parser(\textcolor{keyword}{const} std::string \&);}
+\DoxyCodeLine{59     \textcolor{comment}{//Variables}}
+\DoxyCodeLine{60     std::unique\_ptr<WebSocketServer> m\_websocketserver\_ptr;}
+\DoxyCodeLine{61     \textcolor{keywordtype}{bool} m\_start\_websocket = \textcolor{keyword}{false};}
+\DoxyCodeLine{62     \textcolor{keywordtype}{int} m\_actual\_total = -\/1;}
+\DoxyCodeLine{63     \textcolor{keywordtype}{float} m\_actual\_velocity = -\/1;}
+\DoxyCodeLine{64     \textcolor{keywordtype}{int} m\_actual\_eta = -\/1;}
+\DoxyCodeLine{65     \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} m\_n\_input\_parameter = 6;}
+\DoxyCodeLine{66     \mbox{\hyperlink{structWebServer_1_1html__form__input__t}{WebServer::html\_form\_input\_t}} m\_internal\_html\_form\_input;}
+\DoxyCodeLine{67     std::vector<std::unique\_ptr<WebPage>> m\_pages;}
+\DoxyCodeLine{68     \textcolor{keywordtype}{bool} m\_was\_first\_user\_connected = \textcolor{keyword}{false};}
+\DoxyCodeLine{69     boost::asio::ip::address m\_first\_user\_address;}
+\DoxyCodeLine{70     first\_user\_status\_t m\_first\_user\_status = NO\_FIRST\_USER;}
+\DoxyCodeLine{71     \textcolor{keywordtype}{bool} m\_cgi\_parameter\_available = \textcolor{keyword}{false};}
+\DoxyCodeLine{72 \};}
+\DoxyCodeLine{73 }
+\DoxyCodeLine{74 WebServer::WebServer(boost::asio::io\_context\& executor, \textcolor{keywordtype}{int} portW, \textcolor{keywordtype}{int} portWS,}
+\DoxyCodeLine{75                      std::string path\_to\_Error\_page, }
+\DoxyCodeLine{76                      std::string path\_to\_ServerFull\_page, }
+\DoxyCodeLine{77                      std::string path\_to\_Setup\_page, }
+\DoxyCodeLine{78                      std::string path\_to\_Process\_page)}
+\DoxyCodeLine{79   : \mbox{\hyperlink{classTCPServer}{TCPServer}}(executor, portW)}
+\DoxyCodeLine{80 \{}
+\DoxyCodeLine{81   m\_websocketserver\_ptr.reset(\textcolor{keyword}{new} \mbox{\hyperlink{classWebSocketServer}{WebSocketServer}}(executor, portWS));}
+\DoxyCodeLine{82   m\_pages.clear();}
+\DoxyCodeLine{83   m\_pages.push\_back(std::unique\_ptr<WebPage>(\textcolor{keyword}{new} \mbox{\hyperlink{classWebPage}{WebPage}}(path\_to\_Error\_page)));}
+\DoxyCodeLine{84   m\_pages.push\_back(std::unique\_ptr<WebPage>(\textcolor{keyword}{new} \mbox{\hyperlink{classWebPage}{WebPage}}(path\_to\_ServerFull\_page)));}
+\DoxyCodeLine{85   m\_pages.push\_back(std::unique\_ptr<WebPage>(\textcolor{keyword}{new} \mbox{\hyperlink{classWebPage}{WebPage}}(path\_to\_Setup\_page)));}
+\DoxyCodeLine{86   m\_pages.push\_back(std::unique\_ptr<WebPage>(\textcolor{keyword}{new} \mbox{\hyperlink{classWebPage}{WebPage}}(path\_to\_Process\_page)));}
+\DoxyCodeLine{87 \}}
+\DoxyCodeLine{88 }
+\DoxyCodeLine{89 WebServer::\string~WebServer() \{\}}
+\DoxyCodeLine{90 }
+\DoxyCodeLine{91 \textcolor{keywordtype}{void} WebServer::respond\_to\_all(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{92   m\_get\_executor().poll();}
+\DoxyCodeLine{93   \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t} i = 0; i < m\_get\_plugged\_connection(); ++i)}
+\DoxyCodeLine{94     \textcolor{keywordflow}{if}(m\_get\_connection\_by\_index(i).connection\_ptr-\/>first\_operation\_ended()}
+\DoxyCodeLine{95        \&\& !m\_get\_connection\_by\_index(i).connection\_ptr-\/>is\_persistant())}
+\DoxyCodeLine{96       m\_delete\_connection\_by\_index(i);}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98   \textcolor{keywordflow}{if}(m\_start\_websocket) \{}
+\DoxyCodeLine{99     m\_websocketserver\_ptr-\/>update\_simulation\_data(m\_actual\_total, m\_actual\_velocity, m\_actual\_eta);}
+\DoxyCodeLine{100     m\_start\_websocket = m\_websocketserver\_ptr-\/>respond();}
+\DoxyCodeLine{101     m\_first\_user\_status = m\_start\_websocket ? PROCESSING : OUTPUT;}
+\DoxyCodeLine{102   \}}
+\DoxyCodeLine{103   \textcolor{keywordflow}{if}(!m\_is\_waiting\_list\_empty()) \{}
+\DoxyCodeLine{104     \textcolor{keywordflow}{if}(!m\_was\_first\_user\_connected) \{}
+\DoxyCodeLine{105       m\_first\_user\_address = m\_get\_first\_connection().connection\_ptr}
+\DoxyCodeLine{106                                -\/>get\_socket().remote\_endpoint().address();}
+\DoxyCodeLine{107       m\_was\_first\_user\_connected = \textcolor{keyword}{true};}
+\DoxyCodeLine{108       m\_first\_user\_status = SETUP;}
+\DoxyCodeLine{109       std::cerr << \textcolor{stringliteral}{"{}INFO: WebServer: respond\_to\_all: first user addres is "{}} }
+\DoxyCodeLine{110                 << m\_first\_user\_address << std::endl;}
+\DoxyCodeLine{111     \}}
+\DoxyCodeLine{112 }
+\DoxyCodeLine{113     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{size\_t} i = 0; i < m\_get\_plugged\_connection(); ++i) \{}
+\DoxyCodeLine{114       \textcolor{keywordflow}{if}(m\_get\_connection\_by\_index(i).connection\_ptr}
+\DoxyCodeLine{115           -\/>get\_socket().remote\_endpoint().address() == m\_first\_user\_address) \{}
+\DoxyCodeLine{116         \textcolor{keywordflow}{switch} (m\_first\_user\_status) \{}
+\DoxyCodeLine{117           \textcolor{keywordflow}{case} SETUP:  }
+\DoxyCodeLine{118             std::cerr << \textcolor{stringliteral}{"{}INFO: WebServer: respond\_to\_all: first user at "{}}}
+\DoxyCodeLine{119                       << \textcolor{stringliteral}{"{}SETUP stage"{}} << std::endl;}
+\DoxyCodeLine{120             m\_get\_connection\_by\_index(i).connection\_ptr}
+\DoxyCodeLine{121               -\/>load\_data(m\_pages.at(2)-\/>get\_http\_response());}
+\DoxyCodeLine{122             m\_get\_connection\_by\_index(i).connection\_ptr-\/>send();}
+\DoxyCodeLine{123             m\_first\_user\_status = CGI;}
+\DoxyCodeLine{124             \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{125           \textcolor{keywordflow}{break};}
+\DoxyCodeLine{126 }
+\DoxyCodeLine{127           \textcolor{keywordflow}{case} CGI:}
+\DoxyCodeLine{128             \textcolor{keywordflow}{if}(m\_get\_connection\_by\_index(i).connection\_ptr-\/>is\_ready\_to\_receive()) \{}
+\DoxyCodeLine{129               std::cerr << \textcolor{stringliteral}{"{}INFO: WebServer: respond\_to\_all: first user at "{}}}
+\DoxyCodeLine{130                         << \textcolor{stringliteral}{"{}CGI stage"{}} << std::endl;}
+\DoxyCodeLine{131               m\_get\_connection\_by\_index(i).connection\_ptr-\/>receive();}
+\DoxyCodeLine{132               m\_cgi\_parser(}
+\DoxyCodeLine{133                 m\_get\_connection\_by\_index(i).connection\_ptr-\/>unload\_data().get()}
+\DoxyCodeLine{134               );}
+\DoxyCodeLine{135               \textcolor{keywordflow}{if}(m\_cgi\_parameter\_available)}
+\DoxyCodeLine{136                 m\_first\_user\_status = PROCESSING;}
+\DoxyCodeLine{137             \}}
+\DoxyCodeLine{138             \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{139           \textcolor{keywordflow}{break};}
+\DoxyCodeLine{140           }
+\DoxyCodeLine{141           \textcolor{keywordflow}{case} PROCESSING:  }
+\DoxyCodeLine{142             \textcolor{keywordflow}{if}(m\_start\_websocket == \textcolor{keyword}{false}) \{}
+\DoxyCodeLine{143               std::cerr << \textcolor{stringliteral}{"{}INFO: WebServer: respond\_to\_all: first user at "{}}}
+\DoxyCodeLine{144                         << \textcolor{stringliteral}{"{}PROCESSING stage"{}} << std::endl;}
+\DoxyCodeLine{145               m\_get\_connection\_by\_index(i).connection\_ptr}
+\DoxyCodeLine{146                 -\/>load\_data(m\_pages.at(3)-\/>get\_http\_response());}
+\DoxyCodeLine{147               m\_get\_connection\_by\_index(i).connection\_ptr-\/>send();}
+\DoxyCodeLine{148               m\_start\_websocket = \textcolor{keyword}{true};}
+\DoxyCodeLine{149             \}}
+\DoxyCodeLine{150           \textcolor{keywordflow}{break};}
+\DoxyCodeLine{151  }
+\DoxyCodeLine{152           \textcolor{keywordflow}{case} OUTPUT:}
+\DoxyCodeLine{153             \textcolor{comment}{//raylib compilation and shippin}}
+\DoxyCodeLine{154             \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{155           \textcolor{keywordflow}{break};}
+\DoxyCodeLine{156 }
+\DoxyCodeLine{157           \textcolor{keywordflow}{case} ERROR:}
+\DoxyCodeLine{158           \textcolor{keywordflow}{case} NO\_FIRST\_USER:}
+\DoxyCodeLine{159             \textcolor{comment}{//something is wrong}}
+\DoxyCodeLine{160             \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{161           \textcolor{keywordflow}{break};}
+\DoxyCodeLine{162         \}}
+\DoxyCodeLine{163       \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{164         m\_get\_connection\_by\_index(i).connection\_ptr}
+\DoxyCodeLine{165           -\/>load\_data(m\_pages.at(1)-\/>get\_http\_response());}
+\DoxyCodeLine{166         m\_get\_connection\_by\_index(i).connection\_ptr-\/>send();}
+\DoxyCodeLine{167       \}}
+\DoxyCodeLine{168     \}}
+\DoxyCodeLine{169   \}}
+\DoxyCodeLine{170   \textcolor{keywordflow}{return};}
+\DoxyCodeLine{171 \}}
+\DoxyCodeLine{172 }
+\DoxyCodeLine{173 \mbox{\hyperlink{structWebServer_1_1html__form__input__t}{WebServer::html\_form\_input\_t}} WebServer::get\_user\_input(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{174   \textcolor{keywordflow}{return} m\_internal\_html\_form\_input;}
+\DoxyCodeLine{175 \}}
+\DoxyCodeLine{176 }
+\DoxyCodeLine{177 \textcolor{keywordtype}{void} WebServer::m\_cgi\_parser(\textcolor{keyword}{const} std::string\& http\_request) \{}
+\DoxyCodeLine{178   \textcolor{comment}{// GET /?steps=3000\&cwt=25\&hwt=35\&Ray=100\&Pr=7\&Rey=100 HTTP/1.1}}
+\DoxyCodeLine{179   std::stringstream ss(http\_request);}
+\DoxyCodeLine{180   std::string tmp\_s;}
+\DoxyCodeLine{181   std::cerr << \textcolor{stringliteral}{"{}INFO: WebServer: m\_cgi\_parser: Start CGI analysis..."{}} << std::endl;}
+\DoxyCodeLine{182   ss >> tmp\_s;}
+\DoxyCodeLine{183   std::cerr << \textcolor{stringliteral}{"{}INFO: WebServer: m\_cgi\_parser: HTTP method used: "{}} << tmp\_s << std::endl;}
+\DoxyCodeLine{184   ss >> tmp\_s;}
+\DoxyCodeLine{185   std::cerr << \textcolor{stringliteral}{"{}INFO: WebServer: m\_cgi\_parser: CGI string = "{}} << tmp\_s << std::endl;}
+\DoxyCodeLine{186   \textcolor{keywordflow}{if}(tmp\_s[0] != \textcolor{charliteral}{'/'} || tmp\_s[1] != \textcolor{charliteral}{'?'}) \{}
+\DoxyCodeLine{187     std::cerr << \textcolor{stringliteral}{"{}WARNING: WebServer: m\_cgi\_parser: the request do not"{}}}
+\DoxyCodeLine{188               << \textcolor{stringliteral}{"{} contain a CGI string"{}} << tmp\_s << std::endl;}
+\DoxyCodeLine{189     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{190   \}}
+\DoxyCodeLine{191   tmp\_s.erase(0, 2);}
+\DoxyCodeLine{192   \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i = 0; i < m\_n\_input\_parameter; ++i) \{}
+\DoxyCodeLine{193     std::string token = tmp\_s.substr(0, tmp\_s.find\_first\_of(\textcolor{stringliteral}{"{}\&"{}}));}
+\DoxyCodeLine{194     \textcolor{keywordtype}{size\_t} eq\_pos = token.find\_first\_of(\textcolor{stringliteral}{"{}="{}});}
+\DoxyCodeLine{195     std::string p\_name = token.substr(0, eq\_pos);}
+\DoxyCodeLine{196     \textcolor{keywordflow}{if}(p\_name == \textcolor{stringliteral}{"{}steps"{}}) \{}
+\DoxyCodeLine{197       m\_internal\_html\_form\_input.steps = }
+\DoxyCodeLine{198         stoul(token.substr(eq\_pos + 1, token.size()));   }
+\DoxyCodeLine{199       tmp\_s.erase(0, token.size() + 1);}
+\DoxyCodeLine{200       std::cerr << \textcolor{stringliteral}{"{}INFO: WebServer: m\_cgi\_parser: found parameter \{name = \(\backslash\)'"{}}}
+\DoxyCodeLine{201                 << p\_name << \textcolor{stringliteral}{"{}\(\backslash\)',\(\backslash\)t value = "{}} }
+\DoxyCodeLine{202                 << stoul(token.substr(eq\_pos + 1, token.size())) }
+\DoxyCodeLine{203                 << \textcolor{stringliteral}{"{}\}"{}}  << std::endl;}
+\DoxyCodeLine{204       \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{205     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(p\_name == \textcolor{stringliteral}{"{}cwt"{}}) \{}
+\DoxyCodeLine{206       m\_internal\_html\_form\_input.cwt = }
+\DoxyCodeLine{207         stod(token.substr(eq\_pos + 1, token.size()));  }
+\DoxyCodeLine{208       tmp\_s.erase(0, token.size() + 1);}
+\DoxyCodeLine{209       std::cerr << \textcolor{stringliteral}{"{}INFO: WebServer: m\_cgi\_parser: found parameter \{name = \(\backslash\)'"{}}}
+\DoxyCodeLine{210                 << p\_name << \textcolor{stringliteral}{"{}\(\backslash\)',\(\backslash\)t value = "{}} }
+\DoxyCodeLine{211                 << stoul(token.substr(eq\_pos + 1, token.size())) }
+\DoxyCodeLine{212                 << \textcolor{stringliteral}{"{}\}"{}}  << std::endl;}
+\DoxyCodeLine{213       \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{214     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(p\_name == \textcolor{stringliteral}{"{}hwt"{}}) \{}
+\DoxyCodeLine{215       m\_internal\_html\_form\_input.hwt = }
+\DoxyCodeLine{216         stod(token.substr(eq\_pos + 1, token.size()));   }
+\DoxyCodeLine{217       tmp\_s.erase(0, token.size() + 1);}
+\DoxyCodeLine{218       std::cerr << \textcolor{stringliteral}{"{}INFO: WebServer: m\_cgi\_parser: found parameter \{name = \(\backslash\)'"{}}}
+\DoxyCodeLine{219                 << p\_name << \textcolor{stringliteral}{"{}\(\backslash\)',\(\backslash\)t value = "{}} }
+\DoxyCodeLine{220                 << stoul(token.substr(eq\_pos + 1, token.size())) }
+\DoxyCodeLine{221                 << \textcolor{stringliteral}{"{}\}"{}}  << std::endl;}
+\DoxyCodeLine{222       \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{223     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(p\_name == \textcolor{stringliteral}{"{}Ray"{}}) \{}
+\DoxyCodeLine{224       m\_internal\_html\_form\_input.Ray = }
+\DoxyCodeLine{225         stod(token.substr(eq\_pos + 1, token.size()));   }
+\DoxyCodeLine{226       tmp\_s.erase(0, token.size() + 1);}
+\DoxyCodeLine{227       std::cerr << \textcolor{stringliteral}{"{}INFO: WebServer: m\_cgi\_parser: found parameter \{name = \(\backslash\)'"{}}}
+\DoxyCodeLine{228                 << p\_name << \textcolor{stringliteral}{"{}\(\backslash\)',\(\backslash\)t value = "{}} }
+\DoxyCodeLine{229                 << stoul(token.substr(eq\_pos + 1, token.size())) }
+\DoxyCodeLine{230                 << \textcolor{stringliteral}{"{}\}"{}}  << std::endl;}
+\DoxyCodeLine{231       \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{232     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(p\_name == \textcolor{stringliteral}{"{}Pr"{}}) \{}
+\DoxyCodeLine{233       m\_internal\_html\_form\_input.Pr = }
+\DoxyCodeLine{234         stod(token.substr(eq\_pos + 1, token.size()));   }
+\DoxyCodeLine{235       tmp\_s.erase(0, token.size() + 1);}
+\DoxyCodeLine{236       std::cerr << \textcolor{stringliteral}{"{}INFO: WebServer: m\_cgi\_parser: found parameter \{name = \(\backslash\)'"{}}}
+\DoxyCodeLine{237                 << p\_name << \textcolor{stringliteral}{"{}\(\backslash\)',\(\backslash\)t value = "{}} }
+\DoxyCodeLine{238                 << stoul(token.substr(eq\_pos + 1, token.size())) }
+\DoxyCodeLine{239                 << \textcolor{stringliteral}{"{}\}"{}}  << std::endl;}
+\DoxyCodeLine{240       \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{241     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(p\_name == \textcolor{stringliteral}{"{}Rey"{}}) \{}
+\DoxyCodeLine{242        m\_internal\_html\_form\_input.Rey = }
+\DoxyCodeLine{243         stod(token.substr(eq\_pos + 1, token.size()));   }
+\DoxyCodeLine{244       tmp\_s.erase(0, token.size() + 1);}
+\DoxyCodeLine{245       std::cerr << \textcolor{stringliteral}{"{}INFO: WebServer: m\_cgi\_parser: found parameter \{name = \(\backslash\)'"{}}}
+\DoxyCodeLine{246                 << p\_name << \textcolor{stringliteral}{"{}\(\backslash\)',\(\backslash\)t value = "{}} }
+\DoxyCodeLine{247                 << stoul(token.substr(eq\_pos + 1, token.size())) }
+\DoxyCodeLine{248                 << \textcolor{stringliteral}{"{}\}"{}}  << std::endl;}
+\DoxyCodeLine{249       \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{250     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{251       std::cerr << \textcolor{stringliteral}{"{}WARNING: WebServer: m\_gci\_parser: Parameter name \(\backslash\)'"{}} << p\_name }
+\DoxyCodeLine{252                 << \textcolor{stringliteral}{"{}\(\backslash\)' not recognized."{}} << std::endl;}
+\DoxyCodeLine{253       \textcolor{keywordflow}{return};}
+\DoxyCodeLine{254     \}}
+\DoxyCodeLine{255   \}}
+\DoxyCodeLine{256   m\_cgi\_parameter\_available = \textcolor{keyword}{true};}
+\DoxyCodeLine{257   std::cout << \textcolor{stringliteral}{"{}INFO: WebServer: m\_cgi\_parser: Finished CGI analysis."{}} << std::endl;}
+\DoxyCodeLine{258   \textcolor{keywordflow}{return};}
+\DoxyCodeLine{259 \}}
+\DoxyCodeLine{260 }
+\DoxyCodeLine{261 \textcolor{keywordtype}{bool} WebServer::is\_html\_form\_input\_available(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{262   \textcolor{keywordflow}{return} m\_cgi\_parameter\_available;}
+\DoxyCodeLine{263 \}}
+\DoxyCodeLine{264     }
+\DoxyCodeLine{265 \textcolor{keywordtype}{void} WebServer::update\_simulation\_state(\textcolor{keywordtype}{int} e, \textcolor{keywordtype}{float} v, \textcolor{keywordtype}{int} t) \{}
+\DoxyCodeLine{266   m\_actual\_total = t;}
+\DoxyCodeLine{267   m\_actual\_velocity = v;}
+\DoxyCodeLine{268   m\_actual\_eta = e;}
+\DoxyCodeLine{269 \}}
+\DoxyCodeLine{270 }
+\DoxyCodeLine{271 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

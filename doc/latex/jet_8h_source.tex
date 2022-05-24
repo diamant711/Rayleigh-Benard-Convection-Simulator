@@ -1,0 +1,266 @@
+\hypertarget{jet_8h_source}{}\doxysection{jet.\+h}
+\label{jet_8h_source}\index{src/jet.h@{src/jet.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#include"{}../inc/raylib.h"{}}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#define JETSIZE 256}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{keyword}{const} Color jet[JETSIZE] = \{}
+\DoxyCodeLine{6   (Color)\{  0,    0,  139,  255\},}
+\DoxyCodeLine{7   (Color)\{  0,    0,  143,  255\},}
+\DoxyCodeLine{8   (Color)\{  0,    0,  147,  255\},}
+\DoxyCodeLine{9   (Color)\{  0,    0,  151,  255\},}
+\DoxyCodeLine{10   (Color)\{  0,    0,  155,  255\},}
+\DoxyCodeLine{11   (Color)\{  0,    0,  159,  255\},}
+\DoxyCodeLine{12   (Color)\{  0,    0,  163,  255\},}
+\DoxyCodeLine{13   (Color)\{  0,    0,  167,  255\},}
+\DoxyCodeLine{14   (Color)\{  0,    0,  171,  255\},}
+\DoxyCodeLine{15   (Color)\{  0,    0,  175,  255\},}
+\DoxyCodeLine{16   (Color)\{  0,    0,  179,  255\},}
+\DoxyCodeLine{17   (Color)\{  0,    0,  183,  255\},}
+\DoxyCodeLine{18   (Color)\{  0,    0,  187,  255\},}
+\DoxyCodeLine{19   (Color)\{  0,    0,  191,  255\},}
+\DoxyCodeLine{20   (Color)\{  0,    0,  195,  255\},}
+\DoxyCodeLine{21   (Color)\{  0,    0,  199,  255\},}
+\DoxyCodeLine{22   (Color)\{  0,    0,  203,  255\},}
+\DoxyCodeLine{23   (Color)\{  0,    0,  207,  255\},}
+\DoxyCodeLine{24   (Color)\{  0,    0,  211,  255\},}
+\DoxyCodeLine{25   (Color)\{  0,    0,  215,  255\},}
+\DoxyCodeLine{26   (Color)\{  0,    0,  219,  255\},}
+\DoxyCodeLine{27   (Color)\{  0,    0,  223,  255\},}
+\DoxyCodeLine{28   (Color)\{  0,    0,  227,  255\},}
+\DoxyCodeLine{29   (Color)\{  0,    0,  231,  255\},}
+\DoxyCodeLine{30   (Color)\{  0,    0,  235,  255\},}
+\DoxyCodeLine{31   (Color)\{  0,    0,  239,  255\},}
+\DoxyCodeLine{32   (Color)\{  0,    0,  243,  255\},}
+\DoxyCodeLine{33   (Color)\{  0,    0,  247,  255\},}
+\DoxyCodeLine{34   (Color)\{  0,    0,  251,  255\},}
+\DoxyCodeLine{35   (Color)\{  0,    0,  255,  255\},}
+\DoxyCodeLine{36   (Color)\{  0,    4,  255,  255\},}
+\DoxyCodeLine{37   (Color)\{  0,    8,  255,  255\},}
+\DoxyCodeLine{38   (Color)\{  0,   12,  255,  255\},}
+\DoxyCodeLine{39   (Color)\{  0,   16,  255,  255\},}
+\DoxyCodeLine{40   (Color)\{  0,   20,  255,  255\},}
+\DoxyCodeLine{41   (Color)\{  0,   24,  255,  255\},}
+\DoxyCodeLine{42   (Color)\{  0,   28,  255,  255\},}
+\DoxyCodeLine{43   (Color)\{  0,   32,  255,  255\},}
+\DoxyCodeLine{44   (Color)\{  0,   36,  255,  255\},}
+\DoxyCodeLine{45   (Color)\{  0,   40,  255,  255\},}
+\DoxyCodeLine{46   (Color)\{  0,   44,  255,  255\},}
+\DoxyCodeLine{47   (Color)\{  0,   48,  255,  255\},}
+\DoxyCodeLine{48   (Color)\{  0,   52,  255,  255\},}
+\DoxyCodeLine{49   (Color)\{  0,   56,  255,  255\},}
+\DoxyCodeLine{50   (Color)\{  0,   60,  255,  255\},}
+\DoxyCodeLine{51   (Color)\{  0,   64,  255,  255\},}
+\DoxyCodeLine{52   (Color)\{  0,   68,  255,  255\},}
+\DoxyCodeLine{53   (Color)\{  0,   72,  255,  255\},}
+\DoxyCodeLine{54   (Color)\{  0,   76,  255,  255\},}
+\DoxyCodeLine{55   (Color)\{  0,   80,  255,  255\},}
+\DoxyCodeLine{56   (Color)\{  0,   84,  255,  255\},}
+\DoxyCodeLine{57   (Color)\{  0,   88,  255,  255\},}
+\DoxyCodeLine{58   (Color)\{  0,   92,  255,  255\},}
+\DoxyCodeLine{59   (Color)\{  0,   96,  255,  255\},}
+\DoxyCodeLine{60   (Color)\{  0,  100,  255,  255\},}
+\DoxyCodeLine{61   (Color)\{  0,  104,  255,  255\},}
+\DoxyCodeLine{62   (Color)\{  0,  108,  255,  255\},}
+\DoxyCodeLine{63   (Color)\{  0,  112,  255,  255\},}
+\DoxyCodeLine{64   (Color)\{  0,  116,  255,  255\},}
+\DoxyCodeLine{65   (Color)\{  0,  120,  255,  255\},}
+\DoxyCodeLine{66   (Color)\{  0,  124,  255,  255\},}
+\DoxyCodeLine{67   (Color)\{  0,  128,  255,  255\},}
+\DoxyCodeLine{68   (Color)\{  0,  131,  255,  255\},}
+\DoxyCodeLine{69   (Color)\{  0,  135,  255,  255\},}
+\DoxyCodeLine{70   (Color)\{  0,  139,  255,  255\},}
+\DoxyCodeLine{71   (Color)\{  0,  143,  255,  255\},}
+\DoxyCodeLine{72   (Color)\{  0,  147,  255,  255\},}
+\DoxyCodeLine{73   (Color)\{  0,  151,  255,  255\},}
+\DoxyCodeLine{74   (Color)\{  0,  155,  255,  255\},}
+\DoxyCodeLine{75   (Color)\{  0,  159,  255,  255\},}
+\DoxyCodeLine{76   (Color)\{  0,  163,  255,  255\},}
+\DoxyCodeLine{77   (Color)\{  0,  167,  255,  255\},}
+\DoxyCodeLine{78   (Color)\{  0,  171,  255,  255\},}
+\DoxyCodeLine{79   (Color)\{  0,  175,  255,  255\},}
+\DoxyCodeLine{80   (Color)\{  0,  179,  255,  255\},}
+\DoxyCodeLine{81   (Color)\{  0,  183,  255,  255\},}
+\DoxyCodeLine{82   (Color)\{  0,  187,  255,  255\},}
+\DoxyCodeLine{83   (Color)\{  0,  191,  255,  255\},}
+\DoxyCodeLine{84   (Color)\{  0,  195,  255,  255\},}
+\DoxyCodeLine{85   (Color)\{  0,  199,  255,  255\},}
+\DoxyCodeLine{86   (Color)\{  0,  203,  255,  255\},}
+\DoxyCodeLine{87   (Color)\{  0,  207,  255,  255\},}
+\DoxyCodeLine{88   (Color)\{  0,  211,  255,  255\},}
+\DoxyCodeLine{89   (Color)\{  0,  215,  255,  255\},}
+\DoxyCodeLine{90   (Color)\{  0,  219,  255,  255\},}
+\DoxyCodeLine{91   (Color)\{  0,  223,  255,  255\},}
+\DoxyCodeLine{92   (Color)\{  0,  227,  255,  255\},}
+\DoxyCodeLine{93   (Color)\{  0,  231,  255,  255\},}
+\DoxyCodeLine{94   (Color)\{  0,  235,  255,  255\},}
+\DoxyCodeLine{95   (Color)\{  0,  239,  255,  255\},}
+\DoxyCodeLine{96   (Color)\{  0,  243,  255,  255\},}
+\DoxyCodeLine{97   (Color)\{  0,  247,  255,  255\},}
+\DoxyCodeLine{98   (Color)\{  0,  251,  255,  255\},}
+\DoxyCodeLine{99   (Color)\{  0,  255,  255,  255\},}
+\DoxyCodeLine{100   (Color)\{  4,  255,  251,  255\},}
+\DoxyCodeLine{101   (Color)\{  8,  255,  247,  255\},}
+\DoxyCodeLine{102   (Color)\{ 12,  255,  243,  255\},}
+\DoxyCodeLine{103   (Color)\{ 16,  255,  239,  255\},}
+\DoxyCodeLine{104   (Color)\{ 20,  255,  235,  255\},}
+\DoxyCodeLine{105   (Color)\{ 24,  255,  231,  255\},}
+\DoxyCodeLine{106   (Color)\{ 28,  255,  227,  255\},}
+\DoxyCodeLine{107   (Color)\{ 32,  255,  223,  255\},}
+\DoxyCodeLine{108   (Color)\{ 36,  255,  219,  255\},}
+\DoxyCodeLine{109   (Color)\{ 40,  255,  215,  255\},}
+\DoxyCodeLine{110   (Color)\{ 44,  255,  211,  255\},}
+\DoxyCodeLine{111   (Color)\{ 48,  255,  207,  255\},}
+\DoxyCodeLine{112   (Color)\{ 52,  255,  203,  255\},}
+\DoxyCodeLine{113   (Color)\{ 56,  255,  199,  255\},}
+\DoxyCodeLine{114   (Color)\{ 60,  255,  195,  255\},}
+\DoxyCodeLine{115   (Color)\{ 64,  255,  191,  255\},}
+\DoxyCodeLine{116   (Color)\{ 68,  255,  187,  255\},}
+\DoxyCodeLine{117   (Color)\{ 72,  255,  183,  255\},}
+\DoxyCodeLine{118   (Color)\{ 76,  255,  179,  255\},}
+\DoxyCodeLine{119   (Color)\{ 80,  255,  175,  255\},}
+\DoxyCodeLine{120   (Color)\{ 84,  255,  171,  255\},}
+\DoxyCodeLine{121   (Color)\{ 88,  255,  167,  255\},}
+\DoxyCodeLine{122   (Color)\{ 92,  255,  163,  255\},}
+\DoxyCodeLine{123   (Color)\{ 96,  255,  159,  255\},}
+\DoxyCodeLine{124   (Color)\{100,  255,  155,  255\},}
+\DoxyCodeLine{125   (Color)\{104,  255,  151,  255\},}
+\DoxyCodeLine{126   (Color)\{108,  255,  147,  255\},}
+\DoxyCodeLine{127   (Color)\{112,  255,  143,  255\},}
+\DoxyCodeLine{128   (Color)\{116,  255,  139,  255\},}
+\DoxyCodeLine{129   (Color)\{120,  255,  135,  255\},}
+\DoxyCodeLine{130   (Color)\{124,  255,  131,  255\},}
+\DoxyCodeLine{131   (Color)\{128,  255,  128,  255\},}
+\DoxyCodeLine{132   (Color)\{131,  255,  124,  255\},}
+\DoxyCodeLine{133   (Color)\{135,  255,  120,  255\},}
+\DoxyCodeLine{134   (Color)\{139,  255,  116,  255\},}
+\DoxyCodeLine{135   (Color)\{143,  255,  112,  255\},}
+\DoxyCodeLine{136   (Color)\{147,  255,  108,  255\},}
+\DoxyCodeLine{137   (Color)\{151,  255,  104,  255\},}
+\DoxyCodeLine{138   (Color)\{155,  255,  100,  255\},}
+\DoxyCodeLine{139   (Color)\{159,  255,   96,  255\},}
+\DoxyCodeLine{140   (Color)\{163,  255,   92,  255\},}
+\DoxyCodeLine{141   (Color)\{167,  255,   88,  255\},}
+\DoxyCodeLine{142   (Color)\{171,  255,   84,  255\},}
+\DoxyCodeLine{143   (Color)\{175,  255,   80,  255\},}
+\DoxyCodeLine{144   (Color)\{179,  255,   76,  255\},}
+\DoxyCodeLine{145   (Color)\{183,  255,   72,  255\},}
+\DoxyCodeLine{146   (Color)\{187,  255,   68,  255\},}
+\DoxyCodeLine{147   (Color)\{191,  255,   64,  255\},}
+\DoxyCodeLine{148   (Color)\{195,  255,   60,  255\},}
+\DoxyCodeLine{149   (Color)\{199,  255,   56,  255\},}
+\DoxyCodeLine{150   (Color)\{203,  255,   52,  255\},}
+\DoxyCodeLine{151   (Color)\{207,  255,   48,  255\},}
+\DoxyCodeLine{152   (Color)\{211,  255,   44,  255\},}
+\DoxyCodeLine{153   (Color)\{215,  255,   40,  255\},}
+\DoxyCodeLine{154   (Color)\{219,  255,   36,  255\},}
+\DoxyCodeLine{155   (Color)\{223,  255,   32,  255\},}
+\DoxyCodeLine{156   (Color)\{227,  255,   28,  255\},}
+\DoxyCodeLine{157   (Color)\{231,  255,   24,  255\},}
+\DoxyCodeLine{158   (Color)\{235,  255,   20,  255\},}
+\DoxyCodeLine{159   (Color)\{239,  255,   16,  255\},}
+\DoxyCodeLine{160   (Color)\{243,  255,   12,  255\},}
+\DoxyCodeLine{161   (Color)\{247,  255,    8,  255\},}
+\DoxyCodeLine{162   (Color)\{251,  255,    4,  255\},}
+\DoxyCodeLine{163   (Color)\{255,  255,    0,  255\},}
+\DoxyCodeLine{164   (Color)\{255,  251,    0,  255\},}
+\DoxyCodeLine{165   (Color)\{255,  247,    0,  255\},}
+\DoxyCodeLine{166   (Color)\{255,  243,    0,  255\},}
+\DoxyCodeLine{167   (Color)\{255,  239,    0,  255\},}
+\DoxyCodeLine{168   (Color)\{255,  235,    0,  255\},}
+\DoxyCodeLine{169   (Color)\{255,  231,    0,  255\},}
+\DoxyCodeLine{170   (Color)\{255,  227,    0,  255\},}
+\DoxyCodeLine{171   (Color)\{255,  223,    0,  255\},}
+\DoxyCodeLine{172   (Color)\{255,  219,    0,  255\},}
+\DoxyCodeLine{173   (Color)\{255,  215,    0,  255\},}
+\DoxyCodeLine{174   (Color)\{255,  211,    0,  255\},}
+\DoxyCodeLine{175   (Color)\{255,  207,    0,  255\},}
+\DoxyCodeLine{176   (Color)\{255,  203,    0,  255\},}
+\DoxyCodeLine{177   (Color)\{255,  199,    0,  255\},}
+\DoxyCodeLine{178   (Color)\{255,  195,    0,  255\},}
+\DoxyCodeLine{179   (Color)\{255,  191,    0,  255\},}
+\DoxyCodeLine{180   (Color)\{255,  187,    0,  255\},}
+\DoxyCodeLine{181   (Color)\{255,  183,    0,  255\},}
+\DoxyCodeLine{182   (Color)\{255,  179,    0,  255\},}
+\DoxyCodeLine{183   (Color)\{255,  175,    0,  255\},}
+\DoxyCodeLine{184   (Color)\{255,  171,    0,  255\},}
+\DoxyCodeLine{185   (Color)\{255,  167,    0,  255\},}
+\DoxyCodeLine{186   (Color)\{255,  163,    0,  255\},}
+\DoxyCodeLine{187   (Color)\{255,  159,    0,  255\},}
+\DoxyCodeLine{188   (Color)\{255,  155,    0,  255\},}
+\DoxyCodeLine{189   (Color)\{255,  151,    0,  255\},}
+\DoxyCodeLine{190   (Color)\{255,  147,    0,  255\},}
+\DoxyCodeLine{191   (Color)\{255,  143,    0,  255\},}
+\DoxyCodeLine{192   (Color)\{255,  139,    0,  255\},}
+\DoxyCodeLine{193   (Color)\{255,  135,    0,  255\},}
+\DoxyCodeLine{194   (Color)\{255,  131,    0,  255\},}
+\DoxyCodeLine{195   (Color)\{255,  128,    0,  255\},}
+\DoxyCodeLine{196   (Color)\{255,  124,    0,  255\},}
+\DoxyCodeLine{197   (Color)\{255,  120,    0,  255\},}
+\DoxyCodeLine{198   (Color)\{255,  116,    0,  255\},}
+\DoxyCodeLine{199   (Color)\{255,  112,    0,  255\},}
+\DoxyCodeLine{200   (Color)\{255,  108,    0,  255\},}
+\DoxyCodeLine{201   (Color)\{255,  104,    0,  255\},}
+\DoxyCodeLine{202   (Color)\{255,  100,    0,  255\},}
+\DoxyCodeLine{203   (Color)\{255,   96,    0,  255\},}
+\DoxyCodeLine{204   (Color)\{255,   92,    0,  255\},}
+\DoxyCodeLine{205   (Color)\{255,   88,    0,  255\},}
+\DoxyCodeLine{206   (Color)\{255,   84,    0,  255\},}
+\DoxyCodeLine{207   (Color)\{255,   80,    0,  255\},}
+\DoxyCodeLine{208   (Color)\{255,   76,    0,  255\},}
+\DoxyCodeLine{209   (Color)\{255,   72,    0,  255\},}
+\DoxyCodeLine{210   (Color)\{255,   68,    0,  255\},}
+\DoxyCodeLine{211   (Color)\{255,   64,    0,  255\},}
+\DoxyCodeLine{212   (Color)\{255,   60,    0,  255\},}
+\DoxyCodeLine{213   (Color)\{255,   56,    0,  255\},}
+\DoxyCodeLine{214   (Color)\{255,   52,    0,  255\},}
+\DoxyCodeLine{215   (Color)\{255,   48,    0,  255\},}
+\DoxyCodeLine{216   (Color)\{255,   44,    0,  255\},}
+\DoxyCodeLine{217   (Color)\{255,   40,    0,  255\},}
+\DoxyCodeLine{218   (Color)\{255,   36,    0,  255\},}
+\DoxyCodeLine{219   (Color)\{255,   32,    0,  255\},}
+\DoxyCodeLine{220   (Color)\{255,   28,    0,  255\},}
+\DoxyCodeLine{221   (Color)\{255,   24,    0,  255\},}
+\DoxyCodeLine{222   (Color)\{255,   20,    0,  255\},}
+\DoxyCodeLine{223   (Color)\{255,   16,    0,  255\},}
+\DoxyCodeLine{224   (Color)\{255,   12,    0,  255\},}
+\DoxyCodeLine{225   (Color)\{255,    8,    0,  255\},}
+\DoxyCodeLine{226   (Color)\{255,    4,    0,  255\},}
+\DoxyCodeLine{227   (Color)\{255,    0,    0,  255\},}
+\DoxyCodeLine{228   (Color)\{251,    0,    0,  255\},}
+\DoxyCodeLine{229   (Color)\{247,    0,    0,  255\},}
+\DoxyCodeLine{230   (Color)\{243,    0,    0,  255\},}
+\DoxyCodeLine{231   (Color)\{239,    0,    0,  255\},}
+\DoxyCodeLine{232   (Color)\{235,    0,    0,  255\},}
+\DoxyCodeLine{233   (Color)\{231,    0,    0,  255\},}
+\DoxyCodeLine{234   (Color)\{227,    0,    0,  255\},}
+\DoxyCodeLine{235   (Color)\{223,    0,    0,  255\},}
+\DoxyCodeLine{236   (Color)\{219,    0,    0,  255\},}
+\DoxyCodeLine{237   (Color)\{215,    0,    0,  255\},}
+\DoxyCodeLine{238   (Color)\{211,    0,    0,  255\},}
+\DoxyCodeLine{239   (Color)\{207,    0,    0,  255\},}
+\DoxyCodeLine{240   (Color)\{203,    0,    0,  255\},}
+\DoxyCodeLine{241   (Color)\{199,    0,    0,  255\},}
+\DoxyCodeLine{242   (Color)\{195,    0,    0,  255\},}
+\DoxyCodeLine{243   (Color)\{191,    0,    0,  255\},}
+\DoxyCodeLine{244   (Color)\{187,    0,    0,  255\},}
+\DoxyCodeLine{245   (Color)\{183,    0,    0,  255\},}
+\DoxyCodeLine{246   (Color)\{179,    0,    0,  255\},}
+\DoxyCodeLine{247   (Color)\{175,    0,    0,  255\},}
+\DoxyCodeLine{248   (Color)\{171,    0,    0,  255\},}
+\DoxyCodeLine{249   (Color)\{167,    0,    0,  255\},}
+\DoxyCodeLine{250   (Color)\{163,    0,    0,  255\},}
+\DoxyCodeLine{251   (Color)\{159,    0,    0,  255\},}
+\DoxyCodeLine{252   (Color)\{155,    0,    0,  255\},}
+\DoxyCodeLine{253   (Color)\{151,    0,    0,  255\},}
+\DoxyCodeLine{254   (Color)\{147,    0,    0,  255\},}
+\DoxyCodeLine{255   (Color)\{143,    0,    0,  255\},}
+\DoxyCodeLine{256   (Color)\{139,    0,    0,  255\},}
+\DoxyCodeLine{257   (Color)\{135,    0,    0,  255\},}
+\DoxyCodeLine{258   (Color)\{131,    0,    0,  255\},}
+\DoxyCodeLine{259   (Color)\{128,    0,    0,  255\}}
+\DoxyCodeLine{260 \};}
+
+\end{DoxyCode}

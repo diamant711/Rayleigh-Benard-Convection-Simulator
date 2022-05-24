@@ -1,10 +1,3 @@
-///////////////////////////////////////////////
-//
-//  RayleighBenardConvection.hpp specifies a class which is able to
-//  perform perturbative calculations on a fixed environment,
-//  describing fluid m_dyamics evolution according to Navier-Stokes equations.
-//
-/////////////////////////////////////////////////
 /******************************************************************
  * TODO list:
  * X - Metodi privati vanno rinominati con il prefisso m_
@@ -56,53 +49,91 @@
 
 //! RayBenConvection is the core of the numerical simulation.
 /*!
-  RayleighBenardConvection.hpp specifies a class which is able to
-  perform perturbative calculations on a fixed environment,
-  describing fluid m_dyamics evolution according to Navier-Stokes equations.
+  This class performs perturbative calculations on a fixed environment,
+  describing fluid dynamics evolution according to Navier-Stokes equations.
 */
 
 class RayBenConvection {
 
   public:
 
-    //! Struct that represent the advancement of the simulation. 
+    //! This struct represents the advancement of the simulation.
     typedef struct {
-      bool ended;  /*! This parameter returns if the simulation has ended without errors  */
-      int total;   
+      /*! This parameter represents if the simulation has ended without errors.  */
+      bool ended;
+      /*! This parameter represents the numer of times the calculation will be iterated. */
+      int total;
+      /*! This parameter represents the estimated time of arrival, i.e. the time left before the end of the calculation.  */
       int eta;
+      /*! This parameter represents the number of iterations performed per second. */
       float velocity;
-    } simulation_state_t;
-    RayBenConvection();
-    ~RayBenConvection();
+      } simulation_state_t;
+
+    //! Class constructor.
+    RayBenConvection(void);
+    //! Class destructor.
+    ~RayBenConvection(void);
+
     int init(unsigned int, double, double, double, double, double);
-    simulation_state_t eval_next_frame();
-    void write_current_data();
+
+    simulation_state_t eval_next_frame(void);
+
+    void write_current_data(void);
 
   private:
     //variables
+    //! total number of steps performed.
     unsigned int m_END_CICLE;
+    //! size of x axis
     static const unsigned int m_nx = 100;
+    //! size of y axis, along which we apply the gravitational force.
     static const unsigned int m_ny = 70;
+    //! implementation detail.
     const double m_tf = 1e3;
+    //! interval of time used for perturbative calculation.
     double m_dt = 1e-2;
+    //! implementation detail.
     const unsigned int m_nt = ((int) m_tf / m_dt) + 1;
+    //! height of the box of the simulation.
+    /*!
+     \sa m_L
+    */
     const double m_H = 2;
+    //! lenght of the box of the simulation.
+    /*!
+    The ratio of m_H and m_L is an important physical parameter for the simulation,
+    which influences all other parameters, such as m_Pr, m_Re, m_Ra. 
+    Since it is not possible to forsee how changing this ratio will modify the other parameters,
+    the user must not have access to m_H and m_L.
+    */
     const double m_L = 5;
+    //! interval of x coordinate used for perturbative calculation.
     const double m_dx = m_L / (m_nx - 1);
+    //! interval of y coordinate used for perturbative calculation.
     const double m_dy = m_H / (m_ny - 1);
-    double m_TN;  //lower temperature (cold)
-    double m_TS;  //upper temperature (hot)
+    //! lower temperature
+    double m_TN;
+    //! higher temperature
+    double m_TS;
     Eigen::Matrix<double, m_nx+1, m_ny> m_u;
     Eigen::Matrix<double, m_nx, m_ny+1> m_v;
     Eigen::Matrix<double, m_nx, m_ny> m_p;
     Eigen::Matrix<double, m_nx, m_ny> m_S;
+    //! implementation detail.
     double m_To;
+    //! Eigen maxtrix that represents the temperature of every point per frame. 
     Eigen::Matrix<double, m_nx, m_ny> m_T;
+    //! Reynolds numer.
     double m_Re;
+    //! Prandtl number.
     double m_Pr;
+    //!
     double m_Pe;
+    //! Rayleigh number.
     double m_Ra;
+    //!
     double m_Gr;
+
     Eigen::Matrix<double, m_nx, m_ny> m_Tstar;
     Eigen::Matrix<double, m_nx+1, m_ny> m_ustar;
     Eigen::Matrix<double, m_nx+1, m_ny> m_uhalf;
@@ -129,7 +160,7 @@ class RayBenConvection {
     Eigen::Matrix<double, -1, -1> m_Ay;
     Eigen::Matrix<double, -1, -1> m_A;
     Eigen::Matrix<double, -1, -1> m_Du;
-    Eigen::Matrix<int, 1, -1> m_pu; 
+    Eigen::Matrix<int, 1, -1> m_pu;
     Eigen::Matrix<double, -1, -1> m_Duperm;
     std::vector<Eigen::Matrix<double, -1, -1>> m_LUu;
     Eigen::Matrix<double, -1, -1> m_Dv;
@@ -154,13 +185,16 @@ class RayBenConvection {
     Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Up_solver;
     Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Lt_solver;
     Eigen::PartialPivLU<Eigen::Matrix<double, -1, -1>> m_Ut_solver;
+    //! implementation detail.
     static const unsigned int m_ii = m_nx-2;
+    //! implementation detail.
     static const unsigned int m_jj = m_ny-2;
-    //it: ex-for counter.
+    //! current step of the simulation.
     unsigned int m_it;
+    //! output .h file, in which all temperature datas of the simulation are saved. 
     std::ofstream m_output_header_file;
     simulation_state_t simulation_state;
-    
+
     //functions
     void m_apply_correction(void);
     static void m_d_solve(Eigen::Matrix<double,-1,1> &,
@@ -414,6 +448,18 @@ void RayBenConvection::m_write_current_frame (){
   m_output_header_file << "}";
 };
 
+//! This function initialises the private members of the function from the users' input.
+/*!
+ The parameter inserted by the user are thoughtfully checked to ensure the validity of the simulation.
+*/
+/*!
+ \param END_CICLE total numer of steps.
+ \param cold_temp lower wall temperature. 
+ \param hot_temp higher wall temperature.
+ \param Ray_numb Rayleigh number.
+ \param Pr_numb Prandtl number.
+ \param Re_numb Reynolds number.
+*/
 int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_temp, 
                             double Ray_numb, double Pr_numb, double Re_numb ){
 

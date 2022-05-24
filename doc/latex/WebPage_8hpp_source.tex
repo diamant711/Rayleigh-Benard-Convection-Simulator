@@ -1,0 +1,174 @@
+\hypertarget{WebPage_8hpp_source}{}\doxysection{Web\+Page.\+hpp}
+\label{WebPage_8hpp_source}\index{src/WebPage.hpp@{src/WebPage.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 }
+\DoxyCodeLine{2 \textcolor{comment}{//    }}
+\DoxyCodeLine{3 \textcolor{comment}{//    WebPage: a class that hold and the body of the http request as long as}}
+\DoxyCodeLine{4 \textcolor{comment}{//             calculate the head of the request using the HTTP1.1 protocol}}
+\DoxyCodeLine{5 \textcolor{comment}{//}}
+\DoxyCodeLine{7 \textcolor{comment}{}\textcolor{comment}{//\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}}
+\DoxyCodeLine{8 \textcolor{comment}{//}}
+\DoxyCodeLine{9 \textcolor{comment}{//    HTTP1.1 response section:}}
+\DoxyCodeLine{10 \textcolor{comment}{//    1) status line example: "{}HTTP/1.1 200 OK\(\backslash\)r\(\backslash\)n"{}}}
+\DoxyCodeLine{11 \textcolor{comment}{//    2) response header file:}}
+\DoxyCodeLine{12 \textcolor{comment}{//      a) "{}Content-\/Type: text/html\(\backslash\)r\(\backslash\)n"{}}}
+\DoxyCodeLine{13 \textcolor{comment}{//      b) "{}Content-\/Lenght: <bytes-\/lenght of the body>\(\backslash\)r\(\backslash\)n"{}}}
+\DoxyCodeLine{14 \textcolor{comment}{//      c) ecc...}}
+\DoxyCodeLine{15 \textcolor{comment}{//    3) empty line "{}\(\backslash\)r\(\backslash\)n"{}}}
+\DoxyCodeLine{16 \textcolor{comment}{//    4) body (the copy of the html file)}}
+\DoxyCodeLine{17 \textcolor{comment}{//}}
+\DoxyCodeLine{18 \textcolor{comment}{//\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}}
+\DoxyCodeLine{19 \textcolor{comment}{/******************************************************************************}}
+\DoxyCodeLine{20 \textcolor{comment}{ *}}
+\DoxyCodeLine{21 \textcolor{comment}{ *    TODO:}}
+\DoxyCodeLine{22 \textcolor{comment}{ *      1) http file not found}}
+\DoxyCodeLine{23 \textcolor{comment}{ *}}
+\DoxyCodeLine{24 \textcolor{comment}{ *****************************************************************************/}}
+\DoxyCodeLine{25 \textcolor{preprocessor}{\#ifndef WEBPAGE\_HPP}}
+\DoxyCodeLine{26 \textcolor{preprocessor}{\#define WEBPAGE\_HPP}}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{28 \textcolor{preprocessor}{\#include <iostream>}}
+\DoxyCodeLine{29 \textcolor{preprocessor}{\#include <fstream>}}
+\DoxyCodeLine{30 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{31 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33 \textcolor{preprocessor}{\#define HTTP\_VERSION "{}HTTP/1.1"{}}}
+\DoxyCodeLine{34 }
+\DoxyCodeLine{35 \textcolor{keyword}{class }\mbox{\hyperlink{classWebPage}{WebPage}} \{}
+\DoxyCodeLine{36   \textcolor{keyword}{public}:}
+\DoxyCodeLine{37     \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\{}
+\DoxyCodeLine{38       \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} status\_number;}
+\DoxyCodeLine{39       std::string status\_phrase;}
+\DoxyCodeLine{40     \} \mbox{\hyperlink{structWebPage_1_1status__code__t}{status\_code\_t}};}
+\DoxyCodeLine{41    }
+\DoxyCodeLine{42     \mbox{\hyperlink{classWebPage}{WebPage}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char} *);}
+\DoxyCodeLine{43     \mbox{\hyperlink{classWebPage}{WebPage}}(\textcolor{keyword}{const} std::string \&);}
+\DoxyCodeLine{44     \mbox{\hyperlink{classWebPage}{\string~WebPage}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{45     }
+\DoxyCodeLine{46     \textcolor{keyword}{const} std::string\& get\_http\_response(\textcolor{keywordtype}{void}) \textcolor{keyword}{const};}
+\DoxyCodeLine{47   }
+\DoxyCodeLine{48   \textcolor{keyword}{private}:}
+\DoxyCodeLine{49     \textcolor{comment}{//Variables}}
+\DoxyCodeLine{50     std::string m\_file\_path;}
+\DoxyCodeLine{51     std::ifstream m\_input\_file;}
+\DoxyCodeLine{52     std::string m\_content\_type;}
+\DoxyCodeLine{53     std::string m\_http\_header;}
+\DoxyCodeLine{54     std::string m\_http\_body;}
+\DoxyCodeLine{55     std::string m\_http\_response;}
+\DoxyCodeLine{56     std::string m\_content\_length;}
+\DoxyCodeLine{57     \mbox{\hyperlink{structWebPage_1_1status__code__t}{status\_code\_t}} m\_status\_code = \{200, \textcolor{stringliteral}{"{}OK"{}}\};}
+\DoxyCodeLine{58     \textcolor{keywordtype}{bool} m\_ready\_to\_ship = \textcolor{keyword}{false};}
+\DoxyCodeLine{59     \textcolor{comment}{//function}}
+\DoxyCodeLine{60     \textcolor{keyword}{const} std::string m\_get\_extension\_from\_path(\textcolor{keyword}{const} std::string \&);}
+\DoxyCodeLine{61     \textcolor{keyword}{const} std::string m\_get\_extension\_from\_path(\textcolor{keyword}{const} \textcolor{keywordtype}{char} *);}
+\DoxyCodeLine{62     \textcolor{keywordtype}{bool} m\_fill\_http\_header(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{63     \textcolor{keywordtype}{void} m\_compose\_response(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{64     std::string m\_itos(\textcolor{keywordtype}{int});}
+\DoxyCodeLine{65 \};}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67 std::string WebPage::m\_itos(\textcolor{keywordtype}{int} n) \{}
+\DoxyCodeLine{68   \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} max\_number\_digits = 100;}
+\DoxyCodeLine{69   std::string ret;}
+\DoxyCodeLine{70   \textcolor{keywordtype}{char} buf[max\_number\_digits];}
+\DoxyCodeLine{71   std::sprintf(buf, \textcolor{stringliteral}{"{}\%d"{}}, n);}
+\DoxyCodeLine{72   ret = buf;}
+\DoxyCodeLine{73   \textcolor{keywordflow}{return} ret; }
+\DoxyCodeLine{74 \}}
+\DoxyCodeLine{75 }
+\DoxyCodeLine{76 \textcolor{keyword}{const} std::string\& WebPage::get\_http\_response(\textcolor{keywordtype}{void})\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{77   \textcolor{keywordflow}{return} m\_http\_response;}
+\DoxyCodeLine{78 \}}
+\DoxyCodeLine{79 }
+\DoxyCodeLine{80 \textcolor{keywordtype}{bool} WebPage::m\_fill\_http\_header(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{81   \textcolor{keywordtype}{bool} content\_type\_ok = \textcolor{keyword}{true};}
+\DoxyCodeLine{82   std::string ext(m\_get\_extension\_from\_path(m\_file\_path));}
+\DoxyCodeLine{83   \textcolor{keywordflow}{if}(ext == \textcolor{stringliteral}{"{}plain"{}}) \{}
+\DoxyCodeLine{84     m\_content\_type = \textcolor{stringliteral}{"{}text/plain"{}};}
+\DoxyCodeLine{85   \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(ext == \textcolor{stringliteral}{"{}html"{}}) \{}
+\DoxyCodeLine{86     m\_content\_type = \textcolor{stringliteral}{"{}text/html"{}};}
+\DoxyCodeLine{87   \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(ext == \textcolor{stringliteral}{"{}css"{}}) \{}
+\DoxyCodeLine{88     m\_content\_type = \textcolor{stringliteral}{"{}text/css"{}};}
+\DoxyCodeLine{89   \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(ext == \textcolor{stringliteral}{"{}js"{}}) \{}
+\DoxyCodeLine{90     m\_content\_type = \textcolor{stringliteral}{"{}application/javascript"{}};}
+\DoxyCodeLine{91   \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(ext == \textcolor{stringliteral}{"{}wasm"{}}) \{}
+\DoxyCodeLine{92     m\_content\_type = \textcolor{stringliteral}{"{}application/wasm"{}};}
+\DoxyCodeLine{93   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{94     std::cerr << \textcolor{stringliteral}{"{}Warnings: Unknown file type deceted... disabling"{}}}
+\DoxyCodeLine{95                  \textcolor{stringliteral}{"{} Content-\/Type tag in http header..."{}} << std::endl;}
+\DoxyCodeLine{96     content\_type\_ok = \textcolor{keyword}{false};}
+\DoxyCodeLine{97   \}  }
+\DoxyCodeLine{98   \textcolor{keywordflow}{if}(m\_input\_file.good()) \{}
+\DoxyCodeLine{99     std::string tmp;}
+\DoxyCodeLine{100     m\_http\_body.clear();}
+\DoxyCodeLine{101     \textcolor{keywordflow}{while}(!m\_input\_file.eof())}
+\DoxyCodeLine{102       m\_http\_body += m\_input\_file.get();}
+\DoxyCodeLine{103     m\_content\_length = m\_itos(m\_http\_body.size());}
+\DoxyCodeLine{104     tmp.clear();}
+\DoxyCodeLine{105     tmp = HTTP\_VERSION;}
+\DoxyCodeLine{106     tmp += \textcolor{charliteral}{' '};}
+\DoxyCodeLine{107     tmp += m\_itos(m\_status\_code.status\_number);}
+\DoxyCodeLine{108     tmp += \textcolor{charliteral}{' '};}
+\DoxyCodeLine{109     tmp += m\_status\_code.status\_phrase;}
+\DoxyCodeLine{110     tmp += \textcolor{charliteral}{'\(\backslash\)r'};}
+\DoxyCodeLine{111     tmp += \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{112     \textcolor{keywordflow}{if}(content\_type\_ok) \{}
+\DoxyCodeLine{113       tmp += \textcolor{stringliteral}{"{}Content-\/Type: "{}};}
+\DoxyCodeLine{114       tmp += m\_content\_type;}
+\DoxyCodeLine{115       tmp += \textcolor{stringliteral}{"{}; charset=utf-\/8"{}};}
+\DoxyCodeLine{116       tmp += \textcolor{charliteral}{'\(\backslash\)r'};}
+\DoxyCodeLine{117       tmp += \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{118     \}}
+\DoxyCodeLine{119     tmp += \textcolor{stringliteral}{"{}Content-\/Length: "{}};}
+\DoxyCodeLine{120     tmp += m\_content\_length;}
+\DoxyCodeLine{121     tmp += \textcolor{charliteral}{'\(\backslash\)r'};}
+\DoxyCodeLine{122     tmp += \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{123     m\_http\_header = tmp;}
+\DoxyCodeLine{124     m\_input\_file.clear();}
+\DoxyCodeLine{125     m\_input\_file.seekg(0);}
+\DoxyCodeLine{126     \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{127   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{128     std::cerr << \textcolor{stringliteral}{"{}Error: file not good"{}} << std::endl;}
+\DoxyCodeLine{129     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{130   \}}
+\DoxyCodeLine{131 \}}
+\DoxyCodeLine{132 }
+\DoxyCodeLine{133 \textcolor{keywordtype}{void} WebPage::m\_compose\_response(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{134   \textcolor{keywordflow}{if}(m\_fill\_http\_header()) \{}
+\DoxyCodeLine{135     m\_http\_response = m\_http\_header + \textcolor{stringliteral}{"{}\(\backslash\)r\(\backslash\)n"{}} + m\_http\_body;}
+\DoxyCodeLine{136   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{137     std::cerr << \textcolor{stringliteral}{"{}ERROR: WebServer: m\_compose\_response: "{}}}
+\DoxyCodeLine{138               << \textcolor{stringliteral}{"{}Due to "{}} << m\_file\_path}
+\DoxyCodeLine{139               << \textcolor{stringliteral}{"{} source file errors the http response wont be completed"{}}}
+\DoxyCodeLine{140               << std::endl;}
+\DoxyCodeLine{141   \}}
+\DoxyCodeLine{142 \}}
+\DoxyCodeLine{143 }
+\DoxyCodeLine{144 \textcolor{keyword}{const} std::string WebPage::m\_get\_extension\_from\_path(\textcolor{keyword}{const} std::string \&path) \{}
+\DoxyCodeLine{145   std::string::size\_type start\_index = path.find\_last\_of(\textcolor{charliteral}{'.'});}
+\DoxyCodeLine{146   \textcolor{keywordflow}{if} (start\_index == path.size()) \{}
+\DoxyCodeLine{147     \textcolor{keywordflow}{return} \textcolor{stringliteral}{"{}plain"{}};}
+\DoxyCodeLine{148   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{149     \textcolor{keywordflow}{return} path.substr(start\_index + 1, path.size() -\/ start\_index + 1);}
+\DoxyCodeLine{150   \}}
+\DoxyCodeLine{151 \}}
+\DoxyCodeLine{152 }
+\DoxyCodeLine{153 \textcolor{keyword}{const} std::string WebPage::m\_get\_extension\_from\_path(\textcolor{keyword}{const} \textcolor{keywordtype}{char} *path) \{}
+\DoxyCodeLine{154   std::string tmp(path);}
+\DoxyCodeLine{155   tmp = m\_get\_extension\_from\_path(tmp);}
+\DoxyCodeLine{156   \textcolor{keywordflow}{return} tmp;}
+\DoxyCodeLine{157 \}}
+\DoxyCodeLine{158 }
+\DoxyCodeLine{159 WebPage::WebPage(\textcolor{keyword}{const} \textcolor{keywordtype}{char} *path) : m\_file\_path(path), m\_input\_file(path) \{}
+\DoxyCodeLine{160   m\_compose\_response();}
+\DoxyCodeLine{161 \}}
+\DoxyCodeLine{162 }
+\DoxyCodeLine{163 WebPage::WebPage(\textcolor{keyword}{const} std::string \&path) : m\_file\_path(path), m\_input\_file(path) \{}
+\DoxyCodeLine{164   m\_compose\_response();}
+\DoxyCodeLine{165 \}}
+\DoxyCodeLine{166 }
+\DoxyCodeLine{167 WebPage::\string~WebPage(\textcolor{keywordtype}{void}) \{\}}
+\DoxyCodeLine{168 }
+\DoxyCodeLine{169 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}
