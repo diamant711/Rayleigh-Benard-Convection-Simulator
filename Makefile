@@ -41,7 +41,7 @@ EMSDK_SDK_COMPILER = $(REPOS_DIR)/emsdk/upstream/emscripten/emcc
 EMSDK_SDK_ARCHIVER = $(REPOS_DIR)/emsdk/upstream/emscripten/emar
 
 # Recipes
-all: env $(X_NAME) doxydoc
+all: env doxydoc $(X_NAME) ;
 	@echo "Build done!"
 
 $(X_NAME): $(OBJECTS)
@@ -96,8 +96,11 @@ env: ;
 	@echo "All enviroment component ready"
 
 doxydoc: ;
-	@echo "Making doxygen documentation..."
-	@doxygen config-file 1>/dev/null
+	@if [ ! -e $(DOC_DIR)/html ] || [ ! -e $(DOC_DIR)/latex ] ; then\
+		echo "Making doxygen documentation...";\
+		doxygen config-file;\
+	fi
+	@echo "Doxygen documentation done!"
 
 clean: ;
 	@echo "Cleaning compilation files..."
@@ -106,6 +109,7 @@ clean: ;
 	@cd $(PRJ_DIR)
 	rm -f $(X_NAME)
 	rm -f raylib.html raylib.js raylib.wasm gmon.out
+	rm -r $(DOC_DIR)/html $(DOC_DIR)/latex
 
 purge: ;
 	@make clean
