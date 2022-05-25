@@ -21,7 +21,6 @@ class Connection {
     void send(void);
     void receive(void);
     void load_data(const std::string &);
-    void load_data(const std::vector<int> &);
     void load_data(const std::vector<unsigned char> &);
     void load_data(const boost::asio::const_buffer &);
     const std::shared_ptr<char[]> unload_data(void) const;
@@ -30,6 +29,7 @@ class Connection {
     bool is_ready_to_receive(void);
     bool is_persistant(void);
     void set_persistant(void);
+    bool is_ready_to_send(void);
   private:
     // Variables
     boost::asio::ip::tcp::socket m_socket;
@@ -38,6 +38,7 @@ class Connection {
     bool m_send_error = false;
     bool m_receive_error = false;
     bool m_first_operation_ended = false;
+    bool m_ready_to_send = true;
     bool m_persistant = false;
     // Functions
     void m_handle_send(const boost::system::error_code&,
@@ -60,6 +61,7 @@ void Connection::m_handle_send(const boost::system::error_code& error, size_t by
   if (!error){
     m_internal_send_buffer_ptr.release();
     m_first_operation_ended = true;
+    m_ready_to_send = true;
   } else {
     m_send_error = true; //va implementato come controllo nei send successivi notifica utente
     std::cerr << "Error" << std::endl;
@@ -81,10 +83,12 @@ void Connection::m_handle_receive(const boost::system::error_code& error, size_t
 
 
 void Connection::send(void) {
-  m_socket.async_send(*m_internal_send_buffer_ptr, 
-                      boost::bind(&Connection::m_handle_send, this, 
-                        boost::asio::placeholders::error,
-                        boost::asio::placeholders::bytes_transferred));
+  boost::asio::async_write(
+      m_socket, *m_internal_send_buffer_ptr, 
+      boost::bind(&Connection::m_handle_send, this, 
+        boost::asio::placeholders::error,
+        boost::asio::placeholders::bytes_transferred));
+  m_ready_to_send = false;
 }
 
 void Connection::receive(void) {
@@ -98,18 +102,17 @@ void Connection::receive(void) {
 }
 
 void Connection::load_data(const std::string &input) {
-  m_internal_send_buffer_ptr.reset(new boost::asio::const_buffer(input.data(), 
-                                                                 input.size()));
-}
-
-void Connection::load_data(const std::vector<int> &input) {
-  m_internal_send_buffer_ptr.reset(new boost::asio::const_buffer(input.data(), 
+  m_internal_send_buffer_ptr.reset(new boost::asio::const_buffer(input.data(),
                                                                  input.size()));
 }
 
 void Connection::load_data(const std::vector<unsigned char> &input) {
   m_internal_send_buffer_ptr.reset(new boost::asio::const_buffer(input.data(), 
                                                                  input.size()));
+  for(int i = 0; i < m_internal_send_buffer_ptr->size(); ++i) {
+    ::printf("%x ", ((unsigned char *) m_internal_send_buffer_ptr->data())[i]);
+  }
+  std::cout << std::endl;
 }
 
 void Connection::load_data(const boost::asio::const_buffer &input) {
@@ -148,6 +151,10 @@ void Connection::set_persistant(void) {
     
 bool Connection::is_persistant(void) {
   return m_persistant;
+}
+
+bool Connection::is_ready_to_send(void) {
+  return m_ready_to_send;
 }
 
 #endif
