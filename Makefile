@@ -27,6 +27,7 @@ SRC_DIR = src
 INC_DIR = inc
 LIB_DIR = lib
 OBJ_DIR = obj
+DOC_DIR = doc
 REPOS_DIR = $(TMP_DIR)/rbcs_tmp_repos_$(USER).d
 CXX = g++
 COMMON_FLAGS = -fopenmp -pg -g -fno-math-errno -march=native -DNDEBUG
@@ -40,7 +41,7 @@ EMSDK_SDK_COMPILER = $(REPOS_DIR)/emsdk/upstream/emscripten/emcc
 EMSDK_SDK_ARCHIVER = $(REPOS_DIR)/emsdk/upstream/emscripten/emar
 
 # Recipes
-all: env $(X_NAME)
+all: env $(X_NAME) doxydoc
 	@echo "Build done!"
 
 $(X_NAME): $(OBJECTS)
@@ -62,6 +63,10 @@ env: ;
 	@if [ ! -e $(REPOS_DIR) ] || [ ! -d $(REPOS_DIR) ] ; then\
 		echo "Making temporary dependencies dir";\
 		mkdir -p $(REPOS_DIR);\
+	fi
+	@if [ ! -e $(DOC_DIR) ] || [ ! -d $(DOC_DIR) ] ; then\
+		echo "Making doxygen documentation dir";\
+		mkdir -p $(DOC_DIR);\
 	fi
 	@if [ ! -e "$(EMSDK_SDK_COMPILER)" ] || [ ! -e "$(EMSDK_SDK_ARCHIVER)" ] ; then\
 		cd $(REPOS_DIR);\
@@ -89,6 +94,10 @@ env: ;
 		cd $(PRJ_DIR);\
 	fi
 	@echo "All enviroment component ready"
+
+doxydoc: ;
+	@echo "Making doxygen documentation..."
+	@doxygen config-file 1>/dev/null
 
 clean: ;
 	@echo "Cleaning compilation files..."
