@@ -36,7 +36,7 @@ main
 test
 temperature_matrix.h
 *.swp
-CaosTester
+Rayleigh-Benard-Convection-Simulator
 libraylib.a
 raylib.html
 raylib.wasm
