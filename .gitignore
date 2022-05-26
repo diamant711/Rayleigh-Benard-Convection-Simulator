@@ -41,3 +41,4 @@ libraylib.a
 raylib.html
 raylib.wasm
 raylib.js
+doc/*
