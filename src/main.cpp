@@ -57,6 +57,5 @@ int main(int argc, char *argv[]){
   } while(!simulation_state.ended);
 
   webserver.poll();
-
   return 0;
 }

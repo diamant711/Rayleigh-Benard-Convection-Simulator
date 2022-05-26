@@ -6,6 +6,7 @@
     <script type="text/javascript">
       function init() {
         let socket = new WebSocket("ws://" + location.hostname + ":8000");
+        socket.binaryType = "arraybuffer";
         socket.onopen = function(e) {
           console.log("INFO: init: Connessione stabilita");
         };
@@ -25,7 +26,7 @@
           console.log(`ERROR: socket.onerror: ${error.message}`);
         };
       }
-      //window.onload = init;
+      window.onload = init;
     </script>
   </head>
   <body>

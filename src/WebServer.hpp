@@ -115,12 +115,14 @@ void WebServer::respond_to_all(void) {
           ->get_socket().remote_endpoint().address() == m_first_user_address) {
         switch (m_first_user_status) {
           case SETUP:  
-            std::cerr << "INFO: WebServer: respond_to_all: first user at "
-                      << "SETUP stage" << std::endl;
-            m_get_connection_by_index(i).connection_ptr
-              ->load_data(m_pages.at(2)->get_http_response());
-            m_get_connection_by_index(i).connection_ptr->send();
-            m_first_user_status = CGI;
+            if(m_get_connection_by_index(i).connection_ptr->is_ready_to_send()) {
+              std::cerr << "INFO: WebServer: respond_to_all: first user at "
+                        << "SETUP stage" << std::endl;
+              m_get_connection_by_index(i).connection_ptr
+                ->load_data(m_pages.at(2)->get_http_response());
+              m_get_connection_by_index(i).connection_ptr->send();
+              m_first_user_status = CGI;
+            }
             continue;
           break;
 
@@ -138,15 +140,18 @@ void WebServer::respond_to_all(void) {
             continue;
           break;
           
-          case PROCESSING:  
-            if(m_start_websocket == false) {
-              std::cerr << "INFO: WebServer: respond_to_all: first user at "
-                        << "PROCESSING stage" << std::endl;
-              m_get_connection_by_index(i).connection_ptr
-                ->load_data(m_pages.at(3)->get_http_response());
-              m_get_connection_by_index(i).connection_ptr->send();
-              m_start_websocket = true;
+          case PROCESSING: 
+            if(m_get_connection_by_index(i).connection_ptr->is_ready_to_send()) {
+              if(m_start_websocket == false) {
+                std::cerr << "INFO: WebServer: respond_to_all: first user at "
+                          << "PROCESSING stage" << std::endl;
+                m_get_connection_by_index(i).connection_ptr
+                  ->load_data(m_pages.at(3)->get_http_response());
+                m_get_connection_by_index(i).connection_ptr->send();
+                m_start_websocket = true;
+              }
             }
+            continue;
           break;
  
           case OUTPUT:

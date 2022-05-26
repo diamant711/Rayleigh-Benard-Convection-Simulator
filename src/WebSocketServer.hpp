@@ -46,6 +46,7 @@ class WebSocketServer : TCPServer {
   int m_actual_total;
   int m_actual_velocity10;
   int m_actual_eta;
+  std::vector<unsigned char> m_actual_frame;
   bool m_connected = false;
   m_status_t m_status;
   std::string m_handshake_response;
@@ -100,8 +101,11 @@ bool WebSocketServer::respond(void) {
         m_status = UPDATING_CLIENT;
       break;
       case UPDATING_CLIENT:
-        m_get_first_connection().connection_ptr->load_data(m_frame_builder());
-        m_get_first_connection().connection_ptr->send();
+        if(m_get_first_connection().connection_ptr->is_ready_to_send()) {
+          m_actual_frame = m_frame_builder();
+          m_get_first_connection().connection_ptr->load_data(m_actual_frame);
+          m_get_first_connection().connection_ptr->send();
+        }
       break;
       case CLOSING_CONNECTION:
         return false;
@@ -199,6 +203,12 @@ std::string WebSocketServer::m_handshake_respond_builder(std::string req) {
 
 std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
   std::vector<unsigned char> frame;
+  std::vector<unsigned char> payload;
+  std::vector<unsigned char> mask;
+  mask.push_back(0xe1);
+  mask.push_back(0xe0);
+  mask.push_back(0x1c);
+  mask.push_back(0xca);
   /* 
    * FIN  = 1
    * RSV1 = 0
@@ -220,25 +230,32 @@ std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
    * T    = 0
    * .    = 0
   */
-  frame.push_back(0b10000000 + sizeof(m_actual_eta) + sizeof(m_actual_velocity10) + sizeof(m_actual_total));
+  frame.push_back(0b10000000 + sizeof(m_actual_eta) 
+                             + sizeof(m_actual_velocity10) 
+                             + sizeof(m_actual_total));
   /* mask key = 0xA271 */
-  frame.push_back(0xA2);
-  frame.push_back(0x71);
+  frame.push_back(mask[0]);
+  frame.push_back(mask[1]);
+  frame.push_back(mask[2]);
+  frame.push_back(mask[3]);
   /* payload eta */
-  frame.push_back(m_actual_eta & 0xFF000000 >> 6);
-  frame.push_back(m_actual_eta & 0x00FF0000 >> 4);
-  frame.push_back(m_actual_eta & 0x0000FF00 >> 2);
-  frame.push_back(m_actual_eta & 0x000000FF >> 0);
+  payload.push_back((m_actual_eta & 0xFF000000) >> 6);
+  payload.push_back((m_actual_eta & 0x00FF0000) >> 4);
+  payload.push_back((m_actual_eta & 0x0000FF00) >> 2);
+  payload.push_back((m_actual_eta & 0x000000FF) >> 0);
   /* payload velocity10 */
-  frame.push_back(m_actual_velocity10 & 0xFF000000 >> 6);
-  frame.push_back(m_actual_velocity10 & 0x00FF0000 >> 4);
-  frame.push_back(m_actual_velocity10 & 0x0000FF00 >> 2);
-  frame.push_back(m_actual_velocity10 & 0x000000FF >> 0);
+  payload.push_back((m_actual_velocity10 & 0xFF000000) >> 6);
+  payload.push_back((m_actual_velocity10 & 0x00FF0000) >> 4);
+  payload.push_back((m_actual_velocity10 & 0x0000FF00) >> 2);
+  payload.push_back((m_actual_velocity10 & 0x000000FF) >> 0);
   /* payload total */
-  frame.push_back(m_actual_total & 0xFF000000 >> 6);
-  frame.push_back(m_actual_total & 0x00FF0000 >> 4);
-  frame.push_back(m_actual_total & 0x0000FF00 >> 2);
-  frame.push_back(m_actual_total & 0x000000FF >> 0);
+  payload.push_back((m_actual_total & 0xFF000000) >> 6);
+  payload.push_back((m_actual_total & 0x00FF0000) >> 4);
+  payload.push_back((m_actual_total & 0x0000FF00) >> 2);
+  payload.push_back((m_actual_total & 0x000000FF) >> 0);
+  for(size_t i = 0; i < payload.size(); ++i) {
+    frame.push_back(payload.at(i) ^ mask[i % 4]);
+  }
   return frame;
 }
     
