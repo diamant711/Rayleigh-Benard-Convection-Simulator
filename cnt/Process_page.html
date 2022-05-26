@@ -4,14 +4,25 @@
     <link rel="icon" href="data:,">
     <title> Processing </title>
     <script type="text/javascript">
+      function buf2hex(buffer) { // buffer is an ArrayBuffer
+          return [...new Uint8Array(buffer)]
+              .map(x => x.toString(16).padStart(2, '0'))
+              .join('');
+      }
       function init() {
+        let mask = 0xe1e01cca;
         let socket = new WebSocket("ws://" + location.hostname + ":8000");
         socket.binaryType = "arraybuffer";
         socket.onopen = function(e) {
           console.log("INFO: init: Connessione stabilita");
         };
         socket.onmessage = function(event) {
-          console.log(`Ricezione dati dal server: ${event.data}`);
+          let eta, velocity, total;
+          eta = ((event.data & 0xFFFFFFFF0000000000000000) >> 8)
+          velocity = ((event.data & 0x00000000FFFFFFFF00000000) >> 4)
+          total = ((event.data & 0x0000000000000000FFFFFFFF) >> 0)
+          console.log(buf2hex(event.data));
+          console.log("eta = ", eta, "; velocity = ", velocity, "; total = ", total);
         };
         socket.onclose = function(event) {
           if (event.wasClean) {
