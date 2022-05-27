@@ -1,9 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//  TCPSerber.hpp specifies a class which define a server using the TCP 
-//  protocol.
-//
-////////////////////////////////////////////////////////////////////////////////
+
 #ifndef TCPSERVER_HPP
 #define TCPSERVER_HPP
 
@@ -16,6 +11,10 @@
 //Not good here
 using boost::asio::ip::tcp;
 
+//! TCPServer.hpp defines a server using the TCP protocol.
+/*!
+ This class is a derived class from base class Server in public mode.
+*/
 class TCPServer : public Server {
 
   public:
@@ -32,7 +31,7 @@ class TCPServer : public Server {
 };
 
 TCPServer::TCPServer(boost::asio::io_context& executor, int port)
-  : Server(executor), 
+  : Server(executor),
     m_acceptor(m_get_executor(), tcp::endpoint(tcp::v4(), port))
 {
   m_port = port;
@@ -49,9 +48,9 @@ void TCPServer::m_handle_accept(m_connection_database_record_t new_connection,
   std::cerr << "INFO: TCPServer (" << m_port << "): m_handle_accept: async "
             << "accept event happened..." << std::endl;
   if(!error) {
-    new_connection.remote_ip = 
+    new_connection.remote_ip =
       new_connection.connection_ptr->get_socket().remote_endpoint().address();
-    new_connection.port = 
+    new_connection.port =
       new_connection.connection_ptr->get_socket().remote_endpoint().port();
     m_insert_new_connection(new_connection);
     std::cerr << "INFO: TCPServer (" << m_port << "): m_handle_accept: new "
@@ -65,7 +64,7 @@ void TCPServer::m_start_accept(void) {
   new_connection.connection_ptr.reset(new Connection(m_get_executor()));
 
   m_acceptor.async_accept(new_connection.connection_ptr->get_socket(),
-    boost::bind(&TCPServer::m_handle_accept, this, new_connection, 
+    boost::bind(&TCPServer::m_handle_accept, this, new_connection,
     boost::asio::placeholders::error));
 }
 
