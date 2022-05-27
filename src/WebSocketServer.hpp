@@ -43,9 +43,9 @@ class WebSocketServer : TCPServer {
     UPDATING_CLIENT,
     CLOSING_CONNECTION
   } m_status_t;
-  int m_actual_total;
-  int m_actual_velocity10;
-  int m_actual_eta;
+  unsigned int m_actual_total;
+  unsigned int m_actual_velocity10;
+  unsigned int m_actual_eta;
   std::vector<unsigned char> m_actual_frame;
   bool m_connected = false;
   m_status_t m_status;
@@ -239,19 +239,19 @@ std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
   frame.push_back(mask[2]);
   frame.push_back(mask[3]);
   /* payload eta */
-  payload.push_back((m_actual_eta & 0xFF000000) >> 6);
-  payload.push_back((m_actual_eta & 0x00FF0000) >> 4);
-  payload.push_back((m_actual_eta & 0x0000FF00) >> 2);
+  payload.push_back((m_actual_eta & 0xFF000000) >> 24);
+  payload.push_back((m_actual_eta & 0x00FF0000) >> 16);
+  payload.push_back((m_actual_eta & 0x0000FF00) >> 8);
   payload.push_back((m_actual_eta & 0x000000FF) >> 0);
   /* payload velocity10 */
-  payload.push_back((m_actual_velocity10 & 0xFF000000) >> 6);
-  payload.push_back((m_actual_velocity10 & 0x00FF0000) >> 4);
-  payload.push_back((m_actual_velocity10 & 0x0000FF00) >> 2);
+  payload.push_back((m_actual_velocity10 & 0xFF000000) >> 24);
+  payload.push_back((m_actual_velocity10 & 0x00FF0000) >> 16);
+  payload.push_back((m_actual_velocity10 & 0x0000FF00) >> 8);
   payload.push_back((m_actual_velocity10 & 0x000000FF) >> 0);
   /* payload total */
-  payload.push_back((m_actual_total & 0xFF000000) >> 6);
-  payload.push_back((m_actual_total & 0x00FF0000) >> 4);
-  payload.push_back((m_actual_total & 0x0000FF00) >> 2);
+  payload.push_back((m_actual_total & 0xFF000000) >> 24);
+  payload.push_back((m_actual_total & 0x00FF0000) >> 16);
+  payload.push_back((m_actual_total & 0x0000FF00) >> 8);
   payload.push_back((m_actual_total & 0x000000FF) >> 0);
   for(size_t i = 0; i < payload.size(); ++i) {
     frame.push_back(payload.at(i) ^ mask[i % 4]);
@@ -260,9 +260,9 @@ std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
 }
     
 void WebSocketServer::update_simulation_data(int eta, float velocity, int total) {
-  m_actual_total = total;
-  m_actual_velocity10 = static_cast<int>(10 * velocity);
-  m_actual_eta = eta;
+  m_actual_total = static_cast<unsigned int>(total);
+  m_actual_velocity10 = static_cast<unsigned int>(10 * velocity);
+  m_actual_eta = static_cast<unsigned int>(eta);
 }
 
 #endif

@@ -109,10 +109,6 @@ void Connection::load_data(const std::string &input) {
 void Connection::load_data(const std::vector<unsigned char> &input) {
   m_internal_send_buffer_ptr.reset(new boost::asio::const_buffer(input.data(), 
                                                                  input.size()));
-  for(int i = 0; i < m_internal_send_buffer_ptr->size(); ++i) {
-    ::printf("%x ", ((unsigned char *) m_internal_send_buffer_ptr->data())[i]);
-  }
-  std::cout << std::endl;
 }
 
 void Connection::load_data(const boost::asio::const_buffer &input) {
