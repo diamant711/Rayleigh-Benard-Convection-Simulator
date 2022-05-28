@@ -16,8 +16,9 @@
 #include <stdlib.h>
 
 #include "../inc/raylib.h"
-#include "temperature_matrix.h"
-#include "jet.h"
+#include "../inc/jet.h"
+
+#include "../inc/temperature_matrix.h"
 
 #define PIXEL 4
 #define WINDOW_WIDTH ((PIXEL*NX) + 3*NX)
