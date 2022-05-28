@@ -53,7 +53,8 @@ $(OBJ_DIR)/%.o:: $(SRC_DIR)/%.cpp $(HEADERS)
 	@$(CXX) $(<D)/$(<F) $(CXXFLAGS) -c -o $(@D)/$(@F)
 
 raylib: src/raylib_page.c inc/temperature_matrix.h inc/jet.h
-	$(EMSDK_SDK_COMPILER) $< lib/libraylib.a -o $@.html -DPLATFORM_WEB -Os -Wall \
+	@echo "EMCC    raylib_page.c"
+	@$(EMSDK_SDK_COMPILER) $< lib/libraylib.a -o $@.html -DPLATFORM_WEB -Os -Wall \
 		-s USE_GLFW=3 --shell-file /temporanea/rbcs_tmp_repos_$(USER).d/emsdk/upstream/emscripten/src/shell.html
 
 env: ;
@@ -110,7 +111,7 @@ clean: ;
 	@cd $(PRJ_DIR)
 	rm -f $(X_NAME)
 	rm -f raylib.html raylib.js raylib.wasm gmon.out
-	rm -r $(DOC_DIR)/html $(DOC_DIR)/latex
+	rm -rf $(DOC_DIR)/html $(DOC_DIR)/latex
 
 purge: ;
 	@make clean
