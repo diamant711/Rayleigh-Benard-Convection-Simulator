@@ -34,12 +34,13 @@
 #include <vector>
 #include <chrono>
 #include <thread>
+
 #include "Eigen/Eigen"
 #include "SuiteSparse_config.h"
 #include "colamd.h"
 
 #define NPROC 12
-#define OUTPUT_HEADER_FILE_NAME "src/temperature_matrix.h"
+#define OUTPUT_HEADER_FILE_NAME "inc/temperature_matrix.h"
 
 /*enum Warning_bytes {
   delta_temperature_over_10 = 00100000000000000000000000000000,
@@ -1061,11 +1062,11 @@ void RayBenConvection::write_current_data(){
                             "#define N_STEPS " << m_END_CICLE << "\n" 
                             "const double cold_temp = " << m_TN << ";\n"
                             "const double hot_temp = " << m_TS << ";\n"
-                            "const double T [NX][NY][N_STEPS] = {\n";
+                            "const double T [N_STEPS][NY][NX] = {\n";
     m_write_current_frame();
   }
   else if (m_it == m_END_CICLE){
-    m_output_header_file << "}; ";
+    m_output_header_file << "}};/*here*/" << std::endl;
     m_output_header_file.close();
     std::cerr << "INFO: RayBenConvection: m_write_current_data: closed data file"
               << std::endl;

@@ -71,6 +71,7 @@ class WebServer : public TCPServer {
     boost::asio::ip::address m_first_user_address;
     first_user_status_t m_first_user_status = NO_FIRST_USER;
     bool m_cgi_parameter_available = false;
+    bool m_raylib_compiled = false;
 };
 
 WebServer::WebServer(std::shared_ptr<boost::asio::io_context> executor_ptr, 
@@ -161,7 +162,13 @@ void WebServer::respond_to_all(void) {
           break;
  
           case OUTPUT:
-            //raylib compilation and shippin
+            if(!m_raylib_compiled) {
+              //compile
+              m_raylib_compiled = true;
+            }
+            if(m_get_connection_by_index(i).connection_ptr->is_ready_to_send()) {
+              //ship
+            }
             continue;
           break;
 

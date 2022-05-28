@@ -52,8 +52,9 @@ $(OBJ_DIR)/%.o:: $(SRC_DIR)/%.cpp $(HEADERS)
 	@echo "CXX     $(@F)"
 	@$(CXX) $(<D)/$(<F) $(CXXFLAGS) -c -o $(@D)/$(@F)
 
-raylib: src/raylib_page.c 
-	$(EMSDK_SDK_COMPILER) $< lib/libraylib.a -o $@.html -DPLATFORM_WEB -Os -Wall -s USE_GLFW=3 --shell-file /temporanea/rbcs_tmp_repos_$(USER).d/emsdk/upstream/emscripten/src/shell.html
+raylib: src/raylib_page.c inc/temperature_matrix.h inc/jet.h
+	$(EMSDK_SDK_COMPILER) $< lib/libraylib.a -o $@.html -DPLATFORM_WEB -Os -Wall \
+		-s USE_GLFW=3 --shell-file /temporanea/rbcs_tmp_repos_$(USER).d/emsdk/upstream/emscripten/src/shell.html
 
 env: ;
 	@if [ ! -e $(OBJ_DIR) ] || [ ! -d $(OBJ_DIR) ] ; then\

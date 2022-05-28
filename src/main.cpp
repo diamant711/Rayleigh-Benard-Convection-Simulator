@@ -57,6 +57,9 @@ int main(int argc, char *argv[]){
       simulation_state.step
     );
   } while(!simulation_state.ended);
-
+  
+  while (1) {
+    webserver.respond_to_all();
+  }
   return 0;
 }
