@@ -18,7 +18,7 @@
 */
 class Server {
   public:
-    Server(boost::asio::io_context &);
+    Server(std::shared_ptr<boost::asio::io_context>);
     ~Server(void);
     void poll(void);
   protected:
@@ -55,7 +55,7 @@ class Server {
     virtual void m_start_accept(void) {};
   private:
     //! Unique pointer at boost::asio::io_context.
-    std::unique_ptr<boost::asio::io_context> m_io_context_ptr;
+    std::shared_ptr<boost::asio::io_context> m_io_context_ptr;
     //! std::vector of m_connection_database_record_t that represents the class database.
     std::vector<m_connection_database_record_t> m_connection_database;
 };
@@ -65,9 +65,9 @@ class Server {
  \param executor boost::asio::io_context provides core I/O functionality.
  \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/io_context.html">boost::asio__io_context</a>
 */
-Server::Server(boost::asio::io_context& executor) {
-  m_io_context_ptr.reset(&executor);
-}
+Server::Server(std::shared_ptr<boost::asio::io_context> executor_ptr) 
+  : m_io_context_ptr(executor_ptr) 
+{}
 
 //! Class destructor.
 Server::~Server(void) {}

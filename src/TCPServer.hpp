@@ -1,4 +1,3 @@
-
 #ifndef TCPSERVER_HPP
 #define TCPSERVER_HPP
 
@@ -18,7 +17,7 @@ using boost::asio::ip::tcp;
 class TCPServer : public Server {
 
   public:
-    TCPServer(boost::asio::io_context &, int);
+    TCPServer(std::shared_ptr<boost::asio::io_context>, int);
     ~TCPServer();
   private:
     //Variables
@@ -30,8 +29,9 @@ class TCPServer : public Server {
                          const boost::system::error_code &);
 };
 
-TCPServer::TCPServer(boost::asio::io_context& executor, int port)
-  : Server(executor),
+TCPServer::TCPServer(std::shared_ptr<boost::asio::io_context> executor_ptr,
+                     int port)
+  : Server(executor_ptr),
     m_acceptor(m_get_executor(), tcp::endpoint(tcp::v4(), port))
 {
   m_port = port;

@@ -45,13 +45,14 @@ class WebServer : public TCPServer {
       double Pr;
       double Rey;
     } html_form_input_t;
-    WebServer(boost::asio::io_context &, int, int, std::string, std::string, 
+    WebServer(std::shared_ptr<boost::asio::io_context>, int, int,
+              std::string, std::string, 
               std::string, std::string);
     ~WebServer(void);
     void respond_to_all(void);
     html_form_input_t get_user_input(void);
     bool is_html_form_input_available(void);
-    void update_simulation_state(int, float, int);
+    void update_simulation_state(int, float, int, int);
   private:
     //Functions
     WebPage& m_generate_Output_page(void);
@@ -59,9 +60,10 @@ class WebServer : public TCPServer {
     //Variables
     std::unique_ptr<WebSocketServer> m_websocketserver_ptr;
     bool m_start_websocket = false;
-    int m_actual_total = -1;
-    float m_actual_velocity = -1;
     int m_actual_eta = -1;
+    float m_actual_velocity = -1;
+    int m_actual_total = -1;
+    int m_actual_step = -1;
     const unsigned int m_n_input_parameter = 6;
     WebServer::html_form_input_t m_internal_html_form_input;
     std::vector<std::unique_ptr<WebPage>> m_pages;
@@ -71,14 +73,15 @@ class WebServer : public TCPServer {
     bool m_cgi_parameter_available = false;
 };
 
-WebServer::WebServer(boost::asio::io_context& executor, int portW, int portWS,
+WebServer::WebServer(std::shared_ptr<boost::asio::io_context> executor_ptr, 
+                     int portW, int portWS,
                      std::string path_to_Error_page, 
                      std::string path_to_ServerFull_page, 
                      std::string path_to_Setup_page, 
                      std::string path_to_Process_page)
-  : TCPServer(executor, portW)
+  : TCPServer(executor_ptr, portW)
 {
-  m_websocketserver_ptr.reset(new WebSocketServer(executor, portWS));
+  m_websocketserver_ptr.reset(new WebSocketServer(executor_ptr, portWS));
   m_pages.clear();
   m_pages.push_back(std::unique_ptr<WebPage>(new WebPage(path_to_Error_page)));
   m_pages.push_back(std::unique_ptr<WebPage>(new WebPage(path_to_ServerFull_page)));
@@ -96,7 +99,10 @@ void WebServer::respond_to_all(void) {
       m_delete_connection_by_index(i);
 
   if(m_start_websocket) {
-    m_websocketserver_ptr->update_simulation_data(m_actual_total, m_actual_velocity, m_actual_eta);
+    m_websocketserver_ptr->update_simulation_data(m_actual_eta,
+                                                  m_actual_velocity,
+                                                  m_actual_total,
+                                                  m_actual_step);
     m_start_websocket = m_websocketserver_ptr->respond();
     m_first_user_status = m_start_websocket ? PROCESSING : OUTPUT;
   }
@@ -267,10 +273,11 @@ bool WebServer::is_html_form_input_available(void) {
   return m_cgi_parameter_available;
 }
     
-void WebServer::update_simulation_state(int e, float v, int t) {
-  m_actual_total = t;
-  m_actual_velocity = v;
+void WebServer::update_simulation_state(int e, float v, int t, int s) {
   m_actual_eta = e;
+  m_actual_velocity = v;
+  m_actual_total = t;
+  m_actual_step = s;
 }
 
 #endif

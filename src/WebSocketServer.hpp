@@ -25,51 +25,52 @@
 class WebSocketServer : TCPServer {
   // Functions
   public:
-    WebSocketServer(boost::asio::io_context &, int);
+    WebSocketServer(std::shared_ptr<boost::asio::io_context>, int);
     ~WebSocketServer(void);
 
     bool respond(void);
     bool full(void);
-    void update_simulation_data(int, float, int);
+    void update_simulation_data(int, float, int, int);
   private:
     std::string m_base64_encode(const std::string &);
     std::string m_base64_decode(const std::string &);
     std::string m_handshake_respond_builder(std::string);
     // format: eta velociry10 total
     std::vector<unsigned char> m_frame_builder(void);
-  // Variables
-  typedef enum {
-    HANDSHAKE_ANSWARE,
-    UPDATING_CLIENT,
-    CLOSING_CONNECTION
-  } m_status_t;
-  unsigned int m_actual_total;
-  unsigned int m_actual_velocity10;
-  unsigned int m_actual_eta;
-  std::vector<unsigned char> m_actual_frame;
-  bool m_connected = false;
-  m_status_t m_status;
-  std::string m_handshake_response;
-  std::string m_handshake_request;
-  std::unique_ptr<boost::asio::io_context> m_io_context_ptr;
-  std::unique_ptr<Connection> m_connection_ptr;
-  const char m_b64_table[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno"
-                                    "pqrstuvwxyz0123456789+/";
+    // Variables
+    typedef enum {
+      HANDSHAKE_ANSWARE,
+      UPDATING_CLIENT,
+      CLOSING_CONNECTION
+    } m_status_t;
+    unsigned int m_actual_eta;
+    unsigned int m_actual_velocity10;
+    unsigned int m_actual_total;
+    unsigned int m_actual_step;
+    std::vector<unsigned char> m_actual_frame;
+    bool m_connected = false;
+    m_status_t m_status;
+    std::string m_handshake_response;
+    std::string m_handshake_request;
+    std::unique_ptr<Connection> m_connection_ptr;
+    const char m_b64_table[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno"
+                                      "pqrstuvwxyz0123456789+/";
 
-  const char m_reverse_table[128] = {
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 62, 64, 64, 64, 63,
-    52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 64, 64, 64, 64, 64, 64,
-    64,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-    15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 64, 64, 64, 64, 64,
-    64, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-    41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64
-  };
+    const char m_reverse_table[128] = {
+      64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+      64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+      64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 62, 64, 64, 64, 63,
+      52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 64, 64, 64, 64, 64, 64,
+      64,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
+      15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 64, 64, 64, 64, 64,
+      64, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+      41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64
+    };
 };
 
-WebSocketServer::WebSocketServer(boost::asio::io_context& executor, int port) 
-  : TCPServer(executor, port) 
+WebSocketServer::WebSocketServer(std::shared_ptr<boost::asio::io_context> executor_ptr,
+                                 int port) 
+  : TCPServer(executor_ptr, port) 
 {}
 
 WebSocketServer::~WebSocketServer(void) {}
@@ -106,9 +107,15 @@ bool WebSocketServer::respond(void) {
           m_get_first_connection().connection_ptr->load_data(m_actual_frame);
           m_get_first_connection().connection_ptr->send();
         }
+        if(m_actual_step >= m_actual_total) {
+          m_status = CLOSING_CONNECTION;
+        }
       break;
       case CLOSING_CONNECTION:
-        return false;
+        if(m_get_first_connection().connection_ptr->is_ready_to_send()) {
+          m_delete_connection_by_index(0);
+          return false;
+        }
       break;
     }
   }
@@ -232,7 +239,8 @@ std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
   */
   frame.push_back(0b10000000 + sizeof(m_actual_eta) 
                              + sizeof(m_actual_velocity10) 
-                             + sizeof(m_actual_total));
+                             + sizeof(m_actual_total)
+                             + sizeof(m_actual_step));
   /* mask key = 0xA271 */
   frame.push_back(mask[0]);
   frame.push_back(mask[1]);
@@ -253,16 +261,22 @@ std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
   payload.push_back((m_actual_total & 0x00FF0000) >> 16);
   payload.push_back((m_actual_total & 0x0000FF00) >> 8);
   payload.push_back((m_actual_total & 0x000000FF) >> 0);
+  /* payload step */
+  payload.push_back((m_actual_step & 0xFF000000) >> 24);
+  payload.push_back((m_actual_step & 0x00FF0000) >> 16);
+  payload.push_back((m_actual_step & 0x0000FF00) >> 8);
+  payload.push_back((m_actual_step & 0x000000FF) >> 0);
   for(size_t i = 0; i < payload.size(); ++i) {
     frame.push_back(payload.at(i) ^ mask[i % 4]);
   }
   return frame;
 }
     
-void WebSocketServer::update_simulation_data(int eta, float velocity, int total) {
-  m_actual_total = static_cast<unsigned int>(total);
-  m_actual_velocity10 = static_cast<unsigned int>(10 * velocity);
+void WebSocketServer::update_simulation_data(int eta, float velocity, int total, int step) {
   m_actual_eta = static_cast<unsigned int>(eta);
+  m_actual_velocity10 = static_cast<unsigned int>(10 * velocity);
+  m_actual_total = static_cast<unsigned int>(total);
+  m_actual_step = static_cast<unsigned int>(step);
 }
 
 #endif

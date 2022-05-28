@@ -67,6 +67,7 @@ class RayBenConvection {
       int eta;
       /*! This parameter represents the number of iterations performed per second. */
       float velocity;
+      int step;
       } simulation_state_t;
 
     //! Class constructor.
@@ -370,15 +371,14 @@ void RayBenConvection::m_ETA(int n_calls){
     ) / 1000;
     if(delta_t > 0) {
       simulation_state.total = m_END_CICLE;
+      simulation_state.step = n_calls;
       simulation_state.eta = delta_t * (m_END_CICLE - n_calls);
       simulation_state.velocity = 1.0/delta_t;
-      for(int i = 0; i < 80; ++i)
-        std::putc(' ', stdout);
-      std::cerr << "\rINFO: RayBenConvection: m_ETA: eta = "
+      std::cerr << "INFO: RayBenConvection: m_ETA: eta = "
                 << std::setw(4) << std::setprecision(3)
                 << simulation_state.eta << "s\tspeed = "
                 << simulation_state.velocity << "cicle/s\tstep = "
-                << n_calls << "/" << simulation_state.total << "\r";
+                << n_calls << "/" << simulation_state.total << std::endl;
       ::fflush(stdout);
     }
   }
@@ -1026,7 +1026,7 @@ RayBenConvection::simulation_state_t RayBenConvection::eval_next_frame(){
   }
 
   if (m_it == m_END_CICLE) {
-    std::cerr << std::endl << "INFO: RayBenConvection: eval_next_frame: " 
+    std::cerr << "INFO: RayBenConvection: eval_next_frame: " 
               << "Simulation ended with no errors." << std::endl;
     simulation_state.ended = true;
     return simulation_state;
@@ -1049,9 +1049,11 @@ and it checks if the simulation has reached its end.
 void RayBenConvection::write_current_data(){
   if (m_it == 0) {
     m_output_header_file.open(OUTPUT_HEADER_FILE_NAME, std::ios_base::out);
-    std::cout << "File aperto"; 
+    std::cerr << "INFO: RayBenConvection: m_write_current_data: opened data file"
+              << std::endl;
     if (! m_output_header_file.is_open()){
-      std::cerr <<"Failed opening output_header_file. Exiting..." <<std::endl;
+      std::cerr <<"ERROR: RayBenConvection: Failed opening data file. Exiting..."
+                << std::endl;
       return;
     }
     m_output_header_file << "#define NX " << m_nx << "\n" 
@@ -1065,7 +1067,8 @@ void RayBenConvection::write_current_data(){
   else if (m_it == m_END_CICLE){
     m_output_header_file << "}; ";
     m_output_header_file.close();
-  std::cout << "File chiuso";
+    std::cerr << "INFO: RayBenConvection: m_write_current_data: closed data file"
+              << std::endl;
   }
   else {
     m_output_header_file <<",\n";

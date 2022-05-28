@@ -22,12 +22,13 @@ int main(int argc, char *argv[]){
   }
   
   RayBenConvection RayBenCon;
-  boost::asio::io_context io_context;
-  WebServer webserver(io_context, ::atoi(portW), ::atoi(portWS),
-                                                 "cnt/Error_page.html", 
-                                                 "cnt/ServerFull_page.html", 
-                                                 "cnt/Setup_page.html",
-                                                 "cnt/Process_page.html");
+  std::shared_ptr<boost::asio::io_context> io_context_ptr(new boost::asio::io_context());
+  WebServer webserver(io_context_ptr,
+                      ::atoi(portW), ::atoi(portWS),
+                      "cnt/Error_page.html", 
+                      "cnt/ServerFull_page.html", 
+                      "cnt/Setup_page.html",
+                      "cnt/Process_page.html");
   RayBenConvection::simulation_state_t simulation_state;
   
   while(!webserver.is_html_form_input_available()) {
@@ -47,15 +48,15 @@ int main(int argc, char *argv[]){
   
   do {
     webserver.respond_to_all();
+    RayBenCon.write_current_data();
     simulation_state = RayBenCon.eval_next_frame();
     webserver.update_simulation_state(
-      simulation_state.total,
+      simulation_state.eta,
       simulation_state.velocity,
-      simulation_state.eta
+      simulation_state.total,
+      simulation_state.step
     );
-    RayBenCon.write_current_data();
   } while(!simulation_state.ended);
 
-  webserver.poll();
   return 0;
 }

@@ -4,11 +4,7 @@
     <link rel="icon" href="data:,">
     <title> Processing </title>
     <script type="text/javascript">
-      function buf2hex(buffer) { // buffer is an ArrayBuffer
-          return [...new Uint8Array(buffer)]
-              .map(x => x.toString(16).padStart(2, '0'))
-              .join('');
-      }
+      
       function init() {
         let socket = new WebSocket("ws://" + location.hostname + ":8000");
         socket.binaryType = "arraybuffer";
@@ -19,20 +15,17 @@
           let data = event.data;
           let dv = new DataView(data);
           let eta = dv.getUint32(0);
-          let velocity = dv.getUint32(4);
+          let velocity = dv.getUint32(4)/10;
           let total = dv.getUint32(8);
-          /*
-          let eta, velocity, total;
-          eta = event.data.slice(0,8);
-          velocity = event.data.slice(8,);
-          total = event.data
-          */
-          console.log(buf2hex(event.data));
-          console.log("eta = ", eta, "; velocity = ", velocity, "; total = ", total);
+          let step = dv.getUint32(12);
+          document.getElementById('bar').max = total;
+          document.getElementById('bar').value = step;
+          document.getElementById('bar_label').innerHTML = step + "/" + total;
+          document.getElementById('bar_desc').innerHTML = "ETA: " + eta + "s; Velocity: " + velocity + "cicle/s;";
         };
         socket.onclose = function(event) {
           if (event.wasClean) {
-            console.log("ERROR: socket.onclose: Connessione chiusa con successo");
+            console.log("INFO: socket.onclose: Connessione chiusa con successo");
           } else {
             // e.g. processo del server terminato o connessione già
             // in questo caso event.code solitamente è 1006
@@ -47,7 +40,8 @@
     </script>
   </head>
   <body>
-    <label for="bar">Process:</label>
+    <label id="bar_label" for="bar">(total-eta*velocity)/total</label>
     <progress id="bar" max="1" value="0"></progress>
+    <div id="bar_desc">ETA: eta; Velocity: velocity;</div>
   </body>
 </html>

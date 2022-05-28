@@ -49,9 +49,9 @@ class Connection {
 Connection::Connection(boost::asio::io_context& executor) : m_socket(executor) {}
 
 Connection::~Connection(void) {
-  std::cerr << "INFO: Connection: user " << m_socket.remote_endpoint().address() 
-            << ": destructor: socket close." << std::endl;
-  m_socket.close();
+  //std::cerr << "INFO: Connection: user " << m_socket.remote_endpoint().address() 
+  //          << ": destructor: socket close." << std::endl;
+  //m_socket.close();
 }
 
 void Connection::m_handle_send(const boost::system::error_code& error, size_t bytes_transferred){
