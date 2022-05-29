@@ -1,8 +1,6 @@
 /******************************************************************
  * TODO list:
- * X - Metodi privati vanno rinominati con il prefisso m_
-       * 2 - Dopo aver scritto la documentazione sulla matematica: m_ii, m_jj -> nx-2, ny-2
- * X - write_current_frame() deve scrivere un file .h che conterra' una
+ * * X - write_current_frame() deve scrivere un file .h che conterra' una
  *     dichiarazione di una variabile globale dal nome poco rilevante che sara'�
  *     del tipo double[nx][ny][5000] ad ogni chiamata del metodo in oggetto
  *     verra' salvato T al valore attuale. (Scritto in semplice C99 -> no Eigen::
@@ -13,7 +11,7 @@
  *     una pagina stile doxigen con gli oggetti e i metodi
  * 5 - E' la corretta astrazione quella realizzata? Magari facciamo meglio il
  *     server web?
- * X - Quali parametri l'utente può modificare?
+ *
  *
  *LEGENDA ERRORI:
  * return -1  END_CICLE > 6000
@@ -42,18 +40,11 @@
 #define NPROC 12
 #define OUTPUT_HEADER_FILE_NAME "inc/temperature_matrix.h"
 
-/*enum Warning_bytes {
-  delta_temperature_over_10 = 00100000000000000000000000000000,
-  TN_below_4 = 00010000000000000000000000000000,
-}
-*/
-
 //! RayBenConvection is the core of the numerical simulation.
 /*!
   This class performs perturbative calculations on a fixed environment,
   describing fluid dynamics evolution according to Navier-Stokes equations.
 */
-
 class RayBenConvection {
 
   public:
@@ -129,15 +120,39 @@ class RayBenConvection {
     double m_To;
     //! Eigen maxtrix that represents the temperature of every point per frame. 
     Eigen::Matrix<double, m_nx, m_ny> m_T;
-    //! Reynolds numer.
+    //! Reynolds number.
+    /*!
+    Dimensioneless number that helps predict flow patterns in
+    different fluid flow situations. At low Reynolds numbers,
+    flows tends to be laminar, while at high Reynolds numbers flows tend to be turbulent. 
+    */
     double m_Re;
     //! Prandtl number.
+    /*!
+    Dimensioneless number defined as the ratio of momentum diffusivity 
+    to thermal diffusivity. For Pr < < 1 the thermal diffusivity dominatest 
+    the behavior, while for Pr > > 1 the momentum diffusivity dominates.
+    */
     double m_Pr;
-    //!
+    //! Péclet number
+    /*!
+    Dimensioneless number. In heat transfer studies, it is equivalent to
+    the product of the Reynolds number and the Prandtl number.
+    */
     double m_Pe;
     //! Rayleigh number.
+    /*!
+    Dimensionless number associated with buoyancy-driven flow, also known as natural
+    convection. It characterises the fluid's flow regime: below a critical
+    value, denotes laminar flow, and heat transfer is by conduction rather than convection.
+    Over the critical value, it denotes turbulent flow with convection cells.
+    */
     double m_Ra;
-    //!
+    //! Grashof number.
+    /*!
+     Dimensionless number in fluid dynamics and heat transfer which
+     approximates the ratio of the buoyancy to viscous force acting on a fluid.
+    */
     double m_Gr;
     //! Eigen matrix used for perturbative calculation.
     Eigen::Matrix<double, m_nx, m_ny> m_Tstar;
@@ -286,8 +301,9 @@ RayBenConvection::~RayBenConvection() {}
 /*!
  During the perturbative calculations, small errors due to the truncation of the decimals may occur,
  resulting in temperatures lower than m_TN.
- Since these values do not hold any physical value nor represent a calculation error,
- this function replaces them with m_TN.
+ Since these values do not hold any physical meaning nor represent a calculation error,
+ this function replaces them with m_TN. This correction allows a smoother visual simulation
+ since temperatures are set between TN and TS.
  \sa m_TN
 */
 void RayBenConvection::m_apply_correction(void) {
@@ -316,12 +332,13 @@ void RayBenConvection::m_apply_correction(void) {
 //  }
 //}
 
-//! This function returns a permutated matrix, following Eigen  Partial Pivoting operation.
+//! This function returns a permutated matrix, following Eigen Partial Pivoting operation.
 /*!
  \param mat Eigen matrix to be permutated.
  \param perm Eigen vector of permutation.
  \param L Eigen PartialPivLu matrix.
  \param U Eigen PartialPivLu matrix.
+ \sa <a href="https://eigen.tuxfamily.org/dox/classEigen_1_1PartialPivLU.html">Eigen Partial Pivoting (LU decomposition)</a>
 */
 void RayBenConvection::m_d_solve(Eigen::Matrix<double,-1,1> &mat,
            const Eigen::Matrix<int,1,-1> &perm,
@@ -387,7 +404,10 @@ void RayBenConvection::m_ETA(int n_calls){
   return;
 }
 
-//! This function returns an Eigen sparce diagonal matrix.
+//! This function returns an Eigen sparse diagonal matrix.
+/*!
+\sa <a href="https://eigen.tuxfamily.org/dox/classEigen_1_1SparseMatrix.html">Eigen sparse matrix</a>
+*/
 template <typename Scalar>
 Eigen::Matrix<Scalar,-1,-1> RayBenConvection::m_spdiags(const Eigen::Matrix<Scalar, -1, -1>& B,
                                     const Eigen::Matrix<int, -1, 1>& d,
@@ -413,22 +433,22 @@ Eigen::Matrix<Scalar,-1,-1> RayBenConvection::m_spdiags(const Eigen::Matrix<Scal
   return Eigen::Matrix<Scalar, -1, -1>(A);
 }
 
-//! This function returns the Kronecher product of two constant Eigen matrices.
-template <typename Scalar> 
+//! This function returns the <a href="https://en.wikipedia.org/wiki/Kronecker_product">Kronecker product</a> of two constant Eigen matrices.
+template <typename Scalar>
 Eigen::Matrix<Scalar,-1,-1> RayBenConvection::m_kron(const Eigen::Matrix<Scalar, -1, -1>& B, 
                                  const Eigen::Matrix<Scalar, -1, -1>& d) {
   Eigen::Matrix<Scalar, -1, -1> A;
   A.resize(B.rows()*d.rows(), B.cols()*d.cols());
-  for (int i = 0; i < B.rows(); i++) 
-    for (int j = 0; j < B.cols(); j++) 
-      for (int h = 0; h < d.rows(); h++) 
+  for (int i = 0; i < B.rows(); i++)
+    for (int j = 0; j < B.cols(); j++)
+      for (int h = 0; h < d.rows(); h++)
         for (int k = 0; k < d.cols(); k++)
-          A(i*d.rows() + h, j * d.cols() + k) = B(i, j) * d(h, k);  
+          A(i*d.rows() + h, j * d.cols() + k) = B(i, j) * d(h, k);
 
   return Eigen::Matrix<Scalar, -1, -1>(A);
 }
 
-//! This function converts Eigen sparce matrix to an std vector of Eigen Triplets.
+//! This function converts Eigen sparce matrix to an std vector of <a href="https://eigen.tuxfamily.org/dox/classEigen_1_1Triplet.html">Eigen::Triplet</a>.
 template <typename Scalar>
 std::vector<Eigen::Triplet<Scalar>> RayBenConvection::m_SparseToTriplet(Eigen::SparseMatrix<Scalar> &A)
 {
@@ -444,10 +464,12 @@ std::vector<Eigen::Triplet<Scalar>> RayBenConvection::m_SparseToTriplet(Eigen::S
 }
 
 //! This function returns a permutation vector.
-/*! 
+/*!
  Calling p = symamd(S) returns the permutation vector p such that S(p,p)
  tends to have a sparser Cholesky factor than S.
  \param mat must be a symmetric positive definite Eigen matrix.
+ \sa <a href="https://eigen.tuxfamily.org/dox/Eigen__Colamd_8h_source.html">Colamd.h</a>
+ \sa <a href="https://octave.sourceforge.io/octave/function/symamd.html">Symamd octave function</a>
 */
 template <typename Scalar>
 Eigen::Matrix<int, 1, -1> RayBenConvection::m_my_symamd(Eigen::Matrix<Scalar, -1, -1> &mat) {
@@ -500,12 +522,14 @@ Eigen::Matrix<int, 1, -1> RayBenConvection::m_my_symamd(Eigen::Matrix<Scalar, -1
     return Eigen::Matrix<int,1,1>(0);
   }
 }
-//**************************************** TODO non cancellare gli spazi qui sotto perf.
 
 //! This function resolves Partial Pivoting calculations with LU decomposition.
 /*!
  Calling this function will return an std vector of Eigen Matrices
- consisting of the two matrices L and U obtained during the decomposition.                                  
+ consisting of the two matrices L and U obtained during the decomposition.
+ \sa <a href="https://eigen.tuxfamily.org/dox/classEigen_1_1PartialPivLU.html">Eigen Partial Pivoting (LU decomposition)</a>
+*/
+/*!
  The input matrix A is decomposed as A = PLU where L is unit-lower-triangular,
  U is upper-triangular, and P is a permutation matrix.
  \param mat must be a square invertible matrix.
@@ -551,7 +575,7 @@ void RayBenConvection::m_write_current_frame (){
 /*!
  The parameter inserted by the user are thoughtfully checked to ensure the validity of the simulation.
  \param END_CICLE total numer of steps.
- \param cold_temp lower wall temperature. 
+ \param cold_temp lower wall temperature.
  \param hot_temp higher wall temperature.
  \param Ray_numb Rayleigh number.
  \param Pr_numb Prandtl number.
@@ -584,49 +608,51 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
   if(m_TS != m_TN)
     m_To = (m_TS < m_TN) ? m_TS : m_TN;
   else{
-    std::cout << "Please, remeber to provide two different temperatures.";
+    std::cerr << "ERROR: RayBenConvection: init: This simulation requires two "
+                  "different temperatures." << std::endl;
     return -2;
   }
 
   if (m_TN <= 0 || m_TN >= 100){
-    std::cout << "Default parameters regard liquid water. Work in 1-99 range.";
+    std::cerr << "ERROR: RayBenConvection: init: Default parameters "
+                 "regard liquid water. Work in 1-99 range." << std::endl;
     return -3;
   }
 
   if (m_TS >= 100){
-    std::cout << "Default parameters regard liquid water. Work in 1-99 range.";
-    return -7;
-  }
-
-  if (Ray_numb < 50 || Ray_numb > 150 ){
-    std::cout << "Working range for Rayleigh number: 50-150.";
+    std::cerr << "ERROR: RayBenConvection: init: Default parameters "
+                 "regard liquid water. Work in 1-99 range." << std::endl;
     return -4;
   }
 
-  if (Pr_numb < 5 || Pr_numb > 9){
-    std::cout << "Working range for Prandtl number: 5-9.";
+  if (Ray_numb < 50 || Ray_numb > 150 ){
+    std::cerr << "ERROR: RayBenConvection: init: Working range for "
+                 "Rayleigh number: 50-150." << std::endl;
     return -5;
   }
 
-  if (Re_numb < 70 ||  Re_numb > 130){
-    std::cout << "Working range for Reynolds number: 70-130.";
+  if (Pr_numb < 5 || Pr_numb > 9){
+    std::cerr << "ERROR: RayBenConvection: init: Working range for "
+                 "Prandtl number: 5-9." << std::endl;
     return -6;
   }
 
+  if (Re_numb < 70 ||  Re_numb > 130){
+    std::cerr << "ERROR: RayBenConvection: init: Working range for "
+                 "Reynolds number: 70-130." << std::endl;
+    return -7;
+  }
+
   if (m_TN < 4){
-    std::cout << "Working with linear parameters. Liquid water "
+    std::cerr << "ERROR: RayBenConvection: init: Working with linear parameters. Liquid water "
                  "below of 4 Celsius does not follow linear behaviour." << std::endl;
-    std::cout << "A simulation will be provided but the user is "
-                 "advised to change working parameters." << std::endl;
-    ret_value += 0b00010000000000000000000000000000;
+    return -8;
   }
 
   if (m_TS - m_TN > 10){
-    std::cout << "Warning: with this temperature range the linear" 
+    std::cerr << "ERROR: RayBenConvection: init: with this temperature range the linear"
                 " model validity is not guaranteed." << std::endl;
-    std::cout << "The duration of the simulation will depend on the temperature range," 
-                 "so nsteps requested cannot be assured." << std::endl; 
-    ret_value += 0b00100000000000000000000000000000;
+    return -9;
   }
 
   //m_dt correction:

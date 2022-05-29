@@ -51,7 +51,7 @@ class Server {
     bool m_is_waiting_list_empty(void);
     void m_insert_new_connection(m_connection_database_record_t &);
     void m_delete_connection_by_index(int);
-    //! This virtual method regulates when the server starts to accept connections.  
+    //! This method regulates when the server starts to accept connections.
     virtual void m_start_accept(void) {};
   private:
     //! Unique pointer at boost::asio::io_context.
