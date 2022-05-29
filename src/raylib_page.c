@@ -36,7 +36,6 @@
 //----------------------------------------------------------------------------------
 //const int screenWidth = 800;
 //const int screenHeight = 450;
-  unsigned int n_step = 0;
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
@@ -55,7 +54,7 @@ int main()
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Rayleigh-Benard convection");
 
 #if defined(PLATFORM_WEB)
-    emscripten_set_main_loop(UpdateDrawFrame, 0, 1);
+    emscripten_set_main_loop(UpdateDrawFrame, 1, 1);
 #else
     SetTargetFPS(FPS);
     //--------------------------------------------------------------------------------------
@@ -80,14 +79,14 @@ int main()
 //----------------------------------------------------------------------------------
 
 Color TtoC (double cold, double hot,  double t) {
-/*
-(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
-*/
-if ((t <= hot) && (t >= cold)) {
-  int index = (t - cold) * (JETSIZE - 1) / ( hot - cold );
-  return jet[index];
+  /*
+  (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+  */
+  if ((t <= hot) && (t >= cold)) {
+    int index = (t - cold) * (JETSIZE - 1) / ( hot - cold );
+    return jet[index];
   } else {
-      return (Color){0, 0, 0, 0};
+    return (Color){0, 0, 0, 255};
   }
 }
 
@@ -96,6 +95,7 @@ void UpdateDrawFrame(void)
   // Update
   //----------------------------------------------------------------------------------
   // TODO: Update your variables here
+  static unsigned int n_step = 0;
   if (n_step >= N_STEPS) {
     exit(0);
   }
@@ -107,13 +107,12 @@ void UpdateDrawFrame(void)
 
     ClearBackground(RAYWHITE);
 
-    DrawText("Rayleigh-Benard Convection", 190, 200, 20, LIGHTGRAY);
-
     for(unsigned int i = 0; i < NX; ++i) {
       for(unsigned int k = 0; k < NY; ++k) {
+        DrawText(TextFormat("%d", n_step+1), 190, 200, 20, LIGHTGRAY);
         DrawRectangle((WINDOW_WIDTH/2 - NX*PIXEL/2) + i*PIXEL, 
                       (WINDOW_HEIGHT/2 + NY*PIXEL/2) - k*PIXEL, 
-                       PIXEL, PIXEL, TtoC(cold_temp, hot_temp, T[i][k][n_step]));
+                       PIXEL, PIXEL, TtoC(cold_temp, hot_temp, T[n_step][k][i]));
       }
     }
     int posY = 5;
