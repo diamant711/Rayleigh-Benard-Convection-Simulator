@@ -1066,7 +1066,7 @@ void RayBenConvection::write_current_data(){
     m_write_current_frame();
   }
   else if (m_it == m_END_CICLE){
-    m_output_header_file << "}};/*here*/" << std::endl;
+    m_output_header_file << "};" << std::endl;
     m_output_header_file.close();
     std::cerr << "INFO: RayBenConvection: m_write_current_data: closed data file"
               << std::endl;

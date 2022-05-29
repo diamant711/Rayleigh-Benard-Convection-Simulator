@@ -48,7 +48,6 @@ int main(int argc, char *argv[]){
   
   do {
     webserver.respond_to_all();
-    RayBenCon.write_current_data();
     simulation_state = RayBenCon.eval_next_frame();
     webserver.update_simulation_state(
       simulation_state.eta,
@@ -56,10 +55,8 @@ int main(int argc, char *argv[]){
       simulation_state.total,
       simulation_state.step
     );
+    RayBenCon.write_current_data();
   } while(!simulation_state.ended);
   
-  while (1) {
-    webserver.respond_to_all();
-  }
   return 0;
 }
