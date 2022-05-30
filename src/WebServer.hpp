@@ -76,7 +76,7 @@ class WebServer : public TCPServer {
     first_user_status_t m_first_user_status = NO_FIRST_USER;
     bool m_cgi_parameter_available = false;
     bool m_raylib_compiled = false;
-    bool m_output_pages_sent[3] = {false, false, false};
+    bool m_output_pages_sent[4] = {false, false, false, false};
 };
 
 WebServer::WebServer(std::shared_ptr<boost::asio::io_context> executor_ptr, 
@@ -172,13 +172,15 @@ void WebServer::respond_to_all(void) {
               m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.html")));
               m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.js")));
               m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.wasm")));
+              m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("img/favicon.ico")));
               m_raylib_compiled = true;
             }
             if(m_get_connection_by_index(i).connection_ptr->is_ready_to_send()
                && m_raylib_compiled 
                && (   !m_output_pages_sent[0]
                    || !m_output_pages_sent[1]
-                   || !m_output_pages_sent[2])) {
+                   || !m_output_pages_sent[2]
+                   || !m_output_pages_sent[3])) {
               if(m_get_connection_by_index(i).connection_ptr->is_ready_to_receive()) {
                 m_get_connection_by_index(i).connection_ptr->receive();
                 switch (m_extract_raylib_request(
@@ -208,8 +210,9 @@ void WebServer::respond_to_all(void) {
 
                   case 'i': //ico
                     m_get_connection_by_index(i).connection_ptr
-                      ->load_data("HTTP/1.1 404 Not Found");
+                      ->load_data(m_pages.at(7)->get_http_response());
                     m_get_connection_by_index(i).connection_ptr->send();
+                    m_output_pages_sent[3] = true;
                   break;
 
                   default:

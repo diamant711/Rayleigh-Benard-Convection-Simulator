@@ -31,7 +31,7 @@
             // in questo caso event.code solitamente è 1006
             console.log('ERROR: socket.onclose: Connection morta.');
           }
-          window.location.assign("http://" + location.host + "/output");
+          window.location.assign("http://" + location.host + "/raylib.html");
         };
         socket.onerror = function(error) {
           console.log(`ERROR: socket.onerror: ${error.message}`);

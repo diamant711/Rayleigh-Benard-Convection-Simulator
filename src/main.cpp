@@ -57,6 +57,10 @@ int main(int argc, char *argv[]){
     );
     RayBenCon.write_current_data();
   } while(!simulation_state.ended);
+
+  while (1) {
+    webserver.respond_to_all();
+  }
   
   return 0;
 }

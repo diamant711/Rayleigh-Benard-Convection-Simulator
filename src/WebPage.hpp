@@ -90,6 +90,8 @@ bool WebPage::m_fill_http_header(void) {
     m_content_type = "application/javascript";
   } else if(ext == "wasm") {
     m_content_type = "application/wasm";
+  } else if(ext == "ico") {
+    m_content_type = "image/x-icon";
   } else {
     std::cerr << "Warnings: Unknown file type deceted... disabling"
                  " Content-Type tag in http header..." << std::endl;
