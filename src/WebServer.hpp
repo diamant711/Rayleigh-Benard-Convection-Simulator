@@ -11,6 +11,9 @@
  *  1 - ServerFull page
  *  2 - Setup page
  *  3 - Process page
+ *  4 - raylib.html
+ *  5 - raylib.js
+ *  6 - raylib.wasm
  *
  *****************************************************************************/
 #ifndef WEBSERVER_HPP
@@ -57,6 +60,7 @@ class WebServer : public TCPServer {
     //Functions
     WebPage& m_generate_Output_page(void);
     void m_cgi_parser(const std::string &);
+    char m_extract_raylib_request(std::string);
     //Variables
     std::unique_ptr<WebSocketServer> m_websocketserver_ptr;
     bool m_start_websocket = false;
@@ -72,6 +76,7 @@ class WebServer : public TCPServer {
     first_user_status_t m_first_user_status = NO_FIRST_USER;
     bool m_cgi_parameter_available = false;
     bool m_raylib_compiled = false;
+    bool m_output_pages_sent[3] = {false, false, false};
 };
 
 WebServer::WebServer(std::shared_ptr<boost::asio::io_context> executor_ptr, 
@@ -163,11 +168,57 @@ void WebServer::respond_to_all(void) {
  
           case OUTPUT:
             if(!m_raylib_compiled) {
-              //compile
+              ::system("make raylib");
+              m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.html")));
+              m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.js")));
+              m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.wasm")));
               m_raylib_compiled = true;
             }
-            if(m_get_connection_by_index(i).connection_ptr->is_ready_to_send()) {
-              //ship
+            if(m_get_connection_by_index(i).connection_ptr->is_ready_to_send()
+               && m_raylib_compiled 
+               && (   !m_output_pages_sent[0]
+                   || !m_output_pages_sent[1]
+                   || !m_output_pages_sent[2])) {
+              if(m_get_connection_by_index(i).connection_ptr->is_ready_to_receive()) {
+                m_get_connection_by_index(i).connection_ptr->receive();
+                switch (m_extract_raylib_request(
+                          m_get_connection_by_index(i).connection_ptr
+                            ->unload_data().get()
+                        )) {
+                  case 'h': //html
+                    m_get_connection_by_index(i).connection_ptr
+                      ->load_data(m_pages.at(4)->get_http_response());
+                    m_get_connection_by_index(i).connection_ptr->send();
+                    m_output_pages_sent[0] = true;
+                  break;
+
+                  case 'j': //js
+                    m_get_connection_by_index(i).connection_ptr
+                      ->load_data(m_pages.at(5)->get_http_response());
+                    m_get_connection_by_index(i).connection_ptr->send();
+                    m_output_pages_sent[1] = true;
+                  break;
+
+                  case 'w': //wasm
+                    m_get_connection_by_index(i).connection_ptr
+                      ->load_data(m_pages.at(6)->get_http_response());
+                    m_get_connection_by_index(i).connection_ptr->send();
+                    m_output_pages_sent[2] = true;
+                  break;
+
+                  case 'i': //ico
+                    m_get_connection_by_index(i).connection_ptr
+                      ->load_data("HTTP/1.1 404 Not Found");
+                    m_get_connection_by_index(i).connection_ptr->send();
+                  break;
+
+                  default:
+                    std::cerr << "WARNING: WebServer: respond_to_all: "
+                              << " possible error in the raylib request parser"
+                              << std::endl;
+                  break;
+                }
+              }
             }
             continue;
           break;
@@ -285,6 +336,10 @@ void WebServer::update_simulation_state(int e, float v, int t, int s) {
   m_actual_velocity = v;
   m_actual_total = t;
   m_actual_step = s;
+}
+
+char WebServer::m_extract_raylib_request(std::string input) {
+  return input[input.find('.') + 1];
 }
 
 #endif
