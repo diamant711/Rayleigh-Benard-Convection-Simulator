@@ -59,6 +59,7 @@ class RayBenConvection {
       int eta;
       /*! This parameter represents the number of iterations performed per second. */
       float velocity;
+      /*! Current step of the simulation. */
       int step;
       } simulation_state_t;
 
@@ -105,8 +106,19 @@ class RayBenConvection {
     //! interval of y coordinate used for perturbative calculation.
     const double m_dy = m_H / (m_ny - 1);
     //! lower temperature
+    /*!
+     This simulation is set to work with liquid water, in the temperature range of 4°-99°C.
+    */
+    /*!
+     To guarantee the validity of the perturbative calculation, there must be a 
+     maximum of 10° difference between m_TN and m_TS
+     \sa m_TS
+    */
     double m_TN;
     //! higher temperature
+    /*!
+    \sa m_TN
+    */
     double m_TS;
     //! Eigen matrix used for perturbative calculation.
     Eigen::Matrix<double, m_nx+1, m_ny> m_u;
@@ -216,7 +228,7 @@ class RayBenConvection {
     Eigen::Matrix<int, 1, -1> m_pv;
     //! Eigen matrix used as calculation support.
     Eigen::Matrix<double, -1, -1> m_Dvperm;
-    // std vector of Eigen matrices.
+    //! std vector of Eigen matrices.
     std::vector<Eigen::Matrix<double, -1, -1>> m_LUv;
     //! Eigen matrix used as calculation support.
     Eigen::Matrix<int, 1, -1> m_pp;
@@ -576,10 +588,15 @@ void RayBenConvection::m_write_current_frame (){
  The parameter inserted by the user are thoughtfully checked to ensure the validity of the simulation.
  \param END_CICLE total numer of steps.
  \param cold_temp lower wall temperature.
+ \sa m_TN
  \param hot_temp higher wall temperature.
+ \sa m_TS
  \param Ray_numb Rayleigh number.
+ \sa m_Ra
  \param Pr_numb Prandtl number.
+ \sa m_Pr
  \param Re_numb Reynolds number.
+ \sa m_Re
 */
 int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_temp, 
                             double Ray_numb, double Pr_numb, double Re_numb ){
