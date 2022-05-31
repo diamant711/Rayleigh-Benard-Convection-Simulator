@@ -102,6 +102,7 @@ bool WebPage::m_fill_http_header(void) {
     m_http_body.clear();
     while(!m_input_file.eof())
       m_http_body += m_input_file.get();
+    m_http_body.pop_back(); //pop EOF char
     m_content_length = m_itos(m_http_body.size());
     tmp.clear();
     tmp = HTTP_VERSION;
@@ -134,7 +135,7 @@ bool WebPage::m_fill_http_header(void) {
 
 void WebPage::m_compose_response(void) {
   if(m_fill_http_header()) {
-    m_http_response = m_http_header + "\r\n" + m_http_body;
+    m_http_response = m_http_header + "\r\n" + m_http_body + "\r\n";
   } else {
     std::cerr << "ERROR: WebServer: m_compose_response: "
               << "Due to " << m_file_path
