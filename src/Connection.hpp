@@ -9,6 +9,7 @@
 
 //! Connection defines the wrapper functions for input-output socket operation using an internal buffer.
 /*!
+
 */
 class Connection {
   public:
@@ -19,19 +20,12 @@ class Connection {
     void load_data(const std::string &);
     void load_data(const std::vector<unsigned char> &);
     void load_data(const boost::asio::const_buffer &);
-    //!
     const std::shared_ptr<char[]> unload_data(void) const;
-    //!
     boost::asio::ip::tcp::socket& get_socket(void);
-    //!
     bool first_operation_ended(void);
-    //!
     bool is_ready_to_receive(void);
-    //!
     bool is_persistant(void);
-    //!
     void set_persistant(void);
-    //!
     bool is_ready_to_send(void);
   private:
     // Variables
@@ -39,24 +33,35 @@ class Connection {
      \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/ip__tcp/socket.html">boost::asio::ip::tcp::socket</a>
    */
     boost::asio::ip::tcp::socket m_socket;
-
+    //! Holds a buffer that can be modified.
     /*!
+     Used during the input operations.
+     \sa m_handle_receive
+     \sa receive
+     \sa unload_data
      \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/mutable_buffer.html">boost::asio::mutable_buffer</a>
     */
     std::unique_ptr<boost::asio::mutable_buffer> m_internal_receive_buffer_ptr;
+    //! Holds a buffer that cannot be modified.
     /*!
+     Used during the output operations.
+     \sa m_handle_send
+     \sa send
      \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/const_buffer.html">boost::asio::const_buffer</a>
    */
     std::unique_ptr<boost::asio::const_buffer> m_internal_send_buffer_ptr;
-
+    //! Checks if errors occurred during the send operation.
     bool m_send_error = false;
-
+    //! Checks if errors occurred during the receive operation.
     bool m_receive_error = false;
-
+    //! Checks if the first operation has endend.
+    /*!
+     \sa first_operation_ended
+    */
     bool m_first_operation_ended = false;
-
+    //!
     bool m_ready_to_send = true;
-
+    //!
     bool m_persistant = false;
     // Functions
     void m_handle_send(const boost::system::error_code&,
@@ -173,7 +178,7 @@ boost::asio::ip::tcp::socket& Connection::get_socket(void) {
   return m_socket;
 }
 
-//!
+//! This function returns true if the first operation has endend.
 bool Connection::first_operation_ended(void) {
   return m_first_operation_ended;
 }
