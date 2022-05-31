@@ -108,7 +108,6 @@ void Connection::m_handle_receive(const boost::system::error_code& error, size_t
             << ": m_handle_receive: bytes transferred = " << bytes_transferred 
             << std::endl;
   if (!error){
-   m_internal_receive_buffer_ptr.release();
    m_first_operation_ended = true;
   } else {
     m_receive_error = true;
@@ -141,6 +140,7 @@ void Connection::receive(void) {
 \param input
 */
 void Connection::load_data(const std::string &input) {
+  m_internal_receive_buffer_ptr.release();
   m_internal_send_buffer_ptr.reset(new boost::asio::const_buffer(input.data(),
                                                                  input.size()));
 }
@@ -150,6 +150,7 @@ void Connection::load_data(const std::string &input) {
 \param input
 */
 void Connection::load_data(const std::vector<unsigned char> &input) {
+  m_internal_receive_buffer_ptr.release();
   m_internal_send_buffer_ptr.reset(new boost::asio::const_buffer(input.data(), 
                                                                  input.size()));
 }
@@ -159,6 +160,7 @@ void Connection::load_data(const std::vector<unsigned char> &input) {
 \param input
 */
 void Connection::load_data(const boost::asio::const_buffer &input) {
+  m_internal_receive_buffer_ptr.release();
   m_internal_send_buffer_ptr.reset(new boost::asio::const_buffer(input.data(), 
                                                                  input.size()));
 }

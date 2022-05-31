@@ -101,7 +101,8 @@ void WebServer::respond_to_all(void) {
   m_get_executor().poll();
   for(size_t i = 0; i < m_get_plugged_connection(); ++i)
     if(m_get_connection_by_index(i).connection_ptr->first_operation_ended()
-       && !m_get_connection_by_index(i).connection_ptr->is_persistant())
+       && !m_get_connection_by_index(i).connection_ptr->is_persistant()
+       && m_get_connection_by_index(i).connection_ptr->is_ready_to_send())
       m_delete_connection_by_index(i);
 
   if(m_start_websocket) {

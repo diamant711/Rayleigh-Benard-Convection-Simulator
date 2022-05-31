@@ -51,7 +51,7 @@ class WebPage {
     std::ifstream m_input_file;
     std::string m_content_type;
     std::string m_http_header;
-    std::string m_http_body;
+    std::unique_ptr<std::string> m_http_body_ptr;
     std::string m_http_response;
     std::string m_content_length;
     status_code_t m_status_code = {200, "OK"};
@@ -99,11 +99,11 @@ bool WebPage::m_fill_http_header(void) {
   }  
   if(m_input_file.good()) {
     std::string tmp;
-    m_http_body.clear();
+    m_http_body_ptr->clear();
     while(!m_input_file.eof())
-      m_http_body += m_input_file.get();
-    m_http_body.pop_back(); //pop EOF char
-    m_content_length = m_itos(m_http_body.size());
+      m_http_body_ptr->push_back(m_input_file.get());
+    m_http_body_ptr->pop_back(); //pop EOF char
+    m_content_length = m_itos(m_http_body_ptr->size());
     tmp.clear();
     tmp = HTTP_VERSION;
     tmp += ' ';
@@ -135,7 +135,7 @@ bool WebPage::m_fill_http_header(void) {
 
 void WebPage::m_compose_response(void) {
   if(m_fill_http_header()) {
-    m_http_response = m_http_header + "\r\n" + m_http_body + "\r\n";
+    m_http_response = m_http_header + "\r\n" + *m_http_body_ptr + "\r\n";
   } else {
     std::cerr << "ERROR: WebServer: m_compose_response: "
               << "Due to " << m_file_path
@@ -160,10 +160,12 @@ const std::string WebPage::m_get_extension_from_path(const char *path) {
 }
 
 WebPage::WebPage(const char *path) : m_file_path(path), m_input_file(path) {
+  m_http_body_ptr.reset(new std::string(""));
   m_compose_response();
 }
 
 WebPage::WebPage(const std::string &path) : m_file_path(path), m_input_file(path) {
+  m_http_body_ptr.reset(new std::string(""));
   m_compose_response();
 }
 
