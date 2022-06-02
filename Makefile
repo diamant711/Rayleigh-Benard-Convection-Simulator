@@ -41,7 +41,7 @@ EMSDK_SDK_COMPILER = $(REPOS_DIR)/emsdk/upstream/emscripten/emcc
 EMSDK_SDK_ARCHIVER = $(REPOS_DIR)/emsdk/upstream/emscripten/emar
 
 # Recipes
-all: env doxydoc $(X_NAME) ;
+all: env $(X_NAME) ;
 	@echo "Build done!"
 
 $(X_NAME): $(OBJECTS)
@@ -56,7 +56,7 @@ raylib: src/raylib_page.c inc/temperature_matrix.h inc/jet.h
 	@echo "EMCC    raylib.html raylib.js raylib.wasm"
 	@$(EMSDK_SDK_COMPILER) $< lib/libraylib.a -o $@.html -DPLATFORM_WEB -Os -Wall \
 		-s USE_GLFW=3 --shell-file /temporanea/rbcs_tmp_repos_$(USER).d/emsdk/upstream/emscripten/src/shell.html\
-		-s TOTAL_MEMORY=33554432
+		-s INITIAL_MEMORY=174MB
 	@mv raylib.* cnt/
 
 env: ;
