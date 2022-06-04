@@ -41,7 +41,7 @@ EMSDK_SDK_COMPILER = $(REPOS_DIR)/emsdk/upstream/emscripten/emcc
 EMSDK_SDK_ARCHIVER = $(REPOS_DIR)/emsdk/upstream/emscripten/emar
 
 # Recipes
-all: env $(X_NAME) ;
+all: env doxydoc $(X_NAME) ;
 	@echo "Build done!"
 
 $(X_NAME): $(OBJECTS)
