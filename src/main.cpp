@@ -13,13 +13,33 @@ int main(int argc, char *argv[]){
   bool output_only = false;
   switch(argc) {
     case 4:
-      if(::strcmp(argv[3], "--output_only") == 0)  output_only = true;
-      ::strncpy(portW,  argv[1], 5);
-      ::strncpy(portWS, argv[2], 5);
+      if((::atoi(argv[1]) >= 1) && (::atoi(argv[1]) <= 65535))
+        ::strncpy(portW,  argv[1], 5);
+      else
+        std::cerr << "WARNING: main: invalid WebServer port (" << argv[1]
+                  << ") unsing defaults" << std::endl;
+      if((::atoi(argv[2]) >= 1) && (::atoi(argv[2]) <= 65535))
+        ::strncpy(portWS, argv[2], 5);
+      else
+        std::cerr << "WARNING: main: invalid WebServerSocket port (" << argv[2] 
+                  << ") unsing defaults" << std::endl;
+      if(::strcmp(argv[3], "--output_only") == 0)
+        output_only = true;
+      else
+        std::cerr << "WARNING: main: unrecognized option (" << argv[3] << ")"
+                  << std::endl;
     break;
     case 3:
-      ::strncpy(portW,  argv[1], 5);
-      ::strncpy(portWS, argv[2], 5);
+      if((::atoi(argv[1]) >= 1) && (::atoi(argv[1]) <= 65535))
+        ::strncpy(portW,  argv[1], 5);
+      else
+        std::cerr << "WARNING: main: invalid WebServer port (" << argv[1] 
+                  << ") unsing defaults" << std::endl;
+      if((::atoi(argv[2]) >= 1) && (::atoi(argv[2]) <= 65535))
+        ::strncpy(portWS, argv[2], 5);
+      else
+        std::cerr << "WARNING: main: invalid WebServerSocket port (" << argv[2] 
+                  << ") unsing defaults" << std::endl;
     break;
     case 2:
       std::cerr << "WARNING: main: usage: " << argv[0] << " " << argv[1] 
