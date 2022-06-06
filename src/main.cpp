@@ -35,6 +35,8 @@ int main(int argc, char *argv[]){
   
   webserver.serve_setup_page();
   
+  webserver.read_cgi_input();
+  
   WebServer::html_form_input_t html_form_input(webserver.get_user_input());
   
   RayBenCon.init(html_form_input.steps,
@@ -50,8 +52,6 @@ int main(int argc, char *argv[]){
 
   // Process stage
   do {
-    webserver.update_processing_page();
-
     simulation_state = RayBenCon.eval_next_frame();
 
     webserver.update_simulation_state(simulation_state.eta,
@@ -60,6 +60,8 @@ int main(int argc, char *argv[]){
                                       simulation_state.step);
     
     RayBenCon.write_current_data();
+
+    webserver.update_processing_page();
   } while(!simulation_state.ended);
 
   // Output stage
