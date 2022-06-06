@@ -1,27 +1,11 @@
 /******************************************************************
  * TODO list:
- * * X - write_current_frame() deve scrivere un file .h che conterra' una
- *     dichiarazione di una variabile globale dal nome poco rilevante che sara'�
- *     del tipo double[nx][ny][5000] ad ogni chiamata del metodo in oggetto
- *     verra' salvato T al valore attuale. (Scritto in semplice C99 -> no Eigen::
- *     e no std::)
+ *
  * 4 - Cercare di capire che analisi matematica vogliamo fare, propongo tre tipi
  *     di documentazione: a) un file LaTeX con le info molto leggere
  *     matematiche, una pagine di man per le info sull'utilizzo del software e
  *     una pagina stile doxigen con gli oggetti e i metodi
- * 5 - E' la corretta astrazione quella realizzata? Magari facciamo meglio il
- *     server web?
  *
- *
- *LEGENDA ERRORI:
- * return -1  END_CICLE > 6000
- * return -2  m_TS=m_TN
- * return -3  m_TN <= 0 oppure m_TN >= m_TS
- * return -4  Ray_numb < 50 || > 150
- * return -5  Pr_numb < 5 || > 9
- * return -6  Re_numb < 70 || > 130
- * return -7  m_TS >= 100
-
  ******************************************************************/
 
 
@@ -78,9 +62,9 @@ class RayBenConvection {
     //variables
     //! total number of steps performed.
     unsigned int m_END_CICLE;
-    //! size of x axis
+    //! Number of steps in the x axis
     static const unsigned int m_nx = 100;
-    //! size of y axis, along which we apply the gravitational force.
+    //! Number of steps in y axis, along which we apply the gravitational force.
     static const unsigned int m_ny = 70;
     //! implementation detail.
     const double m_tf = 1e3;
@@ -101,11 +85,11 @@ class RayBenConvection {
     \sa m_H
     */
     const double m_L = 5;
-    //! interval of x coordinate used for perturbative calculation.
+    //! Width of space step (x axis) used for perturbative calculation.
     const double m_dx = m_L / (m_nx - 1);
-    //! interval of y coordinate used for perturbative calculation.
+    //! Width of space step (y axis)  used for perturbative calculation.
     const double m_dy = m_H / (m_ny - 1);
-    //! lower temperature
+    //! Top wall temperature (lower).
     /*!
      This simulation is set to work with liquid water, in the temperature range of 4°-99°C.
     */
@@ -115,7 +99,7 @@ class RayBenConvection {
      \sa m_TS
     */
     double m_TN;
-    //! higher temperature
+    //! Bottom wall temperature (higher).
     /*!
     \sa m_TN
     */
@@ -128,7 +112,7 @@ class RayBenConvection {
     Eigen::Matrix<double, m_nx, m_ny> m_p;
     //! Eigen matrix used for perturbative calculation on the fluid's pressure.
     Eigen::Matrix<double, m_nx, m_ny> m_S;
-    //! implementation detail.
+    //! Initial temperature, min(TS, TN).
     double m_To;
     //! Eigen maxtrix that represents the temperature of every point per frame. 
     Eigen::Matrix<double, m_nx, m_ny> m_T;
