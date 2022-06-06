@@ -3,9 +3,9 @@ In this project, **Rayleigh-Benard convection** is simulated in a thin layer of 
 Rayleigh-Benard convection is a thermal gradient driven natural convection, occurring in a planar, horizontal layer of fluid heated from below. 
 During this phenomena the fluid develops regular patterns of convection cells called Benard cells. 
 
-* The **matrix** calculation is implemented via [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page).
+* The **linear algebra** algorithms are implemented via [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page).
 
-* The **graphical simulation** is implemented via [raylib](https://www.raylib.com/).
+* The **graphical interface** is implemented via [raylib](https://www.raylib.com/).
 
 * The **network and I/O programming** are implemented with [Boost.Asio](https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio.html).
 

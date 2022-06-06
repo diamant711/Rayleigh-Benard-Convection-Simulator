@@ -1,10 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
-// 
-// This class implement a WebSocket in order to comunicate with the JavaScript 
-// client side application this class uses non-async operation in order to sync
-// with the main program
-//
-///////////////////////////////////////////////////////////////////////////////
 
 #ifndef WEBSOCKETSERVER_HPP
 #define WEBSOCKETSERVER_HPP
@@ -22,16 +15,16 @@
 #include "TCPServer.hpp"
 #include "Connection.hpp"
 
-//! WebSocketServer implements a WebSocket to communicate with the JavaScript client side application.
+//! WebSocketServer defines a WebSocket providing full-duplex communication channels over a single TCP connection.
 /*!
-This class uses synchronous operations to synchronize with the main program.
+This class communicates with the client side application written in
+JavaScript, using synchronous operations to synchronize with the main program.
 */
 class WebSocketServer : TCPServer {
   // Functions
   public:
     WebSocketServer(std::shared_ptr<boost::asio::io_context>, int);
     ~WebSocketServer(void);
-
     bool respond(void);
     bool full(void);
     void update_simulation_data(int, float, int, int);
@@ -47,16 +40,27 @@ class WebSocketServer : TCPServer {
       UPDATING_CLIENT,
       CLOSING_CONNECTION
     } m_status_t;
+    //! Estimated time of arrival until the end of the simulation.
     unsigned int m_actual_eta;
+    //! Velocity of the simulation in number of cycles per second.
     unsigned int m_actual_velocity10;
+    //! Total number of steps performed during the simulation.
     unsigned int m_actual_total;
+    //! Current step of the simulation.
     unsigned int m_actual_step;
+    //!
     std::vector<unsigned char> m_actual_frame;
+    //!
     bool m_connected = false;
+    //!
     m_status_t m_status;
+    //!
     std::string m_handshake_response;
+    //!
     std::string m_handshake_request;
+    //!
     std::unique_ptr<Connection> m_connection_ptr;
+    //!
     const char m_b64_table[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno"
                                       "pqrstuvwxyz0123456789+/";
 
@@ -71,14 +75,18 @@ class WebSocketServer : TCPServer {
       41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64
     };
 };
-
+//! Class constructor.
+/*!
+\param executor_ptr
+\param port
+*/
 WebSocketServer::WebSocketServer(std::shared_ptr<boost::asio::io_context> executor_ptr,
                                  int port) 
   : TCPServer(executor_ptr, port) 
 {}
-
+//! Class destructor.
 WebSocketServer::~WebSocketServer(void) {}
-
+//!
 bool WebSocketServer::respond(void) {
   m_get_executor().poll();
   if(!m_is_waiting_list_empty()) {
@@ -125,7 +133,7 @@ bool WebSocketServer::respond(void) {
   }
   return true;
 }
-//! This function returns if 
+//! This function returns the status of m_is_waititng_list_empty(). 
 bool WebSocketServer::full(void) {
   return (!m_is_waiting_list_empty());
 }
