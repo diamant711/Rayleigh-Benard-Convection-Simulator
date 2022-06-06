@@ -112,7 +112,7 @@ clean: ;
 	rm -f $(OBJECTS)
 	@cd $(PRJ_DIR)
 	rm -f $(X_NAME)
-	rm -f raylib.html raylib.js raylib.wasm gmon.out
+	rm -f cnt/raylib.html cnt/raylib.js cnt/raylib.wasm gmon.out
 	rm -rf $(DOC_DIR)/html $(DOC_DIR)/latex
 
 purge: ;
