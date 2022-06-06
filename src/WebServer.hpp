@@ -83,7 +83,8 @@ class WebServer : public TCPServer {
     first_user_status_t m_first_user_status = NO_FIRST_USER;
     bool m_cgi_parameter_available = false;
     bool m_raylib_compiled = false;
-    bool m_output_pages_sent[4] = {false, false, false, false};
+    bool m_output_pages_sent[3] = {false, false, false};
+    unsigned short m_wasm_req_count = 0;
 };
 
 WebServer::WebServer(std::shared_ptr<boost::asio::io_context> executor_ptr, 
@@ -331,6 +332,8 @@ void WebServer::serve_output_page(void) {
             ->get_socket().remote_endpoint().address() == m_first_user_address) {
           if(m_first_user_status == OUTPUT) {
             if(!m_raylib_compiled) {
+              std::cerr << "INFO: WebServer: respond_to_all: first user at "
+                        << "OUTPUT stage" << std::endl;
               ::system("make raylib");
               m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.html")));
               m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.js")));
@@ -339,17 +342,12 @@ void WebServer::serve_output_page(void) {
               m_raylib_compiled = true;
             }
             if(m_get_connection_by_index(i).connection_ptr->is_ready_to_send()
-               && m_raylib_compiled 
-               && (   !m_output_pages_sent[0]
-                   || !m_output_pages_sent[1]
-                   || !m_output_pages_sent[2]
-                   || !m_output_pages_sent[3])) {
+               && m_raylib_compiled) {
               if(m_get_connection_by_index(i).connection_ptr->is_ready_to_receive()) {
                 m_get_connection_by_index(i).connection_ptr->receive();
                 switch (m_extract_raylib_request(
                           m_get_connection_by_index(i).connection_ptr
-                            ->unload_data().get()
-                        )) {
+                            ->unload_data().get())) {
                   case 'h': //html
                     m_get_connection_by_index(i).connection_ptr
                       ->load_data(m_pages.at(4)->get_http_response());
@@ -368,6 +366,7 @@ void WebServer::serve_output_page(void) {
                     m_get_connection_by_index(i).connection_ptr
                       ->load_data(m_pages.at(6)->get_http_response());
                     m_get_connection_by_index(i).connection_ptr->send();
+                    m_wasm_req_count += 1;
                     m_output_pages_sent[2] = true;
                   break;
     
@@ -375,7 +374,6 @@ void WebServer::serve_output_page(void) {
                     m_get_connection_by_index(i).connection_ptr
                       ->load_data(m_pages.at(7)->get_http_response());
                     m_get_connection_by_index(i).connection_ptr->send();
-                    m_output_pages_sent[3] = true;
                   break;
     
                   default:
@@ -384,22 +382,16 @@ void WebServer::serve_output_page(void) {
                               << std::endl;
                   break;
                 }
-                //Se finito return
-
-
               }
             }
           }
-          if(   m_output_pages_sent[0]
-             && m_output_pages_sent[1]
-             && m_output_pages_sent[2]
-             && m_output_pages_sent[3]
-             && m_get_connection_by_index(i)
-                 .connection_ptr->is_ready_to_send()) {
-            return;
-          }
         }
       }
+    } else if((m_wasm_req_count == 2)
+              && m_output_pages_sent[0]
+              && m_output_pages_sent[1]
+              && m_output_pages_sent[2]) {
+      return;
     }
   }
 }
