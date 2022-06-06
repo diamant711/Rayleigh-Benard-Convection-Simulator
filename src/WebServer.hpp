@@ -53,7 +53,6 @@ class WebServer : public TCPServer {
               std::string, std::string, 
               std::string, std::string);
     ~WebServer(void);
-    void respond_to_all(void);
     html_form_input_t get_user_input(void);
     void update_simulation_state(int, float, int, int);
     void waiting_and_assign_first_user(void);
@@ -62,6 +61,7 @@ class WebServer : public TCPServer {
     void serve_processing_page(void);
     void update_processing_page(void);
     void serve_output_page(void);
+    void set_first_user_status(first_user_status_t);
   private:
     //Functions
     void m_close_unused_connection(void);
@@ -394,6 +394,10 @@ void WebServer::serve_output_page(void) {
       return;
     }
   }
+}
+
+void WebServer::set_first_user_status(first_user_status_t first_user_status) {
+  m_first_user_status = first_user_status;
 }
 
 #endif
