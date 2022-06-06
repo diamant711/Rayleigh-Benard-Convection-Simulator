@@ -1,3 +1,4 @@
+//TODO: new char [size] at 190
 
 #ifndef CONNECTION_HPP
 #define CONNECTION_HPP
@@ -8,9 +9,7 @@
 #include <boost/bind/bind.hpp>
 
 //! Connection defines the wrapper functions for input-output socket operation using an internal buffer.
-/*!
 
-*/
 class Connection {
   public:
     Connection(boost::asio::io_context &);
@@ -59,9 +58,9 @@ class Connection {
      \sa first_operation_ended
     */
     bool m_first_operation_ended = false;
-    //!
+    //! Checks if it is possible to send bytes.
     bool m_ready_to_send = true;
-    //! 
+    //! Checks if the connection is set to be persistant.
     bool m_persistant = false;
     // Functions
     void m_handle_send(const boost::system::error_code&,
@@ -82,10 +81,10 @@ Connection::~Connection(void) {
   //m_socket.close();
 }
 
-//!
+//! Completion handler, it is called when the send completes.
 /*!
-\param error
-\param bytes_transferred
+\param error Result of operation.
+\param bytes_transferred Number of bytes received.
 */
 void Connection::m_handle_send(const boost::system::error_code& error, size_t bytes_transferred){
   std::cerr << "INFO: Connection: user " << m_socket.remote_endpoint().address()
@@ -103,8 +102,8 @@ void Connection::m_handle_send(const boost::system::error_code& error, size_t by
 
 //! Completion handler, it is called when the receive completes.
 /*!
-\param error
-\param bytes_transferred
+\param error Result of operation.
+\param bytes_transferred Number of bytes received.
 \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/basic_stream_socket/async_receive/overload2.html">async_receive</a>
 */
 void Connection::m_handle_receive(const boost::system::error_code& error, size_t bytes_transferred){
@@ -119,9 +118,11 @@ void Connection::m_handle_receive(const boost::system::error_code& error, size_t
   }
 }
 
-//!
+//! Asynchronous operation that writes a certain amount of data to a stream before completion.
 /*!
-\sa <a href="">async_write</a>
+Works with the boost::asio::async_write function.
+\sa m_handle_send
+\sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/async_write.html">async_write</a>
 */
 void Connection::send(void) {
   boost::asio::async_write(
@@ -132,8 +133,10 @@ void Connection::send(void) {
   m_ready_to_send = false;
 }
 
-//! 
+//! This function is used to asynchronously receive data from the stream socket.
 /*!
+Works with the basic_stream_socket::async_receive function.
+\sa m_handle_receive
 \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/basic_stream_socket/async_receive/overload2.html">async_receive</a>
 */
 void Connection::receive(void) {
@@ -146,9 +149,10 @@ void Connection::receive(void) {
                                 boost::asio::placeholders::bytes_transferred));
 }
 
-//!
+//! This function regulates the data loading.
 /*!
-\param input
+Works with const std::string as input.
+\param input data to be loaded.
 */
 void Connection::load_data(const std::string &input) {
   m_internal_receive_buffer_ptr.release();
@@ -156,37 +160,42 @@ void Connection::load_data(const std::string &input) {
                                                                  input.size()));
 }
 
-//!
+//! This function regulates the data loading.
 /*!
-\param input
+Works with const std::vector<unsigned char> as input.
+\param input data to be loaded.
 */
 void Connection::load_data(const std::vector<unsigned char> &input) {
   m_internal_receive_buffer_ptr.release();
-  m_internal_send_buffer_ptr.reset(new boost::asio::const_buffer(input.data(), 
+  m_internal_send_buffer_ptr.reset(new boost::asio::const_buffer(input.data(),
                                                                  input.size()));
 }
 
-//!
+//! This function regulates the data loading.
 /*!
-\param input
+Works with boost::asio::const_buffer as input.
+\param input data to be loaded.
 */
 void Connection::load_data(const boost::asio::const_buffer &input) {
   m_internal_receive_buffer_ptr.release();
-  m_internal_send_buffer_ptr.reset(new boost::asio::const_buffer(input.data(), 
+  m_internal_send_buffer_ptr.reset(new boost::asio::const_buffer(input.data(),
                                                                  input.size()));
 }
 
-//!
+//! This function regulates the data unloading.
 const std::shared_ptr<char[]> Connection::unload_data(void) const {
   size_t size = m_internal_receive_buffer_ptr->size();
   std::shared_ptr<char[]> ret_ptr;
   ret_ptr.reset(new char[size]);
-  ::memcpy(ret_ptr.get(), m_internal_receive_buffer_ptr->data(), 
+  ::memcpy(ret_ptr.get(), m_internal_receive_buffer_ptr->data(),
                           m_internal_receive_buffer_ptr->size());
   return ret_ptr;
 }
 
-//!
+//! Returns the private member m_socket.
+/*!
+\sa m_socket
+*/
 boost::asio::ip::tcp::socket& Connection::get_socket(void) {
   return m_socket;
 }
@@ -196,7 +205,10 @@ bool Connection::first_operation_ended(void) {
   return m_first_operation_ended;
 }
 
-//!
+//! This function returns if the connection is ready to receive new data.
+/*!
+Checks if the private member m_socket is available.
+*/
 bool Connection::is_ready_to_receive(void) {
   if(m_socket.available() > 0) {
     return true;
