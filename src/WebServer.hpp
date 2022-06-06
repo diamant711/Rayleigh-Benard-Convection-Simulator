@@ -23,6 +23,7 @@
 #include <memory>
 #include <sstream>
 #include <thread>
+#include <cmath>
 
 #include <boost/asio.hpp>
 
@@ -54,10 +55,18 @@ class WebServer : public TCPServer {
     ~WebServer(void);
     void respond_to_all(void);
     html_form_input_t get_user_input(void);
-    bool is_html_form_input_available(void);
+    bool is_user_input_available(void);
     void update_simulation_state(int, float, int, int);
+    bool is_output_sended(void);
+    bool waiting_first_user(void);
+    bool serve_setup_page(void);
+    bool read_cgi_input(void);
+    bool serve_process_page(void);
+    bool update_process_page(void);
+    bool serve_ouput_page(void);
   private:
     //Functions
+    void m_close_unused_connection(void);
     WebPage& m_generate_Output_page(void);
     void m_cgi_parser(const std::string &);
     char m_extract_raylib_request(std::string);
@@ -331,7 +340,7 @@ void WebServer::m_cgi_parser(const std::string& http_request) {
   return;
 }
 
-bool WebServer::is_html_form_input_available(void) {
+bool WebServer::is_user_input_available(void) {
   return m_cgi_parameter_available;
 }
     
@@ -344,6 +353,26 @@ void WebServer::update_simulation_state(int e, float v, int t, int s) {
 
 char WebServer::m_extract_raylib_request(std::string input) {
   return input[input.find('.') + 1];
+}
+
+
+bool WebServer::is_output_sended(void) {
+  size_t first_user_index = 0xe1e01cca;
+  for(size_t i = 0; i < m_get_plugged_connection(); ++i)
+    if(m_get_connection_by_index(i).connection_ptr
+        ->get_socket().remote_endpoint().address() == m_first_user_address)
+    first_user_index = i;
+  if (first_user_index == 0xe1e01cca) {
+    std::cerr << "WARNING: WebServer: is_output_sended: first user not found in"
+              << " the connection database" << std::endl;
+    return false;
+  }
+  return    m_output_pages_sent[0]
+         && m_output_pages_sent[1]
+         && m_output_pages_sent[2]
+         && m_output_pages_sent[3]
+         && m_get_connection_by_index(first_user_index).connection_ptr
+              ->is_ready_to_send();
 }
 
 #endif

@@ -8,6 +8,7 @@
 #include "WebPage.hpp"
 
 int main(int argc, char *argv[]){
+  /*
   char portW[10]  = "8080";
   char portWS[10] = "8000";
   if(argc < 2) {
@@ -31,6 +32,7 @@ int main(int argc, char *argv[]){
                       "cnt/Process_page.html");
   RayBenConvection::simulation_state_t simulation_state;
   
+  // Setup page
   while(!webserver.is_html_form_input_available()) {
     webserver.respond_to_all();
   }
@@ -46,6 +48,7 @@ int main(int argc, char *argv[]){
   );
   RayBenCon.write_current_data();
   
+  // Process stage
   do {
     webserver.respond_to_all();
     simulation_state = RayBenCon.eval_next_frame();
@@ -58,9 +61,12 @@ int main(int argc, char *argv[]){
     RayBenCon.write_current_data();
   } while(!simulation_state.ended);
 
-  while (1) {
+  // Output stage
+  while (!webserver.is_output_sended()) {
     webserver.respond_to_all();
   }
   
+  std::cerr << "INFO: main: Program ended without errors" << std::endl;
+  */
   return 0;
 }
