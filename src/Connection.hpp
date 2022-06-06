@@ -61,7 +61,7 @@ class Connection {
     bool m_first_operation_ended = false;
     //!
     bool m_ready_to_send = true;
-    //!
+    //! 
     bool m_persistant = false;
     // Functions
     void m_handle_send(const boost::system::error_code&,
@@ -70,6 +70,9 @@ class Connection {
 };
 
 //! Class constructor.
+/*!
+\param executor <a href="https://www.boost.org/doc/libs/master/doc/html/boost_asio/reference/io_context.html">boost::asio::io_context& executor</a>
+*/
 Connection::Connection(boost::asio::io_context& executor) : m_socket(executor) {}
 
 //! Class destructor.
@@ -85,8 +88,8 @@ Connection::~Connection(void) {
 \param bytes_transferred
 */
 void Connection::m_handle_send(const boost::system::error_code& error, size_t bytes_transferred){
-  std::cerr << "INFO: Connection: user " << m_socket.remote_endpoint().address() 
-            << ": m_handle_send: bytes transferred = " << bytes_transferred 
+  std::cerr << "INFO: Connection: user " << m_socket.remote_endpoint().address()
+            << ": m_handle_send: bytes transferred = " << bytes_transferred
             << std::endl;
   if (!error){
     m_internal_send_buffer_ptr.release();
@@ -98,14 +101,15 @@ void Connection::m_handle_send(const boost::system::error_code& error, size_t by
   }
 }
 
-//!
+//! Completion handler, it is called when the receive completes.
 /*!
 \param error
 \param bytes_transferred
+\sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/basic_stream_socket/async_receive/overload2.html">async_receive</a>
 */
 void Connection::m_handle_receive(const boost::system::error_code& error, size_t bytes_transferred){
-  std::cerr << "INFO: Connection: user " << m_socket.remote_endpoint().address() 
-            << ": m_handle_receive: bytes transferred = " << bytes_transferred 
+  std::cerr << "INFO: Connection: user " << m_socket.remote_endpoint().address()
+            << ": m_handle_receive: bytes transferred = " << bytes_transferred
             << std::endl;
   if (!error){
    m_first_operation_ended = true;
@@ -116,25 +120,32 @@ void Connection::m_handle_receive(const boost::system::error_code& error, size_t
 }
 
 //!
+/*!
+\sa <a href="">async_write</a>
+*/
 void Connection::send(void) {
   boost::asio::async_write(
-      m_socket, *m_internal_send_buffer_ptr, 
-      boost::bind(&Connection::m_handle_send, this, 
+      m_socket, *m_internal_send_buffer_ptr,
+      boost::bind(&Connection::m_handle_send, this,
         boost::asio::placeholders::error,
         boost::asio::placeholders::bytes_transferred));
   m_ready_to_send = false;
 }
 
-//!
+//! 
+/*!
+\sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/basic_stream_socket/async_receive/overload2.html">async_receive</a>
+*/
 void Connection::receive(void) {
   m_internal_receive_buffer_ptr.reset(new boost::asio::mutable_buffer(
     new char[m_socket.available()], m_socket.available()
   ));
   m_socket.async_receive(*m_internal_receive_buffer_ptr,
-                        boost::bind(&Connection::m_handle_receive, this, 
+                        boost::bind(&Connection::m_handle_receive, this,
                                 boost::asio::placeholders::error,
                                 boost::asio::placeholders::bytes_transferred));
 }
+
 //!
 /*!
 \param input
@@ -194,17 +205,27 @@ bool Connection::is_ready_to_receive(void) {
   }
 }
 
-//!
+//! Sets a connection as persistant.
+/*!
+\sa m_persistant
+*/
 void Connection::set_persistant(void) {
   m_persistant = true;
 }
 
-//!
+//! Checks if the connection is persistant.
+/*!
+\sa m_persistant
+*/
 bool Connection::is_persistant(void) {
   return m_persistant;
 }
 
-//!
+//! Checks if the connection is ready to send.
+/*!
+m_ready_to_send is set false by the function send, and is set true again by the m_handle_send function.
+\sa send
+*/
 bool Connection::is_ready_to_send(void) {
   return m_ready_to_send;
 }

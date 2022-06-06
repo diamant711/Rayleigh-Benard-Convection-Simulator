@@ -15,6 +15,7 @@
  The server is built  asynchronous, so execution of the server
  application is not suspended while it waits for a connection from a client.
  This class works with Boost.Asio.
+\sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/overview/model/async_ops.html">Asynchronous Operations</a>
 */
 class Server {
   public:
