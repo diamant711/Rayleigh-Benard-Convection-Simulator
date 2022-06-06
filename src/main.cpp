@@ -8,7 +8,6 @@
 #include "WebPage.hpp"
 
 int main(int argc, char *argv[]){
-  /*
   char portW[10]  = "8080";
   char portWS[10] = "8000";
   if(argc < 2) {
@@ -23,6 +22,7 @@ int main(int argc, char *argv[]){
   }
   
   RayBenConvection RayBenCon;
+  RayBenConvection::simulation_state_t simulation_state;
   std::shared_ptr<boost::asio::io_context> io_context_ptr(new boost::asio::io_context());
   WebServer webserver(io_context_ptr,
                       ::atoi(portW), ::atoi(portWS),
@@ -30,43 +30,41 @@ int main(int argc, char *argv[]){
                       "cnt/ServerFull_page.html", 
                       "cnt/Setup_page.html",
                       "cnt/Process_page.html");
-  RayBenConvection::simulation_state_t simulation_state;
   
-  // Setup page
-  while(!webserver.is_html_form_input_available()) {
-    webserver.respond_to_all();
-  }
+  webserver.waiting_and_assign_first_user();
   
-  webserver.respond_to_all();
+  webserver.serve_setup_page();
+  
   WebServer::html_form_input_t html_form_input(webserver.get_user_input());
+  
   RayBenCon.init(html_form_input.steps,
                  html_form_input.cwt,
                  html_form_input.hwt,
                  html_form_input.Ray,
                  html_form_input.Pr,
-                 html_form_input.Rey
-  );
-  RayBenCon.write_current_data();
+                 html_form_input.Rey);
   
+  RayBenCon.write_current_data();
+ 
+  webserver.serve_processing_page();
+
   // Process stage
   do {
-    webserver.respond_to_all();
+    webserver.update_processing_page();
+
     simulation_state = RayBenCon.eval_next_frame();
-    webserver.update_simulation_state(
-      simulation_state.eta,
-      simulation_state.velocity,
-      simulation_state.total,
-      simulation_state.step
-    );
+
+    webserver.update_simulation_state(simulation_state.eta,
+                                      simulation_state.velocity,
+                                      simulation_state.total,
+                                      simulation_state.step);
+    
     RayBenCon.write_current_data();
   } while(!simulation_state.ended);
 
   // Output stage
-  while (!webserver.is_output_sended()) {
-    webserver.respond_to_all();
-  }
+  webserver.serve_output_page();
   
   std::cerr << "INFO: main: Program ended without errors" << std::endl;
-  */
   return 0;
 }

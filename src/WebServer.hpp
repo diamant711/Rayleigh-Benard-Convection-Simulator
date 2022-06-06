@@ -55,15 +55,13 @@ class WebServer : public TCPServer {
     ~WebServer(void);
     void respond_to_all(void);
     html_form_input_t get_user_input(void);
-    bool is_user_input_available(void);
     void update_simulation_state(int, float, int, int);
-    bool is_output_sended(void);
-    bool waiting_first_user(void);
-    bool serve_setup_page(void);
-    bool read_cgi_input(void);
-    bool serve_process_page(void);
-    bool update_process_page(void);
-    bool serve_ouput_page(void);
+    void waiting_and_assign_first_user(void);
+    void serve_setup_page(void);
+    void read_cgi_input(void);
+    void serve_processing_page(void);
+    void update_processing_page(void);
+    void serve_output_page(void);
   private:
     //Functions
     void m_close_unused_connection(void);
@@ -105,152 +103,6 @@ WebServer::WebServer(std::shared_ptr<boost::asio::io_context> executor_ptr,
 }
 
 WebServer::~WebServer() {}
-
-void WebServer::respond_to_all(void) {
-  m_get_executor().poll();
-  for(size_t i = 0; i < m_get_plugged_connection(); ++i)
-    if(m_get_connection_by_index(i).connection_ptr->first_operation_ended()
-       && !m_get_connection_by_index(i).connection_ptr->is_persistant()
-       && m_get_connection_by_index(i).connection_ptr->is_ready_to_send())
-      m_delete_connection_by_index(i);
-
-  if(m_start_websocket) {
-    m_websocketserver_ptr->update_simulation_data(m_actual_eta,
-                                                  m_actual_velocity,
-                                                  m_actual_total,
-                                                  m_actual_step);
-    m_start_websocket = m_websocketserver_ptr->respond();
-    m_first_user_status = m_start_websocket ? PROCESSING : OUTPUT;
-  }
-  if(!m_is_waiting_list_empty()) {
-    if(!m_was_first_user_connected) {
-      m_first_user_address = m_get_first_connection().connection_ptr
-                               ->get_socket().remote_endpoint().address();
-      m_was_first_user_connected = true;
-      m_first_user_status = SETUP;
-      std::cerr << "INFO: WebServer: respond_to_all: first user addres is " 
-                << m_first_user_address << std::endl;
-    }
-
-    for(size_t i = 0; i < m_get_plugged_connection(); ++i) {
-      if(m_get_connection_by_index(i).connection_ptr
-          ->get_socket().remote_endpoint().address() == m_first_user_address) {
-        switch (m_first_user_status) {
-          case SETUP:  
-            if(m_get_connection_by_index(i).connection_ptr->is_ready_to_send()) {
-              std::cerr << "INFO: WebServer: respond_to_all: first user at "
-                        << "SETUP stage" << std::endl;
-              m_get_connection_by_index(i).connection_ptr
-                ->load_data(m_pages.at(2)->get_http_response());
-              m_get_connection_by_index(i).connection_ptr->send();
-              m_first_user_status = CGI;
-            }
-            continue;
-          break;
-
-          case CGI:
-            if(m_get_connection_by_index(i).connection_ptr->is_ready_to_receive()) {
-              std::cerr << "INFO: WebServer: respond_to_all: first user at "
-                        << "CGI stage" << std::endl;
-              m_get_connection_by_index(i).connection_ptr->receive();
-              m_cgi_parser(
-                m_get_connection_by_index(i).connection_ptr->unload_data().get()
-              );
-              if(m_cgi_parameter_available)
-                m_first_user_status = PROCESSING;
-            }
-            continue;
-          break;
-          
-          case PROCESSING: 
-            if(m_get_connection_by_index(i).connection_ptr->is_ready_to_send()) {
-              if(m_start_websocket == false) {
-                std::cerr << "INFO: WebServer: respond_to_all: first user at "
-                          << "PROCESSING stage" << std::endl;
-                m_get_connection_by_index(i).connection_ptr
-                  ->load_data(m_pages.at(3)->get_http_response());
-                m_get_connection_by_index(i).connection_ptr->send();
-                m_start_websocket = true;
-              }
-            }
-            continue;
-          break;
- 
-          case OUTPUT:
-            if(!m_raylib_compiled) {
-              ::system("make raylib");
-              m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.html")));
-              m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.js")));
-              m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.wasm")));
-              m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("img/favicon.ico")));
-              m_raylib_compiled = true;
-            }
-            if(m_get_connection_by_index(i).connection_ptr->is_ready_to_send()
-               && m_raylib_compiled 
-               && (   !m_output_pages_sent[0]
-                   || !m_output_pages_sent[1]
-                   || !m_output_pages_sent[2]
-                   || !m_output_pages_sent[3])) {
-              if(m_get_connection_by_index(i).connection_ptr->is_ready_to_receive()) {
-                m_get_connection_by_index(i).connection_ptr->receive();
-                switch (m_extract_raylib_request(
-                          m_get_connection_by_index(i).connection_ptr
-                            ->unload_data().get()
-                        )) {
-                  case 'h': //html
-                    m_get_connection_by_index(i).connection_ptr
-                      ->load_data(m_pages.at(4)->get_http_response());
-                    m_get_connection_by_index(i).connection_ptr->send();
-                    m_output_pages_sent[0] = true;
-                  break;
-
-                  case 'j': //js
-                    m_get_connection_by_index(i).connection_ptr
-                      ->load_data(m_pages.at(5)->get_http_response());
-                    m_get_connection_by_index(i).connection_ptr->send();
-                    m_output_pages_sent[1] = true;
-                  break;
-
-                  case 'w': //wasm
-                    m_get_connection_by_index(i).connection_ptr
-                      ->load_data(m_pages.at(6)->get_http_response());
-                    m_get_connection_by_index(i).connection_ptr->send();
-                    m_output_pages_sent[2] = true;
-                  break;
-
-                  case 'i': //ico
-                    m_get_connection_by_index(i).connection_ptr
-                      ->load_data(m_pages.at(7)->get_http_response());
-                    m_get_connection_by_index(i).connection_ptr->send();
-                    m_output_pages_sent[3] = true;
-                  break;
-
-                  default:
-                    std::cerr << "WARNING: WebServer: respond_to_all: "
-                              << " possible error in the raylib request parser"
-                              << std::endl;
-                  break;
-                }
-              }
-            }
-            continue;
-          break;
-
-          case ERROR:
-          case NO_FIRST_USER:
-            //something is wrong
-            continue;
-          break;
-        }
-      } else {
-        m_get_connection_by_index(i).connection_ptr
-          ->load_data(m_pages.at(1)->get_http_response());
-        m_get_connection_by_index(i).connection_ptr->send();
-      }
-    }
-  }
-  return;
-}
 
 WebServer::html_form_input_t WebServer::get_user_input(void) {
   return m_internal_html_form_input;
@@ -340,10 +192,6 @@ void WebServer::m_cgi_parser(const std::string& http_request) {
   return;
 }
 
-bool WebServer::is_user_input_available(void) {
-  return m_cgi_parameter_available;
-}
-    
 void WebServer::update_simulation_state(int e, float v, int t, int s) {
   m_actual_eta = e;
   m_actual_velocity = v;
@@ -355,24 +203,205 @@ char WebServer::m_extract_raylib_request(std::string input) {
   return input[input.find('.') + 1];
 }
 
-
-bool WebServer::is_output_sended(void) {
-  size_t first_user_index = 0xe1e01cca;
+void WebServer::m_close_unused_connection(void) {
+  m_get_executor().poll();
   for(size_t i = 0; i < m_get_plugged_connection(); ++i)
-    if(m_get_connection_by_index(i).connection_ptr
-        ->get_socket().remote_endpoint().address() == m_first_user_address)
-    first_user_index = i;
-  if (first_user_index == 0xe1e01cca) {
-    std::cerr << "WARNING: WebServer: is_output_sended: first user not found in"
-              << " the connection database" << std::endl;
-    return false;
+    if(m_get_connection_by_index(i).connection_ptr->first_operation_ended()
+       && !m_get_connection_by_index(i).connection_ptr->is_persistant()
+       && m_get_connection_by_index(i).connection_ptr->is_ready_to_send())
+      m_delete_connection_by_index(i);
+}
+
+void WebServer::waiting_and_assign_first_user(void) {
+  while(1) {
+    m_get_executor().poll();
+    m_close_unused_connection();
+    if(!m_is_waiting_list_empty()) {
+      if(!m_was_first_user_connected) {
+        m_first_user_address = m_get_first_connection().connection_ptr
+                                 ->get_socket().remote_endpoint().address();
+        m_was_first_user_connected = true;
+        m_first_user_status = SETUP;
+        std::cerr << "INFO: WebServer: respond_to_all: first user addres is " 
+                  << m_first_user_address << std::endl;
+        return;
+      }
+    }
   }
-  return    m_output_pages_sent[0]
-         && m_output_pages_sent[1]
-         && m_output_pages_sent[2]
-         && m_output_pages_sent[3]
-         && m_get_connection_by_index(first_user_index).connection_ptr
-              ->is_ready_to_send();
+}
+
+void WebServer::serve_setup_page(void) {
+  while(1) {
+    m_get_executor().poll();
+    m_close_unused_connection();
+    if(!m_is_waiting_list_empty()) {
+      for(size_t i = 0; i < m_get_plugged_connection(); ++i) {
+        if(m_get_connection_by_index(i).connection_ptr
+            ->get_socket().remote_endpoint().address() == m_first_user_address) {
+          if(m_first_user_status == SETUP) {
+            if(m_get_connection_by_index(i).connection_ptr->is_ready_to_send()) {
+              std::cerr << "INFO: WebServer: respond_to_all: first user at "
+                        << "SETUP stage" << std::endl;
+              m_get_connection_by_index(i).connection_ptr
+                ->load_data(m_pages.at(2)->get_http_response());
+              m_get_connection_by_index(i).connection_ptr->send();
+              m_first_user_status = CGI;
+              return;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+void WebServer::read_cgi_input(void) {
+  while(1) {
+    m_get_executor().poll();
+    m_close_unused_connection();
+    if(!m_is_waiting_list_empty()) {
+      for(size_t i = 0; i < m_get_plugged_connection(); ++i) {
+        if(m_get_connection_by_index(i).connection_ptr
+            ->get_socket().remote_endpoint().address() == m_first_user_address) {
+          if(m_first_user_status == CGI) {
+            if(m_get_connection_by_index(i).connection_ptr->is_ready_to_receive()) {
+              std::cerr << "INFO: WebServer: respond_to_all: first user at "
+                        << "CGI stage" << std::endl;
+              m_get_connection_by_index(i).connection_ptr->receive();
+              m_cgi_parser(
+                m_get_connection_by_index(i).connection_ptr->unload_data().get()
+              );
+              if(m_cgi_parameter_available) {
+                m_first_user_status = PROCESSING;
+                return;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+void WebServer::serve_processing_page(void) {
+  while(1) {
+    m_get_executor().poll();
+    m_close_unused_connection();
+    if(!m_is_waiting_list_empty()) {
+      for(size_t i = 0; i < m_get_plugged_connection(); ++i) {
+        if(m_get_connection_by_index(i).connection_ptr
+            ->get_socket().remote_endpoint().address() == m_first_user_address) {
+          if(m_first_user_status == PROCESSING) {
+            if(m_get_connection_by_index(i).connection_ptr->is_ready_to_send()) {
+              if(m_start_websocket == false) {
+                std::cerr << "INFO: WebServer: respond_to_all: first user at "
+                          << "PROCESSING stage" << std::endl;
+                m_get_connection_by_index(i).connection_ptr
+                  ->load_data(m_pages.at(3)->get_http_response());
+                m_get_connection_by_index(i).connection_ptr->send();
+                m_start_websocket = true;
+                return;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+void WebServer::update_processing_page(void) {
+  if(m_start_websocket) {
+    m_websocketserver_ptr->update_simulation_data(m_actual_eta,
+                                                  m_actual_velocity,
+                                                  m_actual_total,
+                                                  m_actual_step);
+    m_start_websocket = m_websocketserver_ptr->respond();
+    m_first_user_status = m_start_websocket ? PROCESSING : OUTPUT;
+  }
+}
+
+void WebServer::serve_output_page(void) {
+  while(1) {
+    m_get_executor().poll();
+    m_close_unused_connection();
+    if(!m_is_waiting_list_empty()) {
+      for(size_t i = 0; i < m_get_plugged_connection(); ++i) {
+        if(m_get_connection_by_index(i).connection_ptr
+            ->get_socket().remote_endpoint().address() == m_first_user_address) {
+          if(m_first_user_status == OUTPUT) {
+            if(!m_raylib_compiled) {
+              ::system("make raylib");
+              m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.html")));
+              m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.js")));
+              m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.wasm")));
+              m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("img/favicon.ico")));
+              m_raylib_compiled = true;
+            }
+            if(m_get_connection_by_index(i).connection_ptr->is_ready_to_send()
+               && m_raylib_compiled 
+               && (   !m_output_pages_sent[0]
+                   || !m_output_pages_sent[1]
+                   || !m_output_pages_sent[2]
+                   || !m_output_pages_sent[3])) {
+              if(m_get_connection_by_index(i).connection_ptr->is_ready_to_receive()) {
+                m_get_connection_by_index(i).connection_ptr->receive();
+                switch (m_extract_raylib_request(
+                          m_get_connection_by_index(i).connection_ptr
+                            ->unload_data().get()
+                        )) {
+                  case 'h': //html
+                    m_get_connection_by_index(i).connection_ptr
+                      ->load_data(m_pages.at(4)->get_http_response());
+                    m_get_connection_by_index(i).connection_ptr->send();
+                    m_output_pages_sent[0] = true;
+                  break;
+    
+                  case 'j': //js
+                    m_get_connection_by_index(i).connection_ptr
+                      ->load_data(m_pages.at(5)->get_http_response());
+                    m_get_connection_by_index(i).connection_ptr->send();
+                    m_output_pages_sent[1] = true;
+                  break;
+    
+                  case 'w': //wasm
+                    m_get_connection_by_index(i).connection_ptr
+                      ->load_data(m_pages.at(6)->get_http_response());
+                    m_get_connection_by_index(i).connection_ptr->send();
+                    m_output_pages_sent[2] = true;
+                  break;
+    
+                  case 'i': //ico
+                    m_get_connection_by_index(i).connection_ptr
+                      ->load_data(m_pages.at(7)->get_http_response());
+                    m_get_connection_by_index(i).connection_ptr->send();
+                    m_output_pages_sent[3] = true;
+                  break;
+    
+                  default:
+                    std::cerr << "WARNING: WebServer: respond_to_all: "
+                              << " possible error in the raylib request parser"
+                              << std::endl;
+                  break;
+                }
+                //Se finito return
+
+
+              }
+            }
+          }
+          if(   m_output_pages_sent[0]
+             && m_output_pages_sent[1]
+             && m_output_pages_sent[2]
+             && m_output_pages_sent[3]
+             && m_get_connection_by_index(i)
+                 .connection_ptr->is_ready_to_send()) {
+            return;
+          }
+        }
+      }
+    }
+  }
 }
 
 #endif
