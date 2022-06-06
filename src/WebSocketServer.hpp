@@ -22,6 +22,10 @@
 #include "TCPServer.hpp"
 #include "Connection.hpp"
 
+//! WebSocketServer implements a WebSocket to communicate with the JavaScript client side application.
+/*!
+This class uses synchronous operations to synchronize with the main program.
+*/
 class WebSocketServer : TCPServer {
   // Functions
   public:
@@ -121,11 +125,15 @@ bool WebSocketServer::respond(void) {
   }
   return true;
 }
-
+//! This function returns if 
 bool WebSocketServer::full(void) {
   return (!m_is_waiting_list_empty());
 }
-
+//TODO
+//!
+/*!
+\param bindata
+*/
 ::std::string WebSocketServer::m_base64_encode(const ::std::string &bindata)
 {
    using ::std::string;
@@ -160,7 +168,11 @@ bool WebSocketServer::full(void) {
    assert(outpos <= retval.size());
    return retval;
 }
-
+//TODO
+//!
+/*!
+\param ascdata 
+*/
 ::std::string WebSocketServer::m_base64_decode(const ::std::string &ascdata)
 {
    using ::std::string;
@@ -187,7 +199,8 @@ bool WebSocketServer::full(void) {
    }
    return retval;
 }
-
+//TODO
+//!
 std::string WebSocketServer::m_handshake_respond_builder(std::string req) {
   m_handshake_request = req;
   std::string field("Sec-WebSocket-Key: ");
@@ -207,7 +220,8 @@ std::string WebSocketServer::m_handshake_respond_builder(std::string req) {
             << s << std::endl;
   return s;
 }
-
+//TODO
+//! This function builds a frame
 std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
   std::vector<unsigned char> frame;
   std::vector<unsigned char> payload;
@@ -271,7 +285,14 @@ std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
   }
   return frame;
 }
-    
+
+//! This function updates the values of the time-parameters of the simulation.
+/*!
+\param eta estimated time of arrival till the end of the simulation.
+\param velocity number of cycles performed per second.
+\param total total number of steps of the simulation.
+\param step current step of the simulation.
+*/
 void WebSocketServer::update_simulation_data(int eta, float velocity, int total, int step) {
   m_actual_eta = static_cast<unsigned int>(eta);
   m_actual_velocity10 = static_cast<unsigned int>(10 * velocity);
