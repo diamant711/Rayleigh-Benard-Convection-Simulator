@@ -116,14 +116,14 @@ void UpdateDrawFrame(void)
       }
     }
     int posY = WINDOW_HEIGHT/2 - JETSIZE/2 + 4;
-    DrawText(TextFormat("%.1lf°C", hot_temp), 
+    DrawText(TextFormat("%.1lf C", hot_temp), 
              WINDOW_WIDTH/2 + NX*PIXEL/2 + 40, 
              posY - 9, 20, BLACK);
     for(unsigned int i = 0; i < JETSIZE; ++i) {
        DrawRectangle(WINDOW_WIDTH/2 + NX*PIXEL/2 + 30, posY, 5, 1, jet[i]);
        posY += 1;
     }
-    DrawText(TextFormat("%.1lf°C", cold_temp),
+    DrawText(TextFormat("%.1lf C", cold_temp),
              WINDOW_WIDTH/2 + NX*PIXEL/2 + 40, 
              posY - 10, 20, BLACK);
 
