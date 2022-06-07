@@ -17,8 +17,7 @@
 
 //! WebSocketServer defines a WebSocket providing full-duplex communication channels over a single TCP connection.
 /*!
-This class communicates with the client side application written in
-JavaScript, using synchronous operations to synchronize with the main program.
+This class communicates with the client side application written in JavaScript.
 */
 class WebSocketServer : TCPServer {
   // Functions
@@ -35,6 +34,10 @@ class WebSocketServer : TCPServer {
     // format: eta velociry10 total
     std::vector<unsigned char> m_frame_builder(void);
     // Variables
+    //! Implementation detail, used in respond function.
+    /*!
+    \sa respond
+    */
     typedef enum {
       HANDSHAKE_ANSWARE,
       UPDATING_CLIENT,
@@ -48,22 +51,19 @@ class WebSocketServer : TCPServer {
     unsigned int m_actual_total;
     //! Current step of the simulation.
     unsigned int m_actual_step;
-    //!
     std::vector<unsigned char> m_actual_frame;
-    //!
+    //! This parameter represents if the client side application is connected to the socket.
     bool m_connected = false;
     //!
     m_status_t m_status;
-    //!
     std::string m_handshake_response;
-    //!
     std::string m_handshake_request;
     //!
     std::unique_ptr<Connection> m_connection_ptr;
-    //!
+    //! dettaglio implementazione code64
     const char m_b64_table[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno"
                                       "pqrstuvwxyz0123456789+/";
-
+    //Dettaglio implementazione decode64
     const char m_reverse_table[128] = {
       64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
       64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
@@ -78,7 +78,7 @@ class WebSocketServer : TCPServer {
 //! Class constructor.
 /*!
 \param executor_ptr
-\param port
+\param port 
 */
 WebSocketServer::WebSocketServer(std::shared_ptr<boost::asio::io_context> executor_ptr,
                                  int port) 
@@ -230,6 +230,12 @@ std::string WebSocketServer::m_handshake_respond_builder(std::string req) {
 }
 //TODO
 //! This function builds a frame
+//frame come verrtore di char primi 4 bit sono dei bit di prima configurazione il primo se 0 è un frame intermedio (ma lo fissiamo sempre ad 1 in sequenza ognun è autoesplicativo) poi 3 bit per configurare i plugin (estensione a Websocketserver, noi tutti a 0 è quello base). opcode= 4 bit che prevedono 
+//danno un senso ai dati, alcuni sono riservati. come interpretare il payload.l principali indicano se i dati che seguiranno saranno caratteri oppure se sono dati binari 
+//bit di maschera : se saranno cifrati con una maschera xor oppure no. xor: operatore tra dato e maschera bit per bit
+//lunghezza del payload in byte (7 bit)
+//settato bit mask a 1 ::quindi inseriamo maschera di codifica e decodifica, dopo il payload inseriamo eleoicca (!!) 
+//i dati: devono seguire uno standard codificati con xor bit a bit (usando la maschera) 
 std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
   std::vector<unsigned char> frame;
   std::vector<unsigned char> payload;
@@ -243,7 +249,7 @@ std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
    * RSV1 = 0
    * RSV2 = 0
    * RSV3 = 0
-   * OP C = 0
+   * OP C = 0    sempre inserito indica dati binari (=evitare che reinterpretasse i dati come caratteri)
    *    O = 0
    *    D = 1
    *    E = 0
@@ -263,13 +269,13 @@ std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
                              + sizeof(m_actual_velocity10) 
                              + sizeof(m_actual_total)
                              + sizeof(m_actual_step));
-  /* mask key = 0xA271 */
+  /* mask key = 0xe1e01cca */
   frame.push_back(mask[0]);
   frame.push_back(mask[1]);
   frame.push_back(mask[2]);
   frame.push_back(mask[3]);
   /* payload eta */
-  payload.push_back((m_actual_eta & 0xFF000000) >> 24);
+  payload.push_back((m_actual_eta & 0xFF000000) >> 24);  //dove c'è la FF tengo i bit orignali il resto viene settato a 0 e poi lo sposto di x posizioni a destra per farlo diventare char (lavoro in bit >>)
   payload.push_back((m_actual_eta & 0x00FF0000) >> 16);
   payload.push_back((m_actual_eta & 0x0000FF00) >> 8);
   payload.push_back((m_actual_eta & 0x000000FF) >> 0);
@@ -289,7 +295,7 @@ std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
   payload.push_back((m_actual_step & 0x0000FF00) >> 8);
   payload.push_back((m_actual_step & 0x000000FF) >> 0);
   for(size_t i = 0; i < payload.size(); ++i) {
-    frame.push_back(payload.at(i) ^ mask[i % 4]);
+    frame.push_back(payload.at(i) ^ mask[i % 4]); //apice è l'xor mask è vettore. 
   }
   return frame;
 }
