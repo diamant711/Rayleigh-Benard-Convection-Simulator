@@ -219,6 +219,8 @@ bool Connection::is_ready_to_receive(void) {
 
 //! Sets a connection as persistant.
 /*!
+A persistant connection is the idea of using a single TCP connection to send and receive multiple 
+requests/responses, as opposed to opening a new connection for every single request/response pair.
 \sa m_persistant
 */
 void Connection::set_persistant(void) {
@@ -227,6 +229,7 @@ void Connection::set_persistant(void) {
 
 //! Checks if the connection is persistant.
 /*!
+\sa set_persistant
 \sa m_persistant
 */
 bool Connection::is_persistant(void) {
