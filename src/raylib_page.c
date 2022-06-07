@@ -54,7 +54,7 @@ int main()
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Rayleigh-Benard convection");
 
 #if defined(PLATFORM_WEB)
-    emscripten_set_main_loop(UpdateDrawFrame, 1, 1);
+    emscripten_set_main_loop(UpdateDrawFrame, 5, 1);
 #else
     SetTargetFPS(FPS);
     //--------------------------------------------------------------------------------------
@@ -107,19 +107,25 @@ void UpdateDrawFrame(void)
 
     ClearBackground(RAYWHITE);
 
+    DrawText(TextFormat("%d/%d", n_step+1, N_STEPS), 150, 80, 20, BLACK);
     for(unsigned int i = 0; i < NX; ++i) {
       for(unsigned int k = 0; k < NY; ++k) {
-        DrawText(TextFormat("%d", n_step+1), 190, 200, 20, LIGHTGRAY);
         DrawRectangle((WINDOW_WIDTH/2 - NX*PIXEL/2) + i*PIXEL, 
                       (WINDOW_HEIGHT/2 + NY*PIXEL/2) - k*PIXEL, 
                        PIXEL, PIXEL, TtoC(cold_temp, hot_temp, T[n_step][k][i]));
       }
     }
-    int posY = 5;
+    int posY = WINDOW_HEIGHT/2 - JETSIZE/2 + 4;
+    DrawText(TextFormat("%.1lf°C", hot_temp), 
+             WINDOW_WIDTH/2 + NX*PIXEL/2 + 40, 
+             posY - 9, 20, BLACK);
     for(unsigned int i = 0; i < JETSIZE; ++i) {
-       DrawRectangle(5, posY, 5, 1, jet[i]);
+       DrawRectangle(WINDOW_WIDTH/2 + NX*PIXEL/2 + 30, posY, 5, 1, jet[i]);
        posY += 1;
     }
+    DrawText(TextFormat("%.1lf°C", cold_temp),
+             WINDOW_WIDTH/2 + NX*PIXEL/2 + 40, 
+             posY - 10, 20, BLACK);
 
   EndDrawing();
   //----------------------------------------------------------------------------------
