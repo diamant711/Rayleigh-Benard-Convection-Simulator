@@ -107,6 +107,7 @@ void UpdateDrawFrame(void)
 
     ClearBackground(RAYWHITE);
 
+    DrawText("Rayleigh Benard Convection Simulator", 10, 5, 30, BLACK);
     DrawText(TextFormat("%d/%d", n_step+1, N_STEPS), 150, 80, 20, BLACK);
     for(unsigned int i = 0; i < NX; ++i) {
       for(unsigned int k = 0; k < NY; ++k) {
@@ -116,14 +117,14 @@ void UpdateDrawFrame(void)
       }
     }
     int posY = WINDOW_HEIGHT/2 - JETSIZE/2 + 4;
-    DrawText(TextFormat("%.1lf C", hot_temp), 
+    DrawText(TextFormat("%.1lfC", hot_temp), 
              WINDOW_WIDTH/2 + NX*PIXEL/2 + 40, 
              posY - 9, 20, BLACK);
     for(unsigned int i = 0; i < JETSIZE; ++i) {
        DrawRectangle(WINDOW_WIDTH/2 + NX*PIXEL/2 + 30, posY, 5, 1, jet[i]);
        posY += 1;
     }
-    DrawText(TextFormat("%.1lf C", cold_temp),
+    DrawText(TextFormat("%.1lfC", cold_temp),
              WINDOW_WIDTH/2 + NX*PIXEL/2 + 40, 
              posY - 10, 20, BLACK);
 
