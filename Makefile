@@ -56,7 +56,7 @@ raylib: src/raylib_page.c inc/temperature_matrix.h inc/jet.h
 	@echo "EMCC    raylib.html raylib.js raylib.wasm"
 	@$(EMSDK_SDK_COMPILER) $< lib/libraylib.a -o $@.html -DPLATFORM_WEB -Os -Wall \
 		-s USE_GLFW=3 --shell-file /temporanea/rbcs_tmp_repos_$(USER).d/emsdk/upstream/emscripten/src/shell.html\
-		-s INITIAL_MEMORY=174MB
+		-s INITIAL_MEMORY=290MB
 	@mv raylib.* cnt/
 
 env: ;
