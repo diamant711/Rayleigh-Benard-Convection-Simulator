@@ -20,7 +20,22 @@
           document.getElementById('bar').max = total;
           document.getElementById('bar').value = step;
           document.getElementById('bar_label').innerHTML = step + "/" + total;
-          document.getElementById('bar_desc').innerHTML = "ETA: " + eta + "s; Velocity: " + velocity + "cicle/s;";
+          document.getElementById('bar_desc_eta').innerHTML = "ETA: " + eta + "s";
+          document.getElementById('bar_desc_vel').innerHTML = "Velocity: " + velocity + " frame/s";
+          switch(step % 8) {
+            case 0:
+              document.getElementById('title').innerHTML = "Processing";
+            break;
+            case 2:
+              document.getElementById('title').innerHTML = "Processing.";
+            break;
+            case 4:
+              document.getElementById('title').innerHTML = "Processing..";
+            break;
+            case 6:
+              document.getElementById('title').innerHTML = "Processing...";
+            break;
+          }
         };
         socket.onclose = function(event) {
           if (event.wasClean) {
@@ -38,10 +53,20 @@
       }
       window.onload = init;
     </script>
+    <style type="text/css">
+      body {
+        background-color: lightblue;
+      }
+      #title {
+        color: crimson;
+      }
+    </style>
   </head>
   <body>
-    <label id="bar_label" for="bar">(total-eta*velocity)/total</label>
+    <h1 id="title">Processing</h1>
+    <label id="bar_label" for="bar">step/total</label>
     <progress id="bar" max="1" value="0"></progress>
-    <div id="bar_desc">ETA: eta; Velocity: velocity;</div>
+    <div id="bar_desc_vel">Velocity: velocity</div>
+    <div id="bar_desc_eta">ETA: eta</div>
   </body>
 </html>
