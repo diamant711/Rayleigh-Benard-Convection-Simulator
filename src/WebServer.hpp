@@ -134,7 +134,7 @@ void WebServer::m_cgi_parser(const std::string& http_request) {
       tmp_s.erase(0, token.size() + 1);
       std::cerr << "INFO: WebServer: m_cgi_parser: found parameter {name = \'"
                 << p_name << "\',\t value = " 
-                << stoul(token.substr(eq_pos + 1, token.size())) 
+                << m_internal_html_form_input.steps
                 << "}"  << std::endl;
       continue;
     } else if(p_name == "cwt") {
@@ -143,7 +143,7 @@ void WebServer::m_cgi_parser(const std::string& http_request) {
       tmp_s.erase(0, token.size() + 1);
       std::cerr << "INFO: WebServer: m_cgi_parser: found parameter {name = \'"
                 << p_name << "\',\t value = " 
-                << stoul(token.substr(eq_pos + 1, token.size())) 
+                << m_internal_html_form_input.cwt
                 << "}"  << std::endl;
       continue;
     } else if(p_name == "hwt") {
@@ -152,7 +152,7 @@ void WebServer::m_cgi_parser(const std::string& http_request) {
       tmp_s.erase(0, token.size() + 1);
       std::cerr << "INFO: WebServer: m_cgi_parser: found parameter {name = \'"
                 << p_name << "\',\t value = " 
-                << stoul(token.substr(eq_pos + 1, token.size())) 
+                << m_internal_html_form_input.hwt
                 << "}"  << std::endl;
       continue;
     } else if(p_name == "Ray") {
@@ -161,7 +161,7 @@ void WebServer::m_cgi_parser(const std::string& http_request) {
       tmp_s.erase(0, token.size() + 1);
       std::cerr << "INFO: WebServer: m_cgi_parser: found parameter {name = \'"
                 << p_name << "\',\t value = " 
-                << stoul(token.substr(eq_pos + 1, token.size())) 
+                << m_internal_html_form_input.Ray
                 << "}"  << std::endl;
       continue;
     } else if(p_name == "Pr") {
@@ -170,16 +170,16 @@ void WebServer::m_cgi_parser(const std::string& http_request) {
       tmp_s.erase(0, token.size() + 1);
       std::cerr << "INFO: WebServer: m_cgi_parser: found parameter {name = \'"
                 << p_name << "\',\t value = " 
-                << stoul(token.substr(eq_pos + 1, token.size())) 
+                << m_internal_html_form_input.Pr
                 << "}"  << std::endl;
       continue;
     } else if(p_name == "Rey") {
-       m_internal_html_form_input.Rey = 
+      m_internal_html_form_input.Rey = 
         stod(token.substr(eq_pos + 1, token.size()));   
       tmp_s.erase(0, token.size() + 1);
       std::cerr << "INFO: WebServer: m_cgi_parser: found parameter {name = \'"
                 << p_name << "\',\t value = " 
-                << stoul(token.substr(eq_pos + 1, token.size())) 
+                << m_internal_html_form_input.Rey
                 << "}"  << std::endl;
       continue;
     } else {
@@ -334,7 +334,14 @@ void WebServer::serve_output_page(void) {
             if(!m_raylib_compiled) {
               std::cerr << "INFO: WebServer: respond_to_all: first user at "
                         << "OUTPUT stage" << std::endl;
-              ::system("make raylib");
+              if(::system("make raylib") != 0) {
+                std::cerr << "ERROR: WebServer: serve_output_page: " 
+                          << "failed raylib for web compilation. " 
+                          << "To resolve and see output execute 'make purge && "
+                          << "make && Rayleigh-Benard-Convection-Simulator 8080 "
+                          << "8000 --output_only'" << std::endl;
+                ::exit(1);
+              }
               m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.html")));
               m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.js")));
               m_pages.push_back(std::unique_ptr<WebPage>(new WebPage("cnt/raylib.wasm")));

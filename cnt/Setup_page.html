@@ -3,6 +3,23 @@
   <head>
     <link rel="icon" href="data:,">
     <title> Setup Convection Parameters </title>
+    <script type="text/javascript">
+      function validateForm() {
+        let cwt = document.forms["myForm"]["cwt"].value;
+        let hwt = document.forms["myForm"]["hwt"].value;
+        if (cwt > hwt) {
+          //innerHTML flashing red
+          return false;
+        } else if (cwt == hwt) {
+          //innerHTML flashing red
+          return false;
+        } else if ((hwt - cwt) > 10 ) {
+          //innerHTML flashing red
+          return false;
+        }
+        return true;
+      }
+    </script>
     <style language="text/css">
       body {
         background-color: lightblue;
@@ -20,12 +37,12 @@
                           at sea-level pressure. 
                           You can try modifing them: </h3>  
 
-      <form action="" method="get" autocomplete="on">
+      <form id="myForm" action="" method="get" autocomplete="on" onsubmit="return validateForm()">
 
       <h4 id="time" > This input box allows the user to select the duration of the simulation. Maximum number of steps is 6000. </h4>
       <p id="time_2"> First convection cells are usually completed by the 2900th cicle.  </p>
       <label for= "steps">Simulation duration (steps)</label>
-      <input type="text" placeholder="3000" id="steps" name="steps" value=3000><br><br>
+      <input type="number" placeholder="3000" id="steps" name="steps" value=3000 step=1 max=5000 min=1 required><br><br>
 
       <h4 id="warning_three"> User is advised to choose intervals of maximum 10 degrees, to ensure the validity
                               of the simulation (linearized). </h4>
@@ -33,9 +50,9 @@
                            Pay attention when choosing temperatures close to 4 Celsius degrees. </p>
 
       <label for="cwt">Cold wall temperature (in Celsius)</label>
-      <input type="text" placeholder="25" id="cwt" name="cwt" value=25><br><br>
+      <input type="number" placeholder="25" id="cwt" name="cwt" value=25 step=0.1 max=98 min=4 required><br><br>
       <label for="hwt">Hot wall temperature (in Celsius)</label>
-      <input type="text" placeholder="35" id="hwt" name="hwt" value=35><br><br>
+      <input type="number" placeholder="35" id="hwt" name="hwt" value=35 step=0.1 max=99 min=15 required><br><br>
 
       <h4 id="RAY" > Rayleigh number is a dimensionless number associated 
                      with buoyancy-driven flow, also known as natural convection. </h4>
@@ -44,7 +61,7 @@
                      conduction rather than convection. Over the critical value, 
                      it denotes turbulent flow with convection cells. </p>
       <label for="Ray"> Rayleigh number (working range 50-150):</label>
-      <input type="text" placeholder="100" id="Ray" name="Ray" value=100><br><br>
+      <input type="number" placeholder="100" id="Ray" name="Ray" value=100 step=0.1 max=150 min=50 required><br><br>
 
       <h4 id="PR" >Prandtl  number is a dimensioneless number defined
                    as the ratio of momentum diffusivity 
@@ -52,16 +69,17 @@
       <p id="PR_2" > For Pr < < 1 the thermal diffusivity dominatest the behavior, while for 
                       Pr > > 1 the momentum diffusivity dominates.  </p>
       <label for="Pr">Prandtl number(working range 5-9):</label>
-      <input type="text" placeholder="7" id="Pr" name="Pr" value=7><br><br>
+      <input type="number" placeholder="7" id="Pr" name="Pr" value=7 step=0.1 max=9 min=5 required><br><br>
 
       <h4 id="REY" >Reynolds number is a dimensioneless number that 
                     helps predict flow patterns in different fluid flow situations. </h4>
       <p id="REY_2" > At low Reynolds numbers, flows tends to be laminar,
                        while at high Reynolds numbers flows tend to be turbulent. </p>
       <label for="Rey">Reynolds number(working range: 70-130):</label>
-      <input type="text" placeholder="100" id="Rey" name="Rey" value=100><br><br>
+      <input type="number" placeholder="100" id="Rey" name="Rey" value=100 step=0.1 max=130 min=70 required><br><br>
 
       <input type="submit" value="Submit">
+      <input type="reset">
     </form> 
   </body>
 </html>
