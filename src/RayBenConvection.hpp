@@ -1,14 +1,3 @@
-/******************************************************************
- * TODO list:
- *
- * 4 - Cercare di capire che analisi matematica vogliamo fare, propongo tre tipi
- *     di documentazione: a) un file LaTeX con le info molto leggere
- *     matematiche, una pagine di man per le info sull'utilizzo del software e
- *     una pagina stile doxigen con gli oggetti e i metodi
- *
- ******************************************************************/
-
-
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -305,28 +294,15 @@ RayBenConvection::~RayBenConvection() {}
 void RayBenConvection::m_apply_correction(void) {
   for(int i = 0; i < m_T.rows(); ++i) {
     for(int k = 0; k < m_T.cols(); ++k) {
-      if((m_T(i, k) < m_TN) || (m_T(i, k) > m_TS)) {
+      if(m_T(i, k) <= m_TN) {
         m_T(i, k) = m_TN;
+      }
+      else if (m_T(i, k) >= m_TS) {
+      m_T(i, k) = m_TS;
       }
     }
   }
 }
-
-//void RayBenConvection::m_printColor (Color c) {
-//  ::printf("(%d, %d, %d, %d)\n", c.r, c.g, c.b, c.a);
-//}
-
-//Color RayBenConvection::m_TtoC (double cold_temp, double hot_temp,  double T) {
-  /*
-  (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
-  */
-//  if ((T <= hot_temp) && (T >= cold_temp)) {
-//    int index = (T - cold_temp) * (jet.size() - 1) / ( hot_temp - cold_temp );
-//    return jet[index];
-//  } else {
-//    return (Color){0, 0, 0, 0};
-//  }
-//}
 
 //! This function returns a permutated matrix, following Eigen Partial Pivoting operation.
 /*!
@@ -929,7 +905,7 @@ RayBenConvection::simulation_state_t RayBenConvection::eval_next_frame(){
 
     m_ETA(m_it);
 
-    m_apply_correction();
+//    m_apply_correction();
 
 
     Eigen::Matrix<double, -1, -1> Tn(m_T);

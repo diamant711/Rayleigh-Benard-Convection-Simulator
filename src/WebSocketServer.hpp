@@ -31,10 +31,10 @@ class WebSocketServer : TCPServer {
     std::string m_base64_encode(const std::string &);
     std::string m_base64_decode(const std::string &);
     std::string m_handshake_respond_builder(std::string);
-    // format: eta velociry10 total
+    // format: eta velocity10 total
     std::vector<unsigned char> m_frame_builder(void);
     // Variables
-    //! Implementation detail, used in respond function.
+    //! Implementation detail, used in function respond.
     /*!
     \sa respond
     */
@@ -45,7 +45,7 @@ class WebSocketServer : TCPServer {
     } m_status_t;
     //! Estimated time of arrival until the end of the simulation.
     unsigned int m_actual_eta;
-    //! Velocity of the simulation in number of cycles per second.
+    //! 10*velocity of the simulation (number of cycles per second).
     unsigned int m_actual_velocity10;
     //! Total number of steps performed during the simulation.
     unsigned int m_actual_total;
@@ -54,16 +54,30 @@ class WebSocketServer : TCPServer {
     std::vector<unsigned char> m_actual_frame;
     //! This parameter represents if the client side application is connected to the socket.
     bool m_connected = false;
-    //!
+    /*!
+     \sa m_status_t
+    */
     m_status_t m_status;
+    //! Implementation detail.
+    /*!
+     \sa respond
+    */
     std::string m_handshake_response;
+    //! Implementation detail.
+    /*!
+    \sa m_handshake_respond_builder
+    */
     std::string m_handshake_request;
-    //!
-    std::unique_ptr<Connection> m_connection_ptr;
-    //! dettaglio implementazione code64
+    //! Implementation detail.
+    /*!
+    \sa m_base64_encode
+    */
     const char m_b64_table[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno"
                                       "pqrstuvwxyz0123456789+/";
-    //Dettaglio implementazione decode64
+    //! Implementation detail.
+    /*!
+     \sa m_base64_decode
+    */
     const char m_reverse_table[128] = {
       64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
       64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
@@ -77,8 +91,8 @@ class WebSocketServer : TCPServer {
 };
 //! Class constructor.
 /*!
-\param executor_ptr
-\param port 
+\param executor_ptr <a href="https://www.boost.org/doc/libs/master/doc/html/boost_asio/reference/io_context.html">boost::asio::io_context</a>
+\param port WebSocketServer port number.
 */
 WebSocketServer::WebSocketServer(std::shared_ptr<boost::asio::io_context> executor_ptr,
                                  int port) 
