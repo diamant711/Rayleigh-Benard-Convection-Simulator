@@ -576,62 +576,6 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
   m_Pe = m_Re * m_Pr;
   m_Gr= m_Ra / m_Pr;
 
-  if (END_CICLE > 6000){
-    std::cerr << "ERROR: RayBenConvection: init: The number of steps requested "
-              << END_CICLE << " is too high." << std::endl;
-    return -1;
-  }
-
-  if(m_TS != m_TN)
-    m_To = (m_TS < m_TN) ? m_TS : m_TN;
-  else{
-    std::cerr << "ERROR: RayBenConvection: init: This simulation requires two "
-                  "different temperatures." << std::endl;
-    return -2;
-  }
-
-  if (m_TN <= 0 || m_TN >= 100){
-    std::cerr << "ERROR: RayBenConvection: init: Default parameters "
-                 "regard liquid water. Work in 1-99 range." << std::endl;
-    return -3;
-  }
-
-  if (m_TS >= 100){
-    std::cerr << "ERROR: RayBenConvection: init: Default parameters "
-                 "regard liquid water. Work in 1-99 range." << std::endl;
-    return -4;
-  }
-
-  if (Ray_numb < 50 || Ray_numb > 150 ){
-    std::cerr << "ERROR: RayBenConvection: init: Working range for "
-                 "Rayleigh number: 50-150." << std::endl;
-    return -5;
-  }
-
-  if (Pr_numb < 5 || Pr_numb > 9){
-    std::cerr << "ERROR: RayBenConvection: init: Working range for "
-                 "Prandtl number: 5-9." << std::endl;
-    return -6;
-  }
-
-  if (Re_numb < 70 ||  Re_numb > 130){
-    std::cerr << "ERROR: RayBenConvection: init: Working range for "
-                 "Reynolds number: 70-130." << std::endl;
-    return -7;
-  }
-
-  if (m_TN < 4){
-    std::cerr << "ERROR: RayBenConvection: init: Working with linear parameters. Liquid water "
-                 "below of 4 Celsius does not follow linear behaviour." << std::endl;
-    return -8;
-  }
-
-  if (m_TS - m_TN > 10){
-    std::cerr << "ERROR: RayBenConvection: init: with this temperature range the linear"
-                " model validity is not guaranteed." << std::endl;
-    return -9;
-  }
-
   //m_dt correction:
   m_dt = m_tf / m_nt;
 
