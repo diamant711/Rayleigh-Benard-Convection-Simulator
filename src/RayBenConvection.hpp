@@ -575,6 +575,7 @@ int RayBenConvection::init(unsigned int END_CICLE, double cold_temp, double hot_
   m_Re = Re_numb;
   m_Pe = m_Re * m_Pr;
   m_Gr= m_Ra / m_Pr;
+  m_To = m_TN;
 
   //m_dt correction:
   m_dt = m_tf / m_nt;
