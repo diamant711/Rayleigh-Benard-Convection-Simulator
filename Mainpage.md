@@ -23,4 +23,4 @@ The simulation is run according to the following hypotesis:
  
 
 
-\image html evolution.png "Natural convection simulation" width=547 height=307 
+\image html Commands_explanation.png "User's commands explained" width=547 height=307 

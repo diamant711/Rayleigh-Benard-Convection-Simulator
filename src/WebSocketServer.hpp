@@ -257,14 +257,11 @@ std::string WebSocketServer::m_handshake_respond_builder(std::string req) {
 }
 //! This function builds a frame.
 /*!
-
+The frame is built according to the following image:
+\image html frame.png width=481 height=457
+MASK is set to 1. Mask key is set to 0xe1e01cca
 */
-//frame come verrtore di char primi 4 bit sono dei bit di prima configurazione il primo se 0 è un frame intermedio (ma lo fissiamo sempre ad 1 in sequenza ognun è autoesplicativo) poi 3 bit per configurare i plugin (estensione a Websocketserver, noi tutti a 0 è quello base). opcode= 4 bit che prevedono 
-//danno un senso ai dati, alcuni sono riservati. come interpretare il payload.l principali indicano se i dati che seguiranno saranno caratteri oppure se sono dati binari 
-//bit di maschera : se saranno cifrati con una maschera xor oppure no. xor: operatore tra dato e maschera bit per bit
-//lunghezza del payload in byte (7 bit)
-//settato bit mask a 1 ::quindi inseriamo maschera di codifica e decodifica, dopo il payload inseriamo eleoicca (!!) 
-//i dati: devono seguire uno standard codificati con xor bit a bit (usando la maschera) 
+//
 std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
   std::vector<unsigned char> frame;
   std::vector<unsigned char> payload;
@@ -274,11 +271,11 @@ std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
   mask.push_back(0x1c);
   mask.push_back(0xca);
   /*
-   * FIN  = 1
-   * RSV1 = 0
+   * FIN  = 1    set to 1 implies that every frame is seen as the last, since they are indipendently sent.
+   * RSV1 = 0    using basic WebSocketServer.
    * RSV2 = 0
    * RSV3 = 0
-   * OP C = 0    sempre inserito indica dati binari (=evitare che reinterpretasse i dati come caratteri)
+   * OP C = 0    set to 0 implies that our datas will be read as binary.
    *    O = 0
    *    D = 1
    *    E = 0
