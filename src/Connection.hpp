@@ -1,4 +1,3 @@
-//TODO: new char [size] at 190
 
 #ifndef CONNECTION_HPP
 #define CONNECTION_HPP

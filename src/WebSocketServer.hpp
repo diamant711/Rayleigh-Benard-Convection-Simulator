@@ -100,9 +100,16 @@ WebSocketServer::WebSocketServer(std::shared_ptr<boost::asio::io_context> execut
 {}
 //! Class destructor.
 WebSocketServer::~WebSocketServer(void) {}
-//!
+//! This function supplies the correct response to the client depending on the connection status.
 /*!
-
+Depending on m_status, there are 3 types of responses.
+\sa m_status_t
+ - HANSHAKE_ANSWER: builds the handshake key using m_handshake_respond_builder
+   and sends it to the client.
+   \sa m_handshake_respond_builder
+ - UPDATING_CLIENT: builds the data frame using m_frame-builder and sends it to the client.
+   \sa m_frame_builder
+ - CLOSING_CONNECTION: closes the connection.
 */
 bool WebSocketServer::respond(void) {
   m_get_executor().poll();
@@ -113,7 +120,7 @@ bool WebSocketServer::respond(void) {
     }
     switch (m_status) {
       case HANDSHAKE_ANSWARE:
-        std::cerr << "INFO: WebSocketServer: respond: waiting for WS request" 
+        std::cerr << "INFO: WebSocketServer: respond: waiting for WS request"
                   << std::endl;
         while (m_get_first_connection().connection_ptr->get_socket().available() <= 0) {}
         std::cerr << "INFO: WebSocketServer: respond: recived WS request, responding" 
@@ -226,7 +233,7 @@ This is an outsourced library function.
 }
 //! This function builds a WebSocket handshake response.
 /*!
-To establish a WebSocket connection, the client sends a WebSocket handshake request, 
+To establish a WebSocket connection, the client sends a WebSocket handshake request,
 for which the server returns a WebSocket handshake response.
 */
 std::string WebSocketServer::m_handshake_respond_builder(std::string req) {
