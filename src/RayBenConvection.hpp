@@ -253,7 +253,6 @@ class RayBenConvection {
     simulation_state_t simulation_state;
 
     //functions
-    void m_apply_correction(void);
     static void m_d_solve(Eigen::Matrix<double,-1,1> &,
             const Eigen::Matrix<int,1,-1> &,
             const Eigen::PartialPivLU<Eigen::Matrix<double,-1,-1>> &,
@@ -281,28 +280,6 @@ class RayBenConvection {
 RayBenConvection::RayBenConvection() {}
 
 RayBenConvection::~RayBenConvection() {}
-
-//! This function applies small corrections on m_T matrix.
-/*!
- During the perturbative calculations, small errors due to the truncation of the decimals may occur,
- resulting in temperatures lower than m_TN.
- Since these values do not hold any physical meaning nor represent a calculation error,
- this function replaces them with m_TN. This correction allows a smoother visual simulation
- since temperatures are set between TN and TS.
- \sa m_TN
-*/
-void RayBenConvection::m_apply_correction(void) {
-  for(int i = 0; i < m_T.rows(); ++i) {
-    for(int k = 0; k < m_T.cols(); ++k) {
-      if(m_T(i, k) <= m_TN) {
-        m_T(i, k) = m_TN;
-      }
-      else if (m_T(i, k) >= m_TS) {
-      m_T(i, k) = m_TS;
-      }
-    }
-  }
-}
 
 //! This function returns a permutated matrix, following Eigen Partial Pivoting operation.
 /*!
@@ -849,9 +826,6 @@ RayBenConvection::simulation_state_t RayBenConvection::eval_next_frame(){
   if (m_it < m_END_CICLE ) {
 
     m_ETA(m_it);
-
-//    m_apply_correction();
-
 
     Eigen::Matrix<double, -1, -1> Tn(m_T);
     m_Tstar.block(1,1,m_ii,m_jj) = (Tn.block(1,1,m_ii,m_jj).array() - (m_dt / m_dx / 2)
