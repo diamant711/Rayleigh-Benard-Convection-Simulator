@@ -44,13 +44,13 @@
       <label for= "steps">Simulation duration (steps)</label>
       <input type="number" placeholder="3000" id="steps" name="steps" value=3000 step=1 max=5000 min=1 required><br><br>
 
-      <h4 id="warning_three"> User is must choose intervals of maximum 10 degrees, to ensure the validity
+      <h4 id="warning_three"> User must choose intervals of maximum 10 degrees, to ensure the validity
                               of the simulation (linearized). </h4>
       <p id="warning_two"> All parameters are approximed as linear functions of temperature.
-                           Minimum temperature difference is 0,1 degree. Precision is set at 0,1 degree. </p>
-      <label for="cwt">Cold wall temperature (in Celsius: working range 4-98,9 C)</label>
+                           Minimum temperature difference is 0,1 degree. Precision is set at 0.1 degree. </p>
+      <label for="cwt">Cold wall temperature (in Celsius: working range 4-98.9 C)</label>
       <input type="number" placeholder="25" id="cwt" name="cwt" value=25 step=0.1 max=98 min=4 required><br><br>
-      <label for="hwt">Hot wall temperature (in Celsius, working range 4,1-99 C)</label>
+      <label for="hwt">Hot wall temperature (in Celsius, working range 4.1-99 C)</label>
       <input type="number" placeholder="35" id="hwt" name="hwt" value=35 step=0.1 max=99 min=15 required><br><br>
 
       <h4 id="RAY" > Rayleigh number is a dimensionless number associated 
@@ -60,7 +60,7 @@
                      conduction rather than convection. Over the critical value, 
                      it denotes turbulent flow with convection cells. Must be an integer. </p>
       <label for="Ray"> Rayleigh number (working range 50-150):</label>
-      <input type="number" placeholder="100" id="Ray" name="Ray" value=100 step=0.1 max=150 min=50 required><br><br>
+      <input type="number" placeholder="100" id="Ray" name="Ray" value=100 step=1 max=150 min=50 required><br><br>
 
       <h4 id="PR" >Prandtl  number is a dimensioneless number defined
                    as the ratio of momentum diffusivity 
@@ -68,14 +68,14 @@
       <p id="PR_2" > For Pr < < 1 the thermal diffusivity dominatest the behavior, while for 
                       Pr > > 1 the momentum diffusivity dominates. Must be an integer. </p>
       <label for="Pr">Prandtl number(working range 5-9):</label>
-      <input type="number" placeholder="7" id="Pr" name="Pr" value=7 step=0.1 max=9 min=5 required><br><br>
+      <input type="number" placeholder="7" id="Pr" name="Pr" value=7 step=1 max=9 min=5 required><br><br>
 
       <h4 id="REY" >Reynolds number is a dimensioneless number that 
                     helps predict flow patterns in different fluid flow situations. </h4>
       <p id="REY_2" > At low Reynolds numbers, flows tends to be laminar,
                        while at high Reynolds numbers flows tend to be turbulent. Must be an integer. </p>
       <label for="Rey">Reynolds number(working range: 70-130):</label>
-      <input type="number" placeholder="100" id="Rey" name="Rey" value=100 step=0.1 max=130 min=70 required><br><br>
+      <input type="number" placeholder="100" id="Rey" name="Rey" value=100 step=1 max=130 min=70 required><br><br>
 
       <input type="submit" value="Submit">
       <input type="reset" value="Reset">
