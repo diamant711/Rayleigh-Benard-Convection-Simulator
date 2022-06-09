@@ -95,12 +95,15 @@ class WebSocketServer : TCPServer {
 \param port WebSocketServer port number.
 */
 WebSocketServer::WebSocketServer(std::shared_ptr<boost::asio::io_context> executor_ptr,
-                                 int port) 
-  : TCPServer(executor_ptr, port) 
+                                 int port)
+  : TCPServer(executor_ptr, port)
 {}
 //! Class destructor.
 WebSocketServer::~WebSocketServer(void) {}
 //!
+/*!
+
+*/
 bool WebSocketServer::respond(void) {
   m_get_executor().poll();
   if(!m_is_waiting_list_empty()) {
@@ -147,14 +150,14 @@ bool WebSocketServer::respond(void) {
   }
   return true;
 }
-//! This function returns the status of m_is_waititng_list_empty(). 
+//! This function returns if the WebSocketServer is full.
 bool WebSocketServer::full(void) {
   return (!m_is_waiting_list_empty());
 }
-//TODO
-//!
+//! This function encodes in base64.
 /*!
-\param bindata
+This is an outsourced library function.
+\param bindata Data to be encoded in base64.
 */
 ::std::string WebSocketServer::m_base64_encode(const ::std::string &bindata)
 {
@@ -190,10 +193,10 @@ bool WebSocketServer::full(void) {
    assert(outpos <= retval.size());
    return retval;
 }
-//TODO
-//!
+//! This function decodes from base64.
 /*!
-\param ascdata 
+This is an outsourced library function.
+\param ascdata Data to be decoded from base64.
 */
 ::std::string WebSocketServer::m_base64_decode(const ::std::string &ascdata)
 {
@@ -221,8 +224,11 @@ bool WebSocketServer::full(void) {
    }
    return retval;
 }
-//TODO
-//!
+//! This function builds a WebSocket handshake response.
+/*!
+To establish a WebSocket connection, the client sends a WebSocket handshake request, 
+for which the server returns a WebSocket handshake response.
+*/
 std::string WebSocketServer::m_handshake_respond_builder(std::string req) {
   m_handshake_request = req;
   std::string field("Sec-WebSocket-Key: ");
@@ -242,8 +248,10 @@ std::string WebSocketServer::m_handshake_respond_builder(std::string req) {
             << s << std::endl;
   return s;
 }
-//TODO
-//! This function builds a frame
+//! This function builds a frame.
+/*!
+
+*/
 //frame come verrtore di char primi 4 bit sono dei bit di prima configurazione il primo se 0 è un frame intermedio (ma lo fissiamo sempre ad 1 in sequenza ognun è autoesplicativo) poi 3 bit per configurare i plugin (estensione a Websocketserver, noi tutti a 0 è quello base). opcode= 4 bit che prevedono 
 //danno un senso ai dati, alcuni sono riservati. come interpretare il payload.l principali indicano se i dati che seguiranno saranno caratteri oppure se sono dati binari 
 //bit di maschera : se saranno cifrati con una maschera xor oppure no. xor: operatore tra dato e maschera bit per bit
@@ -258,7 +266,7 @@ std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
   mask.push_back(0xe0);
   mask.push_back(0x1c);
   mask.push_back(0xca);
-  /* 
+  /*
    * FIN  = 1
    * RSV1 = 0
    * RSV2 = 0
@@ -269,7 +277,7 @@ std::vector<unsigned char> WebSocketServer::m_frame_builder(void) {
    *    E = 0
   */
   frame.push_back(0b10000010);
-  /* 
+  /*
    * MASK = 1
    * L    = 0
    * E    = 0
