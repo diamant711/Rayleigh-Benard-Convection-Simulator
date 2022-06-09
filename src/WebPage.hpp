@@ -19,8 +19,7 @@
 /******************************************************************************
  *
  *    TODO:
- *      1) http file not found
- *      2) Ele's: fare assieme la descrizione della classe
+ *      *      2) Ele's: fare assieme la descrizione della classe
  *
  *****************************************************************************/
 #ifndef WEBPAGE_HPP
@@ -51,24 +50,25 @@ class WebPage {
 
   private:
     //Variables
-    //!
+    //! Represents the file path.
     std::string m_file_path;
-    //!
+    //! Represents the input file.
     std::ifstream m_input_file;
-    //!
+    //! Represents the content type.
     std::string m_content_type;
-    //!
+    //! Represents the http header.
     std::string m_http_header;
-    //!
+    //! Unique pointer to the http body.
     std::unique_ptr<std::string> m_http_body_ptr;
-    //!
+    //! Represents the http response.
     std::string m_http_response;
-    //!
+    //! Represents the length of the content.
     std::string m_content_length;
-    //!
+    //! Implementation detail.
+    /*!
+    \sa m_status_code
+    */
     status_code_t m_status_code = {200, "OK"};
-    //!
-    bool m_ready_to_ship = false;
     //function
     const std::string m_get_extension_from_path(const std::string &);
     const std::string m_get_extension_from_path(const char *);

@@ -48,18 +48,18 @@ class Connection {
      \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/const_buffer.html">boost::asio::const_buffer</a>
    */
     std::unique_ptr<boost::asio::const_buffer> m_internal_send_buffer_ptr;
-    //! Checks if errors occurred during the send operation.
+    //! Represents if errors occurred during the send operation.
     bool m_send_error = false;
-    //! Checks if errors occurred during the receive operation.
+    //! Represents if errors occurred during the receive operation.
     bool m_receive_error = false;
-    //! Checks if the first operation has endend.
+    //! Represents if the first operation has endend.
     /*!
      \sa first_operation_ended
     */
     bool m_first_operation_ended = false;
-    //! Checks if it is possible to send bytes.
+    //! Represents if it is possible to send bytes.
     bool m_ready_to_send = true;
-    //! Checks if the connection is set to be persistant.
+    //! Represents if the connection is set to be persistant.
     bool m_persistant = false;
     // Functions
     void m_handle_send(const boost::system::error_code&,
