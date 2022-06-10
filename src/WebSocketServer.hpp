@@ -1,4 +1,3 @@
-
 #ifndef WEBSOCKETSERVER_HPP
 #define WEBSOCKETSERVER_HPP
 
@@ -17,7 +16,7 @@
 
 //! WebSocketServer defines a WebSocket providing full-duplex communication channels over a single TCP connection.
 /*!
-This class communicates with the client side application written in JavaScript.
+  This class communicates with the client side application written in JavaScript.
 */
 class WebSocketServer : TCPServer
 {
@@ -39,7 +38,7 @@ private:
   //! Implementation detail, used in function respond.
   /*!
     \sa respond
-    */
+  */
   typedef enum
   {
     HANDSHAKE_ANSWARE,
@@ -58,29 +57,29 @@ private:
   //! This parameter represents if the client side application is connected to the socket.
   bool m_connected = false;
   /*!
-     \sa m_status_t
-    */
+    \sa m_status_t
+  */
   m_status_t m_status;
   //! Implementation detail.
   /*!
-     \sa respond
-    */
+    \sa respond
+  */
   std::string m_handshake_response;
   //! Implementation detail.
   /*!
     \sa m_handshake_respond_builder
-    */
+  */
   std::string m_handshake_request;
   //! Implementation detail.
   /*!
     \sa m_base64_encode
-    */
+  */
   const char m_b64_table[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno"
                                "pqrstuvwxyz0123456789+/";
   //! Implementation detail.
   /*!
-     \sa m_base64_decode
-    */
+    \sa m_base64_decode
+  */
   const char m_reverse_table[128]
       = { 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
           64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
@@ -93,8 +92,8 @@ private:
 };
 //! Class constructor.
 /*!
-\param executor_ptr <a href="https://www.boost.org/doc/libs/master/doc/html/boost_asio/reference/io_context.html">boost::asio::io_context</a>
-\param port WebSocketServer port number.
+  \param executor_ptr <a href="https://www.boost.org/doc/libs/master/doc/html/boost_asio/reference/io_context.html">boost::asio::io_context</a>
+  \param port WebSocketServer port number.
 */
 WebSocketServer::WebSocketServer (
     std::shared_ptr<boost::asio::io_context> executor_ptr, int port)
@@ -105,14 +104,14 @@ WebSocketServer::WebSocketServer (
 WebSocketServer::~WebSocketServer (void) {}
 //! This function supplies the correct response to the client depending on the connection status.
 /*!
-Depending on m_status, there are 3 types of responses.
-\sa m_status_t
- - HANSHAKE_ANSWER: builds the handshake key using m_handshake_respond_builder
-   and sends it to the client.
-   \sa m_handshake_respond_builder
- - UPDATING_CLIENT: builds the data frame using m_frame-builder and sends it to the client.
-   \sa m_frame_builder
- - CLOSING_CONNECTION: closes the connection.
+  Depending on m_status, there are 3 types of responses.
+  \sa m_status_t
+  - HANSHAKE_ANSWER: builds the handshake key using m_handshake_respond_builder
+    and sends it to the client.
+  \sa m_handshake_respond_builder
+  - UPDATING_CLIENT: builds the data frame using m_frame-builder and sends it to the client.
+  \sa m_frame_builder
+  - CLOSING_CONNECTION: closes the connection.
 */
 bool
 WebSocketServer::respond (void)
@@ -186,8 +185,8 @@ WebSocketServer::full (void)
 }
 //! This function encodes in base64.
 /*!
-This is an outsourced library function.
-\param bindata Data to be encoded in base64.
+  This is an outsourced library function.
+  \param bindata Data to be encoded in base64.
 */
 ::std::string
 WebSocketServer::m_base64_encode (const ::std::string &bindata)
@@ -231,8 +230,8 @@ WebSocketServer::m_base64_encode (const ::std::string &bindata)
 }
 //! This function decodes from base64.
 /*!
-This is an outsourced library function.
-\param ascdata Data to be decoded from base64.
+  This is an outsourced library function.
+  \param ascdata Data to be decoded from base64.
 */
 ::std::string
 WebSocketServer::m_base64_decode (const ::std::string &ascdata)
@@ -269,8 +268,8 @@ WebSocketServer::m_base64_decode (const ::std::string &ascdata)
 }
 //! This function builds a WebSocket handshake response.
 /*!
-To establish a WebSocket connection, the client sends a WebSocket handshake request,
-for which the server returns a WebSocket handshake response.
+  To establish a WebSocket connection, the client sends a WebSocket handshake
+  request, for which the server returns a WebSocket handshake response.
 */
 std::string
 WebSocketServer::m_handshake_respond_builder (std::string req)
@@ -298,9 +297,9 @@ WebSocketServer::m_handshake_respond_builder (std::string req)
 }
 //! This function builds a frame.
 /*!
-The frame is built according to the following image:
-\image html frame.png width=481 height=457
-MASK is set to 1. Mask key is set to 0xe1e01cca
+  The frame is built according to the following image:
+  \image html frame.png width=481 height=457
+  MASK is set to 1. Mask key is set to 0xe1e01cca
 */
 //
 std::vector<unsigned char>
@@ -343,9 +342,9 @@ WebSocketServer::m_frame_builder (void)
   frame.push_back (mask[2]);
   frame.push_back (mask[3]);
   /* payload eta */
-  payload.push_back (
-      (m_actual_eta & 0xFF000000)
-      >> 24); //dove c'è la FF tengo i bit orignali il resto viene settato a 0 e poi lo sposto di x posizioni a destra per farlo diventare char (lavoro in bit >>)
+  //dove c'è la FF tengo i bit orignali il resto viene settato a 0 e poi lo
+  //sposto di x posizioni a destra per farlo diventare char (lavoro in bit >>)
+  payload.push_back ((m_actual_eta & 0xFF000000) >> 24);
   payload.push_back ((m_actual_eta & 0x00FF0000) >> 16);
   payload.push_back ((m_actual_eta & 0x0000FF00) >> 8);
   payload.push_back ((m_actual_eta & 0x000000FF) >> 0);
@@ -374,10 +373,10 @@ WebSocketServer::m_frame_builder (void)
 
 //! This function updates the values of the time-parameters of the simulation.
 /*!
-\param eta estimated time of arrival till the end of the simulation.
-\param velocity number of cycles performed per second.
-\param total total number of steps of the simulation.
-\param step current step of the simulation.
+  \param eta estimated time of arrival till the end of the simulation.
+  \param velocity number of cycles performed per second.
+  \param total total number of steps of the simulation.
+  \param step current step of the simulation.
 */
 void
 WebSocketServer::update_simulation_data (int eta, float velocity, int total,

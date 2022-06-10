@@ -1,4 +1,3 @@
-
 #ifndef CONNECTION_HPP
 #define CONNECTION_HPP
 
@@ -81,9 +80,6 @@ Connection::Connection (boost::asio::io_context &executor)
 //! Class destructor.
 Connection::~Connection (void)
 {
-  //std::cerr << "INFO: Connection: user " << m_socket.remote_endpoint().address()
-  //          << ": destructor: socket close." << std::endl;
-  //m_socket.close();
 }
 
 //! Completion handler, it is called when the send completes.
@@ -259,8 +255,9 @@ Connection::is_ready_to_receive (void)
 
 //! Sets a connection as persistant.
 /*!
-A persistant connection is the idea of using a single TCP connection to send and receive multiple 
-requests/responses, as opposed to opening a new connection for every single request/response pair.
+A persistant connection is the idea of using a single TCP connection to send and
+receive multiple requests/responses, as opposed to opening a new connection for 
+every single request/response pair.
 \sa m_persistant
 */
 void
@@ -282,7 +279,8 @@ Connection::is_persistant (void)
 
 //! Checks if the connection is ready to send.
 /*!
-m_ready_to_send is set false by the function send, and is set true again by the m_handle_send function.
+m_ready_to_send is set false by the function send, and is set true again by the 
+m_handle_send function.
 \sa send
 */
 bool

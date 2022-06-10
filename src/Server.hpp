@@ -11,9 +11,9 @@
 
 //! Server.hpp defines the base virtual methods for an asynchronus server.
 /*!
- The server is built  asynchronous, so execution of the server
- application is not suspended while it waits for a connection from a client.
- This class works with Boost.Asio.
+  The server is built  asynchronous, so execution of the server
+  application is not suspended while it waits for a connection from a client.
+  This class works with Boost.Asio.
 \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/overview/model/async_ops.html">Asynchronous Operations</a>
 */
 class Server
@@ -28,18 +28,18 @@ protected:
 
   //! This struct specifies the database's record.
   /*!
-     \param status_id record field.
-     \param end_of_life record field, default setting at false.
-     \param remote_ip record field: <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/ip__address.html">boost::asio::ip::address</a>
-     \param port record field.
-    */
+    \param status_id record field.
+    \param end_of_life record field, default setting at false.
+    \param remote_ip record field: <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/ip__address.html">boost::asio::ip::address</a>
+    \param port record field.
+  */
   typedef struct
   {
     std::shared_ptr<Connection> connection_ptr;
     /* TODO: check if implemented.
-       *   status_id  = 0 UNCATEGORIZED
-       *   status_id != 0 inheritance categorization
-       */
+     *   status_id  = 0 UNCATEGORIZED
+     *   status_id != 0 inheritance categorization
+    */
     int status_id = 0;
     bool end_of_life = false;
     boost::asio::ip::address remote_ip;
@@ -66,8 +66,8 @@ private:
 
 //! Class constructor.
 /*!
- \param executor boost::asio::io_context provides core I/O functionality.
- \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/io_context.html">boost::asio__io_context</a>
+  \param executor boost::asio::io_context provides core I/O functionality.
+  \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/io_context.html">boost::asio__io_context</a>
 */
 Server::Server (std::shared_ptr<boost::asio::io_context> executor_ptr)
     : m_io_context_ptr (executor_ptr)
@@ -136,7 +136,7 @@ Server::m_is_waiting_list_empty (void)
 
 //! Calls the poll function from Boost.Asio.
 /*!
- \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/io_context/poll.html">boost::asio::io_context::poll()</a> 
+  \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/io_context/poll.html">boost::asio::io_context::poll()</a> 
 */
 void
 Server::poll (void)

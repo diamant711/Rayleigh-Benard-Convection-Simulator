@@ -25,15 +25,27 @@ public:
   //! This struct represents the advancement of the simulation.
   typedef struct
   {
-    /*! This parameter represents if the simulation has ended without errors.  */
+    /*!
+      This parameter represents if the simulation has ended without errors.
+    */
     bool ended;
-    /*! This parameter represents the numer of times the calculation will be iterated. */
+    /*!
+      This parameter represents the numer of times the calculation will be
+      iterated.
+    */
     int total;
-    /*! This parameter represents the estimated time of arrival, i.e. the time left before the end of the calculation.  */
+    /*!
+      This parameter represents the estimated time of arrival, i.e. the time 
+      left before the end of the calculation.  
+    */
     int eta;
-    /*! This parameter represents the number of iterations performed per second. */
+    /*!
+      This parameter represents the number of iterations performed per second.
+    */
     float velocity;
-    /*! Current step of the simulation. */
+    /*!
+      Current step of the simulation.
+    */
     int step;
   } simulation_state_t;
 
@@ -64,16 +76,16 @@ private:
   const unsigned int m_nt = ((int)m_tf / m_dt) + 1;
   //! height of the box of the simulation.
   /*!
-     The ratio of m_H and m_L is an important physical parameter for the simulation,
-     which influences all other parameters, such as m_Pr, m_Re, m_Ra. 
-     Since it is not possible to forsee how changing this ratio will modify the other parameters,
-     the user must not have access to m_H and m_L.
-    */
+    The ratio of m_H and m_L is an important physical parameter for the 
+    simulation, which influences all other parameters, such as m_Pr, m_Re, m_Ra. 
+    Since it is not possible to forsee how changing this ratio will modify the 
+    other parameters, the user must not have access to m_H and m_L.
+  */
   const double m_H = 2;
   //! lenght of the box of the simulation.
   /*!
     \sa m_H
-    */
+  */
   const double m_L = 5;
   //! Width of space step (x axis) used for perturbative calculation.
   const double m_dx = m_L / (m_nx - 1);
@@ -81,18 +93,19 @@ private:
   const double m_dy = m_H / (m_ny - 1);
   //! Top wall temperature (lower).
   /*!
-     This simulation is set to work with liquid water, in the temperature range of 4°-99°C.
-    */
+    This simulation is set to work with liquid water, in the temperature range 
+    of 4°-99°C.
+  */
   /*!
-     To guarantee the validity of the perturbative calculation, there must be a 
-     maximum of 10° difference between m_TN and m_TS
-     \sa m_TS
-    */
+    To guarantee the validity of the perturbative calculation, there must be a 
+    maximum of 10° difference between m_TN and mTS           
+    \sa m_TS
+  */
   double m_TN;
   //! Bottom wall temperature (higher).
   /*!
     \sa m_TN
-    */
+  */
   double m_TS;
   //! Eigen matrix used for perturbative calculation.
   Eigen::Matrix<double, m_nx + 1, m_ny> m_u;
@@ -108,10 +121,10 @@ private:
   Eigen::Matrix<double, m_nx, m_ny> m_T;
   //! Reynolds number.
   /*!
-    Dimensioneless number that helps predict flow patterns in
-    different fluid flow situations. At low Reynolds numbers,
-    flows tends to be laminar, while at high Reynolds numbers flows tend to be turbulent. 
-    */
+    Dimensioneless number that helps predict flow patterns in different fluid 
+    flow situations. At low Reynolds numbers, flows tends to be laminar, while 
+    at high Reynolds numbers flows tend to be turbulent. 
+  */
   double m_Re;
   //! Prandtl number.
   /*!
@@ -120,25 +133,26 @@ private:
     the behavior, while for Pr > > 1 the momentum diffusivity dominates.
     */
   double m_Pr;
-  //! Péclet number
+  //! Péclet numbr
   /*!
     Dimensioneless number. In heat transfer studies, it is equivalent to
     the product of the Reynolds number and the Prandtl number.
-    */
+  */
   double m_Pe;
   //! Rayleigh number.
   /*!
-    Dimensionless number associated with buoyancy-driven flow, also known as natural
-    convection. It characterises the fluid's flow regime: below a critical
-    value, denotes laminar flow, and heat transfer is by conduction rather than convection.
-    Over the critical value, it denotes turbulent flow with convection cells.
-    */
+    Dimensionless number associated with buoyancy-driven flow, also known as
+    natural convection. It characterises the fluid's flow regime: below a 
+    critical value, denotes laminar flow, and heat transfer is by conduction 
+    rather than convection. Over the critical value, it denotes turbulent flow 
+    with convection cells.
+  */
   double m_Ra;
   //! Grashof number.
   /*!
-     Dimensionless number in fluid dynamics and heat transfer which
-     approximates the ratio of the buoyancy to viscous force acting on a fluid.
-    */
+    Dimensionless number in fluid dynamics and heat transfer which
+    approximates the ratio of the buoyancy to viscous force acting on a fluid.
+  */
   double m_Gr;
   //! Eigen matrix used for perturbative calculation.
   Eigen::Matrix<double, m_nx, m_ny> m_Tstar;
@@ -249,8 +263,8 @@ private:
   //! output .h file, in which all temperature datas of the simulation are saved.
   std::ofstream m_output_header_file;
   /*!
-     \sa simulation_state_t
-    */
+    \sa simulation_state_t
+  */
   simulation_state_t simulation_state;
 
   //functions
@@ -302,33 +316,11 @@ RayBenConvection::m_d_solve (
       U.solve (L.solve (mat (perm))));
 }
 
-//void RayBenConvection::m_Draw(double cold_temp, double hot_temp, const Eigen::Matrix<double, -1, -1> &T)
-//{
-//  const unsigned int nx = T.rows();
-//  const unsigned int ny = T.cols();
-//  ::BeginDrawing();
-//    ::ClearBackground((Color){ 255, 255, 255, 255});
-//    for(unsigned int i = 0; i < nx; ++i) {
-//      for(unsigned int k = 0; k < ny; ++k) {
-//        ::DrawRectangle((WINDOW_WIDTH/2 - nx*PIXEL/2) + i*PIXEL,
-//                       (WINDOW_HEIGHT/2 + ny*PIXEL/2) - k*PIXEL,
-//                       PIXEL, PIXEL, m_TtoC(cold_temp, hot_temp, T(i, k)));
-//      }
-//    }
-
-//    int posY = 5;
-//    for(unsigned int i = 0; i < jet.size(); ++i) {
-//      ::DrawRectangle(5, posY, 5, 1, jet[i]);
-//      posY += 1;
-//    }
-//  ::EndDrawing();
-//}
-
 //! This function returns the estimated time to the end of the simulation.
 /*!
- While performing the calculation, parameters of simulation_state_t are set.
- \param n_calls number of steps the simulation has run.
- \sa simulation_state_t.
+  While performing the calculation, parameters of simulation_state_t are set.
+  \param n_calls number of steps the simulation has run.
+  \sa simulation_state_t.
 */
 void
 RayBenConvection::m_ETA (int n_calls)
@@ -364,7 +356,7 @@ RayBenConvection::m_ETA (int n_calls)
 
 //! This function returns an Eigen sparse diagonal matrix.
 /*!
-\sa <a href="https://eigen.tuxfamily.org/dox/classEigen_1_1SparseMatrix.html">Eigen sparse matrix</a>
+  \sa <a href="https://eigen.tuxfamily.org/dox/classEigen_1_1SparseMatrix.html">Eigen sparse matrix</a>
 */
 template <typename Scalar>
 Eigen::Matrix<Scalar, -1, -1>
@@ -432,11 +424,11 @@ RayBenConvection::m_SparseToTriplet (Eigen::SparseMatrix<Scalar> &A)
 
 //! This function returns a permutation vector.
 /*!
- Calling p = symamd(S) returns the permutation vector p such that S(p,p)
- tends to have a sparser Cholesky factor than S.
- \param mat must be a symmetric positive definite Eigen matrix.
- \sa <a href="https://eigen.tuxfamily.org/dox/Eigen__Colamd_8h_source.html">Colamd.h</a>
- \sa <a href="https://octave.sourceforge.io/octave/function/symamd.html">Symamd octave function</a>
+  Calling p = symamd(S) returns the permutation vector p such that S(p,p)
+  tends to have a sparser Cholesky factor than S.
+  \param mat must be a symmetric positive definite Eigen matrix.
+  \sa <a href="https://eigen.tuxfamily.org/dox/Eigen__Colamd_8h_source.html">Colamd.h</a>
+  \sa <a href="https://octave.sourceforge.io/octave/function/symamd.html">Symamd octave function</a>
 */
 template <typename Scalar>
 Eigen::Matrix<int, 1, -1>
@@ -505,15 +497,16 @@ RayBenConvection::m_my_symamd (Eigen::Matrix<Scalar, -1, -1> &mat)
 
 //! This function resolves Partial Pivoting calculations with LU decomposition.
 /*!
- Calling this function will return an std vector of Eigen Matrices
- consisting of the two matrices L and U obtained during the decomposition.
- \sa <a href="https://eigen.tuxfamily.org/dox/classEigen_1_1PartialPivLU.html">Eigen Partial Pivoting (LU decomposition)</a>
+  Calling this function will return an std vector of Eigen Matrices
+  consisting of the two matrices L and U obtained during the decomposition.
+  \sa <a href="https://eigen.tuxfamily.org/dox/classEigen_1_1PartialPivLU.html">
+      Eigen Partial Pivoting (LU decomposition)</a>
 */
 /*!
- The input matrix A is decomposed as A = PLU where L is unit-lower-triangular,
- U is upper-triangular, and P is a permutation matrix.
- \param mat must be a square invertible matrix.
- \param ret_vett ret_vett[0] = PL matrix, ret_vett[1] = U matrix.
+  The input matrix A is decomposed as A = PLU where L is unit-lower-triangular,
+  U is upper-triangular, and P is a permutation matrix.
+  \param mat must be a square invertible matrix.
+  \param ret_vett ret_vett[0] = PL matrix, ret_vett[1] = U matrix.
 */
 void
 RayBenConvection::m_luP (Eigen::Matrix<double, -1, -1> &mat,
@@ -540,8 +533,8 @@ RayBenConvection::m_luP (Eigen::Matrix<double, -1, -1> &mat,
 
 //! This function writes in the output file the m_T(i, j) matrix.
 /*!
- The output is in C format.
- \sa write_current_data()
+  The output is in C format.
+  \sa write_current_data()
 */
 void
 RayBenConvection::m_write_current_frame ()
@@ -562,18 +555,19 @@ RayBenConvection::m_write_current_frame ()
 
 //! This function initialises the private members of the function from the users' input.
 /*!
- The parameter inserted by the user are thoughtfully checked to ensure the validity of the simulation.
- \param END_CICLE total numer of steps.
- \param cold_temp lower wall temperature.
- \sa m_TN
- \param hot_temp higher wall temperature.
- \sa m_TS
- \param Ray_numb Rayleigh number.
- \sa m_Ra
- \param Pr_numb Prandtl number.
- \sa m_Pr
- \param Re_numb Reynolds number.
- \sa m_Re
+  The parameter inserted by the user are thoughtfully checked to ensure the 
+  validity of the simulation.
+  \param END_CICLE total numer of steps.
+  \param cold_temp lower wall temperature.
+  \sa m_TN
+  \param hot_temp higher wall temperature.
+  \sa m_TS
+  \param Ray_numb Rayleigh number.
+  \sa m_Ra
+  \param Pr_numb Prandtl number.
+  \sa m_Pr
+  \param Re_numb Reynolds number.
+  \sa m_Re
 */
 int
 RayBenConvection::init (unsigned int END_CICLE, double cold_temp,
@@ -1142,10 +1136,11 @@ RayBenConvection::eval_next_frame ()
 
 //! This function writes on the output header file the values of the m_T matrix's elements computed during the simulation.
 /*!
-This public function creates the C format output. It is called once in every eval_next_frame iteration,
-and it checks if the simulation has reached its end. 
-\sa eval_next_frame()
-\sa m_write_current_frame()
+  This public function creates the C format output. It is called once in every 
+  eval_next_frame iteration, and it checks if the simulation has reached its 
+  end. 
+  \sa eval_next_frame()
+  \sa m_write_current_frame()
 */
 
 void
