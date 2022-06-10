@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-//    WebPage: a class that hold and the body of the http request as long as
-//             calculate the head of the request using the HTTP1.1 protocol
+//    WebPage: a class that has the body of the http request and
+//             fill the head of the request using the HTTP1.1 protocol
 //
 ///////////////////////////////////////////////////////////////////////////////
 //#############################################################################
