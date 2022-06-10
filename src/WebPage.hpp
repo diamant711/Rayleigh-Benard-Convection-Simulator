@@ -1,9 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//    WebPage: a class that has the body of the http request and
-//             fill the head of the request using the HTTP1.1 protocol
-//
-///////////////////////////////////////////////////////////////////////////////
 //#############################################################################
 //
 //    HTTP1.1 response section:
@@ -16,12 +10,7 @@
 //    4) body (the copy of the html file)
 //
 //#############################################################################
-/******************************************************************************
- *
- *    TODO:
- *      *      2) Ele's: fare assieme la descrizione della classe
- *
- *****************************************************************************/
+
 #ifndef WEBPAGE_HPP
 #define WEBPAGE_HPP
 
@@ -31,16 +20,22 @@
 #include <vector>
 
 #define HTTP_VERSION "HTTP/1.1"
-//!
+//! WebPage builds HTTP requests.
 /*!
+Taking an external file path, this class build the HTTP requests using HTTP1.1 protocol.
 */
 class WebPage
 {
 public:
-  //!
+  //! Represents the possible HTTP response status codes.
   typedef struct
   {
+    //! HTTP response status code.
+    /*!
+    This parameter indicates whether a specific HTTP request has been successfully completed.
+    */
     unsigned int status_number;
+    //! HTTP response status code. Specific status phrase.
     std::string status_phrase;
   } status_code_t;
 
@@ -78,9 +73,9 @@ private:
   void m_compose_response (void);
   std::string m_itos (int);
 };
-//!
+//! This function takes an integer as input and returns an std::string
 /*!
-
+\param n Integer number to be returned as std::string.
 */
 std::string
 WebPage::m_itos (int n)
@@ -92,16 +87,21 @@ WebPage::m_itos (int n)
   ret = buf;
   return ret;
 }
-//!
+//! Returns the private member m_http_response.
+/*!
+\sa m_http_response
+*/
 const std::string &
 WebPage::get_http_response (void) const
 {
   return m_http_response;
 }
-//TODO guardare assieme questa
-//!
+//! This function fills the http header.
 /*!
-
+After obtaining the file extension from m_get_extension_from_path, this function
+opens the input file and reads it. With the information extracted it composes the
+http header.
+\sa m_get_extension_from_path
 */
 bool
 WebPage::m_fill_http_header (void)
@@ -178,9 +178,13 @@ WebPage::m_fill_http_header (void)
       return false;
     }
 }
-//!
+//! This function composes the http response.
 /*!
-
+It checks if the function m_fill_http_header() returned true, and then
+it binds m_http_header and m_http_body_ptr.
+\sa m_fill_http_header
+\sa m_http_header
+\sa m_http_body_ptr
 */
 void
 WebPage::m_compose_response (void)
@@ -197,9 +201,9 @@ WebPage::m_compose_response (void)
                 << std::endl;
     }
 }
-//!
+//! This function returns the file extension from its path.
 /*!
-\param path
+\param path File path.
 */
 const std::string
 WebPage::m_get_extension_from_path (const std::string &path)
@@ -214,9 +218,9 @@ WebPage::m_get_extension_from_path (const std::string &path)
       return path.substr (start_index + 1, path.size () - start_index + 1);
     }
 }
-//!
+//! This function returns the file extension from its path.
 /*!
-\param path
+\param path File path.
 */
 const std::string
 WebPage::m_get_extension_from_path (const char *path)
@@ -225,16 +229,29 @@ WebPage::m_get_extension_from_path (const char *path)
   tmp = m_get_extension_from_path (tmp);
   return tmp;
 }
-//TODO guardare anche questa
 //! Class constructor.
+/*!
+This constructor saves the path information in its private members m_file_path and m_input_file
+and then it calls m_compose_response.
+\param path File path
+\sa m_compose_response
+\sa m_file_path
+\sa m_input_file
+*/
 WebPage::WebPage (const char *path) : m_file_path (path), m_input_file (path)
 {
   m_http_body_ptr.reset (new std::string (""));
   m_compose_response ();
 }
-
-//TODO guardare assieme questa funzione
 //! Class constructor.
+/*!
+This constructor saves the path information in its private members m_file_path and m_input_file
+and then it calls m_compose_response.
+\param path File path
+\sa m_compose_response
+\sa m_file_path
+\sa m_input_file
+*/
 WebPage::WebPage (const std::string &path)
     : m_file_path (path), m_input_file (path)
 {
