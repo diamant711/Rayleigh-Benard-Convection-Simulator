@@ -145,6 +145,8 @@ WebServer::WebServer (std::shared_ptr<boost::asio::io_context> executor_ptr,
       std::unique_ptr<WebPage> (new WebPage (path_to_Setup_page)));
   m_pages.push_back (
       std::unique_ptr<WebPage> (new WebPage (path_to_Process_page)));
+  m_pages.push_back (
+      std::unique_ptr<WebPage> (new WebPage ("img/favicon.ico")));
 }
 //! Class destructor.
 WebServer::~WebServer () {}
@@ -342,6 +344,11 @@ WebServer::serve_setup_page (void)
                                   m_pages.at (2)->get_http_response ());
                           m_get_connection_by_index (i)
                               .connection_ptr->send ();
+                          m_get_connection_by_index (i)
+                              .connection_ptr->load_data (
+                                  m_pages.at (4)->get_http_response ());
+                          m_get_connection_by_index (i)
+                              .connection_ptr->send ();
                           m_first_user_status = CGI;
                           return;
                         }
@@ -427,6 +434,11 @@ WebServer::serve_processing_page (void)
                                       m_pages.at (3)->get_http_response ());
                               m_get_connection_by_index (i)
                                   .connection_ptr->send ();
+                              m_get_connection_by_index (i)
+                                  .connection_ptr->load_data (
+                                      m_pages.at (4)->get_http_response ());
+                              m_get_connection_by_index (i)
+                                  .connection_ptr->send ();
                               m_start_websocket = true;
                               return;
                             }
@@ -493,8 +505,7 @@ WebServer::serve_output_page (void)
                               new WebPage ("cnt/raylib.js")));
                           m_pages.push_back (std::unique_ptr<WebPage> (
                               new WebPage ("cnt/raylib.wasm")));
-                          m_pages.push_back (std::unique_ptr<WebPage> (
-                              new WebPage ("img/favicon.ico")));
+
                           m_raylib_compiled = true;
                         }
                       if (m_get_connection_by_index (i)
@@ -514,7 +525,7 @@ WebServer::serve_output_page (void)
                                 case 'h': //html
                                   m_get_connection_by_index (i)
                                       .connection_ptr->load_data (
-                                          m_pages.at (4)
+                                          m_pages.at (5)
                                               ->get_http_response ());
                                   m_get_connection_by_index (i)
                                       .connection_ptr->send ();
@@ -524,7 +535,7 @@ WebServer::serve_output_page (void)
                                 case 'j': //js
                                   m_get_connection_by_index (i)
                                       .connection_ptr->load_data (
-                                          m_pages.at (5)
+                                          m_pages.at (6)
                                               ->get_http_response ());
                                   m_get_connection_by_index (i)
                                       .connection_ptr->send ();
@@ -534,7 +545,7 @@ WebServer::serve_output_page (void)
                                 case 'w': //wasm
                                   m_get_connection_by_index (i)
                                       .connection_ptr->load_data (
-                                          m_pages.at (6)
+                                          m_pages.at (7)
                                               ->get_http_response ());
                                   m_get_connection_by_index (i)
                                       .connection_ptr->send ();
@@ -545,7 +556,7 @@ WebServer::serve_output_page (void)
                                 case 'i': //ico
                                   m_get_connection_by_index (i)
                                       .connection_ptr->load_data (
-                                          m_pages.at (7)
+                                          m_pages.at (4)
                                               ->get_http_response ());
                                   m_get_connection_by_index (i)
                                       .connection_ptr->send ();
