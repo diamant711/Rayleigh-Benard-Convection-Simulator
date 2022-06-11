@@ -7,57 +7,50 @@
 #include "WebPage.hpp"
 #include "WebServer.hpp"
 
+void print_help_page(void);
+
 int
-main (int argc, char *argv[])
+main (int argc, char **argv)
 {
-  char portW[10] = "8080";
-  char portWS[10] = "8000";
+  const unsigned short port_len = 5;
+  const unsigned short port_min = 1;
+  const unsigned short port_max = 65535;
+  char portW[port_len] = "8080";
+  char portWS[port_len] = "8000";
+  char tmp[port_len];
   bool output_only = false;
-  switch (argc)
-    {
-    case 4:
-      if ((::atoi (argv[1]) >= 1) && (::atoi (argv[1]) <= 65535))
-        ::strncpy (portW, argv[1], 5);
-      else
-        std::cerr << "WARNING: main: invalid WebServer port (" << argv[1]
-                  << ") unsing defaults" << std::endl;
-      if ((::atoi (argv[2]) >= 1) && (::atoi (argv[2]) <= 65535))
-        ::strncpy (portWS, argv[2], 5);
-      else
-        std::cerr << "WARNING: main: invalid WebServerSocket port (" << argv[2]
-                  << ") unsing defaults" << std::endl;
-      if (::strcmp (argv[3], "--output_only") == 0)
-        output_only = true;
-      else
-        std::cerr << "WARNING: main: unrecognized option (" << argv[3] << ")"
-                  << std::endl;
-      break;
-    case 3:
-      if ((::atoi (argv[1]) >= 1) && (::atoi (argv[1]) <= 65535))
-        ::strncpy (portW, argv[1], 5);
-      else
-        std::cerr << "WARNING: main: invalid WebServer port (" << argv[1]
-                  << ") unsing defaults" << std::endl;
-      if ((::atoi (argv[2]) >= 1) && (::atoi (argv[2]) <= 65535))
-        ::strncpy (portWS, argv[2], 5);
-      else
-        std::cerr << "WARNING: main: invalid WebServerSocket port (" << argv[2]
-                  << ") unsing defaults" << std::endl;
-      break;
-    case 2:
-      std::cerr << "WARNING: main: usage: " << argv[0] << " " << argv[1]
-                << " [port websocketserver] [--output_only]" << std::endl
-                << "WARNING: main: Using 8000 for WebSocketServer"
-                << std::endl;
-      break;
-    case 1:
-      std::cerr << "WARNING: main: usage: " << argv[0]
-                << " [webserver port] [websocketserver port] [--output_only]"
-                << std::endl
-                << "WARNING: main: Using 8080 for WebServer and "
-                << "8000 for WebSocketServer" << std::endl;
-      break;
+  for(int i = 1; i < argc; ++i) {
+    if(argv[i][0] == '-') { 
+      switch(argv[i][1]) {
+        case 's':
+          ::strncpy(tmp, &argv[i][2], port_len);
+          if ((::atoi (tmp) >= port_min) && (::atoi (tmp) <= port_max)) {
+            ::strncpy(portWS, tmp, port_len);
+          }
+        break;
+        case 'w':
+          ::strncpy(tmp, &argv[i][2], port_len);
+          if ((::atoi (tmp) >= port_min) && (::atoi (tmp) <= port_max)) {
+            ::strncpy(portW, tmp, port_len);
+          }
+        break;
+        case 'o':
+          output_only = true;
+        break;
+        case 'h':
+          print_help_page();
+          return 0;
+        break;
+        default:
+          std::cerr << "WARNING: main: unrecognized option \'" << argv[i] 
+                    << "\'" << std::endl;
+        break;
+      }
+    } else {
+          std::cerr << "WARNING: main: unrecognized option \'" << argv[i] 
+                    << "\'" << std::endl;
     }
+  }
 
   RayBenConvection RayBenCon;
   RayBenConvection::simulation_state_t simulation_state;
@@ -66,6 +59,12 @@ main (int argc, char *argv[])
   WebServer webserver (io_context_ptr, ::atoi (portW), ::atoi (portWS),
                        "cnt/Error_page.html", "cnt/ServerFull_page.html",
                        "cnt/Setup_page.html", "cnt/Process_page.html");
+
+  std::cerr << "INFO: main: open this link \'http://localhost:";
+  if(!output_only)
+    std::cerr << portW << "\'" << std::endl;
+  else
+    std::cerr << portW << "/raylib.html\'" << std::endl;
 
   webserver.waiting_and_assign_first_user ();
 
@@ -111,4 +110,19 @@ main (int argc, char *argv[])
 
   std::cerr << "INFO: main: Program ended without errors" << std::endl;
   return 0;
+}
+
+void print_help_page(void) {
+  std::cout << "Rayleigh Benard Convection Simulator" << std::endl
+            << std::endl
+            << "usage: Rayleigh-Benard-Convection-Simulator [arguments]" 
+            << std::endl << std::endl
+            << "Arguments:" << std::endl
+            << "\t-w <PORT>\t select different port for the web server" << std::endl
+            << "\t-s <PORT>\t select different port for the websocket server" << std::endl
+            << "\t-o\t\t only output" << std::endl << std::endl
+            << "Note: if no arguments is provided the following call is performed" << std::endl
+            << "\tRayleigh-Benard-Convection-Simulator -w8080 -s8000" << std::endl
+            << std::endl;
+  return;
 }
