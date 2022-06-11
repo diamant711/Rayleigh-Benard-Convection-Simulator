@@ -9,7 +9,7 @@
 
 //! TCPServer.hpp defines a server using the TCP protocol.
 /*!
- This class is a derived class from base class Server in public mode.
+  This class is a derived class from base class Server in public mode.
 */
 class TCPServer : public Server
 {
@@ -22,8 +22,9 @@ private:
   //Variables
   //! The TCP acceptor type.
   /*!
-     \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/ip__tcp/acceptor.html">ip::tcp::acceptor</a>
-    */
+    \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/ip__tcp/acceptor.html">
+         ip::tcp::acceptor</a>
+  */
   boost::asio::ip::tcp::acceptor m_acceptor;
   //! Specifies the port number.
   int m_port;
@@ -35,8 +36,8 @@ private:
 
 //! Class constructor.
 /*!
- \param executor_ptr shared pointer to <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/io_context.html">boost::asio::io_context</a>
- \param port specifies the port number.
+  \param executor_ptr shared pointer to <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/io_context.html">boost::asio::io_context</a>
+  \param port specifies the port number.
 */
 TCPServer::TCPServer (std::shared_ptr<boost::asio::io_context> executor_ptr,
                       int port)
@@ -55,11 +56,13 @@ TCPServer::~TCPServer (void) {}
 
 //! This function handles the accept operation.
 /*!
- It reports if the async_accept event happened and if the new connection results
- plugged without errors.
- \param new_connection connection database record defined in Connection.hpp
- \param error <a href="https://www.boost.org/doc/libs/1_79_0/libs/system/doc/html/system.html">boost::system::error_code</a>
- \sa <a href="https://www.boost.org/doc/libs/1_79_0/boost/system/error_code.hpp">boost::system::error_code.hpp</a>
+  It reports if the async_accept event happened and if the new connection results
+  plugged without errors.
+  \param new_connection connection database record defined in Connection.hpp
+  \param error <a href="https://www.boost.org/doc/libs/1_79_0/libs/system/doc/html/system.html">
+                boost::system::error_code</a>
+  \sa <a href="https://www.boost.org/doc/libs/1_79_0/boost/system/error_code.hpp">
+       boost::system::error_code.hpp</a>
 */
 void
 TCPServer::m_handle_accept (m_connection_database_record_t new_connection,
@@ -83,9 +86,10 @@ TCPServer::m_handle_accept (m_connection_database_record_t new_connection,
 }
 
 /*!
- This function is implemented with
- <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/basic_socket_acceptor/async_accept.html">async_accept</a> 
- ip::tcp::acceptor member function.
+  This function is implemented with
+  <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/basic_socket_acceptor/async_accept.html">
+           async_accept</a> 
+  ip::tcp::acceptor member function.
 */
 void
 TCPServer::m_start_accept (void)
