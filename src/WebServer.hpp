@@ -507,13 +507,11 @@ WebServer::serve_output_page (void)
                             {
                               std::cerr
                                   << "ERROR: WebServer: serve_output_page: "
-                                  << "failed raylib for web compilation. "
-                                  << "To resolve and see output execute 'make "
-                                     "purge && "
-                                  << "make && "
-                                     "Rayleigh-Benard-Convection-Simulator "
-                                     "8080 "
-                                  << "8000 --output_only'" << std::endl;
+                                     "failed raylib for web compilation. "
+                                     "To resolve and see output execute 'make "
+                                     "purge && make && "
+                                     "./Rayleigh-Benard-Convection-Simulator "
+                                     "-w8080 -s8000 -o'" << std::endl;
                               ::exit (1);
                             }
                           m_pages.push_back (std::unique_ptr<WebPage> (
