@@ -150,13 +150,16 @@ WebServer::WebServer (std::shared_ptr<boost::asio::io_context> executor_ptr,
 }
 //! Class destructor.
 WebServer::~WebServer () {}
-
+//! 
 WebServer::html_form_input_t
 WebServer::get_user_input (void)
 {
   return m_internal_html_form_input;
 }
-
+//!
+/*!
+\param http_request
+*/
 void
 WebServer::m_cgi_parser (const std::string &http_request)
 {
@@ -261,7 +264,13 @@ WebServer::m_cgi_parser (const std::string &http_request)
             << std::endl;
   return;
 }
-
+//! This function updates the simulation statse.
+/*!
+\param e Estimated time of awaiting untill end of the simulation
+\param v Velocity of the simulation (cycles/s)
+\param t Total number of steps
+\param s Current step of the simulation
+*/
 void
 WebServer::update_simulation_state (int e, float v, int t, int s)
 {
@@ -270,13 +279,16 @@ WebServer::update_simulation_state (int e, float v, int t, int s)
   m_actual_total = t;
   m_actual_step = s;
 }
-
+//! This function
+/*!
+\param input
+*/
 char
 WebServer::m_extract_raylib_request (std::string input)
 {
   return input[input.find ('.') + 1];
 }
-
+//! This function closes an unused connection.
 void
 WebServer::m_close_unused_connection (void)
 {
@@ -287,7 +299,12 @@ WebServer::m_close_unused_connection (void)
         && m_get_connection_by_index (i).connection_ptr->is_ready_to_send ())
       m_delete_connection_by_index (i);
 }
-
+//! This function assigns a first user.
+/*!
+It performs two tests before assigning the first user.
+It checks if there are waiting connections in the waiting list and
+if there is already a first user connected.
+*/
 void
 WebServer::waiting_and_assign_first_user (void)
 {
@@ -313,7 +330,7 @@ WebServer::waiting_and_assign_first_user (void)
         }
     }
 }
-
+//! This function 
 void
 WebServer::serve_setup_page (void)
 {
