@@ -30,10 +30,14 @@
 #include "TCPServer.hpp"
 #include "WebPage.hpp"
 #include "WebSocketServer.hpp"
+//!
+/*!
 
+*/
 class WebServer : public TCPServer
 {
 public:
+  //!
   typedef enum
   {
     NO_FIRST_USER,
@@ -43,6 +47,15 @@ public:
     PROCESSING,
     OUTPUT
   } first_user_status_t;
+  //!
+  /*!
+  \param steps
+  \param cwt
+  \param hwt
+  \param Ray
+  \param Pr
+  \param Rey
+  */
   typedef struct
   {
     unsigned int steps;
@@ -72,24 +85,49 @@ private:
   void m_cgi_parser (const std::string &);
   char m_extract_raylib_request (std::string);
   //Variables
+  //! Unique pointer at WebSocketServer
   std::unique_ptr<WebSocketServer> m_websocketserver_ptr;
+  //!
   bool m_start_websocket = false;
+  //! 
   int m_actual_eta = -1;
+  //!
   float m_actual_velocity = -1;
+  //!
   int m_actual_total = -1;
+  //!
   int m_actual_step = -1;
+  //!
   const unsigned int m_n_input_parameter = 6;
+  //!
   WebServer::html_form_input_t m_internal_html_form_input;
+  //!
   std::vector<std::unique_ptr<WebPage> > m_pages;
+  //!
   bool m_was_first_user_connected = false;
+  //!
   boost::asio::ip::address m_first_user_address;
+  //!
   first_user_status_t m_first_user_status = NO_FIRST_USER;
+  //!
   bool m_cgi_parameter_available = false;
+  //!
   bool m_raylib_compiled = false;
+  //!
   bool m_output_pages_sent[3] = { false, false, false };
+  //!
   unsigned short m_wasm_req_count = 0;
 };
-
+//! Class constructor.
+/*!
+\param executor_ptr
+\param portW WebPage port number.
+\param portWS WebSocketServer port number.
+\param path_to_Error_page
+\param path_to_ServerFull_page
+\param path_to_Setup_page
+\param path_to_Process_page
+*/
 WebServer::WebServer (std::shared_ptr<boost::asio::io_context> executor_ptr,
                       int portW, int portWS, std::string path_to_Error_page,
                       std::string path_to_ServerFull_page,
@@ -108,7 +146,7 @@ WebServer::WebServer (std::shared_ptr<boost::asio::io_context> executor_ptr,
   m_pages.push_back (
       std::unique_ptr<WebPage> (new WebPage (path_to_Process_page)));
 }
-
+//! Class destructor.
 WebServer::~WebServer () {}
 
 WebServer::html_form_input_t
