@@ -342,8 +342,6 @@ WebSocketServer::m_frame_builder (void)
   frame.push_back (mask[2]);
   frame.push_back (mask[3]);
   /* payload eta */
-  //dove c'è la FF tengo i bit orignali il resto viene settato a 0 e poi lo
-  //sposto di x posizioni a destra per farlo diventare char (lavoro in bit >>)
   payload.push_back ((m_actual_eta & 0xFF000000) >> 24);
   payload.push_back ((m_actual_eta & 0x00FF0000) >> 16);
   payload.push_back ((m_actual_eta & 0x0000FF00) >> 8);
@@ -365,8 +363,7 @@ WebSocketServer::m_frame_builder (void)
   payload.push_back ((m_actual_step & 0x000000FF) >> 0);
   for (size_t i = 0; i < payload.size (); ++i)
     {
-      frame.push_back (payload.at (i)
-                       ^ mask[i % 4]); //apice è l'xor mask è vettore.
+      frame.push_back (payload.at (i) ^ mask[i % 4]);
     }
   return frame;
 }
