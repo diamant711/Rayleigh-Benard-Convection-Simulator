@@ -43,6 +43,7 @@ EMSDK_SDK_ARCHIVER = $(REPOS_DIR)/emsdk/upstream/emscripten/emar
 # Recipes
 all: env doxydoc $(X_NAME) ;
 	@echo "Build done!"
+	@./$(X_NAME) -h
 
 $(X_NAME): $(OBJECTS)
 	@echo "LD      $@"
