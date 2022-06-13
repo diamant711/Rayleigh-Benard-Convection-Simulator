@@ -49,12 +49,12 @@ public:
   } first_user_status_t;
   //!
   /*!
-  \param steps
-  \param cwt
-  \param hwt
-  \param Ray
-  \param Pr
-  \param Rey
+  \param steps total number of steps
+  \param cwt cold wall temperature
+  \param hwt hot wall temperature
+  \param Ray Rayleigh number
+  \param Pr Prandtl number
+  \param Rey Reynolds number
   */
   typedef struct
   {
@@ -89,23 +89,26 @@ private:
   std::unique_ptr<WebSocketServer> m_websocketserver_ptr;
   //!
   bool m_start_websocket = false;
-  //! 
+  //! Estimated time of awaiting until the end of the simulation.
   int m_actual_eta = -1;
-  //!
+  //! Current velocity of the simulation in cycles/second.
   float m_actual_velocity = -1;
-  //!
+  //! Total number of steps of the simulation.
   int m_actual_total = -1;
-  //!
+  //! Current step of the simulation.
   int m_actual_step = -1;
-  //!
+  //! Number of input parameters.
   const unsigned int m_n_input_parameter = 6;
   //!
   WebServer::html_form_input_t m_internal_html_form_input;
-  //!
+  //! std vector of std unique pointers to WebPage.
   std::vector<std::unique_ptr<WebPage> > m_pages;
-  //!
+  //! It represents if there ever was a first user connected.
   bool m_was_first_user_connected = false;
-  //!
+  //! It represents the first user's address.
+  /*!
+  \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/ip__address.html">boost::asio::ip::address</a>
+  */
   boost::asio::ip::address m_first_user_address;
   //!
   first_user_status_t m_first_user_status = NO_FIRST_USER;
