@@ -279,7 +279,7 @@ WebServer::update_simulation_state (int e, float v, int t, int s)
 char
 WebServer::m_extract_raylib_request (std::string input)
 {
-  return input.at(input.find ('.') + 1);
+  return input.at (input.find ('.') + 1);
 }
 //! This function closes an unused connection.
 void
@@ -352,12 +352,14 @@ WebServer::serve_setup_page (void)
                                     << "SETUP stage" << std::endl;
                           m_get_connection_by_index (i)
                               .connection_ptr->load_data (
-                                  m_pages.at (2)->get_http_response ());   //setup page
+                                  m_pages.at (2)
+                                      ->get_http_response ()); //setup page
                           m_get_connection_by_index (i)
                               .connection_ptr->send ();
                           m_get_connection_by_index (i)
                               .connection_ptr->load_data (
-                                  m_pages.at (4)->get_http_response ());   //favicon
+                                  m_pages.at (4)
+                                      ->get_http_response ()); //favicon
                           m_get_connection_by_index (i)
                               .connection_ptr->send ();
                           m_first_user_status = CGI;
@@ -400,7 +402,7 @@ WebServer::read_cgi_input (void)
                               .connection_ptr->receive ();
                           m_cgi_parser (m_get_connection_by_index (i)
                                             .connection_ptr->unload_data ()
-                                            .get ());   //dereferenzia
+                                            .get ()); //dereferenzia
                           if (m_cgi_parameter_available)
                             {
                               m_first_user_status = PROCESSING;
@@ -437,7 +439,8 @@ WebServer::serve_processing_page (void)
                       if (m_get_connection_by_index (i)
                               .connection_ptr->is_ready_to_send ())
                         {
-                          if (m_start_websocket == false) //To enter only once in this cycle.
+                          if (m_start_websocket
+                              == false) //To enter only once in this cycle.
                             {
                               std::cerr << "INFO: WebServer: respond_to_all: "
                                            "first user at "
@@ -545,7 +548,8 @@ WebServer::serve_output_page (void)
                                               ->get_http_response ());
                                   m_get_connection_by_index (i)
                                       .connection_ptr->send ();
-                                  m_output_pages_sent[0] = true; //To check if all pages have been sent
+                                  m_output_pages_sent[0]
+                                      = true; //To check if all pages have been sent
                                   break;
 
                                 case 'j': //js
@@ -592,7 +596,8 @@ WebServer::serve_output_page (void)
                 }
             }
         }
-      else if ((m_wasm_req_count == 2) && m_output_pages_sent[0] //Implementation detail.
+      else if ((m_wasm_req_count == 2)
+               && m_output_pages_sent[0] //Implementation detail.
                && m_output_pages_sent[1] && m_output_pages_sent[2])
         {
           return;

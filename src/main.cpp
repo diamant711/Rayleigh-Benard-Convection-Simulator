@@ -119,19 +119,26 @@ main (int argc, char **argv)
   return 0;
 }
 
-void print_help_page(void) {
-  std::cout << "Rayleigh Benard Convection Simulator" << std::endl
-            << std::endl
-            << "usage: Rayleigh-Benard-Convection-Simulator [arguments]"
-            << std::endl << std::endl
-            << "Arguments:" << std::endl
-            << "\t-w <PORT>\t select different port for the web server" << std::endl
-            << "\t-s <PORT>\t select different port for the websocket server" << std::endl
-            << "\t-h\t\t show this help page" << std::endl
-            << "\t-o\t\t permorm only the output phase" << std::endl << std::endl
-            << "Note: if no arguments are provided the following call is performed" << std::endl
-            << "\tRayleigh-Benard-Convection-Simulator -w8080 -s8000" << std::endl << std::endl
-            << "Documentation at: doc/html/index.html" << std::endl
-            << std::endl;
+void
+print_help_page (void)
+{
+  std::cout
+      << "Rayleigh Benard Convection Simulator" << std::endl
+      << std::endl
+      << "usage: Rayleigh-Benard-Convection-Simulator [arguments]" << std::endl
+      << std::endl
+      << "Arguments:" << std::endl
+      << "\t-w <PORT>\t select different port for the web server" << std::endl
+      << "\t-s <PORT>\t select different port for the websocket server"
+      << std::endl
+      << "\t-h\t\t show this help page" << std::endl
+      << "\t-o\t\t permorm only the output phase" << std::endl
+      << std::endl
+      << "Note: if no arguments are provided the following call is performed"
+      << std::endl
+      << "\tRayleigh-Benard-Convection-Simulator -w8080 -s8000" << std::endl
+      << std::endl
+      << "Documentation at: doc/html/index.html" << std::endl
+      << std::endl;
   return;
 }
