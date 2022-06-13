@@ -328,10 +328,8 @@ WebServer::waiting_and_assign_first_user (void)
 void
 WebServer::serve_setup_page (void)
 {
-  while (1)
-    {
-      m_get_executor ().poll ();
-      m_close_unused_connection ();
+  m_get_executor ().poll ();
+  m_close_unused_connection ();
       if (!m_is_waiting_list_empty ())
         {
           //number of connections plugged, private member of Server
@@ -357,20 +355,24 @@ WebServer::serve_setup_page (void)
                                       ->get_http_response ()); //setup page
                           m_get_connection_by_index (i)
                               .connection_ptr->send ();
+                          std::string tmp (
+                              m_pages.at (4)->get_http_response ());
+                          std::cout << "GCI REQ" << std::endl
+                                    << tmp << std::endl;
                           m_get_connection_by_index (i)
-                              .connection_ptr->load_data (
-                                  m_pages.at (4)
-                                      ->get_http_response ()); //favicon
+                              .connection_ptr->load_data (tmp); //favicon
                           m_get_connection_by_index (i)
                               .connection_ptr->send ();
+                          while(m_get_connection_by_index (i)
+                              .connection_ptr->is_ready_to_send ()) {
+                            m_get_executor ().poll ();
+                          }
                           m_first_user_status = CGI;
-                          return;
                         }
                     }
                 }
             }
         }
-    }
 }
 
 //! This function reads the cgi input.
