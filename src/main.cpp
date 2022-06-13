@@ -7,7 +7,7 @@
 #include "WebPage.hpp"
 #include "WebServer.hpp"
 
-void print_help_page(void);
+void print_help_page (void);
 
 int
 main (int argc, char **argv)
@@ -19,38 +19,45 @@ main (int argc, char **argv)
   char portWS[port_len] = "8000";
   char tmp[port_len];
   bool output_only = false;
-  for(int i = 1; i < argc; ++i) {
-    if(argv[i][0] == '-') { 
-      switch(argv[i][1]) {
-        case 's':
-          ::strncpy(tmp, &argv[i][2], port_len);
-          if ((::atoi (tmp) >= port_min) && (::atoi (tmp) <= port_max)) {
-            ::strncpy(portWS, tmp, port_len);
-          }
-        break;
-        case 'w':
-          ::strncpy(tmp, &argv[i][2], port_len);
-          if ((::atoi (tmp) >= port_min) && (::atoi (tmp) <= port_max)) {
-            ::strncpy(portW, tmp, port_len);
-          }
-        break;
-        case 'o':
-          output_only = true;
-        break;
-        case 'h':
-          print_help_page();
-          return 0;
-        break;
-        default:
-          std::cerr << "WARNING: main: unrecognized option \'" << argv[i] 
+  for (int i = 1; i < argc; ++i)
+    {
+      if (argv[i][0] == '-')
+        {
+          switch (argv[i][1])
+            {
+            case 's':
+              ::strncpy (tmp, &argv[i][2], port_len);
+              if ((::atoi (tmp) >= port_min) && (::atoi (tmp) <= port_max))
+                {
+                  ::strncpy (portWS, tmp, port_len);
+                }
+              break;
+            case 'w':
+              ::strncpy (tmp, &argv[i][2], port_len);
+              if ((::atoi (tmp) >= port_min) && (::atoi (tmp) <= port_max))
+                {
+                  ::strncpy (portW, tmp, port_len);
+                }
+              break;
+            case 'o':
+              output_only = true;
+              break;
+            case 'h':
+              print_help_page ();
+              return 0;
+              break;
+            default:
+              std::cerr << "WARNING: main: unrecognized option \'" << argv[i]
+                        << "\'" << std::endl;
+              break;
+            }
+        }
+      else
+        {
+          std::cerr << "WARNING: main: unrecognized option \'" << argv[i]
                     << "\'" << std::endl;
-        break;
-      }
-    } else {
-          std::cerr << "WARNING: main: unrecognized option \'" << argv[i] 
-                    << "\'" << std::endl;
+        }
     }
-  }
 
   RayBenConvection RayBenCon;
   RayBenConvection::simulation_state_t simulation_state;
@@ -61,7 +68,7 @@ main (int argc, char **argv)
                        "cnt/Setup_page.html", "cnt/Process_page.html");
 
   std::cerr << "INFO: main: open this link \'http://localhost:";
-  if(!output_only)
+  if (!output_only)
     std::cerr << portW << "\'" << std::endl;
   else
     std::cerr << portW << "/raylib.html\'" << std::endl;
@@ -112,18 +119,24 @@ main (int argc, char **argv)
   return 0;
 }
 
-void print_help_page(void) {
-  std::cout << "Rayleigh Benard Convection Simulator" << std::endl
-            << std::endl
-            << "usage: Rayleigh-Benard-Convection-Simulator [arguments]" 
-            << std::endl << std::endl
-            << "Arguments:" << std::endl
-            << "\t-w <PORT>\t select different port for the web server" << std::endl
-            << "\t-s <PORT>\t select different port for the websocket server" << std::endl
-            << "\t-h\t\t show this help page" << std::endl
-            << "\t-o\t\t permorm only the output phase" << std::endl << std::endl
-            << "Note: if no arguments are provided the following call is performed" << std::endl
-            << "\tRayleigh-Benard-Convection-Simulator -w8080 -s8000" << std::endl
-            << std::endl;
+void
+print_help_page (void)
+{
+  std::cout
+      << "Rayleigh Benard Convection Simulator" << std::endl
+      << std::endl
+      << "usage: Rayleigh-Benard-Convection-Simulator [arguments]" << std::endl
+      << std::endl
+      << "Arguments:" << std::endl
+      << "\t-w <PORT>\t select different port for the web server" << std::endl
+      << "\t-s <PORT>\t select different port for the websocket server"
+      << std::endl
+      << "\t-h\t\t show this help page" << std::endl
+      << "\t-o\t\t permorm only the output phase" << std::endl
+      << std::endl
+      << "Note: if no arguments are provided the following call is performed"
+      << std::endl
+      << "\tRayleigh-Benard-Convection-Simulator -w8080 -s8000" << std::endl
+      << std::endl;
   return;
 }

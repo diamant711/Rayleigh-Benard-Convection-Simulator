@@ -153,7 +153,7 @@ WebServer::WebServer (std::shared_ptr<boost::asio::io_context> executor_ptr,
 }
 //! Class destructor.
 WebServer::~WebServer () {}
-//! 
+//!
 WebServer::html_form_input_t
 WebServer::get_user_input (void)
 {
@@ -333,7 +333,7 @@ WebServer::waiting_and_assign_first_user (void)
         }
     }
 }
-//! This function 
+//! This function
 void
 WebServer::serve_setup_page (void)
 {
@@ -514,7 +514,8 @@ WebServer::serve_output_page (void)
                                      "To resolve and see output execute 'make "
                                      "purge && make && "
                                      "./Rayleigh-Benard-Convection-Simulator "
-                                     "-w8080 -s8000 -o'" << std::endl;
+                                     "-w8080 -s8000 -o'"
+                                  << std::endl;
                               ::exit (1);
                             }
                           m_pages.push_back (std::unique_ptr<WebPage> (

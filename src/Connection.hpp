@@ -78,9 +78,7 @@ Connection::Connection (boost::asio::io_context &executor)
 }
 
 //! Class destructor.
-Connection::~Connection (void)
-{
-}
+Connection::~Connection (void) {}
 
 //! Completion handler, it is called when the send completes.
 /*!
