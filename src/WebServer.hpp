@@ -511,7 +511,8 @@ WebServer::serve_output_page (void)
                                      "To resolve and see output execute 'make "
                                      "purge && make && "
                                      "./Rayleigh-Benard-Convection-Simulator "
-                                     "-w8080 -s8000 -o'" << std::endl;
+                                     "-w8080 -s8000 -o'"
+                                  << std::endl;
                               ::exit (1);
                             }
                           m_pages.push_back (std::unique_ptr<WebPage> (
