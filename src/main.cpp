@@ -123,7 +123,8 @@ void print_help_page(void) {
             << "\t-h\t\t show this help page" << std::endl
             << "\t-o\t\t permorm only the output phase" << std::endl << std::endl
             << "Note: if no arguments are provided the following call is performed" << std::endl
-            << "\tRayleigh-Benard-Convection-Simulator -w8080 -s8000" << std::endl
+            << "\tRayleigh-Benard-Convection-Simulator -w8080 -s8000" << std::endl << std::endl
+            << "Documentation at: doc/html/index.html" << std::endl
             << std::endl;
   return;
 }

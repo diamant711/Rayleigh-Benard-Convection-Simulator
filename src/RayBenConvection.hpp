@@ -36,7 +36,7 @@ public:
     int total;
     /*!
       This parameter represents the estimated time of arrival, i.e. the time 
-      left before the end of the calculation.  
+      left before the end of the calculation.
     */
     int eta;
     /*!

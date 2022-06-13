@@ -1,21 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  WebServer.hpp is an asyncronus server that
-//  serve web content
-//
-///////////////////////////////////////////////////////////////////////////////
-/******************************************************************************
- *
- * m_pages fixed indexing:
- *  0 - Error page
- *  1 - ServerFull page
- *  2 - Setup page
- *  3 - Process page
- *  4 - raylib.html
- *  5 - raylib.js
- *  6 - raylib.wasm
- *
- *****************************************************************************/
 #ifndef WEBSERVER_HPP
 #define WEBSERVER_HPP
 
@@ -30,14 +12,15 @@
 #include "TCPServer.hpp"
 #include "WebPage.hpp"
 #include "WebSocketServer.hpp"
-//!
-/*!
 
+//! WebServer.hpp is an asyncrhonous server that serve web content.
+/*!
+WebServer is an asynchronous server that works with TCP protocol.
 */
 class WebServer : public TCPServer
 {
 public:
-  //!
+  //! This enum holds the possible values for the first_user_status_t.
   typedef enum
   {
     NO_FIRST_USER,
@@ -47,22 +30,20 @@ public:
     PROCESSING,
     OUTPUT
   } first_user_status_t;
-  //!
-  /*!
-  \param steps total number of steps
-  \param cwt cold wall temperature
-  \param hwt hot wall temperature
-  \param Ray Rayleigh number
-  \param Pr Prandtl number
-  \param Rey Reynolds number
-  */
+  //! This struct holds the parameters extracted from the html form.
   typedef struct
   {
+    /*! total number of steps */
     unsigned int steps;
+    /*! cold wall temperature */
     double cwt;
+    /*! hot wall temperature */
     double hwt;
+    /*! Rayleigh number */
     double Ray;
+    /*! Pr Prandtl number */
     double Pr;
+    /*! Reynolds number */
     double Rey;
   } html_form_input_t;
   WebServer (std::shared_ptr<boost::asio::io_context>, int, int, std::string,
@@ -81,13 +62,12 @@ public:
 private:
   //Functions
   void m_close_unused_connection (void);
-  WebPage &m_generate_Output_page (void);
   void m_cgi_parser (const std::string &);
   char m_extract_raylib_request (std::string);
   //Variables
   //! Unique pointer at WebSocketServer
   std::unique_ptr<WebSocketServer> m_websocketserver_ptr;
-  //!
+  //! Implementation detail.
   bool m_start_websocket = false;
   //! Estimated time of awaiting until the end of the simulation.
   int m_actual_eta = -1;
@@ -99,9 +79,19 @@ private:
   int m_actual_step = -1;
   //! Number of input parameters.
   const unsigned int m_n_input_parameter = 6;
-  //!
+  //! \sa html_form_input_t
   WebServer::html_form_input_t m_internal_html_form_input;
   //! std vector of std unique pointers to WebPage.
+  /*!
+ m_pages indexing:
+  4  *  0 - Error page
+  5  *  1 - ServerFull page
+  6  *  2 - Setup page
+  7  *  3 - Process page
+  8  *  4 - raylib.html
+  9  *  5 - raylib.js
+ 10  *  6 - raylib.wasm
+  */
   std::vector<std::unique_ptr<WebPage> > m_pages;
   //! It represents if there ever was a first user connected.
   bool m_was_first_user_connected = false;
@@ -110,15 +100,15 @@ private:
   \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/ip__address.html">boost::asio::ip::address</a>
   */
   boost::asio::ip::address m_first_user_address;
-  //!
+  //! It represents the first user status.
   first_user_status_t m_first_user_status = NO_FIRST_USER;
-  //!
+  //! It represents if the cgi have been correctly read.
   bool m_cgi_parameter_available = false;
-  //!
+  //! It represents if raylib has been compiled.
   bool m_raylib_compiled = false;
-  //!
+  //! It represents if all the three pages have been correctly sent.
   bool m_output_pages_sent[3] = { false, false, false };
-  //!
+  //! Implementation detail.
   unsigned short m_wasm_req_count = 0;
 };
 //! Class constructor.
@@ -153,20 +143,20 @@ WebServer::WebServer (std::shared_ptr<boost::asio::io_context> executor_ptr,
 }
 //! Class destructor.
 WebServer::~WebServer () {}
-//! 
+//! This function returns the user's input.
 WebServer::html_form_input_t
 WebServer::get_user_input (void)
 {
   return m_internal_html_form_input;
 }
-//!
+//! This function reads the CGI string and extracts the user's input parameters.
 /*!
-\param http_request
+cgi example line: GET /?steps=3000&cwt=25&hwt=35&Ray=100&Pr=7&Rey=100 HTTP/1.1
+\param http_request It contains the CGI string.
 */
 void
 WebServer::m_cgi_parser (const std::string &http_request)
 {
-  // GET /?steps=3000&cwt=25&hwt=35&Ray=100&Pr=7&Rey=100 HTTP/1.1
   std::stringstream ss (http_request);
   std::string tmp_s;
   std::cerr << "INFO: WebServer: m_cgi_parser: Start CGI analysis..."
@@ -267,7 +257,7 @@ WebServer::m_cgi_parser (const std::string &http_request)
             << std::endl;
   return;
 }
-//! This function updates the simulation statse.
+//! This function updates the simulation state.
 /*!
 \param e Estimated time of awaiting untill end of the simulation
 \param v Velocity of the simulation (cycles/s)
@@ -282,14 +272,14 @@ WebServer::update_simulation_state (int e, float v, int t, int s)
   m_actual_total = t;
   m_actual_step = s;
 }
-//! This function
+//! This function extracts the fist letter of the extension of the requested file from the http request.
 /*!
-\param input
+\param input http_request
 */
 char
 WebServer::m_extract_raylib_request (std::string input)
 {
-  return input[input.find ('.') + 1];
+  return input.at(input.find ('.') + 1);
 }
 //! This function closes an unused connection.
 void
@@ -333,7 +323,7 @@ WebServer::waiting_and_assign_first_user (void)
         }
     }
 }
-//! This function 
+//! This function serves the user the setup page.
 void
 WebServer::serve_setup_page (void)
 {
@@ -343,6 +333,7 @@ WebServer::serve_setup_page (void)
       m_close_unused_connection ();
       if (!m_is_waiting_list_empty ())
         {
+          //number of connections plugged, private member of Server
           for (size_t i = 0; i < m_get_plugged_connection (); ++i)
             {
               if (m_get_connection_by_index (i)
@@ -361,12 +352,12 @@ WebServer::serve_setup_page (void)
                                     << "SETUP stage" << std::endl;
                           m_get_connection_by_index (i)
                               .connection_ptr->load_data (
-                                  m_pages.at (2)->get_http_response ());
+                                  m_pages.at (2)->get_http_response ());   //setup page
                           m_get_connection_by_index (i)
                               .connection_ptr->send ();
                           m_get_connection_by_index (i)
                               .connection_ptr->load_data (
-                                  m_pages.at (4)->get_http_response ());
+                                  m_pages.at (4)->get_http_response ());   //favicon
                           m_get_connection_by_index (i)
                               .connection_ptr->send ();
                           m_first_user_status = CGI;
@@ -379,6 +370,7 @@ WebServer::serve_setup_page (void)
     }
 }
 
+//! This function reads the cgi input.
 void
 WebServer::read_cgi_input (void)
 {
@@ -408,7 +400,7 @@ WebServer::read_cgi_input (void)
                               .connection_ptr->receive ();
                           m_cgi_parser (m_get_connection_by_index (i)
                                             .connection_ptr->unload_data ()
-                                            .get ());
+                                            .get ());   //dereferenzia
                           if (m_cgi_parameter_available)
                             {
                               m_first_user_status = PROCESSING;
@@ -422,6 +414,7 @@ WebServer::read_cgi_input (void)
     }
 }
 
+//! This function serves the user the processing page.
 void
 WebServer::serve_processing_page (void)
 {
@@ -444,7 +437,7 @@ WebServer::serve_processing_page (void)
                       if (m_get_connection_by_index (i)
                               .connection_ptr->is_ready_to_send ())
                         {
-                          if (m_start_websocket == false)
+                          if (m_start_websocket == false) //To enter only once in this cycle.
                             {
                               std::cerr << "INFO: WebServer: respond_to_all: "
                                            "first user at "
@@ -470,6 +463,10 @@ WebServer::serve_processing_page (void)
     }
 }
 
+//! This function updates the processing page.
+/*!
+\sa update_simulation_data
+*/
 void
 WebServer::update_processing_page (void)
 {
@@ -481,7 +478,7 @@ WebServer::update_processing_page (void)
       m_first_user_status = m_start_websocket ? PROCESSING : OUTPUT;
     }
 }
-
+//! This function serves the user the output page.
 void
 WebServer::serve_output_page (void)
 {
@@ -506,7 +503,7 @@ WebServer::serve_output_page (void)
                           std::cerr << "INFO: WebServer: respond_to_all: "
                                        "first user at "
                                     << "OUTPUT stage" << std::endl;
-                          if (::system ("make raylib") != 0)
+                          if (::system ("make raylib") != 0) //Shell operation
                             {
                               std::cerr
                                   << "ERROR: WebServer: serve_output_page: "
@@ -547,7 +544,7 @@ WebServer::serve_output_page (void)
                                               ->get_http_response ());
                                   m_get_connection_by_index (i)
                                       .connection_ptr->send ();
-                                  m_output_pages_sent[0] = true;
+                                  m_output_pages_sent[0] = true; //To check if all pages have been sent
                                   break;
 
                                 case 'j': //js
@@ -594,7 +591,7 @@ WebServer::serve_output_page (void)
                 }
             }
         }
-      else if ((m_wasm_req_count == 2) && m_output_pages_sent[0]
+      else if ((m_wasm_req_count == 2) && m_output_pages_sent[0] //Implementation detail.
                && m_output_pages_sent[1] && m_output_pages_sent[2])
         {
           return;
@@ -602,6 +599,7 @@ WebServer::serve_output_page (void)
     }
 }
 
+//! This function is able to modify the first user status.
 void
 WebServer::set_first_user_status (first_user_status_t first_user_status)
 {

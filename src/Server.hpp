@@ -27,22 +27,15 @@ protected:
   //Variables
 
   //! This struct specifies the database's record.
-  /*!
-    \param status_id record field.
-    \param end_of_life record field, default setting at false.
-    \param remote_ip record field: <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/ip__address.html">boost::asio::ip::address</a>
-    \param port record field.
-  */
   typedef struct
   {
+    /*! std::shared pointer at Connection. */
     std::shared_ptr<Connection> connection_ptr;
-    /* TODO: check if implemented.
-     *   status_id  = 0 UNCATEGORIZED
-     *   status_id != 0 inheritance categorization
-    */
-    int status_id = 0;
+    /*! It represents if the connection is to be closed. */
     bool end_of_life = false;
+    /*! record field: <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/ip__address.html">boost::asio::ip::address</a> */
     boost::asio::ip::address remote_ip;
+    /*! Connection port number. */
     int port = -1;
   } m_connection_database_record_t;
   //Functions
@@ -66,7 +59,7 @@ private:
 
 //! Class constructor.
 /*!
-  \param executor boost::asio::io_context provides core I/O functionality.
+  \param executor_ptr boost::asio::io_context provides core I/O functionality.
   \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/io_context.html">boost::asio__io_context</a>
 */
 Server::Server (std::shared_ptr<boost::asio::io_context> executor_ptr)

@@ -53,6 +53,8 @@ private:
   unsigned int m_actual_total;
   //! Current step of the simulation.
   unsigned int m_actual_step;
+  //! Current frame.
+  /*! \sa m_frame_builder */
   std::vector<unsigned char> m_actual_frame;
   //! This parameter represents if the client side application is connected to the socket.
   bool m_connected = false;
@@ -186,7 +188,7 @@ WebSocketServer::full (void)
 //! This function encodes in base64.
 /*!
   This is an outsourced library function.
-  \param bindata Data to be encoded in base64.
+  \param &bindata Data to be encoded in base64.
 */
 ::std::string
 WebSocketServer::m_base64_encode (const ::std::string &bindata)
