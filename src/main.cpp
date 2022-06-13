@@ -122,7 +122,7 @@ main (int argc, char **argv)
 void print_help_page(void) {
   std::cout << "Rayleigh Benard Convection Simulator" << std::endl
             << std::endl
-            << "usage: Rayleigh-Benard-Convection-Simulator [arguments]" 
+            << "usage: Rayleigh-Benard-Convection-Simulator [arguments]"
             << std::endl << std::endl
             << "Arguments:" << std::endl
             << "\t-w <PORT>\t select different port for the web server" << std::endl

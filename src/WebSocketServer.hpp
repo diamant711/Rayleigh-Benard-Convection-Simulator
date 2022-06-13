@@ -188,7 +188,6 @@ WebSocketServer::full (void)
 //! This function encodes in base64.
 /*!
   This is an outsourced library function.
-  \param &bindata Data to be encoded in base64.
 */
 ::std::string
 WebSocketServer::m_base64_encode (const ::std::string &bindata)
@@ -233,7 +232,6 @@ WebSocketServer::m_base64_encode (const ::std::string &bindata)
 //! This function decodes from base64.
 /*!
   This is an outsourced library function.
-  \param ascdata Data to be decoded from base64.
 */
 ::std::string
 WebSocketServer::m_base64_decode (const ::std::string &ascdata)
