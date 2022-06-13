@@ -15,7 +15,7 @@
 
 //! WebServer.hpp is an asyncrhonous server that serve web content.
 /*!
-WebServer is an asynchronous server that works with TCP protocol.
+  WebServer is an asynchronous server that works with TCP protocol.
 */
 class WebServer : public TCPServer
 {
@@ -83,21 +83,22 @@ private:
   WebServer::html_form_input_t m_internal_html_form_input;
   //! std vector of std unique pointers to WebPage.
   /*!
- m_pages indexing:
-  4  *  0 - Error page
-  5  *  1 - ServerFull page
-  6  *  2 - Setup page
-  7  *  3 - Process page
-  8  *  4 - raylib.html
-  9  *  5 - raylib.js
- 10  *  6 - raylib.wasm
+    m_pages indexing:
+      0 - Error page
+      1 - ServerFull page
+      2 - Setup page
+      3 - Process page
+      4 - raylib.html
+      5 - raylib.js
+    6 - raylib.wasm
   */
   std::vector<std::unique_ptr<WebPage> > m_pages;
   //! It represents if there ever was a first user connected.
   bool m_was_first_user_connected = false;
   //! It represents the first user's address.
   /*!
-  \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/ip__address.html">boost::asio::ip::address</a>
+    \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/ip__address.html">
+         boost::asio::ip::address</a>
   */
   boost::asio::ip::address m_first_user_address;
   //! It represents the first user status.
@@ -113,13 +114,13 @@ private:
 };
 //! Class constructor.
 /*!
-\param executor_ptr
-\param portW WebPage port number.
-\param portWS WebSocketServer port number.
-\param path_to_Error_page
-\param path_to_ServerFull_page
-\param path_to_Setup_page
-\param path_to_Process_page
+  \param executor_ptr
+  \param portW WebPage port number.
+  \param portWS WebSocketServer port number.
+  \param path_to_Error_page
+  \param path_to_ServerFull_page
+  \param path_to_Setup_page
+  \param path_to_Process_page
 */
 WebServer::WebServer (std::shared_ptr<boost::asio::io_context> executor_ptr,
                       int portW, int portWS, std::string path_to_Error_page,
@@ -151,8 +152,8 @@ WebServer::get_user_input (void)
 }
 //! This function reads the CGI string and extracts the user's input parameters.
 /*!
-cgi example line: GET /?steps=3000&cwt=25&hwt=35&Ray=100&Pr=7&Rey=100 HTTP/1.1
-\param http_request It contains the CGI string.
+  cgi example line: GET /?steps=3000&cwt=25&hwt=35&Ray=100&Pr=7&Rey=100 HTTP/1.1
+  \param http_request It contains the CGI string.
 */
 void
 WebServer::m_cgi_parser (const std::string &http_request)
@@ -259,10 +260,10 @@ WebServer::m_cgi_parser (const std::string &http_request)
 }
 //! This function updates the simulation state.
 /*!
-\param e Estimated time of awaiting untill end of the simulation
-\param v Velocity of the simulation (cycles/s)
-\param t Total number of steps
-\param s Current step of the simulation
+  \param e Estimated time of awaiting untill end of the simulation
+  \param v Velocity of the simulation (cycles/s)
+  \param t Total number of steps
+  \param s Current step of the simulation
 */
 void
 WebServer::update_simulation_state (int e, float v, int t, int s)
@@ -274,7 +275,7 @@ WebServer::update_simulation_state (int e, float v, int t, int s)
 }
 //! This function extracts the fist letter of the extension of the requested file from the http request.
 /*!
-\param input http_request
+  \param input http_request
 */
 char
 WebServer::m_extract_raylib_request (std::string input)
@@ -294,9 +295,9 @@ WebServer::m_close_unused_connection (void)
 }
 //! This function assigns a first user.
 /*!
-It performs two tests before assigning the first user.
-It checks if there are waiting connections in the waiting list and
-if there is already a first user connected.
+  It performs two tests before assigning the first user.
+  It checks if there are waiting connections in the waiting list and
+  if there is already a first user connected.
 */
 void
 WebServer::waiting_and_assign_first_user (void)
@@ -468,7 +469,7 @@ WebServer::serve_processing_page (void)
 
 //! This function updates the processing page.
 /*!
-\sa update_simulation_data
+  \sa update_simulation_data
 */
 void
 WebServer::update_processing_page (void)
