@@ -330,49 +330,42 @@ WebServer::serve_setup_page (void)
 {
   m_get_executor ().poll ();
   m_close_unused_connection ();
-      if (!m_is_waiting_list_empty ())
+  if (!m_is_waiting_list_empty ())
+    {
+      //number of connections plugged, private member of Server
+      for (size_t i = 0; i < m_get_plugged_connection (); ++i)
         {
-          //number of connections plugged, private member of Server
-          for (size_t i = 0; i < m_get_plugged_connection (); ++i)
+          if (m_get_connection_by_index (i)
+                  .connection_ptr->get_socket ()
+                  .remote_endpoint ()
+                  .address ()
+              == m_first_user_address)
             {
-              if (m_get_connection_by_index (i)
-                      .connection_ptr->get_socket ()
-                      .remote_endpoint ()
-                      .address ()
-                  == m_first_user_address)
+              if (m_first_user_status == SETUP)
                 {
-                  if (m_first_user_status == SETUP)
+                  if (m_get_connection_by_index (i)
+                          .connection_ptr->is_ready_to_send ())
                     {
-                      if (m_get_connection_by_index (i)
-                              .connection_ptr->is_ready_to_send ())
+                      std::cerr << "INFO: WebServer: respond_to_all: "
+                                   "first user at "
+                                << "SETUP stage" << std::endl;
+                      m_get_connection_by_index (i).connection_ptr->load_data (
+                          m_pages.at (2)->get_http_response ()); //setup page
+                      m_get_connection_by_index (i).connection_ptr->send ();
+                      m_get_connection_by_index (i).connection_ptr->load_data (
+                          m_pages.at (4)->get_http_response ()); //favicon
+                      m_get_connection_by_index (i).connection_ptr->send ();
+                      while (!m_get_connection_by_index (i)
+                                  .connection_ptr->is_ready_to_send ())
                         {
-                          std::cerr << "INFO: WebServer: respond_to_all: "
-                                       "first user at "
-                                    << "SETUP stage" << std::endl;
-                          m_get_connection_by_index (i)
-                              .connection_ptr->load_data (
-                                  m_pages.at (2)
-                                      ->get_http_response ()); //setup page
-                          m_get_connection_by_index (i)
-                              .connection_ptr->send ();
-                          std::string tmp (
-                              m_pages.at (4)->get_http_response ());
-                          std::cout << "GCI REQ" << std::endl
-                                    << tmp << std::endl;
-                          m_get_connection_by_index (i)
-                              .connection_ptr->load_data (tmp); //favicon
-                          m_get_connection_by_index (i)
-                              .connection_ptr->send ();
-                          while(m_get_connection_by_index (i)
-                              .connection_ptr->is_ready_to_send ()) {
-                            m_get_executor ().poll ();
-                          }
-                          m_first_user_status = CGI;
+                          m_get_executor ().poll ();
                         }
+                      m_first_user_status = CGI;
                     }
                 }
             }
         }
+    }
 }
 
 //! This function reads the cgi input.
@@ -458,6 +451,11 @@ WebServer::serve_processing_page (void)
                                       m_pages.at (4)->get_http_response ());
                               m_get_connection_by_index (i)
                                   .connection_ptr->send ();
+                              while (!m_get_connection_by_index (i)
+                                          .connection_ptr->is_ready_to_send ())
+                                {
+                                  m_get_executor ().poll ();
+                                }
                               m_start_websocket = true;
                               return;
                             }
