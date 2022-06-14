@@ -18,7 +18,7 @@
 /*!
   This class communicates with the client side application written in JavaScript.
 */
-class WebSocketServer : TCPServer
+class WebSocketServer : public TCPServer
 {
   // Functions
 public:
