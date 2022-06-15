@@ -1,4 +1,3 @@
-//  \sa <a href="">My external page</a>
 
 #ifndef SERVER_HPP
 #define SERVER_HPP
@@ -13,8 +12,10 @@
 /*!
   The server is built  asynchronous, so execution of the server
   application is not suspended while it waits for a connection from a client.
-  This class works with Boost.Asio.
-\sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/overview/model/async_ops.html">Asynchronous Operations</a>
+  This class works with <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio.html">
+                         Boost.Asio</a>.
+\sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/overview/model/async_ops.html">
+     Asynchronous Operations</a>
 */
 class Server
 {

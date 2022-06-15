@@ -81,13 +81,13 @@ private:
   //! std vector of std unique pointers to WebPage.
   /*!
     m_pages indexing:
-      0 - Error page
-      1 - ServerFull page
-      2 - Setup page
-      3 - Process page
-      4 - raylib.html
-      5 - raylib.js
-    6 - raylib.wasm
+     - 0 - Error page
+     - 1 - ServerFull page
+     - 2 - Setup page
+     - 3 - Process page
+     - 4 - raylib.html
+     - 5 - raylib.js
+     - 6 - raylib.wasm
   */
   std::vector<std::unique_ptr<WebPage> > m_pages;
   //! It represents if there ever was a first user connected.
@@ -111,13 +111,13 @@ private:
 };
 //! Class constructor.
 /*!
-  \param executor_ptr
+  \param executor_ptr boost::asio::io_context
   \param portW WebServer port number.
   \param portWS WebSocketServer port number.
-  \param path_to_Error_page
-  \param path_to_ServerFull_page
-  \param path_to_Setup_page
-  \param path_to_Process_page
+  \param path_to_Error_page Relative path to Error_page from working directory.
+  \param path_to_ServerFull_page Relative path to ServerFull_page from working directory.
+  \param path_to_Setup_page Relative path to Setup_page from working directory.
+  \param path_to_Process_page Relative path to Process_page from working directory.
 */
 WebServer::WebServer (std::shared_ptr<boost::asio::io_context> executor_ptr,
                       int portW, int portWS, std::string path_to_Error_page,
@@ -466,7 +466,7 @@ WebServer::serve_processing_page (void)
 
 //! This function updates the processing page.
 /*!
-  \sa update_simulation_data
+  \sa update_simulation_state
 */
 void
 WebServer::update_processing_page (void)
