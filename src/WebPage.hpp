@@ -33,8 +33,8 @@ public:
   {
     //! HTTP response status code.
     /*!
-      This parameter indicates whether a specific HTTP request has been 
-      successfully completed.
+      Status codes are issued by a server in response to a client's request 
+      made to the server.
     */
     unsigned int status_number;
     //! HTTP response status code. Specific status phrase.

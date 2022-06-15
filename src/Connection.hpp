@@ -46,7 +46,8 @@ private:
      Used during the output operations.
      \sa m_handle_send
      \sa send
-     \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/const_buffer.html">boost::asio::const_buffer</a>
+     \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/const_buffer.html">
+          boost::asio::const_buffer</a>
    */
   std::unique_ptr<boost::asio::const_buffer> m_internal_send_buffer_ptr;
   //! Represents if errors occurred during the send operation.
@@ -70,7 +71,8 @@ private:
 
 //! Class constructor.
 /*!
-\param executor <a href="https://www.boost.org/doc/libs/master/doc/html/boost_asio/reference/io_context.html">boost::asio::io_context& executor</a>
+  \param executor <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/io_context.html">
+                   boost::asio::io_context& executor</a>
 */
 Connection::Connection (boost::asio::io_context &executor)
     : m_socket (executor)
@@ -82,8 +84,10 @@ Connection::~Connection (void) {}
 
 //! Completion handler, it is called when the send completes.
 /*!
-\param error Result of operation.
-\param bytes_transferred Number of bytes received.
+  \param error Result of operation.
+  \param bytes_transferred Number of bytes received.
+  \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/basic_stream_socket/async_receive/overload1.html">
+       async_send</a>
 */
 void
 Connection::m_handle_send (const boost::system::error_code &error,
@@ -108,9 +112,10 @@ Connection::m_handle_send (const boost::system::error_code &error,
 
 //! Completion handler, it is called when the receive completes.
 /*!
-\param error Result of operation.
-\param bytes_transferred Number of bytes received.
-\sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/basic_stream_socket/async_receive/overload2.html">async_receive</a>
+  \param error Result of operation.
+  \param bytes_transferred Number of bytes received.
+  \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/basic_stream_socket/async_receive/overload1.html">
+       async_receive</a>
 */
 void
 Connection::m_handle_receive (const boost::system::error_code &error,
@@ -131,11 +136,12 @@ Connection::m_handle_receive (const boost::system::error_code &error,
     }
 }
 
-//! Asynchronous operation that writes a certain amount of data to a stream before completion.
+//! Asynchronous operation that writes a certain amount of data to a stream socket before completion.
 /*!
-Works with the boost::asio::async_write function.
-\sa m_handle_send
-\sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/async_write.html">async_write</a>
+  Works with the boost::asio::async_write function.
+  \sa m_handle_send
+  \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/async_write.html">
+       async_write</a>
 */
 void
 Connection::send (void)
@@ -148,11 +154,12 @@ Connection::send (void)
   m_ready_to_send = false;
 }
 
-//! This function is used to asynchronously receive data from the stream socket.
+//! This function is used to asynchronously receive data from the stream socket before completion.
 /*!
-Works with the basic_stream_socket::async_receive function.
-\sa m_handle_receive
-\sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/basic_stream_socket/async_receive/overload2.html">async_receive</a>
+  Works with the basic_stream_socket::async_receive function.
+  \sa m_handle_receive
+  \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/basic_stream_socket/async_receive/overload1.html">
+       async_receive</a>
 */
 void
 Connection::receive (void)
@@ -168,8 +175,8 @@ Connection::receive (void)
 
 //! This function regulates the data loading.
 /*!
-Works with const std::string as input.
-\param input data to be loaded.
+  Works with const std::string as input.
+  \param input data to be loaded.
 */
 void
 Connection::load_data (const std::string &input)
@@ -181,8 +188,8 @@ Connection::load_data (const std::string &input)
 
 //! This function regulates the data loading.
 /*!
-Works with const std::vector<unsigned char> as input.
-\param input data to be loaded.
+  Works with const std::vector<unsigned char> as input.
+  \param input data to be loaded.
 */
 void
 Connection::load_data (const std::vector<unsigned char> &input)
@@ -194,8 +201,8 @@ Connection::load_data (const std::vector<unsigned char> &input)
 
 //! This function regulates the data loading.
 /*!
-Works with boost::asio::const_buffer as input.
-\param input data to be loaded.
+  Works with boost::asio::const_buffer as input.
+  \param input data to be loaded.
 */
 void
 Connection::load_data (const boost::asio::const_buffer &input)
@@ -219,7 +226,7 @@ Connection::unload_data (void) const
 
 //! Returns the private member m_socket.
 /*!
-\sa m_socket
+  \sa m_socket
 */
 boost::asio::ip::tcp::socket &
 Connection::get_socket (void)
@@ -236,7 +243,9 @@ Connection::first_operation_ended (void)
 
 //! This function returns if the connection is ready to receive new data.
 /*!
-Checks if the private member m_socket is available.
+  Checks if the private member m_socket is ready for receive operation.
+  \sa <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/basic_stream_socket/available.html">
+       basic_stream_socket::available</a>
 */
 bool
 Connection::is_ready_to_receive (void)
@@ -253,10 +262,10 @@ Connection::is_ready_to_receive (void)
 
 //! Sets a connection as persistant.
 /*!
-A persistant connection is the idea of using a single TCP connection to send and
-receive multiple requests/responses, as opposed to opening a new connection for 
-every single request/response pair.
-\sa m_persistant
+  A persistant connection is the idea of using a single TCP connection to send and
+  receive multiple requests/responses, as opposed to opening/closing a new connection for 
+  every single request/response pair.
+  \sa m_persistant
 */
 void
 Connection::set_persistant (void)
@@ -266,8 +275,8 @@ Connection::set_persistant (void)
 
 //! Checks if the connection is persistant.
 /*!
-\sa set_persistant
-\sa m_persistant
+  \sa set_persistant
+  \sa m_persistant
 */
 bool
 Connection::is_persistant (void)
@@ -277,9 +286,9 @@ Connection::is_persistant (void)
 
 //! Checks if the connection is ready to send.
 /*!
-m_ready_to_send is set false by the function send, and is set true again by the 
-m_handle_send function.
-\sa send
+  m_ready_to_send is set false by the function send, and is set true again by the 
+  m_handle_send function.
+  \sa send
 */
 bool
 Connection::is_ready_to_send (void)

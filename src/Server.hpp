@@ -26,7 +26,7 @@ public:
 protected:
   //Variables
 
-  //! This struct specifies the database's record.
+  //! This struct specifies the connection database's record.
   typedef struct
   {
     /*! std::shared pointer at Connection. */
@@ -70,7 +70,7 @@ Server::Server (std::shared_ptr<boost::asio::io_context> executor_ptr)
 //! Class destructor.
 Server::~Server (void) {}
 
-//! This method returns the executor associated with the io_context.
+//! This method returns the executor associated with the server.
 boost::asio::io_context &
 Server::m_get_executor (void)
 {

@@ -14,9 +14,6 @@
 #include "WebSocketServer.hpp"
 
 //! WebServer.hpp is an asyncrhonous server that serve web content.
-/*!
-  WebServer is an asynchronous server that works with TCP protocol.
-*/
 class WebServer : public TCPServer
 {
 public:
@@ -33,15 +30,15 @@ public:
   //! This struct holds the parameters extracted from the html form.
   typedef struct
   {
-    /*! total number of steps */
+    /*! Total number of steps */
     unsigned int steps;
-    /*! cold wall temperature */
+    /*! Cold wall temperature */
     double cwt;
-    /*! hot wall temperature */
+    /*! Hot wall temperature */
     double hwt;
     /*! Rayleigh number */
     double Ray;
-    /*! Pr Prandtl number */
+    /*! Prandtl number */
     double Pr;
     /*! Reynolds number */
     double Rey;
@@ -115,7 +112,7 @@ private:
 //! Class constructor.
 /*!
   \param executor_ptr
-  \param portW WebPage port number.
+  \param portW WebServer port number.
   \param portWS WebSocketServer port number.
   \param path_to_Error_page
   \param path_to_ServerFull_page
@@ -153,7 +150,7 @@ WebServer::get_user_input (void)
 //! This function reads the CGI string and extracts the user's input parameters.
 /*!
   cgi example line: GET /?steps=3000&cwt=25&hwt=35&Ray=100&Pr=7&Rey=100 HTTP/1.1
-  \param http_request It contains the CGI string.
+  \param http_request It contains the http request.
 */
 void
 WebServer::m_cgi_parser (const std::string &http_request)
@@ -273,7 +270,7 @@ WebServer::update_simulation_state (int e, float v, int t, int s)
   m_actual_total = t;
   m_actual_step = s;
 }
-//! This function extracts the fist letter of the extension of the requested file from the http request.
+//! This function extracts the first letter of the extension of the requested file from the http request.
 /*!
   \param input http_request
 */

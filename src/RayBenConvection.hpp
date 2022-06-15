@@ -30,7 +30,7 @@ public:
     */
     bool ended;
     /*!
-      This parameter represents the numer of times the calculation will be
+      This parameter represents the number of times the calculation will be
       iterated.
     */
     int total;
@@ -316,7 +316,7 @@ RayBenConvection::m_d_solve (
       U.solve (L.solve (mat (perm))));
 }
 
-//! This function returns the estimated time to the end of the simulation.
+//! This function calculates and prints the estimated time to the end of the simulation.
 /*!
   While performing the calculation, parameters of simulation_state_t are set.
   \param n_calls number of steps the simulation has run.
@@ -497,7 +497,7 @@ RayBenConvection::m_my_symamd (Eigen::Matrix<Scalar, -1, -1> &mat)
 
 //! This function resolves Partial Pivoting calculations with LU decomposition.
 /*!
-  Calling this function will return an std vector of Eigen Matrices
+  Calling this function will return an std::vector of Eigen Matrices
   consisting of the two matrices L and U obtained during the decomposition.
   \sa <a href="https://eigen.tuxfamily.org/dox/classEigen_1_1PartialPivLU.html">
       Eigen Partial Pivoting (LU decomposition)</a>

@@ -8,9 +8,6 @@
 #include "Server.hpp"
 
 //! TCPServer.hpp defines a server using the TCP protocol.
-/*!
-  This class is a derived class from base class Server in public mode.
-*/
 class TCPServer : public Server
 {
 
@@ -34,10 +31,11 @@ private:
                         const boost::system::error_code &);
 };
 
-//! Class constructor.
+//! Class constructor. Initiates the accept chain operation.
 /*!
   \param executor_ptr shared pointer to <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/io_context.html">boost::asio::io_context</a>
   \param port specifies the port number.
+  \sa m_start_accept
 */
 TCPServer::TCPServer (std::shared_ptr<boost::asio::io_context> executor_ptr,
                       int port)
@@ -89,7 +87,9 @@ TCPServer::m_handle_accept (m_connection_database_record_t new_connection,
   This function is implemented with
   <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/basic_socket_acceptor/async_accept.html">
            async_accept</a> 
-  ip::tcp::acceptor member function.
+  member function of
+  <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/ip__tcp/acceptor.html">
+           basic_socket_acceptor</a>.
 */
 void
 TCPServer::m_start_accept (void)
