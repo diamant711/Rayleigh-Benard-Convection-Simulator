@@ -94,7 +94,7 @@ private:
 };
 //! Class constructor.
 /*!
-  \param executor_ptr <a href="https://www.boost.org/doc/libs/master/doc/html/boost_asio/reference/io_context.html">boost::asio::io_context</a>
+  \param executor_ptr <a href="https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio/reference/io_context.html">boost::asio::io_context</a>
   \param port WebSocketServer port number.
 */
 WebSocketServer::WebSocketServer (
@@ -107,13 +107,13 @@ WebSocketServer::~WebSocketServer (void) {}
 //! This function supplies the correct response to the client depending on the connection status.
 /*!
   Depending on m_status, there are 3 types of responses.
-  \sa m_status_t
   - HANSHAKE_ANSWER: builds the handshake key using m_handshake_respond_builder
     and sends it to the client.
-  \sa m_handshake_respond_builder
+    \sa m_handshake_respond_builder
   - UPDATING_CLIENT: builds the data frame using m_frame-builder and sends it to the client.
-  \sa m_frame_builder
+    \sa m_frame_builder
   - CLOSING_CONNECTION: closes the connection.
+  \sa m_status
 */
 bool
 WebSocketServer::respond (void)
@@ -370,10 +370,10 @@ WebSocketServer::m_frame_builder (void)
 
 //! This function updates the values of the time-parameters of the simulation.
 /*!
-  \param eta estimated time of arrival till the end of the simulation.
-  \param velocity number of cycles performed per second.
-  \param total total number of steps of the simulation.
-  \param step current step of the simulation.
+  \param eta Estimated time of arrival till the end of the simulation.
+  \param velocity Number of cycles performed per second.
+  \param total Total number of steps of the simulation.
+  \param step Current step of the simulation.
 */
 void
 WebSocketServer::update_simulation_data (int eta, float velocity, int total,
