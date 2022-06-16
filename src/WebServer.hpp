@@ -85,9 +85,10 @@ private:
      - 1 - ServerFull page
      - 2 - Setup page
      - 3 - Process page
-     - 4 - raylib.html
-     - 5 - raylib.js
-     - 6 - raylib.wasm
+     - 4 - favicon.ico
+     - 5 - raylib.html
+     - 6 - raylib.js
+     - 7 - raylib.wasm
   */
   std::vector<std::unique_ptr<WebPage> > m_pages;
   //! It represents if there ever was a first user connected.
@@ -395,7 +396,7 @@ WebServer::read_cgi_input (void)
                               .connection_ptr->receive ();
                           m_cgi_parser (m_get_connection_by_index (i)
                                             .connection_ptr->unload_data ()
-                                            .get ()); //dereferenzia
+                                            .get ());
                           if (m_cgi_parameter_available)
                             {
                               m_first_user_status = PROCESSING;
