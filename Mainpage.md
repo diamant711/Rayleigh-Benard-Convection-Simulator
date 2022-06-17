@@ -3,6 +3,8 @@ In this project, **Rayleigh-Benard convection** is simulated in a thin layer of 
 Rayleigh-Benard convection is a thermal gradient driven natural convection, occurring in a planar, horizontal layer of fluid heated from below. 
 During this phenomena the fluid develops regular patterns of convection cells called Benard cells. 
 
+This simulation works with [Firefox](https://www.mozilla.org/it/firefox/).
+
 \image html simulation.png "Simulation demo" width=698 height=487 
 
 * The **linear algebra** algorithms are implemented via [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page).
@@ -20,9 +22,5 @@ The simulation is run according to the following hypotesis:
 * No-slip is enforced for velocity on all sides.
 * Homogenous boundary conditions are employed for pressure.
 * Boussinesq approximation is used to model the bouyancy driven flow. 
-
-
- 
-
 
 \image html Commands_explanation.png "User's commands explained" width=698 height=486 
