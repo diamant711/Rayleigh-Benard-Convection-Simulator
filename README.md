@@ -1,2 +1,5 @@
-# Rayleigh-Benard-Convection-Simulator system dependency list
-1. OpenSSL C API
+#Rayleigh-Benard-Convection-Simulator 
+
+System Wide Dependencies:
+ - OpenSSL C API (openssl/sha.h)
+ - Boost libs (boost/asio.hpp, boost/bind/bind.hpp)
