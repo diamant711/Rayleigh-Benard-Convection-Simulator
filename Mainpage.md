@@ -1,5 +1,8 @@
 In this project, **Rayleigh-Benard convection** is simulated in a thin layer of fluid (2D domain).
 
+**To the user:** before running this code, modify **Makefile, line 2**, and change the path to a temporary folder. 
+The user must have writing permission to such folder.
+
 Rayleigh-Benard convection is a thermal gradient driven natural convection, occurring in a planar, horizontal layer of fluid heated from below. 
 During this phenomena the fluid develops regular patterns of convection cells called Benard cells. 
 
@@ -24,3 +27,9 @@ The simulation is run according to the following hypotesis:
 * Boussinesq approximation is used to model the bouyancy driven flow. 
 
 \image html Commands_explanation.png "User's commands explained" width=698 height=486 
+
+See also: 
+
+* [Github code](https://github.com/diamant711/Rayleigh-Benard-Convection-Simulator)
+* [[TUTORIAL] How to install and use Rayleigh-Benard-Convection-Simulator](https://www.youtube.com/watch?v=vU5gNxgOaos)
+* [Rayleight Benard Convection simulation 2D (open source)](https://www.youtube.com/watch?v=nw_JIZDfHp4)
