@@ -412,12 +412,10 @@ void
 WebServer::serve_processing_page (void)
 {
   while(1) {
-  printf("414\n");
   m_get_executor ().poll ();
   m_close_unused_connection ();
   if (!m_is_waiting_list_empty ())
     {
-  printf("419\n");
       for (size_t i = 0; i < m_get_plugged_connection (); ++i)
         {
           if (m_get_connection_by_index (i)
@@ -426,21 +424,14 @@ WebServer::serve_processing_page (void)
                   .address ()
               == m_first_user_address)
             {
-
-  printf("429\n");
               if (m_first_user_status == PROCESSING)
                 {
-  printf("432\n");
                   if (m_get_connection_by_index (i)
                           .connection_ptr->is_ready_to_send ())
                     {
-
-  printf("437\n");
                       if (m_start_websocket
                           == false) //To enter only once in this cycle.
                         {
-
-  printf("442\n");
                           std::cerr << "INFO: WebServer: serve_processing_page: "
                                        "first user at "
                                     << "PROCESSING stage" << std::endl;

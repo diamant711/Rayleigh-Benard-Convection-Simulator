@@ -30,7 +30,7 @@ OBJ_DIR = obj
 DOC_DIR = doc
 REPOS_DIR = $(TMP_DIR)/rbcs_tmp_repos_$(USER).d
 CXX = g++
-COMMON_FLAGS = -fopenmp -pg -g -fno-math-errno -march=native -DNDEBUG
+COMMON_FLAGS = -fopenmp -fno-math-errno -march=native -DNDEBUG #-pg -g
 CXXFLAGS = -O3 -I$(INC_DIR)/ -Wall -Wextra -std=c++11 -Wno-stringop-truncation $(COMMON_FLAGS)
 LDFLAGS = $(STATIC_LIB) $(DINAMIC_LIB) $(COMMON_FLAGS)
 X_NAME = Rayleigh-Benard-Convection-Simulator
