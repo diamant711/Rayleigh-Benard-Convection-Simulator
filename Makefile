@@ -2,24 +2,24 @@
 TMP_DIR = /temporanea
 
 # Machine indipendent variables
-HEADERS =	$(SRC_DIR)/RayBenConvection.hpp                \
-					$(SRC_DIR)/Connection.hpp                      \
-					$(SRC_DIR)/Server.hpp                          \
-					$(SRC_DIR)/TCPServer.hpp											 \
-					$(SRC_DIR)/WebServer.hpp											 \
-					$(SRC_DIR)/WebSocketServer.hpp								 \
+HEADERS =	$(SRC_DIR)/RayBenConvection.hpp\
+					$(SRC_DIR)/Connection.hpp\
+					$(SRC_DIR)/Server.hpp\
+					$(SRC_DIR)/TCPServer.hpp\
+					$(SRC_DIR)/WebServer.hpp\
+					$(SRC_DIR)/WebSocketServer.hpp\
 					$(SRC_DIR)/WebPage.hpp
 
 OBJECTS = $(OBJ_DIR)/main.o
 
-STATIC_LIB = $(LIB_DIR)/libcolamd.a                      \
+STATIC_LIB = $(LIB_DIR)/libcolamd.a\
 						 $(LIB_DIR)/libsuitesparseconfig.a
 						
-DINAMIC_LIB = -lm                                        \
-              -lpthread                                  \
-              -ldl                                       \
-							-lboost_system                             \
-							-lssl                                      \
+DINAMIC_LIB = -lm\
+              -lpthread\
+              -ldl\
+							-lboost_system\
+							-lssl\
 							-lcrypto
 
 PRJ_DIR = $(shell pwd)

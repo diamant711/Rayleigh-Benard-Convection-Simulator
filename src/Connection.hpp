@@ -106,7 +106,9 @@ Connection::m_handle_send (const boost::system::error_code &error,
   else
     {
       m_send_error = true;
-      std::cerr << "Error" << std::endl;
+      std::cerr << "INFO: Connection: user "
+                << m_socket.remote_endpoint ().address ()
+                << ": m_handle_send: Error..." << std::endl;
     }
 }
 
@@ -216,11 +218,8 @@ Connection::load_data (const boost::asio::const_buffer &input)
 const std::shared_ptr<char[]>
 Connection::unload_data (void) const
 {
-  size_t size = m_internal_receive_buffer_ptr->size ();
-  std::shared_ptr<char[]> ret_ptr;
-  ret_ptr.reset (new char[size]);
-  ::memcpy (ret_ptr.get (), m_internal_receive_buffer_ptr->data (),
-            m_internal_receive_buffer_ptr->size ());
+  std::shared_ptr<char[]> ret_ptr (
+      static_cast<char *> (m_internal_receive_buffer_ptr->data ()));
   return ret_ptr;
 }
 

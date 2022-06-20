@@ -411,50 +411,52 @@ WebServer::read_cgi_input (void)
 void
 WebServer::serve_processing_page (void)
 {
-  while(1) {
-  m_get_executor ().poll ();
-  m_close_unused_connection ();
-  if (!m_is_waiting_list_empty ())
+  while (1)
     {
-      for (size_t i = 0; i < m_get_plugged_connection (); ++i)
+      m_get_executor ().poll ();
+      m_close_unused_connection ();
+      if (!m_is_waiting_list_empty ())
         {
-          if (m_get_connection_by_index (i)
-                  .connection_ptr->get_socket ()
-                  .remote_endpoint ()
-                  .address ()
-              == m_first_user_address)
+          for (size_t i = 0; i < m_get_plugged_connection (); ++i)
             {
-              if (m_first_user_status == PROCESSING)
+              if (m_get_connection_by_index (i)
+                      .connection_ptr->get_socket ()
+                      .remote_endpoint ()
+                      .address ()
+                  == m_first_user_address)
                 {
-                  if (m_get_connection_by_index (i)
-                          .connection_ptr->is_ready_to_send ())
+                  if (m_first_user_status == PROCESSING)
                     {
-                      if (m_start_websocket
-                          == false) //To enter only once in this cycle.
+                      if (m_get_connection_by_index (i)
+                              .connection_ptr->is_ready_to_send ())
                         {
-                          std::cerr << "INFO: WebServer: serve_processing_page: "
-                                       "first user at "
-                                    << "PROCESSING stage" << std::endl;
-                          m_get_connection_by_index (i)
-                              .connection_ptr->load_data (
-                                  m_pages.at (3)->get_http_response ());
-                          m_get_connection_by_index (i)
-                              .connection_ptr->send ();
-                          while (!m_get_connection_by_index (i)
-                                      .connection_ptr->is_ready_to_send ())
+                          if (m_start_websocket
+                              == false) //To enter only once in this cycle.
                             {
-                              m_get_executor ().poll ();
+                              std::cerr
+                                  << "INFO: WebServer: serve_processing_page: "
+                                     "first user at "
+                                  << "PROCESSING stage" << std::endl;
+                              m_get_connection_by_index (i)
+                                  .connection_ptr->load_data (
+                                      m_pages.at (3)->get_http_response ());
+                              m_get_connection_by_index (i)
+                                  .connection_ptr->send ();
+                              while (!m_get_connection_by_index (i)
+                                          .connection_ptr->is_ready_to_send ())
+                                {
+                                  m_get_executor ().poll ();
+                                }
+                              m_start_websocket = true;
+                              return;
                             }
-                          m_start_websocket = true;
-                          return;
                         }
                     }
                 }
             }
         }
     }
-}}
-
+}
 
 //! This function updates the processing page.
 /*!
