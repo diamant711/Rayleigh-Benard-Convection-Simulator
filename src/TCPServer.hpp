@@ -57,10 +57,7 @@ TCPServer::~TCPServer (void) {}
   It reports if the async_accept event happened and if the new connection results
   plugged without errors.
   \param new_connection connection database record defined in Connection.hpp
-  \param error <a href="https://www.boost.org/doc/libs/1_79_0/libs/system/doc/html/system.html">
-                boost::system::error_code</a>
-  \sa <a href="https://www.boost.org/doc/libs/1_79_0/boost/system/error_code.hpp">
-       boost::system::error_code.hpp</a>
+  \param error Result of the operation.
 */
 void
 TCPServer::m_handle_accept (m_connection_database_record_t new_connection,
