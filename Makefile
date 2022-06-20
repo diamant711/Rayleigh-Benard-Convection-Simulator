@@ -27,7 +27,7 @@ SRC_DIR = src
 INC_DIR = inc
 LIB_DIR = lib
 OBJ_DIR = obj
-DOC_DIR = doc
+DOC_DIR = docs
 REPOS_DIR = $(TMP_DIR)/rbcs_tmp_repos_$(USER).d
 CXX = g++
 COMMON_FLAGS = -fopenmp -fno-math-errno -march=native -DNDEBUG #-pg -g
@@ -101,10 +101,7 @@ env: ;
 	@echo "All enviroment component ready"
 
 doxydoc: ;
-	@if [ ! -e $(DOC_DIR)/html ] ; then\
-		echo "Making doxygen documentation...";\
-		doxygen config-file;\
-	fi
+	@doxygen config-file;
 	@echo "Doxygen documentation done!"
 
 clean: ;
@@ -114,7 +111,6 @@ clean: ;
 	@cd $(PRJ_DIR)
 	rm -f $(X_NAME)
 	rm -f cnt/raylib.html cnt/raylib.js cnt/raylib.wasm gmon.out
-	rm -rf $(DOC_DIR)/html
 
 purge: ;
 	@make clean
