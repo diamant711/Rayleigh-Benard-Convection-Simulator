@@ -138,7 +138,7 @@ print_help_page (void)
       << std::endl
       << "\tRayleigh-Benard-Convection-Simulator -w8080 -s8000" << std::endl
       << std::endl
-      << "Documentation at: docs/html/index.html" << std::endl
+      << "Documentation at: docs/index.html" << std::endl
       << std::endl;
   return;
 }
