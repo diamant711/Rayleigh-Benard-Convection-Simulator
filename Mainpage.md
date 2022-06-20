@@ -8,7 +8,7 @@ During this phenomena the fluid develops regular patterns of convection cells ca
 
 This simulation works with [Firefox](https://www.mozilla.org/it/firefox/).
 
-\image html simulation.png "Simulation demo" width=698 height=487 
+\image html simulation.png "Simulation demo @Riccardo Osvaldo Nana @Eleonora Delfrate" width=698 height=487 
 
 * The **linear algebra** algorithms are implemented via [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page).
 
@@ -26,10 +26,14 @@ The simulation is run according to the following hypotesis:
 * Homogenous boundary conditions are employed for pressure.
 * Boussinesq approximation is used to model the bouyancy driven flow. 
 
-\image html Commands_explanation.png "User's commands explained" width=698 height=486 
+\image html Commands_explanation.png "User's commands explained @Riccardo Osvaldo Nana @Eleonora Delfrate" width=698 height=486 
 
 See also: 
 
 * [Github code](https://github.com/diamant711/Rayleigh-Benard-Convection-Simulator)
 * [[TUTORIAL] How to install and use Rayleigh-Benard-Convection-Simulator](https://www.youtube.com/watch?v=vU5gNxgOaos)
 * [Rayleight Benard Convection simulation 2D (open source)](https://www.youtube.com/watch?v=nw_JIZDfHp4)
+
+Authors:
+* Riccardo Osvaldo Nana: [keep in touch!](https://diamantlabs.wordpress.com/contact/)
+* Eleonora Delfrate: [keep in touch!](https://github.com/Eleod99)
