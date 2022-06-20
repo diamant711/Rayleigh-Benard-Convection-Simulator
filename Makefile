@@ -101,7 +101,10 @@ env: ;
 	@echo "All enviroment component ready"
 
 doxydoc: ;
+	@rm -rf docs/html
 	@doxygen config-file;
+	@cp -r docs/html/* docs/
+	@rm -rf docs/html
 	@echo "Doxygen documentation done!"
 
 clean: ;
