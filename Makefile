@@ -101,7 +101,7 @@ env: ;
 	@echo "All enviroment component ready"
 
 doxydoc: ;
-	@if [ ! -e $(DOC_DIR)/html ] || [ ! -e $(DOC_DIR)/latex ] ; then\
+	@if [ ! -e $(DOC_DIR)/html ] ; then\
 		echo "Making doxygen documentation...";\
 		doxygen config-file;\
 	fi
