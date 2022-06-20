@@ -1,4 +1,4 @@
-#Rayleigh-Benard-Convection-Simulator 
+# Rayleigh-Benard-Convection-Simulator 
 
 System Wide Dependencies:
  - OpenSSL C API (openssl/sha.h)
