@@ -16,7 +16,7 @@ This simulation works with [Firefox](https://www.mozilla.org/it/firefox/).
 
 * The **network and I/O programming** are implemented with [Boost.Asio](https://www.boost.org/doc/libs/1_79_0/doc/html/boost_asio.html).
 
-* The **numerical solution** of the Navier-Stockes equation and the set of default parameter values is tacken from: Suraj Shankar (2022). [Rayleigh Benard Convection](https://www.mathworks.com/matlabcentral/fileexchange/38093-rayleigh-benard-convection), MATLAB Central File Exchange. Retrieved May 29, 2022.
+* The **numerical solution** of the Navier-Stockes equation and the set of default parameter values is taken from: Suraj Shankar (2022). [Rayleigh Benard Convection](https://www.mathworks.com/matlabcentral/fileexchange/38093-rayleigh-benard-convection), MATLAB Central File Exchange. Retrieved May 29, 2022.
 
 
 The simulation is run according to the following hypotesis:
